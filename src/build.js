@@ -48,8 +48,14 @@ export default (yargs) =>
     // create tar stream from current folder
     const tarStream = tar.pack(workdir, {ignore: dockerignore()});
 
+    const options = {
+      headers: {
+        'x-access-token': config.token,
+      },
+    };
+
     // pipe stream to remote
-    const stream = tarStream.pipe(got.stream.post(remoteUrl));
+    const stream = tarStream.pipe(got.stream.post(remoteUrl, options));
     stream.on('data', (str) => {
       const text = str.toString().split('\n');
       text.filter(t => t && t.length).forEach(t => {
