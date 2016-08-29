@@ -6,6 +6,7 @@ import yargs from 'yargs';
 import login from './login';
 import build from './build';
 import list from './list';
+import deploy from './deploy';
 
 // init program
 yargs
@@ -18,6 +19,7 @@ yargs
 login(yargs);
 build(yargs);
 list(yargs);
+deploy(yargs);
 
 // parse
 yargs.argv; // eslint-disable-line
