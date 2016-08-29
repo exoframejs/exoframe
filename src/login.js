@@ -10,12 +10,12 @@ const validate = input => input && input.length > 0;
 const filter = input => input.trim();
 
 export default (yargs) =>
-  yargs.command('login [url]', 'login into exoframe server', {
-    url: {
+  yargs.command('login [endpoint]', 'login into exoframe server', {
+    endpoint: {
       default: config.endpoint,
     },
-  }, async ({url}) => {
-    console.log(chalk.bold('Logging in to:'), url);
+  }, async ({endpoint}) => {
+    console.log(chalk.bold('Logging in to:'), endpoint);
     const prompts = [];
     prompts.push({
       type: 'input',
@@ -33,7 +33,7 @@ export default (yargs) =>
 
     const {username, password} = await inquirer.prompt(prompts);
 
-    const remoteUrl = `${url.replace(/\/$/, '')}/api/login`;
+    const remoteUrl = `${endpoint.replace(/\/$/, '')}/api/login`;
     try {
       const {body} = await got(remoteUrl, {body: {username, password}, json: true});
       // check for errors
