@@ -32,7 +32,11 @@ export default (yargs) =>
     const workdir = process.cwd();
     const buildTag = tag || workdir.split('/').pop().trim();
     const dockerfilePath = path.join(workdir, 'Dockerfile');
-    const remoteUrl = `${baseUrl}?tag=${encodeURIComponent(buildTag)}`;
+    const labels = {
+      'exoframe.user': config.user.username,
+    };
+    const labelsString = JSON.stringify(labels);
+    const remoteUrl = `${baseUrl}?tag=${encodeURIComponent(buildTag)}&labels=${encodeURIComponent(labelsString)}`;
 
     // check if dockerfile already exists
     let deleteDockerfile = false;
