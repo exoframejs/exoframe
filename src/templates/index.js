@@ -4,9 +4,10 @@ import chalk from 'chalk';
 
 // our packages
 import nodeTemplate from './node';
+import mavenTemplate from './maven';
 
 export default (workdir) => {
-  const templates = [nodeTemplate];
+  const templates = [nodeTemplate, mavenTemplate];
 
   // get files
   const files = fs.readdirSync(workdir);

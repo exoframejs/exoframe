@@ -33,7 +33,6 @@ export default (yargs) =>
       console.error(chalk.red('Error!'), 'Could not detect template for current project!');
       return;
     }
-    return;
 
     // metadata
     const buildTag = tag || workdir.split('/').pop().trim();
