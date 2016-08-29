@@ -4,15 +4,11 @@ import got from 'got';
 import tar from 'tar-fs';
 import path from 'path';
 import chalk from 'chalk';
+import minimatch from 'minimatch';
 
 // our packages
 import config from './config';
-import {dockerignore} from './docker';
-
-
-const dockerfileTemplate = `
-FROM node:onbuild
-`;
+import detectTemplate from './templates';
 
 // text cleanup
 const cleanText = (txt) => txt.trim().replace(/[\n\r]/g, '');
@@ -30,9 +26,20 @@ export default (yargs) =>
     // create config vars
     const baseUrl = `${endpoint.replace(/\/$/, '')}/api/build`;
     const workdir = process.cwd();
+
+    // get templates based on workdir
+    const {dockerfile, ignores, labels: templateLabels} = detectTemplate(workdir);
+    if (!dockerfile || !dockerfile.length) {
+      console.error(chalk.red('Error!'), 'Could not detect template for current project!');
+      return;
+    }
+    return;
+
+    // metadata
     const buildTag = tag || workdir.split('/').pop().trim();
     const dockerfilePath = path.join(workdir, 'Dockerfile');
     const labels = {
+      ...templateLabels,
       'exoframe.user': config.user.username,
     };
     const labelsString = JSON.stringify(labels);
@@ -44,13 +51,13 @@ export default (yargs) =>
       fs.accessSync(dockerfilePath);
     } catch (e) {
       // if no - write new dockerfile
-      fs.writeFileSync(dockerfilePath, dockerfileTemplate, 'utf8');
+      fs.writeFileSync(dockerfilePath, dockerfile, 'utf8');
       // say we need to delete dockerfile later
       deleteDockerfile = true;
     }
 
     // create tar stream from current folder
-    const tarStream = tar.pack(workdir, {ignore: dockerignore()});
+    const tarStream = tar.pack(workdir, {ignore: (name) => ignores.some(ignore => minimatch(name, ignore))});
 
     const options = {
       headers: {
