@@ -1,7 +1,7 @@
 {
   "name": "exoframe",
   "version": "0.1.0",
-  "description": "ExoFrame cli",
+  "description": "Exoframe commad line interface",
   "main": "index.js",
   "bin": {
     "exoframe": "bin/index.js"
@@ -9,8 +9,19 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [
+    "docker",
+    "cli",
+    "exoframe",
+    "build",
+    "deploy"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:exoframejs/exoframe.git"
+  },
   "author": "Tim Ermilov <yamalight@gmail.com> (http://codezen.net)",
-  "license": "ISC",
+  "license": "MIT",
   "babel": {
     "presets": [
       "es2015-node",
