@@ -30,7 +30,7 @@ try {
 }
 
 export const updateConfig = (newCfg) => {
-  const cfg = {...newCfg, ...userConfig};
+  const cfg = {...userConfig, ...newCfg};
   fs.writeFileSync(configPath, yaml.safeDump(cfg), 'utf8');
 };
 

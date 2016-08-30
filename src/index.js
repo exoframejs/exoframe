@@ -7,6 +7,7 @@ import login from './login';
 import build from './build';
 import list from './list';
 import deploy from './deploy';
+import setEndpoint from './endpoint';
 
 // init program
 yargs
@@ -16,6 +17,7 @@ yargs
   .help();
 
 // plug commands
+setEndpoint(yargs);
 login(yargs);
 build(yargs);
 list(yargs);
