@@ -16,8 +16,10 @@ export default (yargs) =>
   }, async ({image, ports: textPorts, labels: textLabels}) => {
     console.log(chalk.bold('Deploying:'), image, 'on', config.endpoint);
     // convert ports and labels to needed formats
-    const ports = (Array.isArray(textPorts) ? textPorts : [textPorts]);
-    const labels = (Array.isArray(textLabels) ? textLabels : [textLabels]).map(l => {
+    const ports = (Array.isArray(textPorts) ? textPorts : [textPorts]).filter(l => l !== undefined);
+    const labels = (Array.isArray(textLabels) ? textLabels : [textLabels])
+    .filter(l => l !== undefined)
+    .map(l => {
       const [k, v] = l.split('=');
       if (!k || !v) {
         return undefined;
