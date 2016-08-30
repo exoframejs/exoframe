@@ -52,7 +52,10 @@ export default (yargs) =>
       if (images.length > 0) {
         console.log(chalk.green('Owned images:'));
         images.forEach((image, i) => {
-          console.log(chalk.bold(`${i + 1})`), image.RepoTags[0], '-', humanFileSize(image.Size));
+          console.log(chalk.green(`${i + 1})`), image.RepoTags[0]);
+          console.log(`  ${chalk.bold('Id')}: ${image.Id.split(':')[1].slice(0, 12)}`);
+          console.log(`  ${chalk.bold('Size')}: ${humanFileSize(image.Size)}`);
+          console.log(`  ${chalk.bold('Template')}: ${image.Labels['exoframe.type']}`);
         });
       } else {
         console.log(chalk.green('No owned images found!'));
