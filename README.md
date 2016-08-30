@@ -2,6 +2,8 @@
 
 > Power armor for docker containers
 
+<img src="https://raw.githubusercontent.com/exoframejs/exoframe/master/img/exoframe-demo.gif?v=2" width="629">
+
 ## How it works
 
 Exoframe intends to do all the heavy lifting required to build and deploy docker images for you.
