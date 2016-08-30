@@ -7,7 +7,8 @@
     "exoframe": "bin/index.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon --debug --ignore dist/ --exec 'npm run build'",
+    "build": "babel src -d dist"
   },
   "keywords": [
     "docker",
@@ -32,7 +33,8 @@
     "babel-cli": "^6.14.0",
     "babel-core": "^6.14.0",
     "babel-preset-es2015-node": "^6.1.1",
-    "babel-preset-stage-0": "^6.5.0"
+    "babel-preset-stage-0": "^6.5.0",
+    "nodemon": "^1.10.2"
   },
   "dependencies": {
     "chalk": "^1.1.3",

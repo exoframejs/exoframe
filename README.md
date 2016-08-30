@@ -50,7 +50,9 @@ You can find a list of all commands and options below.
 1. Fork this repository to your own GitHub account and then clone it to your local device.
 2. Uninstall exoframe if it's already installed: `npm uninstall exoframe -g`
 3. Link it to the global module directory: `npm link`
-4. Now can use the `exoframe` command everywhere.
+4. Transpile the source code and watch for changes: `npm start`
+
+Now can use the `exoframe` command everywhere.
 
 ## License
 
