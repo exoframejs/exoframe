@@ -5,6 +5,7 @@ import tar from 'tar-fs';
 import path from 'path';
 import chalk from 'chalk';
 import minimatch from 'minimatch';
+import spinner from 'char-spinner';
 
 // our packages
 import config from './config';
@@ -18,7 +19,10 @@ export default (yargs) =>
     tag: {
       alias: 't',
     },
-  }, ({tag}) => {
+    verbose: {
+      alias: 'v',
+    },
+  }, ({tag, verbose}) => {
     console.log(chalk.bold('Building current folder using endpoint:'), config.endpoint);
     // create config vars
     const baseUrl = `${config.endpoint}/api/build`;
@@ -61,23 +65,37 @@ export default (yargs) =>
       },
     };
 
+    // render spinner
+    let spinnerInterval;
+    if (!verbose) {
+      spinnerInterval = spinner();
+    }
     // pipe stream to remote
     const stream = tarStream.pipe(got.stream.post(remoteUrl, options));
-    stream.on('data', (str) => {
-      const text = str.toString().split('\n');
-      text.filter(t => t && t.length).forEach(t => {
-        try {
-          const data = JSON.parse(t);
-          console.log(cleanText(data.stream));
-        } catch (e) {
-          console.log(cleanText(t));
-        }
+    // log output if in verbose mode
+    if (verbose) {
+      stream.on('data', (str) => {
+        const text = str.toString().split('\n');
+        text.filter(t => t && t.length).forEach(t => {
+          try {
+            const data = JSON.parse(t);
+            console.log(cleanText(data.stream));
+          } catch (e) {
+            console.log(cleanText(t));
+          }
+        });
       });
-    });
-    stream.on('end', () => {
+    }
+    // listen for stream finish
+    stream.on('finish', () => {
       if (deleteDockerfile) {
         fs.unlinkSync(dockerfilePath);
       }
+      // stop spinner
+      if (!verbose) {
+        clearInterval(spinnerInterval);
+      }
+      // log end
       console.log(chalk.bold('Done building!'), `Your images is now available as ${buildTag}`);
     });
   });
