@@ -6,7 +6,11 @@ import got from 'got';
 import config from './config';
 
 export default (yargs) =>
-  yargs.command('deploy <image>', 'deploy image on exoframe server', {}, async ({image}) => {
+  yargs.command('deploy <image>', 'deploy image on exoframe server', {
+    ports: {
+      alias: 'p',
+    },
+  }, async ({image, ports}) => {
     console.log(chalk.bold('Deploying:'), image, 'on', config.endpoint);
     const options = {
       headers: {
@@ -14,7 +18,7 @@ export default (yargs) =>
         'Content-type': 'application/json',
       },
       body: JSON.stringify({
-        services: [{name: image}],
+        services: [{name: image, ports}],
       }),
       json: true,
     };
