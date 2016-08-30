@@ -10,4 +10,17 @@ CMD mvn exec:java
   labels: {
     'exoframe.type': 'maven',
   },
+  async interactive(inquirer) {
+    const prompts = [];
+    prompts.push({
+      type: 'input',
+      name: 'cmd',
+      message: 'New command:',
+    });
+
+    const {cmd} = await inquirer.prompt(prompts);
+    if (cmd) {
+      this.dockerfile = this.dockerfile.replace(/CMD.+?\n/g, `CMD ${cmd}`);
+    }
+  },
 };

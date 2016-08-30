@@ -6,6 +6,7 @@ import path from 'path';
 import chalk from 'chalk';
 import minimatch from 'minimatch';
 import spinner from 'char-spinner';
+import inquirer from 'inquirer';
 
 // our packages
 import config from './config';
@@ -19,19 +20,32 @@ export default (yargs) =>
     tag: {
       alias: 't',
     },
+    interactive: {
+      alias: 'i',
+    },
     verbose: {
       alias: 'v',
     },
-  }, ({tag, verbose}) => {
+  }, async ({tag, interactive, verbose}) => {
     console.log(chalk.bold('Building current folder using endpoint:'), config.endpoint);
     // create config vars
     const baseUrl = `${config.endpoint}/api/build`;
     const workdir = process.cwd();
 
     // get templates based on workdir
-    const {dockerfile, ignores, labels: templateLabels} = detectTemplate(workdir);
-    if (!dockerfile || !dockerfile.length) {
+    const template = detectTemplate(workdir);
+    if (!template) {
       console.error(chalk.red('Error!'), 'Could not detect template for current project!');
+      return;
+    }
+
+    if (interactive && template.interactive) {
+      await template.interactive(inquirer);
+    }
+
+    // check template dockerfile
+    if (!template.dockerfile || !template.dockerfile.length) {
+      console.error(chalk.red('Error!'), 'Template Dockerfile is empty!');
       return;
     }
 
@@ -39,7 +53,7 @@ export default (yargs) =>
     const buildTag = tag || workdir.split('/').pop().trim();
     const dockerfilePath = path.join(workdir, 'Dockerfile');
     const labels = {
-      ...templateLabels,
+      ...template.labels,
       'exoframe.user': config.user.username,
     };
     const labelsString = JSON.stringify(labels);
@@ -51,13 +65,13 @@ export default (yargs) =>
       fs.accessSync(dockerfilePath);
     } catch (e) {
       // if no - write new dockerfile
-      fs.writeFileSync(dockerfilePath, dockerfile, 'utf8');
+      fs.writeFileSync(dockerfilePath, template.dockerfile, 'utf8');
       // say we need to delete dockerfile later
       deleteDockerfile = true;
     }
 
     // create tar stream from current folder
-    const tarStream = tar.pack(workdir, {ignore: (name) => ignores.some(ignore => minimatch(name, ignore))});
+    const tarStream = tar.pack(workdir, {ignore: (name) => template.ignores.some(ignore => minimatch(name, ignore))});
 
     const options = {
       headers: {
