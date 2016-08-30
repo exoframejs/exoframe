@@ -29,5 +29,5 @@ status(yargs);
 yargs.argv; // eslint-disable-line
 
 // output all uncaught exceptions
-process.on('uncaughtException', err => console.error(chalk.red('Uncaught exception:'), err));
-process.on('unhandledRejection', error => console.error(chalk.red('Unhandled rejection:'), error));
+process.on('uncaughtException', err => console.trace(chalk.red('Uncaught exception:'), err));
+process.on('unhandledRejection', error => console.trace(chalk.red('Unhandled rejection:'), error));

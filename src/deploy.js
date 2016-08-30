@@ -10,15 +10,27 @@ export default (yargs) =>
     ports: {
       alias: 'p',
     },
-  }, async ({image, ports}) => {
+    labels: {
+      alias: 'l',
+    },
+  }, async ({image, ports: textPorts, labels: textLabels}) => {
     console.log(chalk.bold('Deploying:'), image, 'on', config.endpoint);
+    // convert ports and labels to needed formats
+    const ports = (Array.isArray(textPorts) ? textPorts : [textPorts]);
+    const labels = (Array.isArray(textLabels) ? textLabels : [textLabels]).map(l => {
+      const [k, v] = l.split('=');
+      if (!k || !v) {
+        return undefined;
+      }
+      return {key: k, value: v};
+    }).filter(l => l !== undefined);
     const options = {
       headers: {
         'x-access-token': config.token,
         'Content-type': 'application/json',
       },
       body: JSON.stringify({
-        services: [{name: image, ports}],
+        services: [{name: image, ports, labels}],
       }),
       json: true,
     };
@@ -34,7 +46,14 @@ export default (yargs) =>
         console.log(chalk.bold(`${i + 1})`), 'Container with ID:', container.id);
       });
     } catch (e) {
-      console.error(e);
+      // log auth error
+      if (e.statusCode === 403) {
+        console.log(chalk.red('Authentication token expired!'), 'Please re-login');
+        return;
+      }
+
+      // log other errors
       console.log(chalk.red('Error deploying!'));
+      console.error(e);
     }
   });

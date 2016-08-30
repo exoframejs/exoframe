@@ -84,6 +84,19 @@ export default (yargs) =>
     if (!verbose) {
       spinnerInterval = spinner();
     }
+    const cleanUp = () => {
+      if (deleteDockerfile) {
+        try {
+          fs.unlinkSync(dockerfilePath);
+        } catch (e) {
+          console.log('error deleting dockerfile:', e);
+        }
+      }
+      // stop spinner
+      if (!verbose) {
+        clearInterval(spinnerInterval);
+      }
+    };
     // pipe stream to remote
     const stream = tarStream.pipe(got.stream.post(remoteUrl, options));
     // log output if in verbose mode
@@ -102,14 +115,19 @@ export default (yargs) =>
     }
     // listen for stream finish
     stream.on('finish', () => {
-      if (deleteDockerfile) {
-        fs.unlinkSync(dockerfilePath);
-      }
-      // stop spinner
-      if (!verbose) {
-        clearInterval(spinnerInterval);
-      }
+      cleanUp();
       // log end
       console.log(chalk.bold('Done building!'), `Your images is now available as ${buildTag}`);
+    });
+    // listen for stream errors
+    stream.on('error', (e) => {
+      // do delayed cleanup
+      setTimeout(cleanUp, 100);
+      // log error
+      if (e.statusCode === 403) {
+        console.log(chalk.red('Authentication token expired!'), 'Please re-login');
+      } else {
+        console.log(chalk.bold('Error during build!'), e);
+      }
     });
   });

@@ -1,1 +1,1 @@
-# Exoframe - power armor for your Docker containers
+# Exoframe - power armor for Docker containers

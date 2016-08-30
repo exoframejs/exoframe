@@ -77,6 +77,12 @@ export default (yargs) =>
         console.log(chalk.green('No owned services found!'));
       }
     } catch (e) {
+      // log auth error
+      if (e.statusCode === 403) {
+        console.log(chalk.red('Authentication token expired!'), 'Please re-login');
+        return;
+      }
+
       // output error message and log error
       console.log(chalk.red('Error getting images or services!'));
       console.error(e);
