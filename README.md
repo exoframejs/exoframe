@@ -50,10 +50,17 @@ You can find a list of all commands and options below.
 ## Configuration
 
 Exoframe stores its config in `~/.exoframe/cli.config.yml`.  
-Currently it only contains endpoint URL:
+Currently it contains endpoint URL and list of template plugins:
 
 ```yaml
 endpoint: 'http://localhost:3000' # your endpoint URL, defaults to localhost
+
+plugins: # list of plugins by categories
+  templates: # template plugins
+    - exoframe-template-node # default node.js template plugin
+    - exoframe-template-maven # default maven template plugin
+    - my-auth-npm-package # you can use npm package name here
+    - my-git-plugin: git+https://u:pwd@githost.com/user/my-git-plugin.git # you can also use git npm packages
 ```
 
 ## Contribute

@@ -4,12 +4,18 @@ import fs from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
 
+// our packages
+import installPlugins from './plugin';
+
 // construct paths
 const baseFolder = path.join(os.homedir(), '.exoframe');
 const configPath = path.join(baseFolder, 'cli.config.yml');
 
 const defaultConfig = {
   endpoint: 'http://localhost:3000',
+  plugins: {
+    templates: ['exoframe-template-node', 'exoframe-template-maven'],
+  },
 };
 
 // default config
@@ -33,6 +39,9 @@ try {
 } catch (e) {
   console.error('Error parsing user config:', e);
 }
+
+// install plugins
+installPlugins(userConfig);
 
 export const updateConfig = (newCfg) => {
   const cfg = {...userConfig, ...newCfg};
