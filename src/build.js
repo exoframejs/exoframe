@@ -14,17 +14,14 @@ import detectTemplate from './templates';
 const cleanText = (txt) => txt.trim().replace(/[\n\r]/g, '');
 
 export default (yargs) =>
-  yargs.command('build [endpoint]', 'build current folder using exoframe server', {
+  yargs.command('build', 'build current folder using exoframe server', {
     tag: {
       alias: 't',
     },
-    endpoint: {
-      default: config.endpoint,
-    },
-  }, ({endpoint, tag}) => {
-    console.log(chalk.bold('Building current folder using endpoint:'), endpoint);
+  }, ({tag}) => {
+    console.log(chalk.bold('Building current folder using endpoint:'), config.endpoint);
     // create config vars
-    const baseUrl = `${endpoint.replace(/\/$/, '')}/api/build`;
+    const baseUrl = `${config.endpoint.replace(/\/$/, '')}/api/build`;
     const workdir = process.cwd();
 
     // get templates based on workdir

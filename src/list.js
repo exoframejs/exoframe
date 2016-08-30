@@ -21,19 +21,15 @@ const humanFileSize = (bytes) => {
 };
 
 export default (yargs) =>
-  yargs.command('list [endpoint]', 'list your images on exoframe server', {
-    endpoint: {
-      default: config.endpoint,
-    },
-  }, async ({endpoint}) => {
-    console.log(chalk.bold('Getting images from:'), endpoint);
+  yargs.command('list', 'list your images on exoframe server', async () => {
+    console.log(chalk.bold('Getting images from:'), config.endpoint);
     const options = {
       headers: {
         'x-access-token': config.token,
       },
       json: true,
     };
-    const remoteUrl = `${endpoint.replace(/\/$/, '')}/api/list`;
+    const remoteUrl = `${config.endpoint.replace(/\/$/, '')}/api/list`;
     try {
       const {body} = await got(remoteUrl, options);
       // check for errors

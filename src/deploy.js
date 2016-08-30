@@ -6,12 +6,8 @@ import got from 'got';
 import config from './config';
 
 export default (yargs) =>
-  yargs.command('deploy <image> [endpoint]', 'deploy image on exoframe server', {
-    endpoint: {
-      default: config.endpoint,
-    },
-  }, async ({image, endpoint}) => {
-    console.log(chalk.bold('Deploying:'), image, 'on', endpoint);
+  yargs.command('deploy <image>', 'deploy image on exoframe server', async ({image}) => {
+    console.log(chalk.bold('Deploying:'), image, 'on', config.endpoint);
     const options = {
       headers: {
         'x-access-token': config.token,
@@ -22,7 +18,7 @@ export default (yargs) =>
       }),
       json: true,
     };
-    const remoteUrl = `${endpoint.replace(/\/$/, '')}/api/deploy`;
+    const remoteUrl = `${config.endpoint.replace(/\/$/, '')}/api/deploy`;
     try {
       const {body} = await got.post(remoteUrl, options);
       // check for errors
