@@ -45,6 +45,15 @@ You can find a list of all commands and options below.
 | status                 | Get Exoframe status and config |
 
 
+## Configuration
+
+Exoframe stores its config in `~/.exoframe/cli.config.yml`.  
+Currently it only contains endpoint URL:
+
+```yaml
+endpoint: 'http://localhost:3000' # your endpoint URL, defaults to localhost
+```
+
 ## Contribute
 
 1. Fork this repository to your own GitHub account and then clone it to your local device.
