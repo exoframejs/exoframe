@@ -6,7 +6,7 @@ import got from 'got';
 import config from './config';
 
 export default (yargs) =>
-  yargs.command('deploy <image>', 'deploy image on exoframe server', async ({image}) => {
+  yargs.command('deploy <image>', 'deploy image on exoframe server', {}, async ({image}) => {
     console.log(chalk.bold('Deploying:'), image, 'on', config.endpoint);
     const options = {
       headers: {

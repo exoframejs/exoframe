@@ -10,7 +10,7 @@ const validate = input => input && input.length > 0;
 const filter = input => input.trim();
 
 export default (yargs) =>
-  yargs.command('login', 'login into exoframe server', async () => {
+  yargs.command('login', 'login into exoframe server', {}, async () => {
     console.log(chalk.bold('Logging in to:'), config.endpoint);
     const prompts = [];
     prompts.push({

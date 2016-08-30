@@ -20,28 +20,65 @@ const humanFileSize = (bytes) => {
   return `${bytes.toFixed(1)} ${units[u]}`;
 };
 
+// simplified url loader
+const getUrl = async (remoteUrl) => {
+  // construct shared request params
+  const options = {
+    headers: {
+      'x-access-token': config.token,
+    },
+    json: true,
+  };
+  // try sending request
+  const {body} = await got(remoteUrl, options);
+  // check for errors
+  if (!body) {
+    throw new Error('Server returned empty response!');
+  }
+  return body;
+};
+
 export default (yargs) =>
-  yargs.command('list', 'list your images on exoframe server', async () => {
-    console.log(chalk.bold('Getting images from:'), config.endpoint);
-    const options = {
-      headers: {
-        'x-access-token': config.token,
-      },
-      json: true,
-    };
-    const remoteUrl = `${config.endpoint.replace(/\/$/, '')}/api/list`;
+  yargs.command('list', 'list your images on exoframe server', {}, async () => {
+    // log header
+    console.log(chalk.bold('Getting images and services from:'), config.endpoint);
+    console.log();
+
     try {
-      const {body} = await got(remoteUrl, options);
-      // check for errors
-      if (!body || !body.length) {
-        throw new Error('Error getting images!');
+      // images request url
+      const remoteImagesUrl = `${config.endpoint.replace(/\/$/, '')}/api/images`;
+      // try sending request
+      const images = await getUrl(remoteImagesUrl);
+      if (images.length > 0) {
+        console.log(chalk.green('Owned images:'));
+        images.forEach((image, i) => {
+          console.log(chalk.bold(`${i + 1})`), image.RepoTags[0], '-', humanFileSize(image.Size));
+        });
+      } else {
+        console.log(chalk.green('No owned images found!'));
       }
-      console.log(chalk.green('Owned images:'));
-      body.forEach((image, i) => {
-        console.log(chalk.bold(`${i + 1})`), image.RepoTags[0], '-', humanFileSize(image.Size));
-      });
+      console.log();
+
+      // services request url
+      const remoteSvcUrl = `${config.endpoint.replace(/\/$/, '')}/api/services`;
+      // try sending request
+      const services = await getUrl(remoteSvcUrl);
+      if (services.length > 0) {
+        console.log(chalk.green('Owned services:'));
+        services.forEach((svc, i) => {
+          console.log(chalk.bold(`${i + 1})`), svc.Names[0], ':');
+          console.log(`  ${chalk.bold('Image')}: ${svc.Image}`);
+          console.log(`  ${chalk.bold('Ports')}: ${svc.Ports.length ? svc.Ports : 'None'}`);
+          console.log(`  ${chalk.bold('Status')}: ${svc.Status}`);
+          console.log(`  ${chalk.bold('Template')}: ${svc.Labels['exoframe.type']}`);
+          console.log();
+        });
+      } else {
+        console.log(chalk.green('No owned services found!'));
+      }
     } catch (e) {
+      // output error message and log error
+      console.log(chalk.red('Error getting images or services!'));
       console.error(e);
-      console.log(chalk.red('Error getting images in!'));
     }
   });
