@@ -18,7 +18,7 @@ export default (yargs) =>
       }),
       json: true,
     };
-    const remoteUrl = `${config.endpoint.replace(/\/$/, '')}/api/deploy`;
+    const remoteUrl = `${config.endpoint}/api/deploy`;
     try {
       const {body} = await got.post(remoteUrl, options);
       // check for errors

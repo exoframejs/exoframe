@@ -46,7 +46,7 @@ export default (yargs) =>
 
     try {
       // images request url
-      const remoteImagesUrl = `${config.endpoint.replace(/\/$/, '')}/api/images`;
+      const remoteImagesUrl = `${config.endpoint}/api/images`;
       // try sending request
       const images = await getUrl(remoteImagesUrl);
       if (images.length > 0) {
@@ -60,7 +60,7 @@ export default (yargs) =>
       console.log();
 
       // services request url
-      const remoteSvcUrl = `${config.endpoint.replace(/\/$/, '')}/api/services`;
+      const remoteSvcUrl = `${config.endpoint}/api/services`;
       // try sending request
       const services = await getUrl(remoteSvcUrl);
       if (services.length > 0) {

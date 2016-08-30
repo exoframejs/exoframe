@@ -24,7 +24,12 @@ try {
 
 // load
 try {
-  userConfig = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
+  const newCfg = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
+  // assign new config and clean endpoint url
+  userConfig = {
+    ...newCfg,
+    endpoint: newCfg.endpoint.replace(/\/$/, ''),
+  };
 } catch (e) {
   console.error('Error parsing user config:', e);
 }

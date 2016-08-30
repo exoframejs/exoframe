@@ -29,7 +29,7 @@ export default (yargs) =>
 
     const {username, password} = await inquirer.prompt(prompts);
 
-    const remoteUrl = `${config.endpoint.replace(/\/$/, '')}/api/login`;
+    const remoteUrl = `${config.endpoint}/api/login`;
     try {
       const {body} = await got(remoteUrl, {body: {username, password}, json: true});
       // check for errors

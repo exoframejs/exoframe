@@ -21,7 +21,7 @@ export default (yargs) =>
   }, ({tag}) => {
     console.log(chalk.bold('Building current folder using endpoint:'), config.endpoint);
     // create config vars
-    const baseUrl = `${config.endpoint.replace(/\/$/, '')}/api/build`;
+    const baseUrl = `${config.endpoint}/api/build`;
     const workdir = process.cwd();
 
     // get templates based on workdir
