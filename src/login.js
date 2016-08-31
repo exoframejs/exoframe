@@ -39,7 +39,7 @@ export default (yargs) =>
       updateConfig(body);
       console.log(chalk.green('Successfully logged in!'));
     } catch (e) {
-      console.error(e);
       console.log(chalk.red('Error logging in!'), 'Check your username and password and try again.');
+      console.error(e);
     }
   });

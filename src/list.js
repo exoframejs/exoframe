@@ -4,6 +4,7 @@ import got from 'got';
 
 // our packages
 import config from './config';
+import {handleError} from './error';
 
 // convert to human readable file size
 const humanFileSize = (bytes) => {
@@ -80,9 +81,8 @@ export default (yargs) =>
         console.log(chalk.green('No owned services found!'));
       }
     } catch (e) {
-      // log auth error
-      if (e.statusCode === 403) {
-        console.log(chalk.red('Authentication token expired!'), 'Please re-login');
+      // try generic error handling first
+      if (handleError(e)) {
         return;
       }
 

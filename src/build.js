@@ -11,6 +11,7 @@ import inquirer from 'inquirer';
 // our packages
 import config from './config';
 import detectTemplate from './templates';
+import {handleError} from './error';
 
 // text cleanup
 const cleanText = (txt) => txt.trim().replace(/[\n\r]/g, '');
@@ -123,11 +124,12 @@ export default (yargs) =>
     stream.on('error', (e) => {
       // do delayed cleanup
       setTimeout(cleanUp, 100);
-      // log error
-      if (e.statusCode === 403) {
-        console.log(chalk.red('Authentication token expired!'), 'Please re-login');
-      } else {
-        console.log(chalk.bold('Error during build!'), e);
+      // try generic error handling first
+      if (handleError(e)) {
+        return;
       }
+      // log other errors
+      console.log(chalk.bold('Error during build!'));
+      console.error(e);
     });
   });
