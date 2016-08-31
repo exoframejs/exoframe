@@ -13,7 +13,7 @@ import status from './status';
 // init program
 yargs
   .version('0.1.0')
-  .completion()
+  .completion('completion', false)
   .demand(1)
   .help();
 
