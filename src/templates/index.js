@@ -4,10 +4,11 @@ import chalk from 'chalk';
 
 // our packages
 import config from '../config';
+import dockerfileTemplate from './dockerfile';
 
 export default (workdir) => {
   const templatePlugins = config.plugins ? config.plugins.templates || [] : [];
-  const templates = [].concat(templatePlugins
+  const templates = [dockerfileTemplate].concat(templatePlugins
     .map(plugin => {
       const name = typeof plugin === 'object' ? Object.keys(plugin)[0] : plugin;
       return require(name); // eslint-disable-line
