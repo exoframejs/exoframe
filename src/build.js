@@ -30,7 +30,7 @@ export default (yargs) =>
   }, async ({tag, interactive, verbose}) => {
     console.log(chalk.bold('Building current folder using endpoint:'), config.endpoint);
     // create config vars
-    const baseUrl = `${config.endpoint}/api/build`;
+    const remoteUrl = `${config.endpoint}/api/build`;
     const workdir = process.cwd();
 
     // get templates based on workdir
@@ -57,8 +57,6 @@ export default (yargs) =>
       ...template.labels,
       'exoframe.user': config.user.username,
     };
-    const labelsString = JSON.stringify(labels);
-    const remoteUrl = `${baseUrl}?tag=${encodeURIComponent(buildTag)}&labels=${encodeURIComponent(labelsString)}`;
 
     // check if dockerfile already exists
     let deleteDockerfile = false;
@@ -77,6 +75,10 @@ export default (yargs) =>
     const options = {
       headers: {
         'x-access-token': config.token,
+      },
+      query: {
+        tag: buildTag,
+        labels: JSON.stringify(labels),
       },
     };
 
