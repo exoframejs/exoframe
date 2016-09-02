@@ -33,11 +33,11 @@ export const labelsFromString = (str) => {
 };
 
 /**
- * Transforms string of comma separated ports to array of ports
- * @param  {String} str String of comma separated ports
- * @return {Array}      Array of port mappings
+ * Transforms string of comma separated values to array of values
+ * @param  {String} str String of comma separated values
+ * @return {Array}      Array of values
  */
-export const portsStringToArray = (str) => {
+export const commaStringToArray = (str) => {
   if (!str || !str.length) {
     return undefined;
   }

@@ -1,4 +1,5 @@
 // npm packages
+import _ from 'lodash';
 import chalk from 'chalk';
 import got from 'got';
 import inquirer from 'inquirer';
@@ -7,7 +8,7 @@ import inquirer from 'inquirer';
 import config from './config';
 import {handleError} from './error';
 import {getImages} from './list';
-import {labelArrayFromString, portsStringToArray} from './util';
+import {labelArrayFromString, commaStringToArray} from './util';
 
 const processLabels = (labels) => labels
   .filter(l => l !== undefined)
@@ -27,10 +28,13 @@ export default (yargs) =>
     labels: {
       alias: 'l',
     },
+    env: {
+      alias: 'e',
+    },
     noninteractive: {
       alias: 'ni',
     },
-  }, async ({image: userImage, ports: textPorts, labels: textLabels, noninteractive}) => {
+  }, async ({image: userImage, ports: textPorts, labels: textLabels, env: textEnv, noninteractive}) => {
     let image = userImage;
     if (!image) {
       const images = await getImages();
@@ -47,11 +51,12 @@ export default (yargs) =>
     // convert ports and labels to needed formats
     let ports = (Array.isArray(textPorts) ? textPorts : [textPorts]).filter(l => l !== undefined);
     let labels = processLabels(Array.isArray(textLabels) ? textLabels : [textLabels]);
+    let env = (Array.isArray(textEnv) ? textEnv : [textEnv]).filter(e => e !== undefined);
 
     // ask user about config if we're interactive
     if (!noninteractive) {
       // get user custom tag
-      const {inPorts, inLabels} = await inquirer
+      const {inPorts, inLabels, inEnv} = await inquirer
       .prompt([{
         type: 'input',
         name: 'inPorts',
@@ -60,10 +65,18 @@ export default (yargs) =>
         type: '',
         name: 'inLabels',
         message: 'Custom labels (comma separated):',
+      }, {
+        type: '',
+        name: 'inEnv',
+        message: 'Environment variables (comma separated):',
       }]);
-      ports = portsStringToArray(inPorts) || ports;
+      // assign ports
+      ports = commaStringToArray(inPorts) || ports;
+      // assign labels
       const userLabels = labelArrayFromString(inLabels);
       labels = userLabels ? processLabels(userLabels) : labels;
+      // assign env vars
+      env = commaStringToArray(inEnv) || env;
     }
 
     // send request
@@ -73,7 +86,7 @@ export default (yargs) =>
         'Content-type': 'application/json',
       },
       body: JSON.stringify({
-        services: [{name: image, ports, labels}],
+        services: [{name: image, ports, labels, env}],
       }),
       json: true,
     };
