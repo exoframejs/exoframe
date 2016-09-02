@@ -21,6 +21,13 @@ const defaultConfig = {
 // default config
 let userConfig = defaultConfig; // eslint-disable-line
 
+// create config folder if doesn't exist
+try {
+  fs.statSync(baseFolder);
+} catch (e) {
+  fs.mkdirSync(baseFolder);
+}
+
 // create user config if doesn't exist
 try {
   fs.statSync(configPath);
