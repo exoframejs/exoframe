@@ -12,6 +12,7 @@ import inquirer from 'inquirer';
 import config from './config';
 import detectTemplate from './templates';
 import {handleError} from './error';
+import {labelsFromString} from './util';
 
 // text cleanup
 const cleanText = (txt) => txt.trim().replace(/[\n\r]/g, '');
@@ -56,19 +57,7 @@ export default (yargs) =>
         message: 'Custom labels (comma separated):',
       }]);
       userTag = userInputTag;
-      userLabels = userInputLabels ?
-        userInputLabels
-          .split(',')
-          .map(it => it.trim())
-          .filter(it => it.includes('='))
-          .reduce((sum, el) => {
-            const [k, v] = el.split('=');
-            return {
-              [k]: v,
-              ...sum,
-            };
-          }, {}) :
-        userLabels;
+      userLabels = labelsFromString(userInputLabels) || userLabels;
     }
 
     if (!noninteractive && template.interactive) {
