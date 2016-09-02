@@ -33,6 +33,9 @@ export default (yargs) =>
     restart: {
       alias: 'r',
     },
+    volumes: {
+      alias: 'v',
+    },
     noninteractive: {
       alias: 'ni',
     },
@@ -42,6 +45,7 @@ export default (yargs) =>
     labels: textLabels,
     env: textEnv,
     restart: textRestart,
+    volumes: textVolumes,
     noninteractive,
   }) => {
     let image = userImage;
@@ -61,12 +65,13 @@ export default (yargs) =>
     let ports = (Array.isArray(textPorts) ? textPorts : [textPorts]).filter(l => l !== undefined);
     let labels = processLabels(Array.isArray(textLabels) ? textLabels : [textLabels]);
     let env = (Array.isArray(textEnv) ? textEnv : [textEnv]).filter(e => e !== undefined);
+    let volumes = (Array.isArray(textVolumes) ? textVolumes : [textVolumes]).filter(e => e !== undefined);
     let restart = {name: textRestart};
 
     // ask user about config if we're interactive
     if (!noninteractive) {
       // get user custom tag
-      const {inPorts, inLabels, inEnv, inRestart, inRestartRetries} = await inquirer
+      const {inPorts, inLabels, inEnv, inRestart, inRestartRetries, inVolumes} = await inquirer
       .prompt([{
         type: 'input',
         name: 'inPorts',
@@ -79,6 +84,10 @@ export default (yargs) =>
         type: 'input',
         name: 'inEnv',
         message: 'Environment variables (comma separated):',
+      }, {
+        type: 'input',
+        name: 'inVolumes',
+        message: 'Volumes (comma separated):',
       }, {
         type: 'list',
         name: 'inRestart',
@@ -105,6 +114,8 @@ export default (yargs) =>
         name: inRestart,
         retries: inRestartRetries,
       } : textRestart;
+      // assign volumes
+      volumes = commaStringToArray(inVolumes) || volumes;
     }
 
     // send request
@@ -114,7 +125,7 @@ export default (yargs) =>
         'Content-type': 'application/json',
       },
       body: JSON.stringify({
-        services: [{name: image, ports, labels, env, restart}],
+        services: [{name: image, ports, labels, env, restart, volumes}],
       }),
       json: true,
     };
