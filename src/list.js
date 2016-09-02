@@ -39,6 +39,14 @@ const getUrl = async (remoteUrl) => {
   return body;
 };
 
+export const getImages = async () => {
+  // images request url
+  const remoteImagesUrl = `${config.endpoint}/api/images`;
+  // try sending request
+  const images = await getUrl(remoteImagesUrl);
+  return images.map(img => ({...img, name: img.RepoTags[0]}));
+};
+
 export default (yargs) =>
   yargs.command('list', 'list your images on exoframe server', {}, async () => {
     // log header
@@ -46,14 +54,11 @@ export default (yargs) =>
     console.log();
 
     try {
-      // images request url
-      const remoteImagesUrl = `${config.endpoint}/api/images`;
-      // try sending request
-      const images = await getUrl(remoteImagesUrl);
+      const images = await getImages();
       if (images.length > 0) {
         console.log(chalk.green('Owned images:'));
         images.forEach((image, i) => {
-          console.log(chalk.green(`${i + 1})`), image.RepoTags[0]);
+          console.log(chalk.green(`${i + 1})`), image.name);
           console.log(`  ${chalk.bold('Id')}: ${image.Id.split(':')[1].slice(0, 12)}`);
           console.log(`  ${chalk.bold('Size')}: ${humanFileSize(image.Size)}`);
           console.log(`  ${chalk.bold('Template')}: ${image.Labels['exoframe.type']}`);

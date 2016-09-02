@@ -6,6 +6,7 @@ import inquirer from 'inquirer';
 // our packages
 import config from './config';
 import {handleError} from './error';
+import {getImages} from './list';
 import {labelArrayFromString, portsStringToArray} from './util';
 
 const processLabels = (labels) => labels
@@ -19,7 +20,7 @@ const processLabels = (labels) => labels
   }).filter(l => l !== undefined);
 
 export default (yargs) =>
-  yargs.command('deploy <image>', 'deploy image on exoframe server', {
+  yargs.command('deploy [image]', 'deploy image on exoframe server', {
     ports: {
       alias: 'p',
     },
@@ -29,7 +30,19 @@ export default (yargs) =>
     noninteractive: {
       alias: 'ni',
     },
-  }, async ({image, ports: textPorts, labels: textLabels, noninteractive}) => {
+  }, async ({image: userImage, ports: textPorts, labels: textLabels, noninteractive}) => {
+    let image = userImage;
+    if (!image) {
+      const images = await getImages();
+      const {inImage} = await inquirer.prompt({
+        type: 'list',
+        name: 'inImage',
+        message: 'Chose image to deploy:',
+        choices: images,
+      });
+      image = inImage;
+    }
+
     console.log(chalk.bold('Deploying:'), image, 'on', config.endpoint);
     // convert ports and labels to needed formats
     let ports = (Array.isArray(textPorts) ? textPorts : [textPorts]).filter(l => l !== undefined);
@@ -42,7 +55,7 @@ export default (yargs) =>
       .prompt([{
         type: 'input',
         name: 'inPorts',
-        message: 'Ports (comma separated):',
+        message: 'Port mappings (comma separated):',
       }, {
         type: '',
         name: 'inLabels',
