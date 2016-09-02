@@ -1,5 +1,4 @@
 // npm packages
-import _ from 'lodash';
 import chalk from 'chalk';
 import got from 'got';
 import inquirer from 'inquirer';
@@ -31,10 +30,20 @@ export default (yargs) =>
     env: {
       alias: 'e',
     },
+    restart: {
+      alias: 'r',
+    },
     noninteractive: {
       alias: 'ni',
     },
-  }, async ({image: userImage, ports: textPorts, labels: textLabels, env: textEnv, noninteractive}) => {
+  }, async ({
+    image: userImage,
+    ports: textPorts,
+    labels: textLabels,
+    env: textEnv,
+    restart: textRestart,
+    noninteractive,
+  }) => {
     let image = userImage;
     if (!image) {
       const images = await getImages();
@@ -52,23 +61,37 @@ export default (yargs) =>
     let ports = (Array.isArray(textPorts) ? textPorts : [textPorts]).filter(l => l !== undefined);
     let labels = processLabels(Array.isArray(textLabels) ? textLabels : [textLabels]);
     let env = (Array.isArray(textEnv) ? textEnv : [textEnv]).filter(e => e !== undefined);
+    let restart = {name: textRestart};
 
     // ask user about config if we're interactive
     if (!noninteractive) {
       // get user custom tag
-      const {inPorts, inLabels, inEnv} = await inquirer
+      const {inPorts, inLabels, inEnv, inRestart, inRestartRetries} = await inquirer
       .prompt([{
         type: 'input',
         name: 'inPorts',
         message: 'Port mappings (comma separated):',
       }, {
-        type: '',
+        type: 'input',
         name: 'inLabels',
         message: 'Custom labels (comma separated):',
       }, {
-        type: '',
+        type: 'input',
         name: 'inEnv',
         message: 'Environment variables (comma separated):',
+      }, {
+        type: 'list',
+        name: 'inRestart',
+        message: 'Restart policy:',
+        choices: ['no', 'on-failure', 'always', 'unless-stopped'],
+        default: 'no',
+      }, {
+        type: 'input',
+        name: 'inRestartRetries',
+        message: 'Max restart retries:',
+        validate: (val) => Number.isInteger(val),
+        filter: (val) => Number.parseInt(val, 10),
+        when: ({inRestart: r}) => r === 'on-failure',
       }]);
       // assign ports
       ports = commaStringToArray(inPorts) || ports;
@@ -77,6 +100,11 @@ export default (yargs) =>
       labels = userLabels ? processLabels(userLabels) : labels;
       // assign env vars
       env = commaStringToArray(inEnv) || env;
+      // assign restart
+      restart = inRestart ? {
+        name: inRestart,
+        retries: inRestartRetries,
+      } : textRestart;
     }
 
     // send request
@@ -86,7 +114,7 @@ export default (yargs) =>
         'Content-type': 'application/json',
       },
       body: JSON.stringify({
-        services: [{name: image, ports, labels, env}],
+        services: [{name: image, ports, labels, env, restart}],
       }),
       json: true,
     };
