@@ -45,19 +45,36 @@ export default (yargs) =>
     let userLabels = {};
     if (!noninteractive) {
       // get user custom tag
-      const {userInputTag, userInputLabels} = await inquirer
-      .prompt([{
+      const {userInputTag} = await inquirer
+      .prompt({
         type: 'input',
         name: 'userInputTag',
         message: 'Image tag:',
         default: userTag,
-      }, {
-        type: '',
-        name: 'userInputLabels',
-        message: 'Custom labels (comma separated):',
-      }]);
+      });
       userTag = userInputTag;
-      userLabels = labelsFromString(userInputLabels) || userLabels;
+
+      let moreLabels = false;
+      const askForLabel = async () => {
+        const {userInputLabels} = await inquirer.prompt({
+          type: 'input',
+          name: 'userInputLabels',
+          message: moreLabels ? 'Custom label (blank to continue)' : 'Custom label:',
+        });
+        const l = labelsFromString(userInputLabels);
+        if (l) {
+          userLabels = {
+            ...userLabels,
+            ...l,
+          };
+          moreLabels = true;
+          return askForLabel();
+        }
+
+        return undefined;
+      };
+      // ask for labels
+      await askForLabel();
     }
 
     if (!noninteractive && template.interactive) {
