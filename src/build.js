@@ -135,8 +135,8 @@ export default (yargs) =>
     // pipe stream to remote
     const stream = tarStream.pipe(got.stream.post(remoteUrl, options));
     // log output if in verbose mode
-    if (verbose) {
-      stream.on('data', (str) => {
+    stream.on('data', (str) => {
+      if (verbose) {
         const text = str.toString().split('\n');
         text.filter(t => t && t.length).forEach(t => {
           try {
@@ -146,10 +146,10 @@ export default (yargs) =>
             console.log(cleanText(t));
           }
         });
-      });
-    }
-    // listen for stream finish
-    stream.on('finish', () => {
+      }
+    });
+    // listen for read stream end
+    stream.on('end', () => {
       cleanUp();
       // log end
       console.log(chalk.bold('Done building!'), `Your images is now available as ${buildTag}`);
