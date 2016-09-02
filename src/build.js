@@ -21,13 +21,13 @@ export default (yargs) =>
     tag: {
       alias: 't',
     },
-    interactive: {
-      alias: 'i',
+    noninteractive: {
+      alias: 'ni',
     },
     verbose: {
       alias: 'v',
     },
-  }, async ({tag, interactive, verbose}) => {
+  }, async ({tag, noninteractive, verbose}) => {
     console.log(chalk.bold('Building current folder using endpoint:'), config.endpoint);
     // create config vars
     const remoteUrl = `${config.endpoint}/api/build`;
@@ -40,7 +40,38 @@ export default (yargs) =>
       return;
     }
 
-    if (interactive && template.interactive) {
+    let userTag = tag || workdir.split('/').pop().trim();
+    let userLabels = {};
+    if (!noninteractive) {
+      // get user custom tag
+      const {userInputTag, userInputLabels} = await inquirer
+      .prompt([{
+        type: 'input',
+        name: 'userInputTag',
+        message: 'Image tag:',
+        default: userTag,
+      }, {
+        type: '',
+        name: 'userInputLabels',
+        message: 'Custom labels (comma separated):',
+      }]);
+      userTag = userInputTag;
+      userLabels = userInputLabels ?
+        userInputLabels
+          .split(',')
+          .map(it => it.trim())
+          .filter(it => it.includes('='))
+          .reduce((sum, el) => {
+            const [k, v] = el.split('=');
+            return {
+              [k]: v,
+              ...sum,
+            };
+          }, {}) :
+        userLabels;
+    }
+
+    if (!noninteractive && template.interactive) {
       await template.interactive(inquirer);
     }
 
@@ -51,10 +82,11 @@ export default (yargs) =>
     }
 
     // metadata
-    const buildTag = tag || workdir.split('/').pop().trim();
+    const buildTag = userTag || tag;
     const dockerfilePath = path.join(workdir, 'Dockerfile');
     const labels = {
       ...template.labels,
+      ...userLabels,
       'exoframe.user': config.user.username,
     };
 
