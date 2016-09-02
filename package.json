@@ -1,6 +1,6 @@
 {
   "name": "exoframe",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Exoframe commad line interface",
   "main": "index.js",
   "bin": {
