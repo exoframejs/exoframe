@@ -44,7 +44,9 @@ export const getImages = async () => {
   const remoteImagesUrl = `${config.endpoint}/api/images`;
   // try sending request
   const images = await getUrl(remoteImagesUrl);
-  return images.map(img => ({...img, name: img.RepoTags[0]}));
+  return images
+    .map(img => ({...img, name: img.RepoTags[0]}))
+    .filter(img => !img.name.includes('<none>'));
 };
 
 export default (yargs) =>
