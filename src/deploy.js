@@ -111,13 +111,29 @@ export default (yargs) =>
       };
       await askForLabels();
 
+      // ask for env vars
+      let moreEnv = false;
+      const askForEnv = async () => {
+        const {inEnv} = await inquirer.prompt({
+          type: 'input',
+          name: 'inEnv',
+          message: moreEnv ? 'Environment variable (blank to continue):' : 'Environment variable [key=value]:',
+        });
+        // assign ports
+        const l = commaStringToArray(inEnv);
+        if (l) {
+          env = [...env, ...l];
+          moreEnv = true;
+          return askForEnv();
+        }
+
+        return undefined;
+      };
+      await askForEnv();
+
       // get user custom tag
-      const {inEnv, inRestart, inRestartRetries, inVolumes} = await inquirer
+      const {inRestart, inRestartRetries, inVolumes} = await inquirer
       .prompt([{
-        type: 'input',
-        name: 'inEnv',
-        message: 'Environment variables (comma separated):',
-      }, {
         type: 'input',
         name: 'inVolumes',
         message: 'Volumes (comma separated):',
@@ -137,8 +153,6 @@ export default (yargs) =>
       }]);
       // assign labels
       labels = userLabels ? processLabels(userLabels) : labels;
-      // assign env vars
-      env = commaStringToArray(inEnv) || env;
       // assign restart
       restart = inRestart ? {
         name: inRestart,
