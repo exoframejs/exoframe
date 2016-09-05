@@ -14,7 +14,7 @@ const configPath = path.join(baseFolder, 'cli.config.yml');
 const defaultConfig = {
   endpoint: 'http://localhost:3000',
   plugins: {
-    templates: ['exoframe-template-node', 'exoframe-template-maven'],
+    templates: ['exoframe-template-node', 'exoframe-template-maven', 'exoframe-template-nginx'],
   },
 };
 
