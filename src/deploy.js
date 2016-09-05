@@ -70,13 +70,29 @@ export default (yargs) =>
 
     // ask user about config if we're interactive
     if (!noninteractive) {
+      // ask for ports
+      let morePorts = false;
+      const askForPorts = async () => {
+        const {inPorts} = await inquirer.prompt({
+          type: 'input',
+          name: 'inPorts',
+          message: morePorts ? 'Port mapping (blank to continue)' : 'Port mapping [container:host]:',
+        });
+        // assign ports
+        const l = commaStringToArray(inPorts);
+        if (l) {
+          ports = [...ports, ...l];
+          morePorts = true;
+          return askForPorts();
+        }
+
+        return undefined;
+      };
+      await askForPorts();
+
       // get user custom tag
-      const {inPorts, inLabels, inEnv, inRestart, inRestartRetries, inVolumes} = await inquirer
+      const {inLabels, inEnv, inRestart, inRestartRetries, inVolumes} = await inquirer
       .prompt([{
-        type: 'input',
-        name: 'inPorts',
-        message: 'Port mappings (comma separated):',
-      }, {
         type: 'input',
         name: 'inLabels',
         message: 'Custom labels (comma separated):',
@@ -102,8 +118,6 @@ export default (yargs) =>
         filter: (val) => Number.parseInt(val, 10),
         when: ({inRestart: r}) => r === 'on-failure',
       }]);
-      // assign ports
-      ports = commaStringToArray(inPorts) || ports;
       // assign labels
       const userLabels = labelArrayFromString(inLabels);
       labels = userLabels ? processLabels(userLabels) : labels;
