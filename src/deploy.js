@@ -90,13 +90,30 @@ export default (yargs) =>
       };
       await askForPorts();
 
+      // ask for labels
+      let moreLabels = false;
+      let userLabels = [];
+      const askForLabels = async () => {
+        const {inLabels} = await inquirer.prompt({
+          type: 'input',
+          name: 'inLabels',
+          message: moreLabels ? 'Custom label (blank to continue):' : 'Custom label [key=value]:',
+        });
+        // assign ports
+        const l = labelArrayFromString(inLabels);
+        if (l) {
+          userLabels = [...userLabels, ...l];
+          moreLabels = true;
+          return askForLabels();
+        }
+
+        return undefined;
+      };
+      await askForLabels();
+
       // get user custom tag
-      const {inLabels, inEnv, inRestart, inRestartRetries, inVolumes} = await inquirer
+      const {inEnv, inRestart, inRestartRetries, inVolumes} = await inquirer
       .prompt([{
-        type: 'input',
-        name: 'inLabels',
-        message: 'Custom labels (comma separated):',
-      }, {
         type: 'input',
         name: 'inEnv',
         message: 'Environment variables (comma separated):',
@@ -119,7 +136,6 @@ export default (yargs) =>
         when: ({inRestart: r}) => r === 'on-failure',
       }]);
       // assign labels
-      const userLabels = labelArrayFromString(inLabels);
       labels = userLabels ? processLabels(userLabels) : labels;
       // assign env vars
       env = commaStringToArray(inEnv) || env;
