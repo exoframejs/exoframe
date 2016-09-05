@@ -6,7 +6,7 @@ import inquirer from 'inquirer';
 // our packages
 import config from './config';
 import {handleError} from './error';
-import {getImages} from './list';
+import {getImages, getServices} from './list';
 import {labelArrayFromString, commaStringToArray} from './util';
 
 const processLabels = (labels) => labels
@@ -36,6 +36,9 @@ export default (yargs) =>
     volumes: {
       alias: 'v',
     },
+    links: {
+      alias: 'li',
+    },
     noninteractive: {
       alias: 'ni',
     },
@@ -46,6 +49,7 @@ export default (yargs) =>
     env: textEnv,
     restart: textRestart,
     volumes: textVolumes,
+    links: textLinks,
     noninteractive,
   }) => {
     let image = userImage;
@@ -66,6 +70,7 @@ export default (yargs) =>
     let labels = processLabels(Array.isArray(textLabels) ? textLabels : [textLabels]);
     let env = (Array.isArray(textEnv) ? textEnv : [textEnv]).filter(e => e !== undefined);
     let volumes = (Array.isArray(textVolumes) ? textVolumes : [textVolumes]).filter(e => e !== undefined);
+    let links = (Array.isArray(textLinks) ? textLinks : [textLinks]).filter(e => e !== undefined);
     let restart = {name: textRestart};
 
     // ask user about config if we're interactive
@@ -89,6 +94,52 @@ export default (yargs) =>
         return undefined;
       };
       await askForPorts();
+
+      // ask for links
+      const services = await getServices();
+      const liveServices = services
+        .map(s => ({...s, name: s.Names[0].replace(/^\//, '')}))
+        .filter(s => s.Status.toLowerCase().includes('up'));
+      if (liveServices.length === 0) {
+        console.log(chalk.green('>'), 'No services running, skipping linking step..');
+      } else {
+        const {inLinks} = await inquirer.prompt([{
+          type: 'confirm',
+          name: 'addLinks',
+          message: 'Link with other containers?',
+          default: false,
+        }, {
+          type: 'checkbox',
+          name: 'inLinks',
+          message: 'Select containers to link:',
+          choices: liveServices,
+          when: ({addLinks}) => addLinks,
+        }]);
+        // assign ports
+        if (inLinks) {
+          links = [...links, ...inLinks];
+        }
+        // check if there are any links
+        if (links.length) {
+          const prompts = [{
+            type: 'confirm',
+            name: 'renameLinks',
+            message: 'Change link names?',
+            default: false,
+          }, ...links.map(l => ({
+            type: 'input',
+            name: l,
+            message: 'Link name:',
+            default: l,
+            filter: (val) => (val ? `${l}:${val}` : l),
+            when: ({renameLinks}) => renameLinks,
+          }))];
+          const answers = await inquirer.prompt(prompts);
+          const renamedLinks = Object.keys(answers).filter(k => k !== 'renameLinks').map(k => answers[k]);
+          // assign ports
+          links = renamedLinks;
+        }
+      }
 
       // ask for labels
       let moreLabels = false;
@@ -183,7 +234,7 @@ export default (yargs) =>
         'Content-type': 'application/json',
       },
       body: JSON.stringify({
-        services: [{name: image, ports, labels, env, restart, volumes}],
+        services: [{name: image, ports, labels, env, restart, volumes, links}],
       }),
       json: true,
     };
