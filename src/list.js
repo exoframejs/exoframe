@@ -49,6 +49,19 @@ export const getImages = async () => {
     .filter(img => !img.name.includes('<none>'));
 };
 
+export const getPublicImages = async () => {
+  // images request url
+  const remoteImagesUrl = `${config.endpoint}/api/images?public=true`;
+  // try sending request
+  const images = await getUrl(remoteImagesUrl);
+  // console.log('got pub images:', images);
+  return images
+    .filter(img => img.RepoTags && img.RepoTags.length > 0)
+    .filter(img => img.RepoDigests && img.RepoDigests.length > 0 && !img.RepoDigests.find(it => it.includes('<none>')))
+    .map(img => ({...img, name: img.RepoTags[0]}))
+    .filter(img => !img.name.includes('<none>'));
+};
+
 export const getServices = async () => {
   // services request url
   const remoteSvcUrl = `${config.endpoint}/api/services`;
@@ -65,6 +78,7 @@ export default (yargs) =>
   yargs.command('list [type]', 'list your images on exoframe server', {
     type: {
       alias: 't',
+      choices: ['all', 'public', 'images', 'services'],
       default: 'all',
     },
   }, async ({type}) => {
@@ -78,6 +92,19 @@ export default (yargs) =>
     console.log();
 
     try {
+      if (type === 'public') {
+        const images = await getPublicImages();
+        if (images.length > 0) {
+          console.log(chalk.green('Public images:'));
+          images.forEach((image, i) => {
+            console.log(chalk.green(`${i + 1})`), image.name, '-', humanFileSize(image.Size));
+          });
+        } else {
+          console.log(chalk.green('No public images found!'));
+        }
+        return;
+      }
+
       if (type === 'all' || type === 'images') {
         const images = await getImages();
         if (images.length > 0) {
