@@ -71,6 +71,7 @@ export const getServices = async () => {
 };
 
 const portsToString = (ports) => ports
+  .filter(p => p.PrivatePort && p.PublicPort)
   .map(p => `\n    - Container:${p.PrivatePort} to Host:${p.PublicPort} on ${p.IP} (${p.Type})`)
   .join('');
 
