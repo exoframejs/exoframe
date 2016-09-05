@@ -15,7 +15,7 @@ import {handleError} from './error';
 import {labelsFromString} from './util';
 
 // text cleanup
-const cleanText = (txt) => txt.trim().replace(/[\n\r]/g, '');
+export const cleanText = (txt) => txt.trim().replace(/[\n\r]/g, '');
 
 export default (yargs) =>
   yargs.command('build', 'build current folder using exoframe server', {
