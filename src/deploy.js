@@ -110,6 +110,8 @@ export default (yargs) =>
         return undefined;
       };
       await askForLabels();
+      // assign labels
+      labels = userLabels ? processLabels(userLabels) : labels;
 
       // ask for env vars
       let moreEnv = false;
@@ -131,13 +133,29 @@ export default (yargs) =>
       };
       await askForEnv();
 
-      // get user custom tag
-      const {inRestart, inRestartRetries, inVolumes} = await inquirer
+      // ask for volumes
+      let moreVol = false;
+      const askForVol = async () => {
+        const {inVolumes} = await inquirer.prompt({
+          type: 'input',
+          name: 'inVolumes',
+          message: moreVol ? 'Volumes (blank to continue):' : 'Volumes:',
+        });
+        // assign ports
+        const l = commaStringToArray(inVolumes);
+        if (l) {
+          volumes = [...volumes, ...l];
+          moreVol = true;
+          return askForVol();
+        }
+
+        return undefined;
+      };
+      await askForVol();
+
+      // ask for restart policy and retries count when applicable
+      const {inRestart, inRestartRetries} = await inquirer
       .prompt([{
-        type: 'input',
-        name: 'inVolumes',
-        message: 'Volumes (comma separated):',
-      }, {
         type: 'list',
         name: 'inRestart',
         message: 'Restart policy:',
@@ -151,15 +169,11 @@ export default (yargs) =>
         filter: (val) => Number.parseInt(val, 10),
         when: ({inRestart: r}) => r === 'on-failure',
       }]);
-      // assign labels
-      labels = userLabels ? processLabels(userLabels) : labels;
       // assign restart
       restart = inRestart ? {
         name: inRestart,
         retries: inRestartRetries,
       } : textRestart;
-      // assign volumes
-      volumes = commaStringToArray(inVolumes) || volumes;
     }
 
     // send request
