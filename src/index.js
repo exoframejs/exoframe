@@ -9,6 +9,7 @@ import list from './list';
 import deploy from './deploy';
 import setEndpoint from './endpoint';
 import status from './status';
+import stop from './stop';
 
 // init program
 yargs
@@ -24,6 +25,7 @@ build(yargs);
 list(yargs);
 deploy(yargs);
 status(yargs);
+stop(yargs);
 
 // parse
 yargs.argv; // eslint-disable-line
