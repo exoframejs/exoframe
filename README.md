@@ -42,8 +42,11 @@ You can find a list of all commands and options below.
 | endpoint <url>         | Sets the endpoint of Exoframe server |
 | login                  | Login into Exoframe server |
 | build                  | Build current folder into docker image |
-| list                   | List owned images and running services |
-| deploy <image>         | Deploy specified image using docker |
+| list [type]            | List owned images, running services or registry images |
+| deploy [image]         | Deploy specified image using docker |
+| stop [service]         | Stop running service |
+| rm [service]           | Remove non-running service |
+| pull <image>           | Pull image from registry |
 | status                 | Get Exoframe status and config |
 
 
@@ -59,7 +62,8 @@ plugins: # list of plugins by categories
   templates: # template plugins
     - exoframe-template-node # default node.js template plugin
     - exoframe-template-maven # default maven template plugin
-    - my-auth-npm-package # you can use npm package name here
+    - exoframe-template-nginx # default nginx template plugin
+    - my-template-npm-package # you can use npm package name here
     - my-git-plugin: git+https://u:pwd@githost.com/user/my-git-plugin.git # you can also use git npm packages
 ```
 
