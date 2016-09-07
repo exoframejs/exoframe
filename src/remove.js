@@ -9,7 +9,7 @@ import {handleError} from './error';
 import {getServices} from './list';
 
 export default (yargs) =>
-  yargs.command('remove [service]', 'remove non-running service on exoframe server', {
+  yargs.command('rm [service]', 'remove non-running service on exoframe server', {
     service: {
       alias: 's',
     },
