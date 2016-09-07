@@ -75,46 +75,73 @@ export default (yargs) =>
 
     // ask user about config if we're interactive
     if (!noninteractive) {
-      // ask for ports
-      let morePorts = false;
-      const askForPorts = async () => {
-        const {inPorts} = await inquirer.prompt({
-          type: 'input',
-          name: 'inPorts',
-          message: morePorts ? 'Port mapping (blank to continue)' : 'Port mapping [container:host]:',
-        });
-        // assign ports
-        const l = commaStringToArray(inPorts);
-        if (l) {
-          ports = [...ports, ...l];
-          morePorts = true;
-          return askForPorts();
-        }
-
-        return undefined;
-      };
-      await askForPorts();
-
-      // ask for links
       const services = await getServices();
       const liveServices = services
         .map(s => ({...s, name: s.Names[0].replace(/^\//, '')}))
         .filter(s => s.Status.toLowerCase().includes('up'));
-      if (liveServices.length === 0) {
-        console.log(chalk.green('>'), 'No services running, skipping linking step..');
-      } else {
-        const {inLinks} = await inquirer.prompt([{
-          type: 'confirm',
-          name: 'addLinks',
-          message: 'Link with other containers?',
-          default: false,
-        }, {
+
+      // ask what features user wants to use
+      const featureChoices = [{
+        id: 'restart',
+        name: 'Set restart policy',
+        checked: true,
+      }, {
+        id: 'ports',
+        name: 'Forward ports',
+      }, {
+        id: 'labels',
+        name: 'Add custom labels',
+      }, {
+        id: 'env',
+        name: 'Add environment variables',
+      }, {
+        id: 'volumes',
+        name: 'Add volumes',
+      }];
+      if (liveServices.length > 0) {
+        featureChoices.push({
+          id: 'links',
+          name: 'Link with other services',
+        });
+      }
+      const {features} = await inquirer.prompt({
+        type: 'checkbox',
+        name: 'features',
+        message: 'What do you want to do for this deployment?',
+        choices: featureChoices,
+      });
+      const featuresList = features.map(name => featureChoices.find(f => f.name === name).id);
+
+      // ask for ports
+      if (featuresList.includes('ports')) {
+        let morePorts = false;
+        const askForPorts = async () => {
+          const {inPorts} = await inquirer.prompt({
+            type: 'input',
+            name: 'inPorts',
+            message: morePorts ? 'Port mapping (blank to continue)' : 'Port mapping [container:host]:',
+          });
+          // assign ports
+          const l = commaStringToArray(inPorts);
+          if (l) {
+            ports = [...ports, ...l];
+            morePorts = true;
+            return askForPorts();
+          }
+
+          return undefined;
+        };
+        await askForPorts();
+      }
+
+      // ask for links
+      if (featuresList.includes('links')) {
+        const {inLinks} = await inquirer.prompt({
           type: 'checkbox',
           name: 'inLinks',
           message: 'Select containers to link:',
           choices: liveServices,
-          when: ({addLinks}) => addLinks,
-        }]);
+        });
         // assign ports
         if (inLinks) {
           links = [...links, ...inLinks];
@@ -141,90 +168,98 @@ export default (yargs) =>
         }
       }
 
-      // ask for labels
-      let moreLabels = false;
-      let userLabels = [];
-      const askForLabels = async () => {
-        const {inLabels} = await inquirer.prompt({
+      if (featuresList.includes('labels')) {
+        // ask for labels
+        let moreLabels = false;
+        let userLabels = [];
+        const askForLabels = async () => {
+          const {inLabels} = await inquirer.prompt({
+            type: 'input',
+            name: 'inLabels',
+            message: moreLabels ? 'Custom label (blank to continue):' : 'Custom label [key=value]:',
+          });
+          // assign ports
+          const l = labelArrayFromString(inLabels);
+          if (l) {
+            userLabels = [...userLabels, ...l];
+            moreLabels = true;
+            return askForLabels();
+          }
+
+          return undefined;
+        };
+        await askForLabels();
+        // assign labels
+        labels = userLabels ? processLabels(userLabels) : labels;
+      }
+
+      if (featuresList.includes('env')) {
+        // ask for env vars
+        let moreEnv = false;
+        const askForEnv = async () => {
+          const {inEnv} = await inquirer.prompt({
+            type: 'input',
+            name: 'inEnv',
+            message: moreEnv ? 'Environment variable (blank to continue):' : 'Environment variable [key=value]:',
+          });
+          // assign ports
+          const l = commaStringToArray(inEnv);
+          if (l) {
+            env = [...env, ...l];
+            moreEnv = true;
+            return askForEnv();
+          }
+
+          return undefined;
+        };
+        await askForEnv();
+      }
+
+      if (featuresList.includes('volumes')) {
+        // ask for volumes
+        let moreVol = false;
+        const askForVol = async () => {
+          const {inVolumes} = await inquirer.prompt({
+            type: 'input',
+            name: 'inVolumes',
+            message: moreVol ? 'Volumes (blank to continue):' : 'Volumes:',
+          });
+          // assign ports
+          const l = commaStringToArray(inVolumes);
+          if (l) {
+            volumes = [...volumes, ...l];
+            moreVol = true;
+            return askForVol();
+          }
+
+          return undefined;
+        };
+        await askForVol();
+      }
+
+      if (featuresList.includes('restart')) {
+        // ask for restart policy and retries count when applicable
+        const {inRestart, inRestartRetries} = await inquirer
+        .prompt([{
+          type: 'list',
+          name: 'inRestart',
+          message: 'Restart policy:',
+          choices: ['no', 'on-failure', 'always', 'unless-stopped'],
+          default: 'no',
+        }, {
           type: 'input',
-          name: 'inLabels',
-          message: moreLabels ? 'Custom label (blank to continue):' : 'Custom label [key=value]:',
-        });
-        // assign ports
-        const l = labelArrayFromString(inLabels);
-        if (l) {
-          userLabels = [...userLabels, ...l];
-          moreLabels = true;
-          return askForLabels();
-        }
-
-        return undefined;
-      };
-      await askForLabels();
-      // assign labels
-      labels = userLabels ? processLabels(userLabels) : labels;
-
-      // ask for env vars
-      let moreEnv = false;
-      const askForEnv = async () => {
-        const {inEnv} = await inquirer.prompt({
-          type: 'input',
-          name: 'inEnv',
-          message: moreEnv ? 'Environment variable (blank to continue):' : 'Environment variable [key=value]:',
-        });
-        // assign ports
-        const l = commaStringToArray(inEnv);
-        if (l) {
-          env = [...env, ...l];
-          moreEnv = true;
-          return askForEnv();
-        }
-
-        return undefined;
-      };
-      await askForEnv();
-
-      // ask for volumes
-      let moreVol = false;
-      const askForVol = async () => {
-        const {inVolumes} = await inquirer.prompt({
-          type: 'input',
-          name: 'inVolumes',
-          message: moreVol ? 'Volumes (blank to continue):' : 'Volumes:',
-        });
-        // assign ports
-        const l = commaStringToArray(inVolumes);
-        if (l) {
-          volumes = [...volumes, ...l];
-          moreVol = true;
-          return askForVol();
-        }
-
-        return undefined;
-      };
-      await askForVol();
-
-      // ask for restart policy and retries count when applicable
-      const {inRestart, inRestartRetries} = await inquirer
-      .prompt([{
-        type: 'list',
-        name: 'inRestart',
-        message: 'Restart policy:',
-        choices: ['no', 'on-failure', 'always', 'unless-stopped'],
-        default: 'no',
-      }, {
-        type: 'input',
-        name: 'inRestartRetries',
-        message: 'Max restart retries:',
-        validate: (val) => Number.isInteger(val),
-        filter: (val) => Number.parseInt(val, 10),
-        when: ({inRestart: r}) => r === 'on-failure',
-      }]);
-      // assign restart
-      restart = inRestart ? {
-        name: inRestart,
-        retries: inRestartRetries,
-      } : textRestart;
+          name: 'inRestartRetries',
+          message: 'Max restart retries:',
+          validate: (val) => Number.isInteger(val),
+          filter: (val) => Number.parseInt(val, 10),
+          when: ({inRestart: r}) => r === 'on-failure',
+        }]);
+        // assign restart
+        restart = inRestart ? {
+          name: inRestart,
+          retries: inRestartRetries,
+        } : textRestart;
+      }
     }
 
     // send request
