@@ -2,7 +2,7 @@
 
 > Power armor for docker containers
 
-<img src="https://raw.githubusercontent.com/exoframejs/exoframe/master/img/exoframe-demo.gif?v=2" width="629">
+[![asciicast](https://asciinema.org/a/85060.png)](https://asciinema.org/a/85060)
 
 ## How it works
 
