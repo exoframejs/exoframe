@@ -1,4 +1,10 @@
 
+0.5.1 / 2016-09-08
+==================
+
+Fixes:
+  * Require authenticated user for most actions, fixes #1
+
 0.5.0 / 2016-09-08
 ==================
 
