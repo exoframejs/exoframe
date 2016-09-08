@@ -1,4 +1,18 @@
 
+0.5.0 / 2016-09-08
+==================
+
+Additions:
+  * Add way to link containers during deployment
+  * Add nginx template as default one to config
+  * Add way to manually update installed plugins
+  * Ask about features user wants to use during deploy
+
+Changes:
+  * Replace demo gif with asciinema link
+  * Update readme with current list of commands and default templates
+  * Change remove command to shorter rm
+
 0.4.0 / 2016-09-05
 ==================
 

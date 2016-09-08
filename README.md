@@ -2,19 +2,34 @@
 
 > Power armor for docker containers
 
-[![asciicast](https://asciinema.org/a/85060.png)](https://asciinema.org/a/85060)
+[![asciicast](https://asciinema.org/a/85154.png)](https://asciinema.org/a/85154)
 
 ## How it works
 
-Exoframe intends to do all the heavy lifting required to build and deploy docker images for you.
-To run it you need two parts - Exoframe CLI and [Exoframe server](https://github.com/exoframejs/exoframe-server).
-
-It will detect your project type, pick fitting Dockerfile, ignore files that are not needed (e.g. logs, local build artifacts, etc), tag your image, add labels that reflect your ownership and much more.  
+Exoframe intends to do all the heavy lifting required to build, deploy and manage Docker containers for you.  
+It will detect your project type, pick fitting Dockerfile, ignore unneeded files (e.g. logs, local build artifacts, etc), suggest a tag for your image, add labels that reflect your ownership and much more.  
 All of this happens completely automatically. So after running the command, the only thing you need to do is wait a few seconds until your files have been built or deployed!
+
+Project detection is done using templating system.
+By default, Exoframe includes following templates:
+
+1. [nginx](https://github.com/exoframejs/exoframe-template-nginx) - for static html based projects
+2. [node](https://github.com/exoframejs/exoframe-template-node) - for node.js based projects
+3. [maven](https://github.com/exoframejs/exoframe-template-maven) - for maven based projects
+
+To run Exoframe you need two parts - Exoframe CLI on your local machine and [Exoframe server](https://github.com/exoframejs/exoframe-server) on your server with Docker.
+
+### Features list
+
+- Authentication and access control with image and container ownership (know who has built and deployed things)
+- Build your projects in Docker without writing Dockerfiles (no docker knowledge required)
+- Deploy your projects using assisted interface (no more looking up how to map docker ports or link containers)
+- Manage your running services using assisted interface (no need to remember all the container names)
+- Extensible project templating system (missing project type? create your own!)
 
 ## Installation and Usage
 
-Install it (needs at least node v6):
+Install Exoframe CLI (needs at least node v6):
 
 ```
 npm install exoframe -g
