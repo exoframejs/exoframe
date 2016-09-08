@@ -47,6 +47,7 @@ You can find a list of all commands and options below.
 | stop [service]         | Stop running service |
 | rm [service]           | Remove non-running service |
 | pull <image>           | Pull image from registry |
+| update                 | Trigger update of installed Exoframe plugins |
 | status                 | Get Exoframe status and config |
 
 
