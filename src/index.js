@@ -12,6 +12,7 @@ import status from './status';
 import stop from './stop';
 import remove from './remove';
 import pull from './pull';
+import update from './update';
 
 // init program
 yargs
@@ -30,6 +31,7 @@ status(yargs);
 stop(yargs);
 remove(yargs);
 pull(yargs);
+update(yargs);
 
 // parse
 yargs.argv; // eslint-disable-line

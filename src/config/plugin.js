@@ -5,16 +5,22 @@ import {execSync} from 'child_process';
 
 const rootFolder = join(__dirname, '..', '..');
 
-const installNodeModule = ({name, module}) => {
+const installNodeModule = ({name, module, update}) => {
   try {
     const modulePath = join(rootFolder, 'node_modules', name);
     statSync(modulePath);
+    // if requested - trigger npm update
+    if (update) {
+      console.log('Updating plugin:', name);
+      execSync(`cd ${rootFolder} && npm update ${module}`);
+    }
   } catch (e) {
+    console.log('Installing missing plugin:', name);
     execSync(`cd ${rootFolder} && npm install ${module}`);
   }
 };
 
-export default async (config) => {
+export default async (config, {update} = {}) => {
   if (!config.plugins) {
     return;
   }
@@ -27,10 +33,10 @@ export default async (config) => {
         if (typeof plugin === 'object') {
           const name = Object.keys(plugin)[0];
           const module = plugin[name];
-          return {module, name};
+          return {module, name, update};
         }
 
-        return {module: plugin, name: plugin};
+        return {module: plugin, name: plugin, update};
       })
       .map(plugin => installNodeModule(plugin))
     );
