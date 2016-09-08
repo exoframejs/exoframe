@@ -9,7 +9,7 @@ import spinner from 'char-spinner';
 import inquirer from 'inquirer';
 
 // our packages
-import config from './config';
+import config, {isLoggedIn} from './config';
 import detectTemplate from './templates';
 import {handleError} from './error';
 import {labelsFromString} from './util';
@@ -29,6 +29,10 @@ export default (yargs) =>
       alias: 'v',
     },
   }, async ({tag, noninteractive, verbose}) => {
+    if (!isLoggedIn()) {
+      return;
+    }
+
     console.log(chalk.bold('Building current folder using endpoint:'), config.endpoint);
     // create config vars
     const remoteUrl = `${config.endpoint}/api/build`;

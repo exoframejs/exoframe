@@ -4,7 +4,7 @@ import got from 'got';
 import inquirer from 'inquirer';
 
 // our packages
-import config from './config';
+import config, {isLoggedIn} from './config';
 import {handleError} from './error';
 import {getServices} from './list';
 
@@ -14,6 +14,10 @@ export default (yargs) =>
       alias: 's',
     },
   }, async ({service}) => {
+    if (!isLoggedIn()) {
+      return;
+    }
+
     // log header
     console.log(chalk.bold('Removing service on:'), config.endpoint);
     console.log();

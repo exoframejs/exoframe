@@ -3,7 +3,7 @@ import chalk from 'chalk';
 import got from 'got';
 
 // our packages
-import config from './config';
+import config, {isLoggedIn} from './config';
 import {handleError} from './error';
 
 // convert to human readable file size
@@ -83,6 +83,10 @@ export default (yargs) =>
       default: 'all',
     },
   }, async ({type}) => {
+    if (!isLoggedIn()) {
+      return;
+    }
+
     const msgs = {
       all: 'images and services',
       images: 'images',

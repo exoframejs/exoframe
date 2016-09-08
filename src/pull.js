@@ -4,7 +4,7 @@ import got from 'got';
 import spinner from 'char-spinner';
 
 // our packages
-import config from './config';
+import config, {isLoggedIn} from './config';
 import {handleError} from './error';
 import {cleanText} from './build';
 
@@ -18,6 +18,10 @@ export default (yargs) =>
       global: true,
     },
   }, async ({image, verbose}) => {
+    if (!isLoggedIn()) {
+      return;
+    }
+
     // log header
     console.log(chalk.bold('Pulling image on:'), config.endpoint);
     console.log();

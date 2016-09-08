@@ -4,7 +4,7 @@ import got from 'got';
 import inquirer from 'inquirer';
 
 // our packages
-import config from './config';
+import config, {isLoggedIn} from './config';
 import {handleError} from './error';
 import {getImages, getServices} from './list';
 import {labelArrayFromString, commaStringToArray} from './util';
@@ -52,6 +52,10 @@ export default (yargs) =>
     links: textLinks,
     noninteractive,
   }) => {
+    if (!isLoggedIn()) {
+      return;
+    }
+
     let image = userImage;
     if (!image) {
       const images = await getImages();
