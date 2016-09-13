@@ -31,7 +31,7 @@ export default (yargs) =>
       const services = allServices
         .map(svc => ({...svc, name: svc.Names[0].replace(/^\//, '')}));
       if (services.length > 0) {
-        let svcToStop;
+        let svcToLog;
         if (!service) {
           console.log(chalk.green('Running services:'));
           // ask for restart policy and retries count when applicable
@@ -41,14 +41,14 @@ export default (yargs) =>
             message: 'Logs for service:',
             choices: services,
           });
-          svcToStop = services.find(svc => svc.name === serviceId);
+          svcToLog = services.find(svc => svc.name === serviceId);
         } else {
-          svcToStop = services.find(svc => svc.Id.slice(0, 12) === service);
+          svcToLog = services.find(svc => svc.Id.slice(0, 12) === service);
         }
         // stop
-        console.log(chalk.bold('Getting logs for:'), svcToStop.name);
+        console.log(chalk.bold('Getting logs for:'), svcToLog.name);
         // send request to stop
-        const logUrl = `${config.endpoint}/api/logs/${svcToStop.Id.slice(0, 12)}`;
+        const logUrl = `${config.endpoint}/api/logs/${svcToLog.Id.slice(0, 12)}`;
         // construct shared request params
         const options = {
           headers: {
