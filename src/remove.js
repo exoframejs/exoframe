@@ -49,7 +49,7 @@ export default (yargs) =>
         // stop
         console.log(chalk.bold('Removing:'), svcToRemove.name);
         // send request to remove
-        const stopUrl = `${config.endpoint}/api/remove/${svcToRemove.Id.slice(0, 12)}`;
+        const removeUrl = `${config.endpoint}/api/remove/${svcToRemove.Id.slice(0, 12)}`;
         // construct shared request params
         const options = {
           headers: {
@@ -58,14 +58,14 @@ export default (yargs) =>
           json: true,
         };
         // try sending request
-        const {statusCode} = await got.post(stopUrl, options);
+        const {statusCode} = await got.post(removeUrl, options);
         if (statusCode === 204) {
           console.log(chalk.green('Service removed!'));
         } else {
-          console.log(chalk.red('Error!'), 'Could not stop the service.');
+          console.log(chalk.red('Error!'), 'Could not remove the service.');
         }
       } else {
-        console.log(chalk.green('No running services found!'));
+        console.log(chalk.green('No non-running services found!'));
       }
     } catch (e) {
       // try generic error handling first
