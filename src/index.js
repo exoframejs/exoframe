@@ -15,6 +15,7 @@ import remove from './remove';
 import pull from './pull';
 import update from './update';
 import logs from './logs';
+import inspect from './inspect';
 
 // init program
 yargs
@@ -36,6 +37,7 @@ remove(yargs);
 pull(yargs);
 update(yargs);
 logs(yargs);
+inspect(yargs);
 
 // parse
 yargs.argv; // eslint-disable-line
