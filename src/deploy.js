@@ -286,7 +286,7 @@ export default (yargs) =>
       }
       console.log(chalk.green('Successfully deployed!'));
       body.forEach((container, i) => {
-        console.log(chalk.bold(`${i + 1})`), 'Container with ID:', container.id);
+        console.log(chalk.bold(`${i + 1})`), 'Container with ID:', container.id.slice(0, 12));
       });
     } catch (e) {
       // try generic error handling first
