@@ -17,6 +17,7 @@ import update from './update';
 import logs from './logs';
 import inspect from './inspect';
 import removeImage from './remove-image';
+import clean from './clean';
 
 // init program
 yargs
@@ -40,6 +41,7 @@ update(yargs);
 logs(yargs);
 inspect(yargs);
 removeImage(yargs);
+clean(yargs);
 
 // parse
 yargs.argv; // eslint-disable-line
