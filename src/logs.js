@@ -67,8 +67,12 @@ export default (yargs) =>
           console.error(e);
         });
         logStream.on('data', buf => {
-          const d = buf.toString().replace(/\n$/, '');
-          console.log(d);
+          const d = buf.toString();
+          const lines = d.split('\n');
+          lines
+            .map(line => line.replace(/^\u0001.+?\//, '').replace(/\n+$/, ''))
+            .filter(line => line && line.length > 0)
+            .forEach(line => console.log(line));
         });
       } else {
         console.log(chalk.green('No running services found!'));
