@@ -9,37 +9,46 @@ import config, {updateConfig} from './config';
 const validate = input => input && input.length > 0;
 const filter = input => input.trim();
 
-export default (yargs) =>
-  yargs.command('login', 'login into exoframe server', {}, async () => {
-    console.log(chalk.bold('Logging in to:'), config.endpoint);
-    const prompts = [];
-    prompts.push({
-      type: 'input',
-      name: 'username',
-      message: 'Login:',
-      validate,
-      filter,
-    });
-    prompts.push({
-      type: 'password',
-      name: 'password',
-      message: 'Password:',
-      validate,
-    });
-
-    const {username, password} = await inquirer.prompt(prompts);
-
-    const remoteUrl = `${config.endpoint}/api/login`;
-    try {
-      const {body} = await got(remoteUrl, {body: {username, password}, json: true});
-      // check for errors
-      if (!body || !body.token || !body.user) {
-        throw new Error('Error logging in!');
-      }
-      updateConfig(body);
-      console.log(chalk.green('Successfully logged in!'));
-    } catch (e) {
-      console.log(chalk.red('Error logging in!'), 'Check your username and password and try again.');
-      console.error(e);
-    }
+const command = 'login';
+const describe = 'login into exoframe server';
+const builder = {};
+const handler = async () => {
+  console.log(chalk.bold('Logging in to:'), config.endpoint);
+  const prompts = [];
+  prompts.push({
+    type: 'input',
+    name: 'username',
+    message: 'Login:',
+    validate,
+    filter,
   });
+  prompts.push({
+    type: 'password',
+    name: 'password',
+    message: 'Password:',
+    validate,
+  });
+
+  const {username, password} = await inquirer.prompt(prompts);
+
+  const remoteUrl = `${config.endpoint}/api/login`;
+  try {
+    const {body} = await got(remoteUrl, {body: {username, password}, json: true});
+    // check for errors
+    if (!body || !body.token || !body.user) {
+      throw new Error('Error logging in!');
+    }
+    updateConfig(body);
+    console.log(chalk.green('Successfully logged in!'));
+  } catch (e) {
+    console.log(chalk.red('Error logging in!'), 'Check your username and password and try again.');
+    console.error(e);
+  }
+};
+
+export default {
+  command,
+  describe,
+  builder,
+  handler,
+};

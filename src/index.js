@@ -7,7 +7,7 @@ import login from './login';
 import build from './build';
 import list from './list';
 import deploy from './deploy';
-import setEndpoint from './endpoint';
+import endpoint from './endpoint';
 import status from './status';
 import stop from './stop';
 import start from './start';
@@ -20,31 +20,27 @@ import removeImage from './remove-image';
 import clean from './clean';
 
 // init program
-yargs
-  .version('0.1.0')
-  .completion('completion', false)
-  .demand(1)
-  .help();
-
-// plug commands
-setEndpoint(yargs);
-login(yargs);
-build(yargs);
-list(yargs);
-deploy(yargs);
-status(yargs);
-stop(yargs);
-start(yargs);
-remove(yargs);
-pull(yargs);
-update(yargs);
-logs(yargs);
-inspect(yargs);
-removeImage(yargs);
-clean(yargs);
-
-// parse
-yargs.argv; // eslint-disable-line
+yargs // eslint-disable-line
+.version('0.1.0')
+.completion('completion', false)
+.demand(1)
+.help()
+.command(build)
+.command(clean)
+.command(deploy)
+.command(endpoint)
+.command(inspect)
+.command(list)
+.command(login)
+.command(logs)
+.command(pull)
+.command(remove)
+.command(removeImage)
+.command(start)
+.command(status)
+.command(stop)
+.command(update)
+.argv;
 
 // output all uncaught exceptions
 process.on('uncaughtException', err => console.trace(chalk.red('Uncaught exception:'), err));
