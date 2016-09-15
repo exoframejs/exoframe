@@ -1,0 +1,8 @@
+endpoint: 'http://localhost:3000'
+plugins:
+  templates:
+    - test-template: ./test/fixtures/test-template
+token: test-token-123
+user:
+  username: admin
+  admin: true

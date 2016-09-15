@@ -9,7 +9,9 @@
   "scripts": {
     "start": "nodemon --debug --ignore dist/ --exec 'npm run build'",
     "build": "rm -rf dist/ && babel src -d dist",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "test": "NODE_ENV=testing node test/index.js | tap-spec",
+    "cover": "NODE_ENV=testing babel-node ./node_modules/istanbul/lib/cli cover ./node_modules/tape/bin/tape ./test"
   },
   "keywords": [
     "docker",
@@ -35,7 +37,13 @@
     "babel-core": "^6.14.0",
     "babel-preset-es2015-node": "^6.1.1",
     "babel-preset-stage-0": "^6.5.0",
-    "nodemon": "^1.10.2"
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "istanbul": "^1.1.0-alpha.1",
+    "nodemon": "^1.10.2",
+    "sinon": "^1.17.5",
+    "tap-spec": "^4.1.1",
+    "tape": "^4.6.0"
   },
   "dependencies": {
     "chalk": "^1.1.3",

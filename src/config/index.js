@@ -9,7 +9,13 @@ import chalk from 'chalk';
 import installPlugins from './plugin';
 
 // construct paths
-const baseFolder = path.join(os.homedir(), '.exoframe');
+const baseFolder = do {
+  if (process.env.NODE_ENV === 'testing') {
+    path.join(__dirname, '..', '..', 'test', 'fixtures');
+  } else {
+    path.join(os.homedir(), '.exoframe');
+  }
+};
 const configPath = path.join(baseFolder, 'cli.config.yml');
 
 const defaultConfig = {
