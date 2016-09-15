@@ -19,8 +19,8 @@ export default (test) => {
       // make sure log in was successful
       // first check console output
       t.deepEqual(consoleSpy.args, [
-        ['Logging in to:', 'http://localhost:3000'],
-        ['Successfully logged in!'],
+        ['\x1b[1mLogging in to:\x1b[22m', 'http://localhost:3000'],
+        ['\x1b[32mSuccessfully logged in!\x1b[39m'],
       ], 'Correct log output');
       // then check config changes
       const configPath = path.join(__dirname, 'fixtures', 'cli.config.yml');
