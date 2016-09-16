@@ -12,6 +12,7 @@ import endpointTest from './endpoint';
 import statusTest from './status';
 import updateTest from './update';
 import buildTest from './build';
+import deployTest from './deploy';
 import cleanTest from './clean';
 
 // disable chalk
@@ -28,6 +29,7 @@ loginTest(test);
 statusTest(test);
 updateTest(test);
 buildTest(test);
+deployTest(test);
 cleanTest(test);
 
 // stop server in the end
