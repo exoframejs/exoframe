@@ -24,7 +24,7 @@ export default (test) => {
   // test
   test('Should login', (t) => {
     // stup inquirer answers
-    sinon.stub(inquirer, 'prompt', () => Promise.resolve({username: 'admin', password: 'admin'}));
+    sinon.stub(inquirer, 'prompt', () => Promise.resolve({username: user.username, password: user.password}));
     // spy on console
     const consoleSpy = sinon.spy(console, 'log');
     // execute login
@@ -38,8 +38,8 @@ export default (test) => {
       // then check config changes
       const configPath = path.join(__dirname, 'fixtures', 'cli.config.yml');
       const cfg = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
-      t.equal(cfg.token, 'test-token-123', 'Correct token');
-      t.equal(cfg.user.username, 'admin', 'Correct username');
+      t.equal(cfg.token, token, 'Correct token');
+      t.equal(cfg.user.username, user.username, 'Correct username');
       t.end();
       // restore inquirer
       inquirer.prompt.restore();
