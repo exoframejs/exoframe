@@ -11,7 +11,8 @@
     "build": "rm -rf dist/ && babel src -d dist",
     "prepublish": "npm run build",
     "test": "NODE_ENV=testing node test/index.js | tap-spec",
-    "cover": "NODE_ENV=testing babel-node ./node_modules/istanbul/lib/cli cover ./node_modules/tape/bin/tape ./test"
+    "cover": "NODE_ENV=testing babel-node ./node_modules/istanbul/lib/cli cover ./node_modules/tape/bin/tape ./test",
+    "coveralls": "npm run cover && cat ./coverage/lcov.info | coveralls"
   },
   "keywords": [
     "docker",

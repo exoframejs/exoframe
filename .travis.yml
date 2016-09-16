@@ -1,0 +1,8 @@
+sudo: required
+language: node_js
+
+node_js:
+  - "6"
+
+after_success:
+  - npm run coveralls
