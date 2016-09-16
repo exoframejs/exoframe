@@ -9,7 +9,10 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({extended: true})); // for parsing application/x-www-form-urlencoded
 
 let server;
-export const services = [{Id: '12345678901234567890', Names: ['test'], Status: 'up'}];
+export const services = [
+  {Id: '12345678901234567890', Names: ['test'], Status: 'up'}, // running service
+  {Id: '09876543210987654321', Names: ['test-stopped'], Status: 'stopped'}, // stopped service
+];
 
 // common stubs
 // images list stub
