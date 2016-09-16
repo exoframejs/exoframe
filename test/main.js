@@ -4,7 +4,6 @@ import chalk from 'chalk';
 
 // our packages
 import {startServer, stopServer} from './fixtures/server';
-// import '../src/index';
 
 // tests
 import loginTest from './login';
@@ -21,6 +20,7 @@ import inspectTest from './inspect';
 import logsTest from './logs';
 import pullTest from './pull';
 import removeImageTest from './remove-image';
+import listTest from './list';
 
 // disable chalk
 chalk.enabled = false;
@@ -45,6 +45,7 @@ inspectTest(test);
 logsTest(test);
 pullTest(test);
 removeImageTest(test);
+listTest(test);
 
 // stop server in the end
 test('Stop server', (t) => {

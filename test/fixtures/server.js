@@ -9,12 +9,30 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({extended: true})); // for parsing application/x-www-form-urlencoded
 
 let server;
+// services
 export const services = [
-  {Id: '12345678901234567890', Names: ['test'], Status: 'up'}, // running service
-  {Id: '09876543210987654321', Names: ['test-stopped'], Status: 'stopped'}, // stopped service
+  // running service
+  {
+    Id: '12345678901234567890',
+    Names: ['test'],
+    Status: 'up',
+    Ports: [{PrivatePort: '80', PublicPort: '80', IP: '0.0.0.0', Type: 'tcp'}],
+    Labels: {'exoframe.type': 'test'},
+    Image: 'test',
+  },
+  // stopped service
+  {
+    Id: '09876543210987654321',
+    Names: ['test-stopped'],
+    Status: 'stopped',
+    Ports: [],
+    Labels: {'exoframe.type': 'other'},
+    Image: 'other',
+  },
 ];
+// images
 export const images = [
-  {Id: '12345678901234567890', RepoTags: ['test-image']},
+  {Id: 'sha:12345678901234567890', Size: 1024 * 10, RepoTags: ['test-image'], Labels: {'exoframe.type': 'test'}},
 ];
 
 // common stubs
