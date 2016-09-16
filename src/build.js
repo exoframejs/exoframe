@@ -99,7 +99,6 @@ const handler = async ({tag, noninteractive, verbose}) => {
   const labels = {
     ...template.labels,
     ...userLabels,
-    'exoframe.user': config.user.username,
   };
 
   // check if dockerfile already exists
