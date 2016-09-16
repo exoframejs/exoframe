@@ -16,6 +16,7 @@ import deployTest from './deploy';
 import cleanTest from './clean';
 import stopTest from './stop';
 import startTest from './start';
+import removeTest from './remove';
 
 // disable chalk
 chalk.enabled = false;
@@ -35,6 +36,7 @@ deployTest(test);
 cleanTest(test);
 stopTest(test);
 startTest(test);
+removeTest(test);
 
 // stop server in the end
 test('Stop server', (t) => {
