@@ -7,6 +7,7 @@ import {startServer, stopServer} from './fixtures/server';
 
 // tests
 import loginTest from './login';
+import endpointTest from './endpoint';
 
 // start server before running tests
 test('Start server', (t) => {
@@ -14,6 +15,7 @@ test('Start server', (t) => {
 });
 
 // run tests
+endpointTest(test);
 loginTest(test);
 
 // stop server in the end
