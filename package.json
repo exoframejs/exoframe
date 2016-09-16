@@ -39,6 +39,7 @@
     "babel-preset-es2015-node": "^6.1.1",
     "babel-preset-stage-0": "^6.5.0",
     "body-parser": "^1.15.2",
+    "coveralls": "^2.11.13",
     "express": "^4.14.0",
     "istanbul": "^1.1.0-alpha.1",
     "nodemon": "^1.10.2",
