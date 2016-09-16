@@ -18,6 +18,7 @@ import stopTest from './stop';
 import startTest from './start';
 import removeTest from './remove';
 import inspectTest from './inspect';
+import logsTest from './logs';
 
 // disable chalk
 chalk.enabled = false;
@@ -39,6 +40,7 @@ stopTest(test);
 startTest(test);
 removeTest(test);
 inspectTest(test);
+logsTest(test);
 
 // stop server in the end
 test('Stop server', (t) => {
