@@ -8,6 +8,7 @@ import sinon from 'sinon';
 
 // our packages
 import app from './fixtures/server';
+import {sleep} from './fixtures/util';
 import build from '../src/build';
 
 export default (test) => {
@@ -39,15 +40,17 @@ export default (test) => {
       // extracting a directory
       const resDir = path.join(os.tmpdir(), 'test-project');
       const s = req.pipe(tar.extract(resDir));
-      s.on('finish', () => {
+      s.on('finish', async () => {
         // send response
         res.sendStatus(204);
 
+        await sleep(100);
         // make sure log in was successful
         // first check console output
         t.deepEqual(consoleSpy.args, [
           ['Building current folder using endpoint:', 'http://localhost:3000'],
           ['Using template:', 'Test Exoframe Template'],
+          ['Done building!', 'Your images is now available as test-tag'],
         ], 'Correct log output');
         t.equal(req.query.tag, userInputTag, 'Correct tag sent');
         t.deepEqual(JSON.parse(req.query.labels), {'exoframe.type': 'test', 'test.label': '1'}, 'Correct labels sent');
