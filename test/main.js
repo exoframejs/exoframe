@@ -9,6 +9,7 @@ import {startServer, stopServer} from './fixtures/server';
 // tests
 import loginTest from './login';
 import endpointTest from './endpoint';
+import updateTest from './update';
 
 // disable chalk
 chalk.enabled = false;
@@ -21,6 +22,7 @@ test('Start server', (t) => {
 // run tests
 endpointTest(test);
 loginTest(test);
+updateTest(test);
 
 // stop server in the end
 test('Stop server', (t) => {
