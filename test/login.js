@@ -16,6 +16,11 @@ export default (test) => {
 
   // create login method
   app.post('/api/login', (req, res) => {
+    const {username, password} = req.body;
+    if (username !== user.username && password !== user.password) {
+      res.sendStatus(403);
+      return;
+    }
     const newUser = {...user};
     delete newUser.password;
     res.status(200).json({token, user: newUser});
@@ -36,6 +41,33 @@ export default (test) => {
         ['Successfully logged in!'],
       ], 'Correct log output');
       // then check config changes
+      const configPath = path.join(__dirname, 'fixtures', 'cli.config.yml');
+      const cfg = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
+      t.equal(cfg.token, token, 'Correct token');
+      t.equal(cfg.user.username, user.username, 'Correct username');
+      t.end();
+      // restore inquirer
+      inquirer.prompt.restore();
+      // restore console
+      console.log.restore();
+    });
+  });
+
+  // test
+  test('Should fail to login with wrong credentials', (t) => {
+    // stup inquirer answers
+    sinon.stub(inquirer, 'prompt', () => Promise.resolve({username: 'wrong', password: '123'}));
+    // spy on console
+    const consoleSpy = sinon.spy(console, 'log');
+    // execute login
+    login.handler().then(() => {
+      // make sure log in was successful
+      // first check console output
+      t.deepEqual(consoleSpy.args, [
+        ['Logging in to:', 'http://localhost:3000'],
+        ['Error logging in!', 'Check your username and password and try again.'],
+      ], 'Correct log output');
+      // then check the config (should not change)
       const configPath = path.join(__dirname, 'fixtures', 'cli.config.yml');
       const cfg = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
       t.equal(cfg.token, token, 'Correct token');
