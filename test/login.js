@@ -6,9 +6,22 @@ import inquirer from 'inquirer';
 import sinon from 'sinon';
 
 // our packages
+import app from './fixtures/server';
 import login from '../src/login';
 
 export default (test) => {
+  // create and user token
+  const token = 'test-token-123';
+  const user = {username: 'admin', password: 'admin', admin: true};
+
+  // create login method
+  app.post('/api/login', (req, res) => {
+    const newUser = {...user};
+    delete newUser.password;
+    res.status(200).json({token, user: newUser});
+  });
+
+  // test
   test('Should login', (t) => {
     // stup inquirer answers
     sinon.stub(inquirer, 'prompt', () => Promise.resolve({username: 'admin', password: 'admin'}));
@@ -19,8 +32,8 @@ export default (test) => {
       // make sure log in was successful
       // first check console output
       t.deepEqual(consoleSpy.args, [
-        ['\x1b[1mLogging in to:\x1b[22m', 'http://localhost:3000'],
-        ['\x1b[32mSuccessfully logged in!\x1b[39m'],
+        ['Logging in to:', 'http://localhost:3000'],
+        ['Successfully logged in!'],
       ], 'Correct log output');
       // then check config changes
       const configPath = path.join(__dirname, 'fixtures', 'cli.config.yml');
