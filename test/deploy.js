@@ -36,10 +36,6 @@ export default (test) => {
       return answer;
     });
 
-    // stub images and services list
-    app.get('/api/images', (req, res) => res.send([]));
-    app.get('/api/services', (req, res) => res.send([{Names: ['test'], Status: 'up'}]));
-
     // spy on console
     const consoleSpy = sinon.spy(console, 'log');
 
