@@ -20,6 +20,7 @@ import removeTest from './remove';
 import inspectTest from './inspect';
 import logsTest from './logs';
 import pullTest from './pull';
+import removeImageTest from './remove-image';
 
 // disable chalk
 chalk.enabled = false;
@@ -43,6 +44,7 @@ removeTest(test);
 inspectTest(test);
 logsTest(test);
 pullTest(test);
+removeImageTest(test);
 
 // stop server in the end
 test('Stop server', (t) => {

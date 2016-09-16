@@ -13,10 +13,13 @@ export const services = [
   {Id: '12345678901234567890', Names: ['test'], Status: 'up'}, // running service
   {Id: '09876543210987654321', Names: ['test-stopped'], Status: 'stopped'}, // stopped service
 ];
+export const images = [
+  {Id: '12345678901234567890', RepoTags: ['test-image']},
+];
 
 // common stubs
 // images list stub
-app.get('/api/images', (req, res) => res.send([]));
+app.get('/api/images', (req, res) => res.send(images));
 // service list stub
 app.get('/api/services', (req, res) => res.send(services));
 
