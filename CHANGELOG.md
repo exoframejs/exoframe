@@ -1,4 +1,23 @@
 
+0.6.0 / 2016-09-16
+==================
+
+Additions:
+  * Add clean method that removes all untagged docker images
+  * Add method to remove images
+  * Add method to inspect containers
+  * Add method to start containers
+  * Add method to get container logs
+  * Add unit tests and test coverage
+
+Changes:
+  * Show shortened container ID after deploy
+
+Fixes:
+  * Clean logs text before printing it out
+  * Fix var naming in logs method
+  * Fix error messages for remove command
+
 0.5.1 / 2016-09-08
 ==================
 

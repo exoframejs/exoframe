@@ -1,6 +1,6 @@
 {
   "name": "exoframe",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "Exoframe - power armor for docker containers",
   "main": "index.js",
   "bin": {
