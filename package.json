@@ -1,0 +1,18 @@
+{
+  "name": "exoframe-cli",
+  "version": "0.1.0",
+  "description": "Exoframe - power armor for docker containers",
+  "main": "index.js",
+  "repository": "git@github.com:exoframejs/exoframe.git",
+  "author": "Tim Ermilov <yamalight@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^1.1.3",
+    "got": "^6.7.1",
+    "ignore": "^3.3.0",
+    "inquirer": "^3.0.6",
+    "js-yaml": "^3.8.4",
+    "tar-fs": "^1.15.2",
+    "yargs": "^8.0.1"
+  }
+}
