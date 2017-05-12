@@ -3,6 +3,8 @@ const chalk = require('chalk');
 const ignore = require('ignore');
 const tar = require('tar-fs');
 const got = require('got');
+const path = require('path');
+const fs = require('fs');
 
 // my modules
 const {userConfig, isLoggedIn} = require('../config');
@@ -24,7 +26,17 @@ exports.handler = () => {
 
   // create config vars
   const workdir = process.cwd();
+  const folderName = path.basename(workdir);
   const remoteUrl = `${userConfig.endpoint}/deploy`;
+
+  // create config if doesn't exist
+  const configPath = path.join(workdir, 'exoframe.json');
+  try {
+    fs.statSync(configPath);
+  } catch (e) {
+    const defaultConfig = JSON.stringify({name: folderName});
+    fs.writeFileSync(configPath, defaultConfig, 'utf-8');
+  }
 
   // create tar stream from current folder
   const ig = ignore().add(ignores);
