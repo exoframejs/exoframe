@@ -6,6 +6,9 @@
   "repository": "git@github.com:exoframejs/exoframe.git",
   "author": "Tim Ermilov <yamalight@gmail.com>",
   "license": "MIT",
+  "bin": {
+    "exoframe": "bin/index.js"
+  },
   "dependencies": {
     "chalk": "^1.1.3",
     "got": "^6.7.1",
