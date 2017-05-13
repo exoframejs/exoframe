@@ -4,6 +4,7 @@ const yargs = require('yargs');
 // our packages
 const login = require('./commands/login');
 const deploy = require('./commands/deploy');
+const list = require('./commands/list');
 const endpoint = require('./commands/endpoint');
 
 // init program
@@ -13,4 +14,5 @@ yargs
   .help()
   .command(deploy)
   .command(login)
-  .command(endpoint).argv;
+  .command(endpoint)
+  .command(list).argv;
