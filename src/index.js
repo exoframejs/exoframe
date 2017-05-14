@@ -5,6 +5,7 @@ const yargs = require('yargs');
 const login = require('./commands/login');
 const deploy = require('./commands/deploy');
 const list = require('./commands/list');
+const remove = require('./commands/remove');
 const endpoint = require('./commands/endpoint');
 
 // init program
@@ -15,4 +16,5 @@ yargs
   .command(deploy)
   .command(login)
   .command(endpoint)
-  .command(list).argv;
+  .command(list)
+  .command(remove).argv;
