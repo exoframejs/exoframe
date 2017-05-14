@@ -5,7 +5,7 @@ const chalk = require('chalk');
 // our packages
 const {userConfig, isLoggedIn} = require('../config');
 
-exports.command = 'list';
+exports.command = ['list', 'ls'];
 exports.describe = 'list deployments';
 exports.builder = {};
 exports.handler = async () => {

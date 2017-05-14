@@ -5,7 +5,7 @@ const chalk = require('chalk');
 // our packages
 const {userConfig, isLoggedIn} = require('../config');
 
-exports.command = 'rm <id>';
+exports.command = ['remove <id>', 'rm <id>'];
 exports.describe = 'remove active deployment';
 exports.builder = {};
 exports.handler = async ({id}) => {

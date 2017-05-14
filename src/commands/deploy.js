@@ -11,7 +11,7 @@ const {userConfig, isLoggedIn} = require('../config');
 
 const ignores = ['.git', 'node_modules'];
 
-exports.command = '*';
+exports.command = ['*', 'deploy'];
 exports.describe = 'deploy current folder';
 exports.builder = {};
 exports.handler = () => {
