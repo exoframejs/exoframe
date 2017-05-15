@@ -63,7 +63,7 @@ exports.handler = () => {
     // log end
     console.log(
       chalk.bold('Done!'),
-      `Your project is now deployed as ${res.name}`
+      `Your project is now deployed as: ${res.names.join(', ')}`
     );
   });
   // listen for stream errors
