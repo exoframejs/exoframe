@@ -3,7 +3,7 @@ const got = require('got');
 const chalk = require('chalk');
 
 // our packages
-const {userConfig, isLoggedIn} = require('../config');
+const {userConfig, isLoggedIn, logout} = require('../config');
 
 exports.command = ['remove <id>', 'rm <id>'];
 exports.describe = 'remove active deployment';
@@ -25,10 +25,21 @@ exports.handler = async ({id}) => {
     json: true,
   };
   // try sending request
-  const {statusCode} = await got.post(remoteUrl, options);
-  if (statusCode === 204) {
-    console.log(chalk.green('Deployment removed!'));
-  } else {
-    console.log(chalk.red('Error!'), 'Could not remove the deployment.');
+  try {
+    const {statusCode} = await got.post(remoteUrl, options);
+    if (statusCode === 204) {
+      console.log(chalk.green('Deployment removed!'));
+    } else {
+      console.log(chalk.red('Error!'), 'Could not remove the deployment.');
+    }
+  } catch (e) {
+    // if authorization is expired/broken/etc
+    if (e.statusCode === 401) {
+      logout(userConfig);
+      console.log(chalk.red('Error: authorization expired!'), 'Please, relogin and try again.');
+      return;
+    }
+
+    console.log(chalk.red('Error removing project:'), e.toString());
   }
 };

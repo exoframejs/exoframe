@@ -57,5 +57,11 @@ exports.isLoggedIn = () => {
   return true;
 };
 
+exports.logout = cfg => {
+  delete cfg.user;
+  delete cfg.token;
+  exports.updateConfig(cfg);
+};
+
 // latest config from file
 exports.userConfig = userConfig;

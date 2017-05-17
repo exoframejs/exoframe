@@ -7,7 +7,7 @@ const path = require('path');
 const fs = require('fs');
 
 // my modules
-const {userConfig, isLoggedIn} = require('../config');
+const {userConfig, isLoggedIn, logout} = require('../config');
 
 const ignores = ['.git', 'node_modules'];
 
@@ -19,10 +19,7 @@ exports.handler = () => {
     return;
   }
 
-  console.log(
-    chalk.bold('Deploying current project to endpoint:'),
-    userConfig.endpoint
-  );
+  console.log(chalk.bold('Deploying current project to endpoint:'), userConfig.endpoint);
 
   // create config vars
   const workdir = process.cwd();
@@ -60,16 +57,22 @@ exports.handler = () => {
   // listen for read stream end
   stream.on('end', () => {
     const res = JSON.parse(result);
+    // ignore errored out results
+    if (res.status !== 'success') {
+      return;
+    }
     // log end
-    console.log(
-      chalk.bold('Done!'),
-      `Your project is now deployed as:\n  > ${res.names.join('\n  > ')}`
-    );
+    console.log(chalk.bold('Done!'), `Your project is now deployed as:\n  > ${res.names.join('\n  > ')}`);
   });
   // listen for stream errors
   stream.on('error', e => {
-    // log other errors
-    console.log(chalk.bold('Error during build!'));
-    console.error(e);
+    // if authorization is expired/broken/etc
+    if (e.statusCode === 401) {
+      logout(userConfig);
+      console.log(chalk.red('Error: authorization expired!'), 'Please, relogin and try again.');
+      return;
+    }
+
+    console.log(chalk.red('Error deploying project:'), e.toString());
   });
 };

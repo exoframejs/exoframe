@@ -31,7 +31,8 @@
     "prettier/prettier": ["error", {
       "trailingComma": "es5",
       "singleQuote": true,
-      "bracketSpacing": false
+      "bracketSpacing": false,
+      "printWidth": 120
     }],
     "no-console": "off"
   }
