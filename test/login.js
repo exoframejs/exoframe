@@ -16,16 +16,12 @@ module.exports = () => {
   const wrongUser = {username: 'wrong', password: 'user'};
 
   // handle correct request
-  const correctLogin = nock('http://localhost:8080')
-    .post('/login', user)
-    .reply(200, {
-      token,
-      user,
-    });
+  const correctLogin = nock('http://localhost:8080').post('/login', user).reply(200, {
+    token,
+    user,
+  });
 
-  const brokenLogin = nock('http://localhost:8080')
-    .post('/login', wrongUser)
-    .reply(401);
+  const brokenLogin = nock('http://localhost:8080').post('/login', wrongUser).reply(401);
 
   // test
   tap.test('Should login', t => {
