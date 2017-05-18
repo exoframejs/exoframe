@@ -1,2 +1,4 @@
 node_modules
 test_project
+coverage
+.nyc_output/
