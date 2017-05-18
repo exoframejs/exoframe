@@ -40,12 +40,12 @@ exports.handler = async args => {
     return;
   }
 
-  const folder = args._.filter(arg => arg !== 'deploy').shift();
+  const folder = args && args._ ? args._.filter(arg => arg !== 'deploy').shift() : undefined;
 
   console.log(chalk.bold(`Deploying ${folder || 'current project'} to endpoint:`), userConfig.endpoint);
 
   // create config vars
-  const workdir = path.join(process.cwd(), folder);
+  const workdir = folder ? path.join(process.cwd(), folder) : process.cwd();
   const folderName = path.basename(workdir);
   const remoteUrl = `${userConfig.endpoint}/deploy`;
 

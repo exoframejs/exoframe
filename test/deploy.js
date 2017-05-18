@@ -52,6 +52,38 @@ module.exports = () => {
   });
 
   // test
+  tap.test('Should deploy without path', t => {
+    // spy on console
+    const consoleSpy = sinon.spy(console, 'log');
+
+    // handle correct request
+    const deployServer = nock('http://localhost:8080').post('/deploy').reply((uri, requestBody, cb) => {
+      cb(null, [200, {status: 'success', names: ['test']}]);
+    });
+
+    // execute login
+    deploy().then(() => {
+      // make sure log in was successful
+      // check that server was called
+      t.ok(deployServer.isDone());
+      // first check console output
+      t.deepEqual(
+        consoleSpy.args,
+        [
+          ['Deploying current project to endpoint:', 'http://localhost:8080'],
+          ['Done!', 'Your project is now deployed as:\n  > test'],
+        ],
+        'Correct log output'
+      );
+      // restore console
+      console.log.restore();
+      // tear down nock
+      deployServer.done();
+      t.end();
+    });
+  });
+
+  // test
   tap.test('Should deauth on 401', t => {
     // copy original config for restoration
     const originalConfig = Object.assign({}, userConfig);
