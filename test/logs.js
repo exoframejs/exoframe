@@ -6,14 +6,16 @@ const Stream = require('stream');
 
 // our packages
 const {handler: logs} = require('../src/commands/logs');
-const {userConfig, updateConfig} = require('../src/config');
 
 module.exports = () => {
   const id = 'test-id';
+  const date1 = '2017-05-18T15:16:40.120990460Z';
+  const date2 = '2017-05-18T15:16:40.212591019Z';
+  const date3 = '2017-05-18T15:16:40.375554362Z';
   const dirtyLogs = [
-    '\u0001\u0000\u0000\u0000\u0000\u0000\u000022017-05-18T15:16:40.120990460Z yarn start v0.24.4',
-    '\u0001\u0000\u0000\u0000\u0000\u0000\u000002017-05-18T15:16:40.212591019Z $ node index.js ',
-    '\u0001\u0000\u0000\u0000\u0000\u0000\u000042017-05-18T15:16:40.375554362Z Listening on port 80',
+    `\u0001\u0000\u0000\u0000\u0000\u0000\u00002${date1} yarn start v0.24.4`,
+    `\u0001\u0000\u0000\u0000\u0000\u0000\u00000${date2} $ node index.js `,
+    `\u0001\u0000\u0000\u0000\u0000\u0000\u00004${date3} Listening on port 80`,
     '',
   ];
 
@@ -38,13 +40,16 @@ module.exports = () => {
       // check that server was called
       t.ok(logServer.isDone());
       // first check console output
+      const d1 = new Date(date1);
+      const d2 = new Date(date2);
+      const d3 = new Date(date3);
       t.deepEqual(
         consoleSpy.args,
         [
           ['Getting logs for deployment:', id],
-          ['18/05/2017 17:16:40 yarn start v0.24.4'],
-          ['18/05/2017 17:16:40 $ node index.js '],
-          ['18/05/2017 17:16:40 Listening on port 80'],
+          [`${d1.toLocaleDateString()} ${d1.toLocaleTimeString()} yarn start v0.24.4`],
+          [`${d2.toLocaleDateString()} ${d2.toLocaleTimeString()} $ node index.js `],
+          [`${d3.toLocaleDateString()} ${d3.toLocaleTimeString()} Listening on port 80`],
         ],
         'Correct log output'
       );
