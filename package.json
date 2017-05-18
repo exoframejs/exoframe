@@ -10,7 +10,8 @@
     "exoframe": "bin/index.js"
   },
   "scripts": {
-    "test": "NODE_ENV=testing tap test/index.js"
+    "test": "NODE_ENV=testing tap --cov --coverage-report=text-summary --reporter=spec ./test/index.js",
+    "cover": "NODE_ENV=testing tap --cov --coverage-report=lcov ./test/index.js"
   },
   "dependencies": {
     "chalk": "^1.1.3",
