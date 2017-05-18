@@ -1,6 +1,6 @@
 {
-  "name": "exoframe-cli",
-  "version": "0.1.0",
+  "name": "exoframe",
+  "version": "0.7.0",
   "description": "Exoframe - power armor for docker containers",
   "main": "index.js",
   "repository": "git@github.com:exoframejs/exoframe.git",
