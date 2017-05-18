@@ -1,4 +1,11 @@
 
+0.8.0 / 2017-05-18
+==================
+
+Additions:
+  * Add logs command and tests for it, closes #24
+  * Allow deploying current folder without specifying path
+
 0.7.0 / 2017-05-18
 ==================
 
