@@ -11,18 +11,41 @@ const {userConfig, isLoggedIn, logout} = require('../config');
 
 const ignores = ['.git', 'node_modules'];
 
+const streamToResponse = ({tarStream, remoteUrl, options}) =>
+  new Promise((resolve, reject) => {
+    // pipe stream to remote
+    let result = '';
+    const stream = tarStream.pipe(got.stream.post(remoteUrl, options));
+    // log output if in verbose mode
+    stream.on('data', str => (result += str.toString()));
+    // listen for read stream end
+    stream.on('end', () => {
+      const res = JSON.parse(result);
+      // ignore errored out results
+      if (res.status !== 'success') {
+        return;
+      }
+      // resolve on end
+      resolve(res);
+    });
+    // listen for stream errors
+    stream.on('error', e => reject(e));
+  });
+
 exports.command = ['*', 'deploy'];
 exports.describe = 'deploy current folder';
 exports.builder = {};
-exports.handler = () => {
+exports.handler = async args => {
   if (!isLoggedIn()) {
     return;
   }
 
-  console.log(chalk.bold('Deploying current project to endpoint:'), userConfig.endpoint);
+  const folder = args._.filter(arg => arg !== 'deploy').shift();
+
+  console.log(chalk.bold(`Deploying ${folder || 'current project'} to endpoint:`), userConfig.endpoint);
 
   // create config vars
-  const workdir = process.cwd();
+  const workdir = path.join(process.cwd(), folder);
   const folderName = path.basename(workdir);
   const remoteUrl = `${userConfig.endpoint}/deploy`;
 
@@ -48,24 +71,10 @@ exports.handler = () => {
   };
 
   // pipe stream to remote
-  let result = '';
-  const stream = tarStream.pipe(got.stream.post(remoteUrl, options));
-  // log output if in verbose mode
-  stream.on('data', str => {
-    result += str.toString();
-  });
-  // listen for read stream end
-  stream.on('end', () => {
-    const res = JSON.parse(result);
-    // ignore errored out results
-    if (res.status !== 'success') {
-      return;
-    }
-    // log end
+  try {
+    const res = await streamToResponse({tarStream, remoteUrl, options});
     console.log(chalk.bold('Done!'), `Your project is now deployed as:\n  > ${res.names.join('\n  > ')}`);
-  });
-  // listen for stream errors
-  stream.on('error', e => {
+  } catch (e) {
     // if authorization is expired/broken/etc
     if (e.statusCode === 401) {
       logout(userConfig);
@@ -74,5 +83,5 @@ exports.handler = () => {
     }
 
     console.log(chalk.red('Error deploying project:'), e.toString());
-  });
+  }
 };
