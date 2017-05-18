@@ -33,6 +33,12 @@ exports.handler = ({id}) => new Promise(resolve => {
       return;
     }
 
+    // if container was not found
+    if (e.statusCode === 404) {
+      console.log(chalk.red('Error: container was not found!'), 'Please, check deployment ID and try again.');
+      return;
+    }
+
     console.log(chalk.red('Error while getting logs:'), e.toString());
   });
   logStream.on('data', buf => {
@@ -45,8 +51,10 @@ exports.handler = ({id}) => new Promise(resolve => {
         const parts = line.split(/\dZ\s/);
         const date = new Date(parts[0]);
         const msg = parts[1];
-        return `${chalk.gray(`${date.toLocaleDateString()} ${date.toLocaleTimeString()}`)} ${msg}`;
+        return {date, msg};
       })
+      .filter(({date, msg}) => date !== undefined && msg !== undefined)
+      .map(({date, msg}) => `${chalk.gray(`${date.toLocaleDateString()} ${date.toLocaleTimeString()}`)} ${msg}`)
       .forEach(line => console.log(line));
 
     resolve();

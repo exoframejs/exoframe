@@ -40,6 +40,12 @@ exports.handler = async ({id}) => {
       return;
     }
 
+    // if container was not found
+    if (e.statusCode === 404) {
+      console.log(chalk.red('Error: container was not found!'), 'Please, check deployment ID and try again.');
+      return;
+    }
+
     console.log(chalk.red('Error removing project:'), e.toString());
   }
 };
