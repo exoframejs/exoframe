@@ -1,4 +1,9 @@
 
+0.8.1 / 2017-05-18
+==================
+
+  * Correctly handle not found responses for logs/remove requests
+
 0.8.0 / 2017-05-18
 ==================
 
