@@ -1,0 +1,7 @@
+{
+  "name": "test_docker_project",
+  "domain": "test.dev",
+  "env": {
+    "TEST_VAR": 1
+  }
+}
