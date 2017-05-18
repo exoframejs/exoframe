@@ -1,5 +1,8 @@
 image: node:latest
 
+variables:
+  LANG: en_GB.UTF-8
+
 cache:
   paths:
   - node_modules/
