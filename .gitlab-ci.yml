@@ -1,0 +1,12 @@
+image: node:latest
+
+cache:
+  paths:
+  - node_modules/
+
+before_script:
+  - yarn
+
+test:
+  script:
+    - yarn test
