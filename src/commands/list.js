@@ -1,9 +1,29 @@
 // npm packages
 const got = require('got');
 const chalk = require('chalk');
+const Table = require('cli-table');
 
 // our packages
 const {userConfig, isLoggedIn, logout} = require('../config');
+
+const tableBorder = {
+  top: '',
+  'top-mid': '',
+  'top-left': '',
+  'top-right': '',
+  bottom: '',
+  'bottom-mid': '',
+  'bottom-left': '',
+  'bottom-right': '',
+  left: '',
+  'left-mid': '',
+  mid: '',
+  'mid-mid': '',
+  right: '',
+  'right-mid': '',
+  middle: ' ',
+};
+const tableStyle = {'padding-left': 3, 'padding-right': 3};
 
 exports.command = ['list', 'ls'];
 exports.describe = 'list deployments';
@@ -43,12 +63,29 @@ exports.handler = async () => {
     throw new Error('Server returned empty response!');
   }
   if (services.length > 0) {
+    // print count
     console.log(chalk.green(`${services.length} deployments found on ${userConfig.endpoint}:\n`));
-    services.forEach((svc, i) => {
-      console.log(chalk.bold(`${i + 1})`), svc.Names[0].slice(1), ':');
-      console.log(`  ${chalk.bold('Status')}: ${svc.Status}`);
-      console.log();
+
+    // create table
+    const resultTable = new Table({
+      head: ['ID', 'URL', 'Status'],
+      chars: tableBorder,
+      style: tableStyle,
     });
+
+    // populate table
+    services.forEach(svc => {
+      const name = svc.Names[0].slice(1);
+      const domain = svc.Labels['traefik.frontend.rule']
+        ? `http://${svc.Labels['traefik.frontend.rule'].replace('Host:', '')}`
+        : 'not set';
+      const status = svc.Status;
+      // console.log(svc);
+      resultTable.push([name, domain, status]);
+    });
+
+    // draw table
+    console.log(resultTable.toString());
   } else {
     console.log(chalk.green(`No deployments found on ${userConfig.endpoint}!`));
   }

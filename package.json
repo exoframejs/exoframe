@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "chalk": "^1.1.3",
+    "cli-table": "^0.3.1",
     "got": "^6.7.1",
     "ignore": "^3.3.0",
     "inquirer": "^3.0.6",
