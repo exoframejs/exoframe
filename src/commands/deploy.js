@@ -5,6 +5,7 @@ const tar = require('tar-fs');
 const got = require('got');
 const path = require('path');
 const fs = require('fs');
+const ora = require('ora');
 
 // my modules
 const {userConfig, isLoggedIn, logout} = require('../config');
@@ -70,11 +71,16 @@ exports.handler = async args => {
     },
   };
 
+  // show loader
+  const spinner = ora('Uploading project to server...').start();
+
   // pipe stream to remote
   try {
     const res = await streamToResponse({tarStream, remoteUrl, options});
-    console.log(chalk.bold('Done!'), `Your project is now deployed as:\n  > ${res.names.join('\n  > ')}`);
+    spinner.succeed('Upload finsihed!');
+    console.log(`Your project is now deployed as:\n  > ${res.names.join('\n  > ')}`);
   } catch (e) {
+    spinner.fail('Upload failed!');
     // if authorization is expired/broken/etc
     if (e.statusCode === 401) {
       logout(userConfig);

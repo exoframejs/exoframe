@@ -39,7 +39,7 @@ module.exports = () => {
         consoleSpy.args,
         [
           [`Deploying ${folderPath} to endpoint:`, 'http://localhost:8080'],
-          ['Done!', 'Your project is now deployed as:\n  > test'],
+          ['Your project is now deployed as:\n  > test'],
         ],
         'Correct log output'
       );
@@ -71,7 +71,7 @@ module.exports = () => {
         consoleSpy.args,
         [
           ['Deploying current project to endpoint:', 'http://localhost:8080'],
-          ['Done!', 'Your project is now deployed as:\n  > test'],
+          ['Your project is now deployed as:\n  > test'],
         ],
         'Correct log output'
       );
