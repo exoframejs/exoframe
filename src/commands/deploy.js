@@ -97,10 +97,10 @@ exports.handler = async args => {
       const domain = deployment.Config.Labels['traefik.frontend.rule']
         ? `http://${deployment.Config.Labels['traefik.frontend.rule'].replace('Host:', '')}`
         : 'Not set';
-      const aliases = deployment.NetworkSettings.Networks.exoframe.Aliases.filter(
-        alias => !deployment.Id.startsWith(alias)
-      );
-      const host = aliases.shift();
+      const aliases = deployment.NetworkSettings.Networks.exoframe.Aliases
+        ? deployment.NetworkSettings.Networks.exoframe.Aliases.filter(alias => !deployment.Id.startsWith(alias))
+        : [];
+      const host = aliases.shift() || 'Not set';
       resultTable.push([name, domain, host]);
     });
 
