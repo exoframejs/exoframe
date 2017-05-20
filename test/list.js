@@ -2,7 +2,6 @@
 const tap = require('tap');
 const nock = require('nock');
 const sinon = require('sinon');
-const Stream = require('stream');
 
 // our packages
 const {handler: list} = require('../src/commands/list');
@@ -10,14 +9,38 @@ const {handler: list} = require('../src/commands/list');
 module.exports = () => {
   const services = [
     {
-      Names: ['/test'],
-      Labels: {'traefik.frontend.rule': 'Host:test.host'},
-      Status: 'Up 10 minutes',
+      Id: '123',
+      Name: '/test',
+      Config: {
+        Labels: {'traefik.frontend.rule': 'Host:test.host'},
+      },
+      State: {
+        Status: 'Up 10 minutes',
+      },
+      NetworkSettings: {
+        Networks: {
+          exoframe: {
+            Aliases: null,
+          },
+        },
+      },
     },
     {
-      Names: ['/test2'],
-      Labels: {},
-      Status: 'Up 12 minutes',
+      Id: '321',
+      Name: '/test2',
+      Config: {
+        Labels: {},
+      },
+      State: {
+        Status: 'Up 12 minutes',
+      },
+      NetworkSettings: {
+        Networks: {
+          exoframe: {
+            Aliases: null,
+          },
+        },
+      },
     },
   ];
 
@@ -38,9 +61,9 @@ module.exports = () => {
         [
           ['2 deployments found on http://localhost:8080:\n'],
           [
-            '   ID          URL                    Status          \n' +
-              '   test        http://test.host       Up 10 minutes   \n' +
-              '   test2       not set                Up 12 minutes   ',
+            '   ID          URL                    Hostname       Status          \n' +
+              '   test        http://test.host       Not set        Up 10 minutes   \n' +
+              '   test2       not set                Not set        Up 12 minutes   ',
           ],
         ],
         'Correct log output'

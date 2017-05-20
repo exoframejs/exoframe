@@ -6,9 +6,11 @@ const got = require('got');
 const path = require('path');
 const fs = require('fs');
 const ora = require('ora');
+const Table = require('cli-table');
 
 // my modules
 const {userConfig, isLoggedIn, logout} = require('../config');
+const {tableBorder, tableStyle} = require('../config/table');
 
 const ignores = ['.git', 'node_modules'];
 
@@ -77,8 +79,33 @@ exports.handler = async args => {
   // pipe stream to remote
   try {
     const res = await streamToResponse({tarStream, remoteUrl, options});
+    if (!res.deployments || !res.deployments.length) {
+      throw new Error('Something went wrong!');
+    }
     spinner.succeed('Upload finsihed!');
-    console.log(`Your project is now deployed as:\n  > ${res.names.join('\n  > ')}`);
+    console.log('Your project is now deployed as:\n');
+    // create table
+    const resultTable = new Table({
+      head: ['ID', 'URL', 'Hostname'],
+      chars: tableBorder,
+      style: tableStyle,
+    });
+
+    // process deployments
+    res.deployments.forEach(deployment => {
+      const name = deployment.Name.slice(1);
+      const domain = deployment.Config.Labels['traefik.frontend.rule']
+        ? `http://${deployment.Config.Labels['traefik.frontend.rule'].replace('Host:', '')}`
+        : 'Not set';
+      const aliases = deployment.NetworkSettings.Networks.exoframe.Aliases.filter(
+        alias => !deployment.Id.startsWith(alias)
+      );
+      const host = aliases.shift();
+      resultTable.push([name, domain, host]);
+    });
+
+    // draw table
+    console.log(resultTable.toString());
   } catch (e) {
     spinner.fail('Upload failed!');
     // if authorization is expired/broken/etc

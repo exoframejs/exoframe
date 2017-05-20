@@ -14,6 +14,25 @@ module.exports = () => {
   const folderPath = path.join('test', 'fixtures', folder);
   const testFolder = path.join(__dirname, 'fixtures', folder);
 
+  const deployments = [
+    {
+      Id: '123',
+      Name: '/test',
+      Config: {
+        Labels: {
+          'traefik.frontend.rule': 'Host:localhost',
+        },
+      },
+      NetworkSettings: {
+        Networks: {
+          exoframe: {
+            Aliases: ['123', 'test'],
+          },
+        },
+      },
+    },
+  ];
+
   // test
   tap.test('Should deploy', t => {
     // spy on console
@@ -26,7 +45,7 @@ module.exports = () => {
       t.ok(requestBody.includes(excgf), 'Should send correct config');
       t.ok(requestBody.includes(index), 'Should send correct index file');
 
-      cb(null, [200, {status: 'success', names: ['test']}]);
+      cb(null, [200, {status: 'success', deployments}]);
     });
 
     // execute login
@@ -39,7 +58,8 @@ module.exports = () => {
         consoleSpy.args,
         [
           [`Deploying ${folderPath} to endpoint:`, 'http://localhost:8080'],
-          ['Your project is now deployed as:\n  > test'],
+          ['Your project is now deployed as:\n'],
+          ['   ID         URL                    Hostname   \n   test       http://localhost       test       '],
         ],
         'Correct log output'
       );
@@ -58,7 +78,7 @@ module.exports = () => {
 
     // handle correct request
     const deployServer = nock('http://localhost:8080').post('/deploy').reply((uri, requestBody, cb) => {
-      cb(null, [200, {status: 'success', names: ['test']}]);
+      cb(null, [200, {status: 'success', deployments}]);
     });
 
     // execute login
@@ -71,7 +91,8 @@ module.exports = () => {
         consoleSpy.args,
         [
           ['Deploying current project to endpoint:', 'http://localhost:8080'],
-          ['Your project is now deployed as:\n  > test'],
+          ['Your project is now deployed as:\n'],
+          ['   ID         URL                    Hostname   \n   test       http://localhost       test       '],
         ],
         'Correct log output'
       );

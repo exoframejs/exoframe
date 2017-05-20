@@ -5,25 +5,7 @@ const Table = require('cli-table');
 
 // our packages
 const {userConfig, isLoggedIn, logout} = require('../config');
-
-const tableBorder = {
-  top: '',
-  'top-mid': '',
-  'top-left': '',
-  'top-right': '',
-  bottom: '',
-  'bottom-mid': '',
-  'bottom-left': '',
-  'bottom-right': '',
-  left: '',
-  'left-mid': '',
-  mid: '',
-  'mid-mid': '',
-  right: '',
-  'right-mid': '',
-  middle: ' ',
-};
-const tableStyle = {'padding-left': 3, 'padding-right': 3};
+const {tableBorder, tableStyle} = require('../config/table');
 
 exports.command = ['list', 'ls'];
 exports.describe = 'list deployments';
@@ -68,20 +50,23 @@ exports.handler = async () => {
 
     // create table
     const resultTable = new Table({
-      head: ['ID', 'URL', 'Status'],
+      head: ['ID', 'URL', 'Hostname', 'Status'],
       chars: tableBorder,
       style: tableStyle,
     });
 
     // populate table
     services.forEach(svc => {
-      const name = svc.Names[0].slice(1);
-      const domain = svc.Labels['traefik.frontend.rule']
-        ? `http://${svc.Labels['traefik.frontend.rule'].replace('Host:', '')}`
+      const name = svc.Name.slice(1);
+      const domain = svc.Config.Labels['traefik.frontend.rule']
+        ? `http://${svc.Config.Labels['traefik.frontend.rule'].replace('Host:', '')}`
         : 'not set';
-      const status = svc.Status;
-      // console.log(svc);
-      resultTable.push([name, domain, status]);
+      const aliases = svc.NetworkSettings.Networks.exoframe.Aliases
+        ? svc.NetworkSettings.Networks.exoframe.Aliases.filter(alias => !svc.Id.startsWith(alias))
+        : [];
+      const host = aliases.shift() || 'Not set';
+      const status = svc.State.Status;
+      resultTable.push([name, domain, host, status]);
     });
 
     // draw table
