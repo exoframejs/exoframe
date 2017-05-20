@@ -1,4 +1,19 @@
 
+0.9.0 / 2017-05-20
+==================
+
+Additions:
+  * Show extended info on deployment
+  * Show spinner during upload
+
+Changes:
+  * Use new list response format
+  * Use table for better list output
+
+Fixes:
+  * Fix logs parsing for lines without dates
+  * Generate dates for logs test on the fly to be independent of platform locale
+
 0.8.1 / 2017-05-18
 ==================
 
