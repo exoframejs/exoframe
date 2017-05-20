@@ -54,7 +54,11 @@ exports.handler = ({id}) => new Promise(resolve => {
         return {date, msg};
       })
       .filter(({date, msg}) => date !== undefined && msg !== undefined)
-      .map(({date, msg}) => `${chalk.gray(`${date.toLocaleDateString()} ${date.toLocaleTimeString()}`)} ${msg}`)
+      .map(({date, msg}) => ({
+        date: isFinite(date) ? `${date.toLocaleDateString()} ${date.toLocaleTimeString()}` : '  ',
+        msg,
+      }))
+      .map(({date, msg}) => `${chalk.gray(`${date}`)} ${msg}`)
       .forEach(line => console.log(line));
 
     resolve();
