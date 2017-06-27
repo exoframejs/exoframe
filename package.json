@@ -10,13 +10,13 @@
     "exoframe": "bin/index.js"
   },
   "scripts": {
-    "test": "NODE_ENV=testing tap --cov --coverage-report=text-summary --reporter=spec ./test/index.js",
-    "cover": "NODE_ENV=testing tap --cov --coverage-report=lcov ./test/index.js"
+    "test": "TZ=Greenland NODE_ENV=testing tap --cov --coverage-report=text-summary --reporter=spec ./test/index.js",
+    "cover": "TZ=Greenland NODE_ENV=testing tap --cov --coverage-report=lcov ./test/index.js"
   },
   "dependencies": {
     "chalk": "^1.1.3",
     "cli-table": "^0.3.1",
-    "got": "^6.7.1",
+    "got": "^7.0.0",
     "ignore": "^3.3.0",
     "inquirer": "^3.0.6",
     "js-yaml": "^3.8.4",
