@@ -63,7 +63,7 @@ module.exports = () => {
           [
             '   ID          URL                    Hostname       Status          \n' +
               '   test        http://test.host       Not set        Up 10 minutes   \n' +
-              '   test2       not set                Not set        Up 12 minutes   ',
+              '   test2       Not set                Not set        Up 12 minutes   ',
           ],
         ],
         'Correct log output'

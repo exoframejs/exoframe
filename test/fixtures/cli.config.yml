@@ -2,4 +2,3 @@ endpoint: 'http://localhost:8080'
 token: test-token
 user:
   username: admin
-  password: admin
