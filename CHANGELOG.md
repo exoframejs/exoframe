@@ -1,4 +1,14 @@
 
+0.10.0 / 2017-06-28
+==================
+
+Changes:
+  * Update login to use new private-public key auth
+  * Update dependencies and fix tests
+
+Fixes:
+  * Fix issue when no hostname is set during deployment
+
 0.9.0 / 2017-05-20
 ==================
 
