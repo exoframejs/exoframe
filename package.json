@@ -10,7 +10,7 @@
     "exoframe": "bin/index.js"
   },
   "scripts": {
-    "test": "TZ=Greenland NODE_ENV=testing tap --coverage --reporter=spec ./test/index.js",
+    "test": "TZ=Greenland NODE_ENV=testing tap --cov --coverage-report=lcov --reporter=spec ./test/index.js",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "dependencies": {
