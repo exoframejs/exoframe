@@ -66,7 +66,7 @@ module.exports = () => {
     // spy on console
     const consoleSpy = sinon.spy(console, 'log');
     // execute login
-    login({}).then(() => {
+    login({key: 'asd'}).then(() => {
       // first check console output
       t.deepEqual(
         consoleSpy.args,

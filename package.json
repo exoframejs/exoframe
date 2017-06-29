@@ -10,8 +10,8 @@
     "exoframe": "bin/index.js"
   },
   "scripts": {
-    "test": "TZ=Greenland NODE_ENV=testing tap --cov --coverage-report=text-summary --reporter=spec ./test/index.js",
-    "cover": "TZ=Greenland NODE_ENV=testing tap --cov --coverage-report=lcov ./test/index.js"
+    "test": "TZ=Greenland NODE_ENV=testing tap --cov --coverage-report=lcov --reporter=spec ./test/index.js",
+    "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "dependencies": {
     "chalk": "^1.1.3",
@@ -26,6 +26,7 @@
     "yargs": "^8.0.1"
   },
   "devDependencies": {
+    "coveralls": "^2.13.1",
     "nock": "^9.0.13",
     "sinon": "^2.2.0",
     "tap": "^10.3.2"
