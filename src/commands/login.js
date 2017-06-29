@@ -31,9 +31,14 @@ exports.handler = async ({key, passphrase}) => {
   let privateKeys = [];
   const sshFolder = path.join(os.homedir(), '.ssh');
   if (noKey) {
-    const allFiles = fs.readdirSync(sshFolder);
-    const filterOut = ['authorized_keys', 'config', 'known_hosts'];
-    privateKeys = allFiles.filter(f => !f.endsWith('.pub') && !filterOut.includes(f));
+    try {
+      const allFiles = fs.readdirSync(sshFolder);
+      const filterOut = ['authorized_keys', 'config', 'known_hosts'];
+      privateKeys = allFiles.filter(f => !f.endsWith('.pub') && !filterOut.includes(f));
+    } catch (e) {
+      console.log(chalk.red('Error logging in!'), 'Default folder (~/.ssh) with private keys does not exists!');
+      return;
+    }
   }
 
   // generate and show choices
@@ -94,9 +99,10 @@ exports.handler = async ({key, passphrase}) => {
   // generate login token based on phrase from server
   let reqToken;
   try {
-    const cert = password && password.length
-      ? {key: fs.readFileSync(privateKey), passphrase: password}
-      : fs.readFileSync(privateKey);
+    const cert =
+      password && password.length
+        ? {key: fs.readFileSync(privateKey), passphrase: password}
+        : fs.readFileSync(privateKey);
     reqToken = jwt.sign(phrase, cert, {algorithm: 'RS256'});
   } catch (e) {
     console.log(
