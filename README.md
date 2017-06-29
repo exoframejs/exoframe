@@ -2,8 +2,8 @@
 
 > Power armor for docker containers
 
-[![Build Status](https://gitlab.com/exoframejs/exoframe/badges/master/build.svg)](https://gitlab.com/exoframejs/exoframe/pipelines)
-[![coverage report](https://gitlab.com/exoframejs/exoframe/badges/master/coverage.svg)](https://gitlab.com/exoframejs/exoframe/commits/master)
+[![Build Status](https://travis-ci.org/exoframejs/exoframe.svg?branch=master)](https://travis-ci.org/exoframejs/exoframe)
+[![Coverage Status](https://coveralls.io/repos/github/exoframejs/exoframe/badge.svg?branch=master)](https://coveralls.io/github/exoframejs/exoframe?branch=master)
 [![npm](https://img.shields.io/npm/v/exoframe.svg?maxAge=2592000)](https://www.npmjs.com/package/exoframe)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://opensource.org/licenses/MIT)
 
