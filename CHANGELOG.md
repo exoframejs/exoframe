@@ -1,4 +1,13 @@
 
+0.10.1 / 2017-06-29
+==================
+
+Changes:
+  * Replace gitlab-ci with travis
+
+Fixes:
+  * Fix issue with absent .ssh folder in userdir
+
 0.10.0 / 2017-06-28
 ==================
 
