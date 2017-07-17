@@ -66,7 +66,7 @@ It can either be generated using `exoframe config` command or created manually.
 If it doesn't exist during deployment, Exoframe will generate simple config file that only contains name of the current project.
 
 Config file has the following structure:
-```json
+```js
 {
   // project name
   // defaults to folder name
