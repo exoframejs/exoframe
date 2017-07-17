@@ -8,6 +8,7 @@ const list = require('./commands/list');
 const logs = require('./commands/logs');
 const remove = require('./commands/remove');
 const endpoint = require('./commands/endpoint');
+const config = require('./commands/config');
 
 // init program
 yargs
@@ -20,4 +21,5 @@ yargs
   .command(endpoint)
   .command(list)
   .command(logs)
-  .command(remove).argv;
+  .command(remove)
+  .command(config).argv;

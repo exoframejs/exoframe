@@ -6,9 +6,10 @@ const yaml = require('js-yaml');
 const chalk = require('chalk');
 
 // construct paths
-const baseFolder = process.env.NODE_ENV === 'testing'
-  ? path.join(__dirname, '..', '..', 'test', 'fixtures')
-  : path.join(os.homedir(), '.exoframe');
+const baseFolder =
+  process.env.NODE_ENV === 'testing'
+    ? path.join(__dirname, '..', '..', 'test', 'fixtures')
+    : path.join(os.homedir(), '.exoframe');
 const configPath = path.join(baseFolder, 'cli.config.yml');
 
 const defaultConfig = {
