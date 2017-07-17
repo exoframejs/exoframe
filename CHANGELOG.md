@@ -1,4 +1,13 @@
 
+0.11.0 / 2017-07-17
+==================
+
+Additions:
+  * Add command to generate project config file
+
+Fixes:
+  * Describe config file in docs
+
 0.10.1 / 2017-06-29
 ==================
 
