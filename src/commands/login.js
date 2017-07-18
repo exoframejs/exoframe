@@ -62,7 +62,6 @@ exports.handler = async ({key, passphrase}) => {
       type: 'password',
       name: 'password',
       message: 'Private key passpharse (leave blank if not set):',
-      validate,
     });
   }
 
