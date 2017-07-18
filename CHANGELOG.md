@@ -1,4 +1,11 @@
 
+0.11.1 / 2017-07-18
+==================
+
+Fixes:
+  * Do not filter passphrase input during login to allow for empty passphrases
+  * Fix config file JSON formatting in README
+
 0.11.0 / 2017-07-17
 ==================
 
