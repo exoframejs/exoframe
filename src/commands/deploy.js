@@ -57,7 +57,13 @@ exports.handler = async args => {
   try {
     fs.statSync(configPath);
   } catch (e) {
-    const defaultConfig = JSON.stringify({name: folderName});
+    const defaultConfig = JSON.stringify({
+        name: folderName,
+        restart: "on-failure:2",
+        domain:null,
+        env:{},
+        hostname:null
+    },null,2) + "\n";
     fs.writeFileSync(configPath, defaultConfig, 'utf-8');
   }
 
