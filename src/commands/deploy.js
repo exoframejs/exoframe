@@ -64,12 +64,12 @@ exports.handler = async args => {
   // show loader
   const spinner = ora('Uploading project to server...').start();
 
-  //syntax-check config
+  // syntax-check config
   try {
     JSON.parse(fs.readFileSync(configPath));
-  } catch (e){
-      spinner.fail("Your exoframe.json is not valid");
-      return;
+  } catch (e) {
+    spinner.fail('Your exoframe.json is not valid');
+    return;
   }
 
   // create tar stream from current folder
