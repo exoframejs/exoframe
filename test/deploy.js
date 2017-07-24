@@ -105,6 +105,31 @@ module.exports = () => {
   });
 
   // test
+  tap.test('Should not deploy with broken config', t => {
+    // spy on console
+    const consoleSpy = sinon.spy(console, 'log');
+
+    // corrupt config with string
+    fs.appendFileSync(path.join(__dirname, '..', 'exoframe.json'), 'I am broken json now');
+
+    // execute deploy
+    deploy().then(() => {
+      // check console output
+      t.deepEqual(
+        consoleSpy.args,
+        [
+          ['Deploying current project to endpoint:', 'http://localhost:8080'],
+          ['Please, check your config and try again.'],
+        ],
+        'Correct log output'
+      );
+      // restore console
+      console.log.restore();
+      t.end();
+    });
+  });
+
+  // test
   tap.test('Should deauth on 401', t => {
     // copy original config for restoration
     const originalConfig = Object.assign({}, userConfig);
