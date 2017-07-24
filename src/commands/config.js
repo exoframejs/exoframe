@@ -4,6 +4,8 @@ const path = require('path');
 const chalk = require('chalk');
 const inquirer = require('inquirer');
 
+const util = require('util');
+
 const validate = input => input && input.length > 0;
 const filter = input => input.trim();
 
@@ -14,12 +16,26 @@ exports.handler = async () => {
   const workdir = process.cwd();
   const folderName = path.basename(workdir);
   const configPath = path.join(workdir, 'exoframe.json');
+  let defaultConfig = {
+    name: folderName,
+    domain: '',
+    restart: 'on-failure:2',
+    env: undefined,
+    hostname: '',
+  };
   try {
     fs.statSync(configPath);
-    console.log(chalk.green('Config already exists!'));
-    return;
+    console.log(chalk.green('Config already exists! Editing..'));
+    defaultConfig = JSON.parse(fs.readFileSync(configPath).toString());
   } catch (e) {
-    console.log('Creating new config..');
+    // check if config didn't exist
+    if (e.message.includes('ENOENT')) {
+      console.log('Creating new config..');
+    } else {
+      // if there was any parsing error - show message and die
+      console.log(chalk.red('Error parsing existing config! Please make sure it is valid and try again.'));
+      return;
+    }
   }
 
   // ask user for values
@@ -29,7 +45,7 @@ exports.handler = async () => {
     type: 'input',
     name: 'name',
     message: 'Project name:',
-    default: folderName,
+    default: defaultConfig.name,
     validate,
     filter,
   });
@@ -37,25 +53,30 @@ exports.handler = async () => {
     type: 'input',
     name: 'domain',
     message: 'Domain [optional]:',
+    default: defaultConfig.domain,
     filter,
   });
   prompts.push({
     type: 'input',
     name: 'env',
     message: 'Env variables [comma-separated, optional]:',
+    default: defaultConfig.env
+      ? Object.keys(defaultConfig.env).map(k => `${k.toUpperCase()}=${defaultConfig.env[k]}`).join(', ')
+      : '',
     filter,
   });
   prompts.push({
     type: 'input',
     name: 'hostname',
     message: 'Hostname [optional]:',
+    default: defaultConfig.hostname,
     filter,
   });
   prompts.push({
     type: 'list',
     name: 'restart',
     message: 'Restart policy [optional]:',
-    default: 'on-failure:2',
+    default: defaultConfig.restart,
     choices: ['no', 'on-failure:2', 'always'],
   });
   // get values from user

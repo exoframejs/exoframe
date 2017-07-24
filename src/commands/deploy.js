@@ -61,6 +61,18 @@ exports.handler = async args => {
     fs.writeFileSync(configPath, defaultConfig, 'utf-8');
   }
 
+  // show loader
+  const spinner = ora('Uploading project to server...').start();
+
+  // syntax-check config
+  try {
+    JSON.parse(fs.readFileSync(configPath));
+  } catch (e) {
+    spinner.fail('Your exoframe.json is not valid');
+    console.log(chalk.red('Please, check your config and try again.'));
+    return;
+  }
+
   // create tar stream from current folder
   const ig = ignore().add(ignores);
   const tarStream = tar.pack(workdir, {
@@ -72,9 +84,6 @@ exports.handler = async args => {
       Authorization: `Bearer ${userConfig.token}`,
     },
   };
-
-  // show loader
-  const spinner = ora('Uploading project to server...').start();
 
   // pipe stream to remote
   try {

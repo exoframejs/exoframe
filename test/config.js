@@ -54,22 +54,4 @@ module.exports = () => {
       t.end();
     });
   });
-
-  // test config generation
-  tap.test('Should not generate config when file exists', t => {
-    // stup inquirer answers
-    sinon.stub(inquirer, 'prompt').callsFake(() => Promise.resolve(configData));
-    // spy on console
-    const consoleSpy = sinon.spy(console, 'log');
-    // execute login
-    config().then(() => {
-      // first check console output
-      t.deepEqual(consoleSpy.args, [['Config already exists!']], 'Correct log output');
-      // restore inquirer
-      inquirer.prompt.restore();
-      // restore console
-      console.log.restore();
-      t.end();
-    });
-  });
 };
