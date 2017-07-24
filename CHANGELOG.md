@@ -1,4 +1,13 @@
 
+0.12.0 / 2017-07-24
+==================
+
+Changes:
+  * Change config method to edit existing config file
+
+Fixes:
+  * Fail early if the configuration is invalid JSON
+
 0.11.1 / 2017-07-18
 ==================
 
