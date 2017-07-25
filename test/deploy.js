@@ -110,7 +110,7 @@ module.exports = () => {
     const consoleSpy = sinon.spy(console, 'log');
 
     // corrupt config with string
-    fs.appendFileSync(path.join(__dirname, '..', 'exoframe.json'), 'I am broken json now');
+    fs.writeFileSync(path.join(__dirname, '..', 'exoframe.json'), 'I am broken json now');
 
     // execute deploy
     deploy().then(() => {
@@ -119,7 +119,7 @@ module.exports = () => {
         consoleSpy.args,
         [
           ['Deploying current project to endpoint:', 'http://localhost:8080'],
-          ['Please, check your config and try again:', 'SyntaxError: Unexpected token I in JSON at position 23'],
+          ['Please, check your config and try again:', 'SyntaxError: Unexpected token I in JSON at position 0'],
         ],
         'Correct log output'
       );
