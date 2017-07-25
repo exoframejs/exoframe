@@ -119,7 +119,7 @@ module.exports = () => {
         consoleSpy.args,
         [
           ['Deploying current project to endpoint:', 'http://localhost:8080'],
-          ['Please, check your config and try again.'],
+          ['Please, check your config and try again:', 'SyntaxError: Unexpected token I in JSON at position 23'],
         ],
         'Correct log output'
       );
