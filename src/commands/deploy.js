@@ -69,7 +69,7 @@ exports.handler = async args => {
     JSON.parse(fs.readFileSync(configPath));
   } catch (e) {
     spinner.fail('Your exoframe.json is not valid');
-    console.log(chalk.red('Please, check your config and try again.'));
+    console.log(chalk.red('Please, check your config and try again:'), e.toString());
     return;
   }
 

@@ -1,4 +1,5 @@
 // npm packages
+const _ = require('lodash');
 const got = require('got');
 const chalk = require('chalk');
 const Table = require('cli-table');
@@ -48,15 +49,8 @@ exports.handler = async () => {
     // print count
     console.log(chalk.green(`${services.length} deployments found on ${userConfig.endpoint}:\n`));
 
-    // create table
-    const resultTable = new Table({
-      head: ['ID', 'URL', 'Hostname', 'Status'],
-      chars: tableBorder,
-      style: tableStyle,
-    });
-
     // populate table
-    services.forEach(svc => {
+    const formattedServices = services.map(svc => {
       const name = svc.Name.slice(1);
       const domain = svc.Config.Labels['traefik.frontend.rule']
         ? `http://${svc.Config.Labels['traefik.frontend.rule'].replace('Host:', '')}`
@@ -64,13 +58,51 @@ exports.handler = async () => {
       const aliases = svc.NetworkSettings.Networks.exoframe.Aliases
         ? svc.NetworkSettings.Networks.exoframe.Aliases.filter(alias => !svc.Id.startsWith(alias))
         : [];
+      const project = svc.Config.Labels['exoframe.project'];
       const host = aliases.shift() || 'Not set';
       const status = svc.State.Status;
-      resultTable.push([name, domain, host, status]);
+      return {name, domain, host, status, project};
+    });
+
+    // create table
+    const resultTable = new Table({
+      head: ['ID', 'URL', 'Hostname', 'Status'],
+      chars: tableBorder,
+      style: tableStyle,
+    });
+
+    // group by project
+    const groupedServices = _.groupBy(formattedServices, 'project');
+    // populate tables
+    Object.keys(groupedServices).forEach(svcKey => {
+      const svcList = groupedServices[svcKey];
+      // if there's only one deployment in project - add it to global table
+      if (svcList.length === 1) {
+        const {name, domain, host, status} = svcList.pop();
+        resultTable.push([name, domain, host, status]);
+        return;
+      }
+
+      console.log(`Deployments for ${chalk.bold(svcKey)}:`);
+      console.log();
+      const projectTable = new Table({
+        head: ['ID', 'URL', 'Hostname', 'Status'],
+        chars: tableBorder,
+        style: tableStyle,
+      });
+      svcList.forEach(({name, domain, host, status}) => {
+        projectTable.push([name, domain, host, status]);
+      });
+      console.log(projectTable.toString());
+      console.log();
     });
 
     // draw table
-    console.log(resultTable.toString());
+    if (resultTable.length > 0) {
+      console.log(`Other deployments:`);
+      console.log();
+      console.log(resultTable.toString());
+    }
   } else {
     console.log(chalk.green(`No deployments found on ${userConfig.endpoint}!`));
   }

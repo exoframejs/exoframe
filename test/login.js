@@ -72,7 +72,11 @@ module.exports = () => {
         consoleSpy.args,
         [
           ['Logging in to:', 'http://localhost:8080'],
-          ['Error logging in!', 'Error generating login token! Make sure your private key password is correct'],
+          [
+            'Error logging in!',
+            'Error generating login token! Make sure your private key password is correct',
+            "Error: ENOENT: no such file or directory, open 'asd'",
+          ],
         ],
         'Correct log output'
       );
@@ -105,7 +109,11 @@ module.exports = () => {
         consoleSpy.args,
         [
           ['Logging in to:', 'http://localhost:8080'],
-          ['Error logging in!', 'Check your username and password and try again.'],
+          [
+            'Error logging in!',
+            'Check your username and password and try again.',
+            'HTTPError: Response code 401 (Unauthorized)',
+          ],
         ],
         'Correct log output'
       );

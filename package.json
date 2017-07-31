@@ -21,6 +21,7 @@
     "inquirer": "^3.2.0",
     "js-yaml": "^3.9.0",
     "jsonwebtoken": "^7.4.1",
+    "lodash": "^4.17.4",
     "ora": "^1.2.0",
     "tar-fs": "^1.15.2",
     "yargs": "^8.0.1"

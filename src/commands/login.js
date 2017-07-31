@@ -90,7 +90,8 @@ exports.handler = async ({key, passphrase}) => {
   } catch (e) {
     console.log(
       chalk.red('Error logging in!'),
-      'Error getting login request phrase. Make sure your endpoint is correct!'
+      'Error getting login request phrase. Make sure your endpoint is correct!',
+      e.toString()
     );
     return;
   }
@@ -106,7 +107,8 @@ exports.handler = async ({key, passphrase}) => {
   } catch (e) {
     console.log(
       chalk.red('Error logging in!'),
-      'Error generating login token! Make sure your private key password is correct'
+      'Error generating login token! Make sure your private key password is correct',
+      e.toString()
     );
     return;
   }
@@ -137,7 +139,6 @@ exports.handler = async ({key, passphrase}) => {
     updateConfig(Object.assign(body, {user}));
     console.log(chalk.green('Successfully logged in!'));
   } catch (e) {
-    console.log(chalk.red('Error logging in!'), 'Check your username and password and try again.');
-    // console.error(e);
+    console.log(chalk.red('Error logging in!'), 'Check your username and password and try again.', e.toString());
   }
 };
