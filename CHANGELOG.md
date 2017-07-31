@@ -1,4 +1,14 @@
 
+0.13.0 / 2017-07-31
+==================
+
+Additions:
+  * Create docs folder, add FAQ and clarify username usage, closes #35
+
+Changes:
+  * Group deployments by projects
+  * Display thrown errors where applicable
+
 0.12.0 / 2017-07-24
 ==================
 
