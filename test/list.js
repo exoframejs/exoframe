@@ -12,7 +12,7 @@ module.exports = () => {
       Id: '123',
       Name: '/test',
       Config: {
-        Labels: {'traefik.frontend.rule': 'Host:test.host'},
+        Labels: {'traefik.frontend.rule': 'Host:test.host', 'exoframe.project': 'test'},
       },
       State: {
         Status: 'Up 10 minutes',
@@ -29,10 +29,27 @@ module.exports = () => {
       Id: '321',
       Name: '/test2',
       Config: {
-        Labels: {},
+        Labels: {'exoframe.project': 'test'},
       },
       State: {
         Status: 'Up 12 minutes',
+      },
+      NetworkSettings: {
+        Networks: {
+          exoframe: {
+            Aliases: null,
+          },
+        },
+      },
+    },
+    {
+      Id: '111',
+      Name: '/test3',
+      Config: {
+        Labels: {'exoframe.project': 'other'},
+      },
+      State: {
+        Status: 'Up 13 minutes',
       },
       NetworkSettings: {
         Networks: {
@@ -59,11 +76,20 @@ module.exports = () => {
       t.deepEqual(
         consoleSpy.args,
         [
-          ['2 deployments found on http://localhost:8080:\n'],
+          ['3 deployments found on http://localhost:8080:\n'],
+          ['Deployments for test:'],
+          [],
           [
             '   ID          URL                    Hostname       Status          \n' +
               '   test        http://test.host       Not set        Up 10 minutes   \n' +
               '   test2       Not set                Not set        Up 12 minutes   ',
+          ],
+          [],
+          ['Other deployments:'],
+          [],
+          [
+            '   ID          URL           Hostname       Status          \n' +
+              '   test3       Not set       Not set        Up 13 minutes   ',
           ],
         ],
         'Correct log output'
