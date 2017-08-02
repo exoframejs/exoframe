@@ -80,9 +80,9 @@ module.exports = () => {
           ['Deployments for test:'],
           [],
           [
-            '   ID          URL                    Hostname       Status          \n' +
-              '   test        http://test.host       Not set        Up 10 minutes   \n' +
-              '   test2       Not set                Not set        Up 12 minutes   ',
+            '   ID          URL             Hostname       Status          \n' +
+              '   test        test.host       Not set        Up 10 minutes   \n' +
+              '   test2       Not set         Not set        Up 12 minutes   ',
           ],
           [],
           ['Other deployments:'],

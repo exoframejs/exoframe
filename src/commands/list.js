@@ -53,7 +53,7 @@ exports.handler = async () => {
     const formattedServices = services.map(svc => {
       const name = svc.Name.slice(1);
       const domain = svc.Config.Labels['traefik.frontend.rule']
-        ? `http://${svc.Config.Labels['traefik.frontend.rule'].replace('Host:', '')}`
+        ? svc.Config.Labels['traefik.frontend.rule'].replace('Host:', '')
         : 'Not set';
       const aliases = svc.NetworkSettings.Networks.exoframe.Aliases
         ? svc.NetworkSettings.Networks.exoframe.Aliases.filter(alias => !svc.Id.startsWith(alias))
