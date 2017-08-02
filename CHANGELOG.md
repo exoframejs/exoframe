@@ -1,4 +1,15 @@
 
+0.14.0 / 2017-08-02
+==================
+
+Additions:
+  * Allow specifying project name using config command
+  * Allow getting logs for whole projects, not just single deployments
+  * Describe deployment and project concepts in docs
+
+Fixes:
+  * Do not prepend http:// to listed domains
+
 0.13.0 / 2017-07-31
 ==================
 
