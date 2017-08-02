@@ -14,7 +14,7 @@ exports.handler = ({id}) =>
       return;
     }
 
-    console.log(chalk.bold('Getting logs for deployment:'), id);
+    console.log(chalk.bold('Getting logs for deployment:'), id, '\n');
 
     // services request url
     const remoteUrl = `${userConfig.endpoint}/logs/${id}`;
@@ -46,9 +46,13 @@ exports.handler = ({id}) =>
       const d = buf.toString();
       const lines = d.split('\n');
       lines
-        .map(line => line.replace(/^\u0001.+?\d/, '').replace(/\n+$/, ''))
+        .map(line => line.replace(/^\u0001.+?(\d)/g, '$1').replace(/\n+$/, ''))
         .filter(line => line && line.length > 0)
         .map(line => {
+          if (line.startsWith('Logs for')) {
+            return {date: null, msg: `${chalk.bold(line)}\n`};
+          }
+
           const parts = line.split(/\dZ\s/);
           const date = new Date(parts[0]);
           const msg = parts[1];
@@ -56,7 +60,7 @@ exports.handler = ({id}) =>
         })
         .filter(({date, msg}) => date !== undefined && msg !== undefined)
         .map(({date, msg}) => ({
-          date: isFinite(date) ? `${date.toLocaleDateString()} ${date.toLocaleTimeString()}` : '  ',
+          date: date && isFinite(date) ? `${date.toLocaleDateString()} ${date.toLocaleTimeString()}` : '  ',
           msg,
         }))
         .map(({date, msg}) => `${chalk.gray(`${date}`)} ${msg}`)
