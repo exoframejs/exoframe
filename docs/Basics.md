@@ -14,6 +14,7 @@
 | list                   | List currently deployed projects |
 | rm [id]                | Remove existing deployment or project |
 | log [id]               | Get logs for existing deployment or project |
+| token                  | Generate new deployment token |
 | login                  | Login into Exoframe server |
 | endpoint [url]         | Gets or sets the endpoint of Exoframe server |
 | completion             | Generates bash completion script  |
@@ -61,3 +62,12 @@ Currently it contains endpoint URL and list of template plugins:
 ```yaml
 endpoint: 'http://localhost:8080' # your endpoint URL, defaults to localhost
 ```
+
+## Deployment tokens
+
+Sometimes you might need to deploy things from environments that don't have your private key (e.g. CI/CD services).   
+For this cases you can use deployment tokens. Here's how it works:
+
+1. Make sure you are logged in to your Exoframe server
+2. Generate new deployment token using `exoframe token` command
+3. Use the new token to deploy your service without need to authenticate: `exoframe deploy -t $TOKEN`
