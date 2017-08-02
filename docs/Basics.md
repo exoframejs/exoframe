@@ -1,5 +1,10 @@
 # Basics
 
+### Concepts
+
+- **Project** - one or more deployments grouped together (e.g. started via docker-compose)
+- **Deployment** - one and only one deployed service
+
 ### Commands
 
 | Command                | Description |
@@ -7,7 +12,7 @@
 | deploy [path]          | Deploy specified path |
 | config                 | Generate or update project config for current path |
 | list                   | List currently deployed projects |
-| rm [project]           | Remove existing project |
+| rm [project]           | Remove existing deployment or project |
 | log [project]          | Get logs for existing project |
 | login                  | Login into Exoframe server |
 | endpoint [url]         | Gets or sets the endpoint of Exoframe server |
