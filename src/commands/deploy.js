@@ -52,6 +52,13 @@ exports.handler = async args => {
   const folderName = path.basename(workdir);
   const remoteUrl = `${userConfig.endpoint}/deploy`;
 
+  // make sure workdir exists
+  if (!fs.existsSync(workdir)) {
+    console.log(chalk.red(`Error! Path ${chalk.bold(workdir)} do not exists`));
+    console.log('Please, check your arguments and try again.');
+    return;
+  }
+
   // create config if doesn't exist
   const configPath = path.join(workdir, 'exoframe.json');
   try {

@@ -53,6 +53,8 @@ module.exports = () => {
       inquirer.prompt.restore();
       // restore console
       console.log.restore();
+      // remove corrupted config
+      fs.unlinkSync(configPath);
       t.end();
     });
   });

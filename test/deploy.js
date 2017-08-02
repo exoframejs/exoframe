@@ -130,6 +130,29 @@ module.exports = () => {
   });
 
   // test
+  tap.test('Should not deploy with non-existent path', t => {
+    // spy on console
+    const consoleSpy = sinon.spy(console, 'log');
+
+    // execute deploy
+    deploy({_: ['i-do-not-exist']}).then(() => {
+      // check console output
+      t.deepEqual(
+        consoleSpy.args,
+        [
+          ['Deploying i-do-not-exist to endpoint:', 'http://localhost:8080'],
+          [`Error! Path ${path.join(process.cwd(), 'i-do-not-exist')} do not exists`],
+          ['Please, check your arguments and try again.'],
+        ],
+        'Correct log output'
+      );
+      // restore console
+      console.log.restore();
+      t.end();
+    });
+  });
+
+  // test
   tap.test('Should deauth on 401', t => {
     // copy original config for restoration
     const originalConfig = Object.assign({}, userConfig);
