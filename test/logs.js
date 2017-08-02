@@ -13,9 +13,9 @@ module.exports = () => {
   const date2 = '2017-05-18T15:16:40.212591019Z';
   const date3 = '2017-05-18T15:16:40.375554362Z';
   const dirtyLogs = [
-    `\u0001\u0000\u0000\u0000\u0000\u0000\u00002${date1} yarn start v0.24.4`,
-    `\u0001\u0000\u0000\u0000\u0000\u0000\u00000${date2} $ node index.js `,
-    `\u0001\u0000\u0000\u0000\u0000\u0000\u00004${date3} Listening on port 80`,
+    `\u0001\u0000\u0000\u0000\u0000\u0000\u0000g${date1} yarn start v0.24.4`,
+    `\u0001\u0000\u0000\u0000\u0000\u0000\u0000${date2} $ node index.js `,
+    `\u0001\u0000\u0000\u0000\u0000\u0000\u0000${date3} Listening on port 80`,
     '',
   ];
 
@@ -46,7 +46,7 @@ module.exports = () => {
       t.deepEqual(
         consoleSpy.args,
         [
-          ['Getting logs for deployment:', id],
+          ['Getting logs for deployment:', id, '\n'],
           [`${d1.toLocaleDateString()} ${d1.toLocaleTimeString()} yarn start v0.24.4`],
           [`${d2.toLocaleDateString()} ${d2.toLocaleTimeString()} $ node index.js `],
           [`${d3.toLocaleDateString()} ${d3.toLocaleTimeString()} Listening on port 80`],

@@ -19,6 +19,7 @@ exports.handler = async () => {
   let defaultConfig = {
     name: folderName,
     domain: '',
+    project: '',
     restart: 'on-failure:2',
     env: undefined,
     hostname: '',
@@ -58,6 +59,13 @@ exports.handler = async () => {
   });
   prompts.push({
     type: 'input',
+    name: 'project',
+    message: 'Project [optional]:',
+    default: defaultConfig.project,
+    filter,
+  });
+  prompts.push({
+    type: 'input',
     name: 'env',
     message: 'Env variables [comma-separated, optional]:',
     default: defaultConfig.env
@@ -80,11 +88,14 @@ exports.handler = async () => {
     choices: ['no', 'on-failure:2', 'always'],
   });
   // get values from user
-  const {name, domain, env, hostname, restart} = await inquirer.prompt(prompts);
+  const {name, domain, project, env, hostname, restart} = await inquirer.prompt(prompts);
   // init config object
   const config = {name, restart};
   if (domain && domain.length) {
     config.domain = domain;
+  }
+  if (project && project.length) {
+    config.project = project;
   }
   if (env && env.length) {
     config.env = env

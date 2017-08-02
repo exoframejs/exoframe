@@ -13,6 +13,7 @@ module.exports = () => {
   const configData = {
     name: 'test',
     domain: 'test.dev',
+    project: 'test-project',
     env: 'ENV=1, OTHER=2',
     hostname: 'host',
     restart: 'no',
@@ -44,6 +45,7 @@ module.exports = () => {
       t.equal(cfg.name, configData.name, 'Correct name');
       t.equal(cfg.restart, configData.restart, 'Correct restart policy');
       t.equal(cfg.domain, configData.domain, 'Correct domain');
+      t.equal(cfg.project, configData.project, 'Correct project');
       t.equal(cfg.hostname, configData.hostname, 'Correct hostname');
       t.equal(cfg.env.ENV, '1', 'Correct ENV var');
       t.equal(cfg.env.OTHER, '2', 'Correct OTHER var');
