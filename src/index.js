@@ -1,6 +1,9 @@
 // npm packages
 const yargs = require('yargs');
 
+// version
+const pkg = require('../package.json');
+
 // our packages
 const login = require('./commands/login');
 const deploy = require('./commands/deploy');
@@ -13,7 +16,7 @@ const token = require('./commands/token');
 
 // init program
 yargs
-  .version('0.7.0')
+  .version(pkg.version)
   .completion('completion')
   .demand(1)
   .help()
