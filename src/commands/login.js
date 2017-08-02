@@ -17,10 +17,10 @@ exports.command = 'login';
 exports.describe = 'login into exoframe server';
 exports.builder = {
   key: {
-    short: 'k',
+    alias: 'k',
   },
   passphrase: {
-    short: 'p',
+    alias: 'p',
   },
 };
 exports.handler = async ({key, passphrase}) => {

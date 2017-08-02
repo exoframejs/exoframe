@@ -37,13 +37,20 @@ const streamToResponse = ({tarStream, remoteUrl, options}) =>
 
 exports.command = ['*', 'deploy'];
 exports.describe = 'deploy current folder';
-exports.builder = {};
-exports.handler = async args => {
-  if (!isLoggedIn()) {
+exports.builder = {
+  token: {
+    alias: 't',
+  },
+};
+exports.handler = async (args = {}) => {
+  const deployToken = args.token;
+
+  // exit if not logged in and no token provided
+  if (!deployToken && !isLoggedIn()) {
     return;
   }
 
-  const folder = args && args._ ? args._.filter(arg => arg !== 'deploy').shift() : undefined;
+  const folder = args._ ? args._.filter(arg => arg !== 'deploy').shift() : undefined;
 
   console.log(chalk.bold(`Deploying ${folder || 'current project'} to endpoint:`), userConfig.endpoint);
 
@@ -86,9 +93,14 @@ exports.handler = async args => {
     ignore: name => ig.ignores(name),
   });
 
+  let token = userConfig.token;
+  if (deployToken) {
+    token = deployToken;
+    console.log('Deploying using given token..');
+  }
   const options = {
     headers: {
-      Authorization: `Bearer ${userConfig.token}`,
+      Authorization: `Bearer ${token}`,
     },
   };
 
