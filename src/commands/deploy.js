@@ -37,13 +37,20 @@ const streamToResponse = ({tarStream, remoteUrl, options}) =>
 
 exports.command = ['*', 'deploy'];
 exports.describe = 'deploy current folder';
-exports.builder = {};
-exports.handler = async args => {
-  if (!isLoggedIn()) {
+exports.builder = {
+  token: {
+    alias: 't',
+  },
+};
+exports.handler = async (args = {}) => {
+  const deployToken = args.token;
+
+  // exit if not logged in and no token provided
+  if (!deployToken && !isLoggedIn()) {
     return;
   }
 
-  const folder = args && args._ ? args._.filter(arg => arg !== 'deploy').shift() : undefined;
+  const folder = args._ ? args._.filter(arg => arg !== 'deploy').shift() : undefined;
 
   console.log(chalk.bold(`Deploying ${folder || 'current project'} to endpoint:`), userConfig.endpoint);
 
@@ -51,6 +58,13 @@ exports.handler = async args => {
   const workdir = folder ? path.join(process.cwd(), folder) : process.cwd();
   const folderName = path.basename(workdir);
   const remoteUrl = `${userConfig.endpoint}/deploy`;
+
+  // make sure workdir exists
+  if (!fs.existsSync(workdir)) {
+    console.log(chalk.red(`Error! Path ${chalk.bold(workdir)} do not exists`));
+    console.log('Please, check your arguments and try again.');
+    return;
+  }
 
   // create config if doesn't exist
   const configPath = path.join(workdir, 'exoframe.json');
@@ -79,9 +93,14 @@ exports.handler = async args => {
     ignore: name => ig.ignores(name),
   });
 
+  let token = userConfig.token;
+  if (deployToken) {
+    token = deployToken;
+    console.log('Deploying using given token..');
+  }
   const options = {
     headers: {
-      Authorization: `Bearer ${userConfig.token}`,
+      Authorization: `Bearer ${token}`,
     },
   };
 

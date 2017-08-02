@@ -5,6 +5,7 @@ const deploy = require('./deploy');
 const logs = require('./logs');
 const list = require('./list');
 const config = require('./config');
+const token = require('./token');
 
 // run tests
 login();
@@ -13,3 +14,4 @@ deploy();
 logs();
 list();
 config();
+token();

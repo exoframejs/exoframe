@@ -105,6 +105,47 @@ module.exports = () => {
   });
 
   // test
+  tap.test('Should deploy without auth but with token', t => {
+    // spy on console
+    const consoleSpy = sinon.spy(console, 'log');
+    // copy original config for restoration
+    const originalConfig = Object.assign({}, userConfig);
+
+    // handle correct request
+    const deployServer = nock('http://localhost:8080').post('/deploy').reply((uri, requestBody, cb) => {
+      cb(null, [200, {status: 'success', deployments}]);
+    });
+
+    // remove auth from config
+    updateConfig({endpoint: 'http://localhost:8080'});
+
+    // execute login
+    deploy({token: 'test-token'}).then(() => {
+      // make sure log in was successful
+      // check that server was called
+      t.ok(deployServer.isDone());
+      // first check console output
+      t.deepEqual(
+        consoleSpy.args,
+        [
+          ['Deploying current project to endpoint:', 'http://localhost:8080'],
+          ['Deploying using given token..'],
+          ['Your project is now deployed as:\n'],
+          ['   ID         URL                    Hostname   \n   test       http://localhost       test       '],
+        ],
+        'Correct log output'
+      );
+      // restore console
+      console.log.restore();
+      // tear down nock
+      deployServer.done();
+      // restore original config
+      updateConfig(originalConfig);
+      t.end();
+    });
+  });
+
+  // test
   tap.test('Should not deploy with broken config', t => {
     // spy on console
     const consoleSpy = sinon.spy(console, 'log');
@@ -120,6 +161,29 @@ module.exports = () => {
         [
           ['Deploying current project to endpoint:', 'http://localhost:8080'],
           ['Please, check your config and try again:', 'SyntaxError: Unexpected token I in JSON at position 0'],
+        ],
+        'Correct log output'
+      );
+      // restore console
+      console.log.restore();
+      t.end();
+    });
+  });
+
+  // test
+  tap.test('Should not deploy with non-existent path', t => {
+    // spy on console
+    const consoleSpy = sinon.spy(console, 'log');
+
+    // execute deploy
+    deploy({_: ['i-do-not-exist']}).then(() => {
+      // check console output
+      t.deepEqual(
+        consoleSpy.args,
+        [
+          ['Deploying i-do-not-exist to endpoint:', 'http://localhost:8080'],
+          [`Error! Path ${path.join(process.cwd(), 'i-do-not-exist')} do not exists`],
+          ['Please, check your arguments and try again.'],
         ],
         'Correct log output'
       );
