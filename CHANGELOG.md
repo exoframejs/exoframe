@@ -1,4 +1,16 @@
 
+0.15.0 / 2017-08-02
+==================
+
+Additions:
+  * Add support for deployment tokens
+
+Changes:
+  * Use package.json for version in yargs
+
+Fixes:
+  * Check if path exists before running deploy, fixes #47
+
 0.14.0 / 2017-08-02
 ==================
 
