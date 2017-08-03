@@ -42,6 +42,9 @@ exports.builder = {
   token: {
     alias: 't',
   },
+  update: {
+    alias: 'u',
+  },
 };
 exports.handler = async (args = {}) => {
   const deployToken = args.token;
@@ -52,13 +55,17 @@ exports.handler = async (args = {}) => {
   }
 
   const folder = args._ ? args._.filter(arg => arg !== 'deploy').shift() : undefined;
+  const update = args.update;
 
-  console.log(chalk.bold(`Deploying ${folder || 'current project'} to endpoint:`), userConfig.endpoint);
+  console.log(
+    chalk.bold(`${update ? 'Updating' : 'Deploying'} ${folder || 'current project'} to endpoint:`),
+    userConfig.endpoint
+  );
 
   // create config vars
   const workdir = folder ? path.join(process.cwd(), folder) : process.cwd();
   const folderName = path.basename(workdir);
-  const remoteUrl = `${userConfig.endpoint}/deploy`;
+  const remoteUrl = `${userConfig.endpoint}/${update ? 'update' : 'deploy'}`;
 
   // make sure workdir exists
   if (!fs.existsSync(workdir)) {
