@@ -38,13 +38,19 @@ Make sure you have [Exoframe server](https://github.com/exoframejs/exoframe-serv
 exoframe endpoint http://you.server.url
 ```
 
-Then use it:
+Then login using:
 
 ```
-exoframe <command> [options]
+exoframe login
 ```
 
-You can find a list of all commands and options below.
+Then deploy your project by simply running:
+
+```
+exoframe
+```
+
+You can find a list of all commands and options in the [docs](./docs/README.md).
 
 ## Docs
 

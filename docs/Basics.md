@@ -16,7 +16,7 @@
 | log [id]               | Get logs for existing deployment or project |
 | token                  | Generate new deployment token |
 | login                  | Login into Exoframe server |
-| endpoint [url]         | Gets or sets the endpoint of Exoframe server |
+| endpoint [url]         | Selects or adds the endpoint of Exoframe server |
 | completion             | Generates bash completion script  |
 
 ## Project config file
@@ -57,7 +57,7 @@ Config file has the following structure:
 ## CLI Configuration
 
 Exoframe stores its config in `~/.exoframe/cli.config.yml`.  
-Currently it contains endpoint URL and list of template plugins:
+Currently it contains list of endpoint URLs with associated usernames and authentication tokens:
 
 ```yaml
 endpoint: 'http://localhost:8080' # your endpoint URL, defaults to localhost
@@ -71,3 +71,15 @@ For this cases you can use deployment tokens. Here's how it works:
 1. Make sure you are logged in to your Exoframe server
 2. Generate new deployment token using `exoframe token` command
 3. Use the new token to deploy your service without need to authenticate: `exoframe deploy -t $TOKEN`
+
+## Updating deployed project
+
+Exoframe provides a way to easily update already deployed projects.  
+This can be done by passing `--update` (or `-u`) flag to deploy command.  
+The way it works is quite simple:
+
+1. Exoframe deploys new version of the given project
+2. Exoframe then waits for them to start up 
+3. Exoframe removes the old running deployments for current project
+
+This can be used together with deployment tokens to achieve simple continuous deployment for your projects.

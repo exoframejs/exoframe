@@ -18,9 +18,11 @@ exports.describe = 'login into exoframe server';
 exports.builder = {
   key: {
     alias: 'k',
+    description: 'User private key used for authentication',
   },
   passphrase: {
     alias: 'p',
+    description: 'Passphrase for user private key (if set)',
   },
 };
 exports.handler = async ({key, passphrase}) => {

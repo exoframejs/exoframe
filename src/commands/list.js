@@ -7,6 +7,7 @@ const Table = require('cli-table');
 // our packages
 const {userConfig, isLoggedIn, logout} = require('../config');
 const {tableBorder, tableStyle} = require('../config/table');
+const formatServices = require('../util/formatServices');
 
 exports.command = ['list', 'ls'];
 exports.describe = 'list deployments';
@@ -50,19 +51,7 @@ exports.handler = async () => {
     console.log(chalk.green(`${services.length} deployments found on ${userConfig.endpoint}:\n`));
 
     // populate table
-    const formattedServices = services.map(svc => {
-      const name = svc.Name.slice(1);
-      const domain = svc.Config.Labels['traefik.frontend.rule']
-        ? svc.Config.Labels['traefik.frontend.rule'].replace('Host:', '')
-        : 'Not set';
-      const aliases = svc.NetworkSettings.Networks.exoframe.Aliases
-        ? svc.NetworkSettings.Networks.exoframe.Aliases.filter(alias => !svc.Id.startsWith(alias))
-        : [];
-      const project = svc.Config.Labels['exoframe.project'];
-      const host = aliases.shift() || 'Not set';
-      const status = svc.State.Status;
-      return {name, domain, host, status, project};
-    });
+    const formattedServices = formatServices(services);
 
     // create table
     const resultTable = new Table({

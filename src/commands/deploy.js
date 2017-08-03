@@ -11,6 +11,7 @@ const Table = require('cli-table');
 // my modules
 const {userConfig, isLoggedIn, logout} = require('../config');
 const {tableBorder, tableStyle} = require('../config/table');
+const formatServices = require('../util/formatServices');
 
 const ignores = ['.git', 'node_modules'];
 
@@ -40,6 +41,11 @@ exports.describe = 'deploy current folder';
 exports.builder = {
   token: {
     alias: 't',
+    description: 'Deployment token to be used for authentication',
+  },
+  update: {
+    alias: 'u',
+    description: 'Update current project instead of simple deployment',
   },
 };
 exports.handler = async (args = {}) => {
@@ -51,13 +57,17 @@ exports.handler = async (args = {}) => {
   }
 
   const folder = args._ ? args._.filter(arg => arg !== 'deploy').shift() : undefined;
+  const update = args.update;
 
-  console.log(chalk.bold(`Deploying ${folder || 'current project'} to endpoint:`), userConfig.endpoint);
+  console.log(
+    chalk.bold(`${update ? 'Updating' : 'Deploying'} ${folder || 'current project'} to endpoint:`),
+    userConfig.endpoint
+  );
 
   // create config vars
   const workdir = folder ? path.join(process.cwd(), folder) : process.cwd();
   const folderName = path.basename(workdir);
-  const remoteUrl = `${userConfig.endpoint}/deploy`;
+  const remoteUrl = `${userConfig.endpoint}/${update ? 'update' : 'deploy'}`;
 
   // make sure workdir exists
   if (!fs.existsSync(workdir)) {
@@ -120,15 +130,8 @@ exports.handler = async (args = {}) => {
     });
 
     // process deployments
-    res.deployments.forEach(deployment => {
-      const name = deployment.Name.slice(1);
-      const domain = deployment.Config.Labels['traefik.frontend.rule']
-        ? `http://${deployment.Config.Labels['traefik.frontend.rule'].replace('Host:', '')}`
-        : 'Not set';
-      const aliases = deployment.NetworkSettings.Networks.exoframe.Aliases
-        ? deployment.NetworkSettings.Networks.exoframe.Aliases.filter(alias => !deployment.Id.startsWith(alias))
-        : [];
-      const host = aliases.shift() || 'Not set';
+    const formattedServices = formatServices(res.deployments);
+    formattedServices.forEach(({name, domain, host}) => {
       resultTable.push([name, domain, host]);
     });
 

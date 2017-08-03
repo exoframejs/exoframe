@@ -59,7 +59,7 @@ module.exports = () => {
         [
           [`Deploying ${folderPath} to endpoint:`, 'http://localhost:8080'],
           ['Your project is now deployed as:\n'],
-          ['   ID         URL                    Hostname   \n   test       http://localhost       test       '],
+          ['   ID         URL             Hostname   \n   test       localhost       test       '],
         ],
         'Correct log output'
       );
@@ -92,7 +92,7 @@ module.exports = () => {
         [
           ['Deploying current project to endpoint:', 'http://localhost:8080'],
           ['Your project is now deployed as:\n'],
-          ['   ID         URL                    Hostname   \n   test       http://localhost       test       '],
+          ['   ID         URL             Hostname   \n   test       localhost       test       '],
         ],
         'Correct log output'
       );
@@ -131,7 +131,7 @@ module.exports = () => {
           ['Deploying current project to endpoint:', 'http://localhost:8080'],
           ['Deploying using given token..'],
           ['Your project is now deployed as:\n'],
-          ['   ID         URL                    Hostname   \n   test       http://localhost       test       '],
+          ['   ID         URL             Hostname   \n   test       localhost       test       '],
         ],
         'Correct log output'
       );
@@ -141,6 +141,39 @@ module.exports = () => {
       deployServer.done();
       // restore original config
       updateConfig(originalConfig);
+      t.end();
+    });
+  });
+
+  // test
+  tap.test('Should execute update', t => {
+    // spy on console
+    const consoleSpy = sinon.spy(console, 'log');
+
+    // handle correct request
+    const updateServer = nock('http://localhost:8080').post('/update').reply((uri, requestBody, cb) => {
+      cb(null, [200, {status: 'success', deployments}]);
+    });
+
+    // execute login
+    deploy({update: true}).then(() => {
+      // make sure log in was successful
+      // check that server was called
+      t.ok(updateServer.isDone());
+      // first check console output
+      t.deepEqual(
+        consoleSpy.args,
+        [
+          ['Updating current project to endpoint:', 'http://localhost:8080'],
+          ['Your project is now deployed as:\n'],
+          ['   ID         URL             Hostname   \n   test       localhost       test       '],
+        ],
+        'Correct log output'
+      );
+      // restore console
+      console.log.restore();
+      // tear down nock
+      updateServer.done();
       t.end();
     });
   });
