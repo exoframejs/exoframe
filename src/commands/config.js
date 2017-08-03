@@ -4,8 +4,6 @@ const path = require('path');
 const chalk = require('chalk');
 const inquirer = require('inquirer');
 
-const util = require('util');
-
 const validate = input => input && input.length > 0;
 const filter = input => input.trim();
 
