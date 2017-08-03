@@ -1,4 +1,15 @@
 
+0.16.0 / 2017-08-03
+==================
+  
+Additions:
+  * Add deployment updates and docs for it
+  * Add basic support for multiple endpoints
+  * Add descriptions to all options for better help
+
+Changes:
+  * Use unified service formatting function, fixes #50
+
 0.15.0 / 2017-08-02
 ==================
 
