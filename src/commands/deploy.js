@@ -41,9 +41,11 @@ exports.describe = 'deploy current folder';
 exports.builder = {
   token: {
     alias: 't',
+    description: 'Deployment token to be used for authentication',
   },
   update: {
     alias: 'u',
+    description: 'Update current project instead of simple deployment',
   },
 };
 exports.handler = async (args = {}) => {

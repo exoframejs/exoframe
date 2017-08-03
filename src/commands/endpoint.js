@@ -11,6 +11,7 @@ exports.builder = {
   url: {
     alias: 'u',
     default: '',
+    description: 'URL of a new endpoint',
   },
 };
 exports.handler = async ({url}) => {
