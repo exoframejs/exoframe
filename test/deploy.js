@@ -59,7 +59,7 @@ module.exports = () => {
         [
           [`Deploying ${folderPath} to endpoint:`, 'http://localhost:8080'],
           ['Your project is now deployed as:\n'],
-          ['   ID         URL                    Hostname   \n   test       http://localhost       test       '],
+          ['   ID         URL             Hostname   \n   test       localhost       test       '],
         ],
         'Correct log output'
       );
@@ -92,7 +92,7 @@ module.exports = () => {
         [
           ['Deploying current project to endpoint:', 'http://localhost:8080'],
           ['Your project is now deployed as:\n'],
-          ['   ID         URL                    Hostname   \n   test       http://localhost       test       '],
+          ['   ID         URL             Hostname   \n   test       localhost       test       '],
         ],
         'Correct log output'
       );
@@ -131,7 +131,7 @@ module.exports = () => {
           ['Deploying current project to endpoint:', 'http://localhost:8080'],
           ['Deploying using given token..'],
           ['Your project is now deployed as:\n'],
-          ['   ID         URL                    Hostname   \n   test       http://localhost       test       '],
+          ['   ID         URL             Hostname   \n   test       localhost       test       '],
         ],
         'Correct log output'
       );

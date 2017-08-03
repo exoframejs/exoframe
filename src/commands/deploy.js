@@ -11,6 +11,7 @@ const Table = require('cli-table');
 // my modules
 const {userConfig, isLoggedIn, logout} = require('../config');
 const {tableBorder, tableStyle} = require('../config/table');
+const formatServices = require('../util/formatServices');
 
 const ignores = ['.git', 'node_modules'];
 
@@ -120,15 +121,8 @@ exports.handler = async (args = {}) => {
     });
 
     // process deployments
-    res.deployments.forEach(deployment => {
-      const name = deployment.Name.slice(1);
-      const domain = deployment.Config.Labels['traefik.frontend.rule']
-        ? `http://${deployment.Config.Labels['traefik.frontend.rule'].replace('Host:', '')}`
-        : 'Not set';
-      const aliases = deployment.NetworkSettings.Networks.exoframe.Aliases
-        ? deployment.NetworkSettings.Networks.exoframe.Aliases.filter(alias => !deployment.Id.startsWith(alias))
-        : [];
-      const host = aliases.shift() || 'Not set';
+    const formattedServices = formatServices(res.deployments);
+    formattedServices.forEach(({name, domain, host}) => {
       resultTable.push([name, domain, host]);
     });
 
