@@ -26,7 +26,7 @@ To run Exoframe you need two parts - Exoframe CLI on your local machine and [Exo
 
 ## Installation and Usage
 
-Install Exoframe CLI (needs at least node v6):
+Install Exoframe CLI (needs at least Node 8.0):
 
 ```
 npm install exoframe -g
