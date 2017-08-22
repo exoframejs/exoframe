@@ -138,13 +138,15 @@ exports.handler = async (args = {}) => {
     const formattedServices = formatServices(res.deployments);
     formattedServices.forEach(({name, domain, host}) => {
       resultTable.push([name, domain, host]);
-      if(args.open){
-        open('http://' + domain);
-      }
     });
 
     // draw table
     console.log(resultTable.toString());
+
+    // open in browser
+    if(args.open && formattedServices[0].domain != 'not set' && typeof(formattedServices[0].domain) != 'undefined') {
+        open('http://' + formattedServices[0].domain.split(",")[0].trim());
+    }
   } catch (e) {
     spinner.fail('Upload failed!');
     // if authorization is expired/broken/etc
