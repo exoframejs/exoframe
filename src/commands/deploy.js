@@ -7,6 +7,7 @@ const path = require('path');
 const fs = require('fs');
 const ora = require('ora');
 const Table = require('cli-table');
+const open = require('open');
 
 // my modules
 const {userConfig, isLoggedIn, logout} = require('../config');
@@ -47,6 +48,10 @@ exports.builder = {
     alias: 'u',
     description: 'Update current project instead of simple deployment',
   },
+  open: {
+    alias: 'o',
+    description: 'Open deployed project in browser after upload'
+  }
 };
 exports.handler = async (args = {}) => {
   const deployToken = args.token;
@@ -133,6 +138,9 @@ exports.handler = async (args = {}) => {
     const formattedServices = formatServices(res.deployments);
     formattedServices.forEach(({name, domain, host}) => {
       resultTable.push([name, domain, host]);
+      if(args.open){
+        open('http://' + domain);
+      }
     });
 
     // draw table
