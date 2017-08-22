@@ -50,8 +50,8 @@ exports.handler = async ({url}) => {
     // push data
     userConfig.endpoints.push({
       endpoint: userConfig.endpoint,
-      user: userConfig.user,
-      token: userConfig.token,
+      user: userConfig.user || null,
+      token: userConfig.token || null,
     });
   }
   // then write new endpoint to current one and remove user/token
