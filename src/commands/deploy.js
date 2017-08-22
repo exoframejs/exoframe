@@ -144,17 +144,8 @@ exports.handler = async (args = {}) => {
     console.log(resultTable.toString());
 
     // open in browser
-    if(args.open) {
-      // check if domain is set
-      if(formattedServices[0].domain != 'not set' && typeof(formattedServices[0].domain) != 'undefined') {
-        // check if multiple domains
-        if(formattedServices[0].domain.includes(",")){
-          const domains = formattedServices[0].domain.split(",");
-          open('http://' + domains[0].trim());
-        }else{
-          open('http://' + formattedServices[0].domain.trim());
-        }
-      }
+    if(args.open && formattedServices[0].domain != 'not set' && typeof(formattedServices[0].domain) != 'undefined') {
+        open('http://' + formattedServices[0].domain.split(",")[0].trim());
     }
   } catch (e) {
     spinner.fail('Upload failed!');
