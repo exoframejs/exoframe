@@ -1,4 +1,10 @@
 
+0.16.1 / 2017-08-22
+==================
+
+Fixes:
+  * Use null instead of undefined values to fix config yaml issue
+
 0.16.0 / 2017-08-03
 ==================
   
