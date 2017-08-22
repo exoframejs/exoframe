@@ -1,4 +1,13 @@
 
+0.17.0 / 2017-08-22
+==================
+
+Additions:
+  * Added option to open domain in browser after deploy or update
+
+Fixes:
+  * Fix minimum required version in readme
+
 0.16.1 / 2017-08-22
 ==================
 
