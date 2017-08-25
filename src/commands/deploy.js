@@ -50,8 +50,8 @@ exports.builder = {
   },
   open: {
     alias: 'o',
-    description: 'Open deployed project in browser after upload'
-  }
+    description: 'Open deployed project in browser after upload',
+  },
 };
 exports.handler = async (args = {}) => {
   const deployToken = args.token;
@@ -144,8 +144,8 @@ exports.handler = async (args = {}) => {
     console.log(resultTable.toString());
 
     // open in browser
-    if(args.open && formattedServices[0].domain != 'not set' && typeof(formattedServices[0].domain) != 'undefined') {
-        open('http://' + formattedServices[0].domain.split(",")[0].trim());
+    if (args.open && formattedServices[0].domain && formattedServices[0].domain !== 'not set') {
+      open(`http://${formattedServices[0].domain.split(',')[0].trim()}`);
     }
   } catch (e) {
     spinner.fail('Upload failed!');

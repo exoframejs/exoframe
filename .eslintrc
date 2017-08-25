@@ -34,6 +34,9 @@
       "bracketSpacing": false,
       "printWidth": 120
     }],
-    "no-console": "off"
+    "no-console": "off",
+    "no-unused-expressions": "off",
+    "no-param-reassign": "off",
+    "no-return-assign": "off"
   }
 }
