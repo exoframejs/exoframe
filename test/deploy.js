@@ -4,10 +4,16 @@ const fs = require('fs');
 const path = require('path');
 const nock = require('nock');
 const sinon = require('sinon');
+const proxyquire = require('proxyquire');
 
 // our packages
-const {handler: deploy} = require('../src/commands/deploy');
 const {userConfig, updateConfig} = require('../src/config');
+
+// opn stub
+const opnStub = sinon.spy();
+
+// require deploy with stub for opn
+const {handler: deploy} = proxyquire('../src/commands/deploy', {opn: opnStub});
 
 module.exports = () => {
   const folder = 'test_html_project';
@@ -174,6 +180,41 @@ module.exports = () => {
       console.log.restore();
       // tear down nock
       updateServer.done();
+      t.end();
+    });
+  });
+
+  // test
+  tap.test('Should open webpage after deploy', t => {
+    // spy on console
+    const consoleSpy = sinon.spy(console, 'log');
+
+    // handle correct request
+    const deployServer = nock('http://localhost:8080').post('/deploy').reply((uri, requestBody, cb) => {
+      cb(null, [200, {status: 'success', deployments}]);
+    });
+
+    // execute
+    deploy({open: true}).then(() => {
+      // make sure log in was successful
+      // check that server was called
+      t.ok(deployServer.isDone());
+      // make sure opn was called once
+      t.ok(opnStub.calledOnce);
+      // first check console output
+      t.deepEqual(
+        consoleSpy.args,
+        [
+          ['Deploying current project to endpoint:', 'http://localhost:8080'],
+          ['Your project is now deployed as:\n'],
+          ['   ID         URL             Hostname   \n   test       localhost       test       '],
+        ],
+        'Correct log output'
+      );
+      // restore console
+      console.log.restore();
+      // tear down nock
+      deployServer.done();
       t.end();
     });
   });

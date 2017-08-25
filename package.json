@@ -30,6 +30,7 @@
   "devDependencies": {
     "coveralls": "^2.13.1",
     "nock": "^9.0.14",
+    "proxyquire": "^1.8.0",
     "sinon": "^3.2.1",
     "tap": "^10.7.2"
   }
