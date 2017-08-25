@@ -7,7 +7,7 @@ const path = require('path');
 const fs = require('fs');
 const ora = require('ora');
 const Table = require('cli-table');
-const open = require('open');
+const opn = require('opn');
 
 // my modules
 const {userConfig, isLoggedIn, logout} = require('../config');
@@ -50,8 +50,8 @@ exports.builder = {
   },
   open: {
     alias: 'o',
-    description: 'Open deployed project in browser after upload'
-  }
+    description: 'Open deployed project in browser after upload',
+  },
 };
 exports.handler = async (args = {}) => {
   const deployToken = args.token;
@@ -138,13 +138,15 @@ exports.handler = async (args = {}) => {
     const formattedServices = formatServices(res.deployments);
     formattedServices.forEach(({name, domain, host}) => {
       resultTable.push([name, domain, host]);
-      if(args.open){
-        open('http://' + domain);
-      }
     });
 
     // draw table
     console.log(resultTable.toString());
+
+    // open in browser
+    if (args.open && formattedServices[0].domain && formattedServices[0].domain !== 'not set') {
+      opn(`http://${formattedServices[0].domain.split(',')[0].trim()}`);
+    }
   } catch (e) {
     spinner.fail('Upload failed!');
     // if authorization is expired/broken/etc
