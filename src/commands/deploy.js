@@ -7,7 +7,7 @@ const path = require('path');
 const fs = require('fs');
 const ora = require('ora');
 const Table = require('cli-table');
-const open = require('open');
+const opn = require('opn');
 
 // my modules
 const {userConfig, isLoggedIn, logout} = require('../config');
@@ -145,7 +145,7 @@ exports.handler = async (args = {}) => {
 
     // open in browser
     if (args.open && formattedServices[0].domain && formattedServices[0].domain !== 'not set') {
-      open(`http://${formattedServices[0].domain.split(',')[0].trim()}`);
+      opn(`http://${formattedServices[0].domain.split(',')[0].trim()}`);
     }
   } catch (e) {
     spinner.fail('Upload failed!');
