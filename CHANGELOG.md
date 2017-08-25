@@ -1,4 +1,18 @@
 
+0.17.1 / 2017-08-25
+==================
+
+Additions:
+  * Add test for url opening during deployment
+  * Add docs section for articles, videos, links
+
+Changes:
+  * Replace open with opn
+
+Fixes:
+  * Fix eslint errors
+  * Correctly handle opening multiple domains on deploy
+
 0.17.0 / 2017-08-22
 ==================
 
