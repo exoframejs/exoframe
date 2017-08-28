@@ -5,4 +5,13 @@ node_js: node
 cache: yarn
 
 after_success:
-  - yarn coveralls
+- yarn coveralls
+
+deploy:
+  provider: npm
+  email: yamalight@gmail.com
+  api_key:
+    secure: E0jdvpJugRD1upHJI0S+g0xvDkGvGGJv0plyZaY/zHqKf5oNspok74Ew8cqkP4IRdB/G/57eXoiyCCOkQM/P44a2xt7TEiBvn4PBhxRD1Dfw+u5ukreQPAn4QCXvC9pRF2KuRSswnkZk+QYRiYUVcsv7S7C6p7xDyCw5Po0ywiHzUR75c56B657sCOG4w+wTFcawIjpb369DqPoefUK1C837YYfu0DJXX6NBrV1BN6kOUiSHITbUcwPFg5VfZLRMOZIqQzb3ud0IDfvy5KdcOiKOCes7bi179NMWG8evPr7l6NikA882xqdDjmxvUPY0x6H1tzXTKca8pzX2l5Pkh0qPXipkjgKAjrg4qrQmoH4lW3sr+6zan6Nk3RwwE7QdhuvXHuyNQ/YJHxGHr1uI5SV7AQyUCM0AtdkXnIJ97LoEm8zm/48YzeMQel53iw01quOubmRP3qv6PNJU8Nlbfy02caXhIftkEBxanXAQl8OSnYUaZYN2XmvAqlzMdyygBWhg/f7NbZLkjWY6JdzFzBnSAkghKt//CfsylYvQt7xNk7sjGvoUjuKx+hWfrCb7fnjIjWwalchyjHRRokUROx0QdRltUbZDGPL0JG3vYTlDV1/k0tkw9C3faq2ckoXccEHXItZrspAk1EYVL6FvlHPu6YqZtQupMIxszI4BvXQ=
+  on:
+    tags: true
+    repo: exoframejs/exoframe
