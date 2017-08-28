@@ -1,4 +1,11 @@
 
+0.18.0 / 2017-08-28
+==================
+
+Additions:
+  * Display build log after deployment failures
+  * Use travis to autopublish new versions from tags
+
 0.17.1 / 2017-08-25
 ==================
 
