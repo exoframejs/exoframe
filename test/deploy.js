@@ -220,6 +220,51 @@ module.exports = () => {
   });
 
   // test
+  tap.test('Should display error log', t => {
+    // spy on console
+    const consoleSpy = sinon.spy(console, 'log');
+
+    // handle correct request
+    const deployServer = nock('http://localhost:8080').post('/deploy').reply((uri, requestBody, cb) => {
+      cb(null, [
+        400,
+        {
+          status: 'error',
+          result: {
+            error: 'Build failed! See build log for details.',
+            log: ['Error log', 'here'],
+            image: 'test:latest',
+          },
+        },
+      ]);
+    });
+
+    // execute
+    deploy().then(() => {
+      // make sure log in was successful
+      // check that server was called
+      t.ok(deployServer.isDone());
+      // first check console output
+      t.deepEqual(
+        consoleSpy.args,
+        [
+          ['Deploying current project to endpoint:', 'http://localhost:8080'],
+          ['Error deploying project:', 'Build failed! See build log for details.'],
+          ['Build log:\n'],
+          ['Error log'],
+          ['here'],
+        ],
+        'Correct log output'
+      );
+      // restore console
+      console.log.restore();
+      // tear down nock
+      deployServer.done();
+      t.end();
+    });
+  });
+
+  // test
   tap.test('Should not deploy with broken config', t => {
     // spy on console
     const consoleSpy = sinon.spy(console, 'log');

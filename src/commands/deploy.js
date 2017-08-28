@@ -18,23 +18,28 @@ const ignores = ['.git', 'node_modules'];
 
 const streamToResponse = ({tarStream, remoteUrl, options}) =>
   new Promise((resolve, reject) => {
-    // pipe stream to remote
+    // store error and result
+    let error;
     let result = '';
+    // pipe stream to remote
     const stream = tarStream.pipe(got.stream.post(remoteUrl, options));
-    // log output if in verbose mode
+    // store output
     stream.on('data', str => (result += str.toString()));
     // listen for read stream end
     stream.on('end', () => {
       const res = JSON.parse(result);
-      // ignore errored out results
-      if (res.status !== 'success') {
+      // if stream had error - reject
+      if (error) {
+        // add response to allow access to body
+        error.response = res;
+        reject(error);
         return;
       }
-      // resolve on end
+      // otherwise resolve
       resolve(res);
     });
     // listen for stream errors
-    stream.on('error', e => reject(e));
+    stream.on('error', e => (error = e));
   });
 
 exports.command = ['*', 'deploy'];
@@ -148,7 +153,7 @@ exports.handler = async (args = {}) => {
       opn(`http://${formattedServices[0].domain.split(',')[0].trim()}`);
     }
   } catch (e) {
-    spinner.fail('Upload failed!');
+    spinner.fail('Deployment failed!');
     // if authorization is expired/broken/etc
     if (e.statusCode === 401) {
       logout(userConfig);
@@ -156,6 +161,13 @@ exports.handler = async (args = {}) => {
       return;
     }
 
-    console.log(chalk.red('Error deploying project:'), e.toString());
+    const reason = e.response.result ? e.response.result.error : e.toString();
+    console.log(chalk.red('Error deploying project:'), reason);
+    console.log('Build log:\n');
+    e.response.result.log
+      .filter(l => l !== undefined)
+      .map(l => l.trim())
+      .filter(l => l && l.length > 0)
+      .forEach(line => console.log(line));
   }
 };
