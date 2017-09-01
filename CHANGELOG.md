@@ -1,4 +1,10 @@
 
+0.18.1 / 2017-09-01
+==================
+
+Additions:
+  * Setup autobuild of pre-packaged binaries using pkg
+
 0.18.0 / 2017-08-28
 ==================
 
