@@ -1,6 +1,6 @@
 {
   "name": "exoframe",
-  "version": "0.18.1",
+  "version": "0.18.2",
   "description": "Exoframe - power armor for docker containers",
   "main": "index.js",
   "repository": "git@github.com:exoframejs/exoframe.git",

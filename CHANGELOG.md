@@ -1,4 +1,10 @@
 
+0.18.2 / 2017-09-01
+==================
+
+Fixes:
+  * Tweak github deployment, disable cleanup to leave built files in place
+
 0.18.1 / 2017-09-01
 ==================
 
