@@ -7,6 +7,7 @@ const list = require('./list');
 const config = require('./config');
 const token = require('./token');
 const endpoint = require('./endpoint');
+const update = require('./update');
 
 // run tests
 login();
@@ -17,3 +18,4 @@ list();
 config();
 token();
 endpoint();
+update();
