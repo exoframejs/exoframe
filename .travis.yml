@@ -6,12 +6,23 @@ cache: yarn
 
 after_success:
 - yarn coveralls
+- yarn package
 
 deploy:
-  provider: npm
-  email: yamalight@gmail.com
-  api_key:
-    secure: E0jdvpJugRD1upHJI0S+g0xvDkGvGGJv0plyZaY/zHqKf5oNspok74Ew8cqkP4IRdB/G/57eXoiyCCOkQM/P44a2xt7TEiBvn4PBhxRD1Dfw+u5ukreQPAn4QCXvC9pRF2KuRSswnkZk+QYRiYUVcsv7S7C6p7xDyCw5Po0ywiHzUR75c56B657sCOG4w+wTFcawIjpb369DqPoefUK1C837YYfu0DJXX6NBrV1BN6kOUiSHITbUcwPFg5VfZLRMOZIqQzb3ud0IDfvy5KdcOiKOCes7bi179NMWG8evPr7l6NikA882xqdDjmxvUPY0x6H1tzXTKca8pzX2l5Pkh0qPXipkjgKAjrg4qrQmoH4lW3sr+6zan6Nk3RwwE7QdhuvXHuyNQ/YJHxGHr1uI5SV7AQyUCM0AtdkXnIJ97LoEm8zm/48YzeMQel53iw01quOubmRP3qv6PNJU8Nlbfy02caXhIftkEBxanXAQl8OSnYUaZYN2XmvAqlzMdyygBWhg/f7NbZLkjWY6JdzFzBnSAkghKt//CfsylYvQt7xNk7sjGvoUjuKx+hWfrCb7fnjIjWwalchyjHRRokUROx0QdRltUbZDGPL0JG3vYTlDV1/k0tkw9C3faq2ckoXccEHXItZrspAk1EYVL6FvlHPu6YqZtQupMIxszI4BvXQ=
-  on:
-    tags: true
-    repo: exoframejs/exoframe
+  - provider: npm
+    email: yamalight@gmail.com
+    api_key:
+      secure: E0jdvpJugRD1upHJI0S+g0xvDkGvGGJv0plyZaY/zHqKf5oNspok74Ew8cqkP4IRdB/G/57eXoiyCCOkQM/P44a2xt7TEiBvn4PBhxRD1Dfw+u5ukreQPAn4QCXvC9pRF2KuRSswnkZk+QYRiYUVcsv7S7C6p7xDyCw5Po0ywiHzUR75c56B657sCOG4w+wTFcawIjpb369DqPoefUK1C837YYfu0DJXX6NBrV1BN6kOUiSHITbUcwPFg5VfZLRMOZIqQzb3ud0IDfvy5KdcOiKOCes7bi179NMWG8evPr7l6NikA882xqdDjmxvUPY0x6H1tzXTKca8pzX2l5Pkh0qPXipkjgKAjrg4qrQmoH4lW3sr+6zan6Nk3RwwE7QdhuvXHuyNQ/YJHxGHr1uI5SV7AQyUCM0AtdkXnIJ97LoEm8zm/48YzeMQel53iw01quOubmRP3qv6PNJU8Nlbfy02caXhIftkEBxanXAQl8OSnYUaZYN2XmvAqlzMdyygBWhg/f7NbZLkjWY6JdzFzBnSAkghKt//CfsylYvQt7xNk7sjGvoUjuKx+hWfrCb7fnjIjWwalchyjHRRokUROx0QdRltUbZDGPL0JG3vYTlDV1/k0tkw9C3faq2ckoXccEHXItZrspAk1EYVL6FvlHPu6YqZtQupMIxszI4BvXQ=
+    on:
+      tags: true
+      repo: exoframejs/exoframe
+  - provider: releases
+    api_key:
+      secure: cX62q8fanA+1BXidpVobsx6vkmD7mI7STJN2b/zD9TxLKa7EY4MpSI8t3JFnW0EaUxbiIwTJEjeftfDJhxey0kPvPgUxEAf3h5V7IoO6KSmCZ0I8xYdnNbMtKNBJqNj5USHupWyK5geZbIQ+GtjCr0k07G7Sm1zz9SaV3pmB/FZpPFsev8TukUPrGMyfa6AThS32EJXrNSTDEcewaxrCQN+5PylWlACKZ72v1MUBa9Lzxs7Rfd9god0jFqw29EBuCkpqmvgpThdG2sT0wFgAlodBFnW/DeVRyyfciAbLiMUKPTErNCbH51Hcndh3Wi7lGpjqhk+UeU9rMuF7br+BnmHy0eqr+vBAFSaVxnornrsebX0qO+Vgd/accM0VgI6UzIbrEZeRtKYpkZAf1y+gYFOA3ThafEp3PBBSJz1RI6hP03VuPx4GS2qCDfLm9nWBHR/pKMc9MAUuGiaEmeSXWwUGxLpM+B/9vzJGHrywSUXM/9NLb0Tqd35HElPKp2Vv39dYSASC/XQIhW696Gt2Ewkrg4Cqx5RTn7WlJBWXAvryVMDtOiZzgdaqk5aOUMie3Qe5bH5M6lwEGp/Rbo9rCFtSXDPQMbxiQrUuBVt3u0lX4BTynKVWagpDDfuOTm1Fl4CY50dwvmuZZmmtK0GLLQ/POL7LiOhX1XUoL4WL1sU=
+    file:
+      - "exoframe-linux"
+      - "exoframe-macos"
+      - "exoframe-win.exe"
+    on:
+      tags: true
+      repo: exoframejs/exoframe
