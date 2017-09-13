@@ -11,7 +11,9 @@ module.exports = () => {
   // test update
   tap.test('Should update traefik', t => {
     // handle correct request
-    const updateServer = nock('http://localhost:8080').post('/update/traefik').reply(200, {updated: true});
+    const updateServer = nock('http://localhost:8080')
+      .post('/update/traefik')
+      .reply(200, {updated: true});
     // spy on console
     const consoleSpy = sinon.spy(console, 'log');
     // execute login
@@ -32,11 +34,39 @@ module.exports = () => {
     });
   });
 
+  // test update
+  tap.test('Should update server', t => {
+    // handle correct request
+    const updateServer = nock('http://localhost:8080')
+      .post('/update/server')
+      .reply(200, {updated: true});
+    // spy on console
+    const consoleSpy = sinon.spy(console, 'log');
+    // execute login
+    update({target: 'server'}).then(() => {
+      // make sure log in was successful
+      // check that server was called
+      t.ok(updateServer.isDone());
+      // first check console output
+      t.deepEqual(
+        consoleSpy.args,
+        [['Updating server on:', 'http://localhost:8080'], ['Successfully updated server!']],
+        'Correct log output'
+      );
+      // restore console
+      console.log.restore();
+      updateServer.done();
+      t.end();
+    });
+  });
+
   // test update error
   tap.test('Should display update error', t => {
     // handle correct request
     const response = {updated: false, error: 'Test error', log: 'log'};
-    const updateServer = nock('http://localhost:8080').post('/update/traefik').reply(500, response);
+    const updateServer = nock('http://localhost:8080')
+      .post('/update/traefik')
+      .reply(500, response);
     // spy on console
     const consoleSpy = sinon.spy(console, 'log');
     // execute login
@@ -67,7 +97,9 @@ module.exports = () => {
     // copy original config for restoration
     const originalConfig = Object.assign({}, userConfig);
     // handle correct request
-    const updateServer = nock('http://localhost:8080').post(`/update/traefik`).reply(401);
+    const updateServer = nock('http://localhost:8080')
+      .post(`/update/traefik`)
+      .reply(401);
     // spy on console
     const consoleSpy = sinon.spy(console, 'log');
     // execute login

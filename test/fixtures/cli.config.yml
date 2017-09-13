@@ -1,4 +1,8 @@
 endpoint: 'http://localhost:8080'
+endpoints:
+  - endpoint: 'http://test.endpoint'
+    user: null
+    token: null
 token: test-token
 user:
   username: admin

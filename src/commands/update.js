@@ -7,7 +7,7 @@ const chalk = require('chalk');
 const {userConfig, isLoggedIn, logout} = require('../config');
 
 // valid targets list
-const validTargets = ['traefik'];
+const validTargets = ['traefik', 'server'];
 
 exports.command = ['update [target]'];
 exports.describe = 'update given target';
@@ -63,10 +63,10 @@ exports.handler = async ({target} = {target: 'self'}) => {
       return;
     }
 
-    const reason = e.response.body ? e.response.body.error : e.toString();
+    const reason = e.response.body && e.response.body.error ? e.response.body.error : e.toString();
     console.log(chalk.red(`Error updating ${target}:`), reason);
     console.log('Update log:\n');
-    e.response.body.log
+    (e.response.body.log || 'No log available')
       .split('\n')
       .map(l => {
         try {
