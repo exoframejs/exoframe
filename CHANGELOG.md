@@ -1,4 +1,15 @@
 
+0.19.0 / 2017-09-13
+==================
+
+Additions:
+  * Add notifications about available cli updates
+  * Add update server target
+  * Add update traefik command
+
+Changes:
+  * Mention pre-packaged binaries in readme
+
 0.18.2 / 2017-09-01
 ==================
 
