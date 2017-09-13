@@ -1,8 +1,14 @@
 // npm packages
 const yargs = require('yargs');
 
+// our packages
+const checkUpdate = require('./util/checkUpdate');
+
 // version
 const pkg = require('../package.json');
+
+// check for updates on start
+checkUpdate(pkg);
 
 // our packages
 const login = require('./commands/login');
