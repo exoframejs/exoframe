@@ -45,14 +45,16 @@ module.exports = () => {
     const consoleSpy = sinon.spy(console, 'log');
 
     // handle correct request
-    const deployServer = nock('http://localhost:8080').post('/deploy').reply((uri, requestBody, cb) => {
-      const excgf = fs.readFileSync(path.join(testFolder, 'exoframe.json'));
-      const index = fs.readFileSync(path.join(testFolder, 'index.html'));
-      t.ok(requestBody.includes(excgf), 'Should send correct config');
-      t.ok(requestBody.includes(index), 'Should send correct index file');
+    const deployServer = nock('http://localhost:8080')
+      .post('/deploy')
+      .reply((uri, requestBody, cb) => {
+        const excgf = fs.readFileSync(path.join(testFolder, 'exoframe.json'));
+        const index = fs.readFileSync(path.join(testFolder, 'index.html'));
+        t.ok(requestBody.includes(excgf), 'Should send correct config');
+        t.ok(requestBody.includes(index), 'Should send correct index file');
 
-      cb(null, [200, {status: 'success', deployments}]);
-    });
+        cb(null, [200, {status: 'success', deployments}]);
+      });
 
     // execute login
     deploy({_: [folderPath]}).then(() => {
@@ -83,9 +85,11 @@ module.exports = () => {
     const consoleSpy = sinon.spy(console, 'log');
 
     // handle correct request
-    const deployServer = nock('http://localhost:8080').post('/deploy').reply((uri, requestBody, cb) => {
-      cb(null, [200, {status: 'success', deployments}]);
-    });
+    const deployServer = nock('http://localhost:8080')
+      .post('/deploy')
+      .reply((uri, requestBody, cb) => {
+        cb(null, [200, {status: 'success', deployments}]);
+      });
 
     // execute login
     deploy().then(() => {
@@ -118,9 +122,11 @@ module.exports = () => {
     const originalConfig = Object.assign({}, userConfig);
 
     // handle correct request
-    const deployServer = nock('http://localhost:8080').post('/deploy').reply((uri, requestBody, cb) => {
-      cb(null, [200, {status: 'success', deployments}]);
-    });
+    const deployServer = nock('http://localhost:8080')
+      .post('/deploy')
+      .reply((uri, requestBody, cb) => {
+        cb(null, [200, {status: 'success', deployments}]);
+      });
 
     // remove auth from config
     updateConfig({endpoint: 'http://localhost:8080'});
@@ -157,9 +163,11 @@ module.exports = () => {
     const consoleSpy = sinon.spy(console, 'log');
 
     // handle correct request
-    const updateServer = nock('http://localhost:8080').post('/update').reply((uri, requestBody, cb) => {
-      cb(null, [200, {status: 'success', deployments}]);
-    });
+    const updateServer = nock('http://localhost:8080')
+      .post('/update')
+      .reply((uri, requestBody, cb) => {
+        cb(null, [200, {status: 'success', deployments}]);
+      });
 
     // execute login
     deploy({update: true}).then(() => {
@@ -190,9 +198,11 @@ module.exports = () => {
     const consoleSpy = sinon.spy(console, 'log');
 
     // handle correct request
-    const deployServer = nock('http://localhost:8080').post('/deploy').reply((uri, requestBody, cb) => {
-      cb(null, [200, {status: 'success', deployments}]);
-    });
+    const deployServer = nock('http://localhost:8080')
+      .post('/deploy')
+      .reply((uri, requestBody, cb) => {
+        cb(null, [200, {status: 'success', deployments}]);
+      });
 
     // execute
     deploy({open: true}).then(() => {
@@ -225,19 +235,21 @@ module.exports = () => {
     const consoleSpy = sinon.spy(console, 'log');
 
     // handle correct request
-    const deployServer = nock('http://localhost:8080').post('/deploy').reply((uri, requestBody, cb) => {
-      cb(null, [
-        400,
-        {
-          status: 'error',
-          result: {
-            error: 'Build failed! See build log for details.',
-            log: ['Error log', 'here'],
-            image: 'test:latest',
+    const deployServer = nock('http://localhost:8080')
+      .post('/deploy')
+      .reply((uri, requestBody, cb) => {
+        cb(null, [
+          400,
+          {
+            status: 'error',
+            result: {
+              error: 'Build failed! See build log for details.',
+              log: ['Error log', 'here'],
+              image: 'test:latest',
+            },
           },
-        },
-      ]);
-    });
+        ]);
+      });
 
     // execute
     deploy().then(() => {
@@ -253,6 +265,42 @@ module.exports = () => {
           ['Build log:\n'],
           ['Error log'],
           ['here'],
+        ],
+        'Correct log output'
+      );
+      // restore console
+      console.log.restore();
+      // tear down nock
+      deployServer.done();
+      t.end();
+    });
+  });
+
+  // test
+  tap.test('Should display error on malformed JSON', t => {
+    // spy on console
+    const consoleSpy = sinon.spy(console, 'log');
+
+    // handle correct request
+    const deployServer = nock('http://localhost:8080')
+      .post('/deploy')
+      .reply((uri, requestBody, cb) => {
+        cb(null, [200, 'Bad Gateway']);
+      });
+
+    // execute
+    deploy().then(() => {
+      // make sure log in was successful
+      // check that server was called
+      t.ok(deployServer.isDone());
+      // first check console output
+      t.deepEqual(
+        consoleSpy.args,
+        [
+          ['Deploying current project to endpoint:', 'http://localhost:8080'],
+          ['Error deploying project:', 'Bad Gateway'],
+          ['Build log:\n'],
+          ['No log available'],
         ],
         'Correct log output'
       );
@@ -317,7 +365,9 @@ module.exports = () => {
     // copy original config for restoration
     const originalConfig = Object.assign({}, userConfig);
     // handle correct request
-    const deployServer = nock('http://localhost:8080').post('/deploy').reply(401, {error: 'Deauth test'});
+    const deployServer = nock('http://localhost:8080')
+      .post('/deploy')
+      .reply(401, {error: 'Deauth test'});
     // spy on console
     const consoleSpy = sinon.spy(console, 'log');
     // execute login
