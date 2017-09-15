@@ -27,16 +27,23 @@ const streamToResponse = ({tarStream, remoteUrl, options}) =>
     stream.on('data', str => (result += str.toString()));
     // listen for read stream end
     stream.on('end', () => {
-      const res = JSON.parse(result);
-      // if stream had error - reject
-      if (error) {
+      try {
+        const res = JSON.parse(result);
+        // if stream had error - reject
+        if (error) {
+          // add response to allow access to body
+          error.response = res;
+          reject(error);
+          return;
+        }
+        // otherwise resolve
+        resolve(res);
+      } catch (parseErr) {
+        // catch parsing error
         // add response to allow access to body
-        error.response = res;
-        reject(error);
-        return;
+        parseErr.response = {result: {error: result, log: ['No log available']}};
+        reject(parseErr);
       }
-      // otherwise resolve
-      resolve(res);
     });
     // listen for stream errors
     stream.on('error', e => (error = e));
