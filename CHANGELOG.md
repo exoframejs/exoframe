@@ -1,4 +1,10 @@
 
+0.19.1 / 2017-09-15
+==================
+
+Fixes:
+  * Fix for malformed JSON parsing during deployment
+
 0.19.0 / 2017-09-13
 ==================
 
