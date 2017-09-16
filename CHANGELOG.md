@@ -1,4 +1,13 @@
 
+0.19.2 / 2017-09-16
+==================
+
+Additions:
+  * Add verbose output for deployment
+
+Fixes:
+  * Correctly handle empty response from server
+
 0.19.1 / 2017-09-15
 ==================
 
