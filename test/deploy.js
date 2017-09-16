@@ -313,6 +313,100 @@ module.exports = () => {
   });
 
   // test
+  tap.test('Should display verbose output', t => {
+    // spy on console
+    const consoleSpy = sinon.spy(console, 'log');
+
+    // handle correct request
+    const deployServer = nock('http://localhost:8080')
+      .post('/deploy')
+      .reply((uri, requestBody, cb) => {
+        cb(null, [200, 'Bad Gateway']);
+      });
+
+    // execute
+    deploy({verbose: true}).then(() => {
+      // make sure log in was successful
+      // check that server was called
+      t.ok(deployServer.isDone());
+      // first check console output
+      t.deepEqual(
+        consoleSpy.args,
+        [
+          ['Deploying current project to endpoint:', 'http://localhost:8080'],
+          ['\nIgnoring following paths:', ['.git', 'node_modules']],
+          ['Error deploying project:', 'Bad Gateway'],
+          ['Build log:\n'],
+          ['No log available'],
+          [''],
+          [
+            'Original error:',
+            {
+              response: {
+                result: {
+                  error: 'Bad Gateway',
+                  log: ['No log available'],
+                },
+              },
+            },
+          ],
+          [
+            'Original response:',
+            {
+              result: {
+                error: 'Bad Gateway',
+                log: ['No log available'],
+              },
+            },
+          ],
+        ],
+        'Correct log output'
+      );
+      // restore console
+      console.log.restore();
+      // tear down nock
+      deployServer.done();
+      t.end();
+    });
+  });
+
+  // test
+  tap.test('Should display error on zero deployments', t => {
+    // spy on console
+    const consoleSpy = sinon.spy(console, 'log');
+
+    // handle correct request
+    const deployServer = nock('http://localhost:8080')
+      .post('/deploy')
+      .reply((uri, requestBody, cb) => {
+        cb(null, [200, {}]);
+      });
+
+    // execute
+    deploy().then(() => {
+      // make sure log in was successful
+      // check that server was called
+      t.ok(deployServer.isDone());
+      // first check console output
+      t.deepEqual(
+        consoleSpy.args,
+        [
+          ['Deploying current project to endpoint:', 'http://localhost:8080'],
+          ['Error deploying project:', 'Error: Something went wrong!'],
+          ['Build log:\n'],
+          ['No log available'],
+        ],
+        'Correct log output'
+      );
+      // restore console
+      console.log.restore();
+      // tear down nock
+      deployServer.done();
+      t.end();
+    });
+  });
+
+  // test
   tap.test('Should not deploy with broken config', t => {
     // spy on console
     const consoleSpy = sinon.spy(console, 'log');

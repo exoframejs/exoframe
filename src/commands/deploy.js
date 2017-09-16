@@ -64,9 +64,14 @@ exports.builder = {
     alias: 'o',
     description: 'Open deployed project in browser after upload',
   },
+  verbose: {
+    alias: 'v',
+    description: 'Verbose mode; will output more information',
+  },
 };
 exports.handler = async (args = {}) => {
   const deployToken = args.token;
+  const {verbose} = args;
 
   // exit if not logged in and no token provided
   if (!deployToken && !isLoggedIn()) {
@@ -100,6 +105,8 @@ exports.handler = async (args = {}) => {
   } catch (e) {
     const defaultConfig = JSON.stringify({name: folderName});
     fs.writeFileSync(configPath, defaultConfig, 'utf-8');
+    // if in verbose mode - log config creation
+    verbose && console.log('Create new default config:', defaultConfig);
   }
 
   // show loader
@@ -119,6 +126,8 @@ exports.handler = async (args = {}) => {
   const tarStream = tar.pack(workdir, {
     ignore: name => ig.ignores(name),
   });
+  // if in verbose mode - log ignores
+  verbose && console.log('\nIgnoring following paths:', ignores);
 
   let token = userConfig.token;
   if (deployToken) {
@@ -133,7 +142,10 @@ exports.handler = async (args = {}) => {
 
   // pipe stream to remote
   try {
-    const res = await streamToResponse({tarStream, remoteUrl, options});
+    const res = await streamToResponse({tarStream, remoteUrl, options, verbose});
+    // if in verbose mode - log response
+    verbose && console.log('\nGot response from server:', res);
+    // check deployments
     if (!res.deployments || !res.deployments.length) {
       throw new Error('Something went wrong!');
     }
@@ -168,13 +180,21 @@ exports.handler = async (args = {}) => {
       return;
     }
 
-    const reason = e.response.result ? e.response.result.error : e.toString();
-    console.log(chalk.red('Error deploying project:'), reason);
+    const response = e.response || {};
+    const reason = response.result ? response.result.error : e.toString();
+    console.log(chalk.red('Error deploying project:'), reason || 'Unknown reason');
     console.log('Build log:\n');
-    e.response.result.log
-      .filter(l => l !== undefined)
-      .map(l => l.trim())
-      .filter(l => l && l.length > 0)
-      .forEach(line => console.log(line));
+    response.result
+      ? (response.result.log || ['No log available'])
+          .filter(l => l !== undefined)
+          .map(l => l.trim())
+          .filter(l => l && l.length > 0)
+          .forEach(line => console.log(line))
+      : console.log('No log available');
+
+    // if in verbose mode - log original error and response
+    verbose && console.log('');
+    verbose && console.log('Original error:', e);
+    verbose && console.log('Original response:', e.response);
   }
 };
