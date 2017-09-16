@@ -180,16 +180,17 @@ exports.handler = async (args = {}) => {
       return;
     }
 
-    const reason = e.response.result ? e.response.result.error : e.toString();
+    const response = e.response || {};
+    const reason = response.result ? response.result.error : e.toString();
     console.log(chalk.red('Error deploying project:'), reason || 'Unknown reason');
     console.log('Build log:\n');
-    e.response.result
-      ? (e.response.result.log || ['No log available'])
+    response.result
+      ? (response.result.log || ['No log available'])
           .filter(l => l !== undefined)
           .map(l => l.trim())
           .filter(l => l && l.length > 0)
           .forEach(line => console.log(line))
-      : 'No log available';
+      : console.log('No log available');
 
     // if in verbose mode - log original error and response
     verbose && console.log('');
