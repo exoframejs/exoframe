@@ -92,6 +92,49 @@ module.exports = () => {
     });
   });
 
+  // test version check
+  tap.test('Should display versions', t => {
+    // handle correct request
+    const response = {
+      server: '0.18.0',
+      latestServer: '0.19.1',
+      serverUpdate: true,
+      traefik: 'v1.3.0',
+      latestTraefik: 'v1.3.2',
+      traefikUpdate: true,
+    };
+    const updateServer = nock('http://localhost:8080')
+      .get('/version')
+      .reply(200, response);
+    // spy on console
+    const consoleSpy = sinon.spy(console, 'log');
+    // execute login
+    update({}).then(() => {
+      // make sure log in was successful
+      // check that server was called
+      t.ok(updateServer.isDone());
+      // first check console output
+      t.deepEqual(
+        consoleSpy.args,
+        [
+          [],
+          ['Exoframe Server:'],
+          ['  current: 0.18.0'],
+          ['  latest: 0.19.1'],
+          [],
+          ['Traefik:'],
+          ['  current: v1.3.0'],
+          ['  latest: v1.3.2'],
+        ],
+        'Correct log output'
+      );
+      // restore console
+      console.log.restore();
+      updateServer.done();
+      t.end();
+    });
+  });
+
   // test deauth
   tap.test('Should deauth on 401', t => {
     // copy original config for restoration

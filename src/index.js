@@ -17,6 +17,7 @@ const list = require('./commands/list');
 const logs = require('./commands/logs');
 const remove = require('./commands/remove');
 const endpoint = require('./commands/endpoint');
+const endpointRm = require('./commands/endpoint-rm');
 const config = require('./commands/config');
 const token = require('./commands/token');
 const update = require('./commands/update');
@@ -30,6 +31,7 @@ yargs
   .command(deploy)
   .command(login)
   .command(endpoint)
+  .command(endpointRm)
   .command(list)
   .command(logs)
   .command(remove)

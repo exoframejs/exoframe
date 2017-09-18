@@ -2,6 +2,7 @@
 const _ = require('lodash');
 const got = require('got');
 const chalk = require('chalk');
+const ora = require('ora');
 
 // our packages
 const {userConfig, isLoggedIn, logout} = require('../config');
@@ -10,15 +11,55 @@ const {userConfig, isLoggedIn, logout} = require('../config');
 const validTargets = ['traefik', 'server'];
 
 exports.command = ['update [target]'];
-exports.describe = 'update given target';
+exports.describe = 'check for updates or update given target';
 exports.builder = {
   target: {
     alias: 't',
     description: `Target for update (${validTargets.join(', ')})`,
   },
 };
-exports.handler = async ({target} = {target: 'self'}) => {
+exports.handler = async ({target}) => {
   if (!isLoggedIn()) {
+    return;
+  }
+
+  // construct shared request params
+  const options = {
+    headers: {
+      Authorization: `Bearer ${userConfig.token}`,
+    },
+    json: true,
+  };
+
+  // if no target given - check for update
+  if (!target || !target.length) {
+    // show loader
+    const spinner = ora('Checking for update...').start();
+
+    // services request url
+    const remoteUrl = `${userConfig.endpoint}/version`;
+    // send request
+    const {body, statusCode} = await got.get(remoteUrl, options);
+    if (statusCode !== 200 || body.error) {
+      spinner.fail('Error checking for update');
+      console.log(body.error || 'Oops. Something went wrong! Try again please.');
+      return;
+    }
+
+    if (body.serverUpdate || body.traefikUpdate) {
+      spinner.warn('Updates available!');
+    } else {
+      spinner.succeed('You are up to date!');
+    }
+
+    console.log();
+    console.log(chalk.bold('Exoframe Server:'));
+    console.log(`  current: ${body.server}`);
+    console.log(`  latest: ${body.latestServer}`);
+    console.log();
+    console.log(chalk.bold('Traefik:'));
+    console.log(`  current: ${body.traefik}`);
+    console.log(`  latest: ${body.latestTraefik}`);
     return;
   }
 
@@ -35,13 +76,6 @@ exports.handler = async ({target} = {target: 'self'}) => {
 
   // services request url
   const remoteUrl = `${userConfig.endpoint}/update/${target}`;
-  // construct shared request params
-  const options = {
-    headers: {
-      Authorization: `Bearer ${userConfig.token}`,
-    },
-    json: true,
-  };
   // try sending request
   try {
     const {body, statusCode} = await got.post(remoteUrl, options);
