@@ -1,4 +1,11 @@
 
+0.20.0 / 2017-09-18
+==================
+
+Additions:
+  * Add way to check for server and traefik updates
+  * Add rm-endpoint command to remove existing endpoints
+
 0.19.2 / 2017-09-16
 ==================
 
