@@ -17,6 +17,8 @@
 | token                  | Generate new deployment token |
 | login                  | Login into Exoframe server |
 | endpoint [url]         | Selects or adds the endpoint of Exoframe server |
+| rm-endpoint [url]      | Removes an existing endpoint of Exoframe server |
+| update [target]        | Gets current versions or updates given target |
 | completion             | Generates bash completion script  |
 
 ## Project config file
