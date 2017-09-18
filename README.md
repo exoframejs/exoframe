@@ -17,10 +17,10 @@ All the configuration of your projects happens automatically. So after running t
 
 Currently, Exoframe understands and can deploy the following project types:
 
-1. static html based projects - will be deployed using [nginx](http://hub.docker.com/_/nginx) image
-2. node.js based projects - will be deployed using [node:alpine](https://hub.docker.com/_/node) image
-3. docker based project - will be deployed using your [Dockerfile](https://docs.docker.com/engine/reference/builder/)
-4. docker-compose based project - will be deployed using your [docker-compose](https://docs.docker.com/compose/compose-file/) file
+1. Static html based projects - will be deployed using [nginx](http://hub.docker.com/_/nginx) image
+2. Node.js based projects - will be deployed using [Node:latest](https://hub.docker.com/_/node) image
+3. Docker based project - will be deployed using your [Dockerfile](https://docs.docker.com/engine/reference/builder/)
+4. Docker-Compose based project - will be deployed using your [docker-compose](https://docs.docker.com/compose/compose-file/) file
 
 To run Exoframe you need two parts - Exoframe CLI on your local machine and [Exoframe server](https://github.com/exoframejs/exoframe-server) on your server with Docker.
 
