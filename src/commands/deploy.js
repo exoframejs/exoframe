@@ -16,36 +16,53 @@ const formatServices = require('../util/formatServices');
 
 const ignores = ['.git', 'node_modules'];
 
-const streamToResponse = ({tarStream, remoteUrl, options}) =>
+const streamToResponse = ({tarStream, remoteUrl, options, verbose}) =>
   new Promise((resolve, reject) => {
     // store error and result
     let error;
-    let result = '';
+    let result = {};
     // pipe stream to remote
     const stream = tarStream.pipe(got.stream.post(remoteUrl, options));
     // store output
-    stream.on('data', str => (result += str.toString()));
-    // listen for read stream end
-    stream.on('end', () => {
+    stream.on('data', str => {
+      const s = str.toString();
       try {
-        const res = JSON.parse(result);
-        // if stream had error - reject
-        if (error) {
-          // add response to allow access to body
-          error.response = res;
-          reject(error);
-          return;
+        const data = JSON.parse(s);
+        // always log info
+        if (data.level === 'info') {
+          verbose && console.log(chalk.blue('[info]'), data.message);
+          // if data has deployments info - assign it as result
+          if (data.deployments) {
+            result = data;
+          }
         }
-        // otherwise resolve
-        resolve(res);
-      } catch (parseErr) {
-        // catch parsing error
-        // add response to allow access to body
-        parseErr.response = {result: {error: result, log: ['No log available']}};
-        reject(parseErr);
+        // log verbose if needed
+        data.level === 'verbose' && verbose > 1 && console.log(chalk.grey('[verbose]'), data.message);
+        // if error - store as error and log
+        if (data.level === 'error') {
+          verbose && console.log(chalk.red('[error]'), data.message);
+          verbose > 1 && console.log(JSON.stringify(data, null, 2));
+          error = new Error(data.message);
+          error.response = data;
+        }
+      } catch (e) {
+        error = new Error('Error parsing output!');
+        error.response = {
+          error: s,
+        };
+        verbose && console.log(chalk.red('[error]'), 'Error parsing line:', s);
       }
     });
-    // listen for stream errors
+    // listen for read stream end
+    stream.on('end', () => {
+      // if stream had error - reject
+      if (error) {
+        reject(error);
+        return;
+      }
+      // otherwise resolve
+      resolve(result);
+    });
     stream.on('error', e => (error = e));
   });
 
@@ -67,6 +84,7 @@ exports.builder = {
   verbose: {
     alias: 'v',
     description: 'Verbose mode; will output more information',
+    count: true,
   },
 };
 exports.handler = async (args = {}) => {
@@ -110,13 +128,16 @@ exports.handler = async (args = {}) => {
   }
 
   // show loader
-  const spinner = ora('Uploading project to server...').start();
+  let spinner;
+  if (!verbose) {
+    spinner = ora('Deploying project to server...').start();
+  }
 
   // syntax-check config
   try {
     JSON.parse(fs.readFileSync(configPath));
   } catch (e) {
-    spinner.fail('Your exoframe.json is not valid');
+    spinner && spinner.fail('Your exoframe.json is not valid');
     console.log(chalk.red('Please, check your config and try again:'), e.toString());
     return;
   }
@@ -132,7 +153,7 @@ exports.handler = async (args = {}) => {
   let token = userConfig.token;
   if (deployToken) {
     token = deployToken;
-    console.log('Deploying using given token..');
+    console.log('\nDeploying using given token..');
   }
   const options = {
     headers: {
@@ -143,13 +164,18 @@ exports.handler = async (args = {}) => {
   // pipe stream to remote
   try {
     const res = await streamToResponse({tarStream, remoteUrl, options, verbose});
-    // if in verbose mode - log response
-    verbose && console.log('\nGot response from server:', res);
     // check deployments
     if (!res.deployments || !res.deployments.length) {
-      throw new Error('Something went wrong!');
+      const err = new Error('Something went wrong!');
+      err.response = res;
+      throw err;
     }
-    spinner.succeed('Upload finsihed!');
+    spinner && spinner.succeed('Upload finsihed!');
+
+    // log response in verbose-verbose mode
+    verbose > 2 && console.log(chalk.gray('Server response:'), JSON.stringify(res, null, 2), '\n');
+
+    // log result
     console.log('Your project is now deployed as:\n');
     // create table
     const resultTable = new Table({
@@ -172,7 +198,7 @@ exports.handler = async (args = {}) => {
       opn(`http://${formattedServices[0].domain.split(',')[0].trim()}`);
     }
   } catch (e) {
-    spinner.fail('Deployment failed!');
+    spinner && spinner.fail('Deployment failed!');
     // if authorization is expired/broken/etc
     if (e.statusCode === 401) {
       logout(userConfig);
@@ -181,20 +207,18 @@ exports.handler = async (args = {}) => {
     }
 
     const response = e.response || {};
-    const reason = response.result ? response.result.error : e.toString();
+    const reason = response.error || e.toString();
     console.log(chalk.red('Error deploying project:'), reason || 'Unknown reason');
     console.log('Build log:\n');
-    response.result
-      ? (response.result.log || ['No log available'])
-          .filter(l => l !== undefined)
-          .map(l => l.trim())
-          .filter(l => l && l.length > 0)
-          .forEach(line => console.log(line))
-      : console.log('No log available');
+    (response.log || ['No log available'])
+      .filter(l => l !== undefined)
+      .map(l => l.trim())
+      .filter(l => l && l.length > 0)
+      .forEach(line => console.log(line));
 
     // if in verbose mode - log original error and response
     verbose && console.log('');
     verbose && console.log('Original error:', e);
-    verbose && console.log('Original response:', e.response);
+    verbose > 1 && console.log('Original response:', e.response);
   }
 };

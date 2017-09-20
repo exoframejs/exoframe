@@ -5,6 +5,8 @@ const path = require('path');
 const nock = require('nock');
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
+const _ = require('highland');
+const {Readable} = require('stream');
 
 // our packages
 const {userConfig, updateConfig} = require('../src/config');
@@ -14,6 +16,14 @@ const opnStub = sinon.spy();
 
 // require deploy with stub for opn
 const {handler: deploy} = proxyquire('../src/commands/deploy', {opn: opnStub});
+
+// reply with stream helper
+const replyWithStream = dataArr => {
+  const replyStream = _();
+  dataArr.forEach(data => replyStream.write(JSON.stringify(data)));
+  replyStream.end('');
+  return new Readable().wrap(replyStream);
+};
 
 module.exports = () => {
   const folder = 'test_html_project';
@@ -47,13 +57,13 @@ module.exports = () => {
     // handle correct request
     const deployServer = nock('http://localhost:8080')
       .post('/deploy')
-      .reply((uri, requestBody, cb) => {
+      .reply((uri, requestBody) => {
         const excgf = fs.readFileSync(path.join(testFolder, 'exoframe.json'));
         const index = fs.readFileSync(path.join(testFolder, 'index.html'));
         t.ok(requestBody.includes(excgf), 'Should send correct config');
         t.ok(requestBody.includes(index), 'Should send correct index file');
 
-        cb(null, [200, {status: 'success', deployments}]);
+        return replyWithStream([{message: 'Deployment success!', deployments, level: 'info'}]);
       });
 
     // execute login
@@ -87,9 +97,7 @@ module.exports = () => {
     // handle correct request
     const deployServer = nock('http://localhost:8080')
       .post('/deploy')
-      .reply((uri, requestBody, cb) => {
-        cb(null, [200, {status: 'success', deployments}]);
-      });
+      .reply(() => replyWithStream([{message: 'Deployment success!', deployments, level: 'info'}]));
 
     // execute login
     deploy().then(() => {
@@ -124,9 +132,7 @@ module.exports = () => {
     // handle correct request
     const deployServer = nock('http://localhost:8080')
       .post('/deploy')
-      .reply((uri, requestBody, cb) => {
-        cb(null, [200, {status: 'success', deployments}]);
-      });
+      .reply(() => replyWithStream([{message: 'Deployment success!', deployments, level: 'info'}]));
 
     // remove auth from config
     updateConfig({endpoint: 'http://localhost:8080'});
@@ -141,7 +147,7 @@ module.exports = () => {
         consoleSpy.args,
         [
           ['Deploying current project to endpoint:', 'http://localhost:8080'],
-          ['Deploying using given token..'],
+          ['\nDeploying using given token..'],
           ['Your project is now deployed as:\n'],
           ['   ID         URL             Hostname   \n   test       localhost       test       '],
         ],
@@ -165,9 +171,7 @@ module.exports = () => {
     // handle correct request
     const updateServer = nock('http://localhost:8080')
       .post('/update')
-      .reply((uri, requestBody, cb) => {
-        cb(null, [200, {status: 'success', deployments}]);
-      });
+      .reply(() => replyWithStream([{message: 'Deployment success!', deployments, level: 'info'}]));
 
     // execute login
     deploy({update: true}).then(() => {
@@ -200,9 +204,7 @@ module.exports = () => {
     // handle correct request
     const deployServer = nock('http://localhost:8080')
       .post('/deploy')
-      .reply((uri, requestBody, cb) => {
-        cb(null, [200, {status: 'success', deployments}]);
-      });
+      .reply(() => replyWithStream([{message: 'Deployment success!', deployments, level: 'info'}]));
 
     // execute
     deploy({open: true}).then(() => {
@@ -237,19 +239,16 @@ module.exports = () => {
     // handle correct request
     const deployServer = nock('http://localhost:8080')
       .post('/deploy')
-      .reply((uri, requestBody, cb) => {
-        cb(null, [
-          400,
+      .reply(() =>
+        replyWithStream([
           {
-            status: 'error',
-            result: {
-              error: 'Build failed! See build log for details.',
-              log: ['Error log', 'here'],
-              image: 'test:latest',
-            },
+            message: 'Build failed! See build log for details.',
+            error: 'Build failed! See build log for details.',
+            log: ['Error log', 'here'],
+            level: 'error',
           },
-        ]);
-      });
+        ])
+      );
 
     // execute
     deploy().then(() => {
@@ -331,37 +330,24 @@ module.exports = () => {
       t.ok(deployServer.isDone());
       // first check console output
       t.deepEqual(
-        consoleSpy.args,
+        // check beginning of log
+        consoleSpy.args.slice(0, consoleSpy.args.length - 1),
         [
           ['Deploying current project to endpoint:', 'http://localhost:8080'],
           ['\nIgnoring following paths:', ['.git', 'node_modules']],
+          ['[error]', 'Error parsing line:', 'Bad Gateway'],
           ['Error deploying project:', 'Bad Gateway'],
           ['Build log:\n'],
           ['No log available'],
           [''],
-          [
-            'Original error:',
-            {
-              response: {
-                result: {
-                  error: 'Bad Gateway',
-                  log: ['No log available'],
-                },
-              },
-            },
-          ],
-          [
-            'Original response:',
-            {
-              result: {
-                error: 'Bad Gateway',
-                log: ['No log available'],
-              },
-            },
-          ],
         ],
         'Correct log output'
       );
+      // check error correctness
+      const err = consoleSpy.args[consoleSpy.args.length - 1][1];
+      t.equal(err.message, 'Error parsing output!', 'Correct error text');
+      t.ok(err.response, 'Has response');
+      t.equal(err.response.error, 'Bad Gateway', 'Correct error response');
       // restore console
       console.log.restore();
       // tear down nock
