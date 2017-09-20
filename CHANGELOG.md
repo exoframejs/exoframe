@@ -1,4 +1,10 @@
 
+0.21.1 / 2017-09-20
+==================
+
+Fixes:
+  * Use highland.js to correctly parse streamed server response
+
 0.21.0 / 2017-09-20
 ==================
 
