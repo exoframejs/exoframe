@@ -19,6 +19,7 @@
     "chalk": "^2.1.0",
     "cli-table": "^0.3.1",
     "got": "^7.1.0",
+    "highland": "^2.11.1",
     "ignore": "^3.3.3",
     "inquirer": "^3.2.2",
     "js-yaml": "^3.9.1",
@@ -32,7 +33,6 @@
   },
   "devDependencies": {
     "coveralls": "^2.13.1",
-    "highland": "^2.11.1",
     "nock": "^9.0.14",
     "pkg": "^4.2.4",
     "proxyquire": "^1.8.0",
