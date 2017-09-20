@@ -1,4 +1,14 @@
 
+0.21.0 / 2017-09-20
+==================
+
+Additions:
+  * Add support for streamed response from server for more verbosity
+  * Document new update and rm-endpoint commands
+
+Changes:
+  * Change readme to reflect usage of node:latest
+
 0.20.0 / 2017-09-18
 ==================
 
