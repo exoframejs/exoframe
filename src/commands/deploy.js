@@ -8,6 +8,7 @@ const fs = require('fs');
 const ora = require('ora');
 const Table = require('cli-table');
 const opn = require('opn');
+const _ = require('highland');
 
 // my modules
 const {userConfig, isLoggedIn, logout} = require('../config');
@@ -22,7 +23,9 @@ const streamToResponse = ({tarStream, remoteUrl, options, verbose}) =>
     let error;
     let result = {};
     // pipe stream to remote
-    const stream = tarStream.pipe(got.stream.post(remoteUrl, options));
+    const stream = _(tarStream.pipe(got.stream.post(remoteUrl, options)))
+      .split()
+      .filter(l => l && l.length);
     // store output
     stream.on('data', str => {
       const s = str.toString();
