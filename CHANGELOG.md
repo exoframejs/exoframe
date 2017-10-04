@@ -1,4 +1,13 @@
 
+0.22.0 / 2017-10-04
+==================
+
+Additions:  
+  * Add basic deployment token management
+
+Fixes:
+  * Improve "remove" method test code coverage
+
 0.21.1 / 2017-09-20
 ==================
 

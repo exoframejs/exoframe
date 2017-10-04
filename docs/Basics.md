@@ -14,7 +14,7 @@
 | list                   | List currently deployed projects |
 | rm [id]                | Remove existing deployment or project |
 | log [id]               | Get logs for existing deployment or project |
-| token                  | Generate new deployment token |
+| token [ls|rm]          | Generate, list or remove deployment tokens |
 | login                  | Login into Exoframe server |
 | endpoint [url]         | Selects or adds the endpoint of Exoframe server |
 | rm-endpoint [url]      | Removes an existing endpoint of Exoframe server |
