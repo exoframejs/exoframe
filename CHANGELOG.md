@@ -1,4 +1,10 @@
 
+0.23.0 / 2017-10-18
+==================
+
+Additions:
+  * Ask if user wants to execute update immediately when available
+
 0.22.0 / 2017-10-04
 ==================
 
