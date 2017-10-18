@@ -9,6 +9,22 @@
 
 Exoframe is a self-hosted tool that allows simple one-command deployments using Docker.
 
+## Features
+
+- One-command project deployment
+- SSH key based auth
+- Rolling updates
+- Deploy tokens (e.g. to deploy from CI)
+- Automated HTTPS setup via letsencrypt *
+- Automated gzip compression *
+- Simple access to the logs of deployments
+- Docker-compose support
+- Multiple deployment endpoints and multi-user support
+- Simple update procedure for client, server and Traefik
+- Optional automatic subdomain assignment (i.e. every deployment gets its own subdomain)
+
+\* Traefik feature
+
 ## Demo
 
 [![asciicast](https://asciinema.org/a/129255.png)](https://asciinema.org/a/129255)
