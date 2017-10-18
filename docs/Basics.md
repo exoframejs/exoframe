@@ -25,13 +25,13 @@ It is recommended to run Exoframe on a server with at least 1GB of RAM.
 | deploy [path]          | Deploy specified path |
 | config                 | Generate or update project config for current path |
 | list                   | List currently deployed projects |
-| rm [id]                | Remove existing deployment or project |
-| log [id]               | Get logs for existing deployment or project |
+| rm <id>                | Remove existing deployment or project |
+| log <id>               | Get logs for existing deployment or project |
 | token [ls|rm]          | Generate, list or remove deployment tokens |
 | login                  | Login into Exoframe server |
 | endpoint [url]         | Selects or adds the endpoint of Exoframe server |
 | rm-endpoint [url]      | Removes an existing endpoint of Exoframe server |
-| update [target]        | Gets current versions or updates given target |
+| update [target]        | Gets current versions or updates given target (server | traefik | all) |
 | completion             | Generates bash completion script  |
 
 ## Project config file
