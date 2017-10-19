@@ -1,7 +1,7 @@
 {
   "name": "exoframe",
-  "version": "0.23.0",
-  "description": "Exoframe - power armor for docker containers",
+  "version": "1.0.0",
+  "description": "Exoframe is a self-hosted tool that allows simple one-command deployments using Docker",
   "main": "index.js",
   "repository": "git@github.com:exoframejs/exoframe.git",
   "author": "Tim Ermilov <yamalight@gmail.com>",

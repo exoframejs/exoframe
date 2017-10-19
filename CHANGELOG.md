@@ -1,4 +1,15 @@
 
+1.0.0 / 2017-10-19
+==================
+
+First "production ready" release!
+
+Additions:
+  * Clarify node.js projects deployment in docs
+  * Add list of features to readme
+  * Restructure docs, add basic contribution guide
+  * Document basic requirements for Exoframe usage and OOM build issue
+
 0.23.0 / 2017-10-18
 ==================
 
