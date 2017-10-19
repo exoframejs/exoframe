@@ -1,6 +1,6 @@
 # Basics
 
-### Concepts
+## Concepts
 
 - **Project** - one or more deployments grouped together (e.g. started via docker-compose)
 - **Deployment** - one and only one deployed service
@@ -18,7 +18,18 @@ Be aware though - execution of deployments will result in (1) new Docker images 
 Depending on your project's complexity, this might require significant amount of resources during both steps resulting in failed deployments (note: if Docker goes out-of-memory during build, you will not get any specific error - just a failed deployment).  
 It is recommended to run Exoframe on a server with at least 1GB of RAM.
 
-### Commands
+## Supported project types
+
+Currently, Exoframe understands and can deploy the following project types:
+
+1. Static html based projects - will be deployed using [nginx](http://hub.docker.com/_/nginx) image
+2. Node.js based projects - will be deployed using [node:latest](https://hub.docker.com/_/node) image *
+3. Docker based project - will be deployed using your [Dockerfile](https://docs.docker.com/engine/reference/builder/)
+4. Docker-Compose based projects - will be deployed using your [docker-compose](https://docs.docker.com/compose/compose-file/) file
+
+\* There are two things to keep in mind for Node.js projects: (1) they are started via `npm start`, so make sure you have specified start script in your `package.json`; (2) by default port 80 is exposed, so you need to make your app listen on that port. If you'd like to execute your app in any different way or expose more ports - please use Dockerfile deployment method.
+
+## Commands
 
 | Command                | Description |
 | ---------------------- | ----------- |
