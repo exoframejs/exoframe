@@ -1,5 +1,7 @@
 # Exoframe
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/exoframejs/exoframe.svg)](https://greenkeeper.io/)
+
 > Simple Docker deployment tool
 
 [![Build Status](https://travis-ci.org/exoframejs/exoframe.svg?branch=master)](https://travis-ci.org/exoframejs/exoframe)
