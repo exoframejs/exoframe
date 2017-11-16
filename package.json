@@ -21,7 +21,7 @@
     "got": "^8.0.0",
     "highland": "^2.11.1",
     "ignore": "^3.3.7",
-    "inquirer": "^3.3.0",
+    "inquirer": "^4.0.0",
     "js-yaml": "^3.10.0",
     "jsonwebtoken": "^8.1.0",
     "lodash": "^4.17.4",
