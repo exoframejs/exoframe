@@ -12,13 +12,13 @@
   "scripts": {
     "test": "TZ=Greenland NODE_ENV=testing tap --cov --coverage-report=lcov --reporter=spec ./test/index.js",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "package": "pkg --targets node8.3.0-linux-x64,node8.3.0-win-x64,node8.3.0-macos-x64 -o exoframe index.js"
+    "package": "pkg --targets node8.6.0-linux-x64,node8.6.0-win-x64,node8.6.0-macos-x64 -o exoframe index.js"
   },
   "dependencies": {
     "boxen": "^1.2.2",
     "chalk": "^2.3.0",
     "cli-table": "^0.3.1",
-    "got": "^7.1.0",
+    "got": "^8.0.0",
     "highland": "^2.11.1",
     "ignore": "^3.3.7",
     "inquirer": "^4.0.1",
@@ -37,6 +37,6 @@
     "pkg": "^4.2.5",
     "proxyquire": "^1.8.0",
     "sinon": "^4.0.2",
-    "tap": "^10.7.2"
+    "tap": "^11.0.0"
   }
 }
