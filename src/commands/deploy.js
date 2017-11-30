@@ -136,9 +136,13 @@ exports.handler = async (args = {}) => {
     spinner = ora('Deploying project to server...').start();
   }
 
-  // syntax-check config
+  // syntax-check & validate config
   try {
-    JSON.parse(fs.readFileSync(configPath));
+    const config = JSON.parse(fs.readFileSync(configPath));
+    // validate project name
+    if (!config.name || !config.name.length) {
+      throw new Error('Project should have a valid name in config!');
+    }
   } catch (e) {
     spinner && spinner.fail('Your exoframe.json is not valid');
     console.log(chalk.red('Please, check your config and try again:'), e.toString());

@@ -393,6 +393,33 @@ module.exports = () => {
   });
 
   // test
+  tap.test('Should not deploy with config without project name', t => {
+    // spy on console
+    const consoleSpy = sinon.spy(console, 'log');
+
+    // corrupt config with string
+    const cfg = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'exoframe.json')));
+    cfg.name = '';
+    fs.writeFileSync(path.join(__dirname, '..', 'exoframe.json'), JSON.stringify(cfg));
+
+    // execute deploy
+    deploy().then(() => {
+      // check console output
+      t.deepEqual(
+        consoleSpy.args,
+        [
+          ['Deploying current project to endpoint:', 'http://localhost:8080'],
+          ['Please, check your config and try again:', 'Error: Project should have a valid name in config!'],
+        ],
+        'Correct log output'
+      );
+      // restore console
+      console.log.restore();
+      t.end();
+    });
+  });
+
+  // test
   tap.test('Should not deploy with broken config', t => {
     // spy on console
     const consoleSpy = sinon.spy(console, 'log');
