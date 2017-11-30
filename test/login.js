@@ -16,18 +16,36 @@ module.exports = () => {
   const loginRequest = {phrase: 'test', uid: '123'};
   const privateKeyName = path.join(__dirname, 'fixtures', 'id_rsa');
   const privateKeyNameBroken = path.join(__dirname, 'fixtures', 'id_rsa_b');
+  const privateKeyWithPassphrase = path.join(__dirname, 'fixtures', 'id_rsa_keyphrase');
   const cert = fs.readFileSync(privateKeyName);
+  const certKey = fs.readFileSync(privateKeyWithPassphrase);
   const certBroken = fs.readFileSync(privateKeyNameBroken);
   const reqToken = jwt.sign(loginRequest.phrase, cert, {algorithm: 'RS256'});
+  const reqTokenKey = jwt.sign(loginRequest.phrase, {key: certKey, passphrase: 'test123'}, {algorithm: 'RS256'});
   const reqTokenBroken = jwt.sign(loginRequest.phrase, certBroken, {algorithm: 'RS256'});
   const correctLogin = {user: {username: 'admin'}, token: reqToken, requestId: loginRequest.uid};
+  const correctLoginWithPassphrase = {
+    user: {username: 'admin'},
+    token: reqTokenKey,
+    requestId: loginRequest.uid,
+  };
   const failedLogin = {user: {username: 'broken'}, token: reqTokenBroken, requestId: loginRequest.uid};
   const wrongUser = {username: 'wrong', privateKeyName: 'i am broken', password: ''};
 
   // handle correct request
-  nock('http://localhost:8080').get('/login').times(3).reply(200, loginRequest);
-  const correctLoginSrv = nock('http://localhost:8080').post('/login', correctLogin).reply(200, {token});
-  const failedLoginSrv = nock('http://localhost:8080').post('/login', failedLogin).reply(401);
+  nock('http://localhost:8080')
+    .get('/login')
+    .times(4)
+    .reply(200, loginRequest);
+  const correctLoginSrv = nock('http://localhost:8080')
+    .post('/login', correctLogin)
+    .reply(200, {token});
+  const correctLoginPassSrv = nock('http://localhost:8080')
+    .post('/login', correctLoginWithPassphrase)
+    .reply(200, {token});
+  const failedLoginSrv = nock('http://localhost:8080')
+    .post('/login', failedLogin)
+    .reply(401);
 
   // test login
   tap.test('Should login', t => {
@@ -51,6 +69,38 @@ module.exports = () => {
       const cfg = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
       t.equal(cfg.token, token, 'Correct token');
       t.equal(cfg.user.username, correctLogin.user.username, 'Correct username');
+      // restore inquirer
+      inquirer.prompt.restore();
+      // restore console
+      console.log.restore();
+      t.end();
+    });
+  });
+
+  // test login
+  tap.test('Should login using key with passphrase', t => {
+    // stup inquirer answers
+    sinon
+      .stub(inquirer, 'prompt')
+      .callsFake(() => Promise.resolve(Object.assign({}, correctLoginWithPassphrase.user, {password: 'test123'})));
+    // spy on console
+    const consoleSpy = sinon.spy(console, 'log');
+    // execute login
+    login({key: privateKeyWithPassphrase}).then(() => {
+      // make sure log in was successful
+      // check that server was called
+      t.ok(correctLoginPassSrv.isDone());
+      // first check console output
+      t.deepEqual(
+        consoleSpy.args,
+        [['Logging in to:', 'http://localhost:8080'], ['Successfully logged in!']],
+        'Correct log output'
+      );
+      // then check config changes
+      const configPath = path.join(__dirname, 'fixtures', 'cli.config.yml');
+      const cfg = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
+      t.equal(cfg.token, token, 'Correct token');
+      t.equal(cfg.user.username, correctLoginWithPassphrase.user.username, 'Correct username');
       // restore inquirer
       inquirer.prompt.restore();
       // restore console
