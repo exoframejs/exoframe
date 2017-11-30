@@ -1,4 +1,12 @@
 
+1.0.2 / 2017-11-30
+==================
+
+Changes
+  * Validate project name in config before deployment
+  * Update dependencies
+  * Update pkg binaries to latest available node v8.6.0 version
+
 1.0.1 / 2017-10-30
 ==================
 
