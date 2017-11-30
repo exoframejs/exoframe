@@ -1,4 +1,10 @@
 
+1.0.3 / 2017-11-30
+==================
+
+Fixes:
+  * Update npm api key for travis-ci to fix autobuilds
+
 1.0.2 / 2017-11-30
 ==================
 
