@@ -1,4 +1,9 @@
 
+1.0.4 / 2017-11-30
+==================
+
+  * Fix npm autorelease by switching to token that does not require OTP
+
 1.0.3 / 2017-11-30
 ==================
 
