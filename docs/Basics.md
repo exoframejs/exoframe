@@ -76,7 +76,11 @@ Config file has the following structure:
   // internal hostname for container [optional]
   // see docker docs for more info
   // no hostname is assigned by default
-  "hostname": "hostname"
+  "hostname": "hostname",
+  // Add additional docker labels to your container [optional]
+  "labels": {
+    "my.custom.label": "value"
+  }
 }
 ```
 
