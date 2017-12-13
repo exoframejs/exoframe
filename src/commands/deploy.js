@@ -157,14 +157,14 @@ exports.handler = async (args = {}) => {
   // if in verbose mode - log ignores
   verbose && console.log('\nIgnoring following paths:', ignores);
 
-  let token = userConfig.token;
+  let authToken = userConfig.token;
   if (deployToken) {
-    token = deployToken;
+    authToken = deployToken;
     console.log('\nDeploying using given token..');
   }
   const options = {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${authToken}`,
     },
   };
 

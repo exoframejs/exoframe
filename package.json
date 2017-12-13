@@ -10,7 +10,7 @@
     "exoframe": "bin/index.js"
   },
   "scripts": {
-    "test": "TZ=Greenland NODE_ENV=testing tap --cov --coverage-report=lcov --reporter=spec ./test/index.js",
+    "test": "TZ=Greenland NODE_ENV=testing jest --coverage",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "package": "pkg --targets node8.6.0-linux-x64,node8.6.0-win-x64,node8.6.0-macos-x64 -o exoframe index.js"
   },
@@ -33,10 +33,10 @@
   },
   "devDependencies": {
     "coveralls": "^3.0.0",
+    "jest": "^21.2.1",
     "nock": "^9.0.25",
     "pkg": "^4.2.5",
-    "proxyquire": "^1.8.0",
     "sinon": "^4.0.2",
-    "tap": "^11.0.0"
+    "strip-ansi": "^4.0.0"
   }
 }
