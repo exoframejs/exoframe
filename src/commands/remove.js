@@ -22,6 +22,7 @@ exports.handler = async ({id}) => {
     headers: {
       Authorization: `Bearer ${userConfig.token}`,
     },
+    body: {},
     json: true,
   };
   // try sending request

@@ -165,6 +165,7 @@ exports.handler = async (args = {}) => {
   const options = {
     headers: {
       Authorization: `Bearer ${authToken}`,
+      'Content-Type': 'application/octet-stream',
     },
   };
 

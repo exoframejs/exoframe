@@ -15,6 +15,7 @@ const options = {
   headers: {
     Authorization: `Bearer ${userConfig.token}`,
   },
+  body: {},
   json: true,
 };
 
