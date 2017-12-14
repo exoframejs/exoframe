@@ -1,6 +1,6 @@
 {
   "name": "exoframe",
-  "version": "1.0.5",
+  "version": "2.0.0",
   "description": "Exoframe is a self-hosted tool that allows simple one-command deployments using Docker",
   "main": "index.js",
   "repository": "git@github.com:exoframejs/exoframe.git",
@@ -10,7 +10,7 @@
     "exoframe": "bin/index.js"
   },
   "scripts": {
-    "test": "TZ=Greenland NODE_ENV=testing jest --coverage",
+    "test": "TZ=Greenland LANG=en_US.UTF-8 NODE_ENV=testing jest --coverage --silent",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "package": "pkg --targets node8.6.0-linux-x64,node8.6.0-win-x64,node8.6.0-macos-x64 -o exoframe index.js"
   },
