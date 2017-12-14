@@ -20,6 +20,7 @@ exports.handler = async () => {
     project: '',
     restart: 'on-failure:2',
     env: undefined,
+    labels: undefined,
     hostname: '',
   };
   try {
@@ -67,7 +68,20 @@ exports.handler = async () => {
     name: 'env',
     message: 'Env variables [comma-separated, optional]:',
     default: defaultConfig.env
-      ? Object.keys(defaultConfig.env).map(k => `${k.toUpperCase()}=${defaultConfig.env[k]}`).join(', ')
+      ? Object.keys(defaultConfig.env)
+          .map(k => `${k.toUpperCase()}=${defaultConfig.env[k]}`)
+          .join(', ')
+      : '',
+    filter,
+  });
+  prompts.push({
+    type: 'input',
+    name: 'labels',
+    message: 'Labels [comma-separated, optional]:',
+    default: defaultConfig.labels
+      ? Object.keys(defaultConfig.labels)
+          .map(k => `${k}=${defaultConfig.labels[k]}`)
+          .join(', ')
       : '',
     filter,
   });
@@ -86,7 +100,7 @@ exports.handler = async () => {
     choices: ['no', 'on-failure:2', 'always'],
   });
   // get values from user
-  const {name, domain, project, env, hostname, restart} = await inquirer.prompt(prompts);
+  const {name, domain, project, env, labels, hostname, restart} = await inquirer.prompt(prompts);
   // init config object
   const config = {name, restart};
   if (domain && domain.length) {
@@ -97,6 +111,13 @@ exports.handler = async () => {
   }
   if (env && env.length) {
     config.env = env
+      .split(',')
+      .map(kv => kv.split('='))
+      .map(pair => ({key: pair[0].trim(), value: pair[1].trim()}))
+      .reduce((prev, obj) => Object.assign(prev, {[obj.key]: obj.value}), {});
+  }
+  if (labels && Object.keys(labels).length) {
+    config.labels = labels
       .split(',')
       .map(kv => kv.split('='))
       .map(pair => ({key: pair[0].trim(), value: pair[1].trim()}))

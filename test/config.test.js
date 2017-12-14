@@ -14,6 +14,7 @@ const configData = {
   domain: 'test.dev',
   project: 'test-project',
   env: 'ENV=1, OTHER=2',
+  labels: 'label=1, other=2',
   hostname: 'host',
   restart: 'no',
 };
@@ -47,6 +48,8 @@ test('Should generate config file', done => {
     expect(cfg.hostname).toEqual(configData.hostname);
     expect(cfg.env.ENV).toEqual('1');
     expect(cfg.env.OTHER).toEqual('2');
+    expect(cfg.labels.label).toEqual('1');
+    expect(cfg.labels.other).toEqual('2');
     // restore inquirer
     inquirer.prompt.restore();
     // restore console
