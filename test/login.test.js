@@ -9,7 +9,6 @@ const inquirer = require('inquirer');
 const jwt = require('jsonwebtoken');
 
 // our packages
-const {cleanLogs} = require('./util');
 const {handler: login} = require('../src/commands/login');
 
 const token = 'test-token';
@@ -59,8 +58,7 @@ test('Should login', done => {
     // check that server was called
     expect(correctLoginSrv.isDone()).toBeTruthy();
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([['Logging in to:', 'http://localhost:8080'], ['Successfully logged in!']]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // then check config changes
     const configPath = path.join(__dirname, 'fixtures', 'cli.config.yml');
     const cfg = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
@@ -88,8 +86,7 @@ test('Should login using key with passphrase', done => {
     // check that server was called
     expect(correctLoginPassSrv.isDone()).toBeTruthy();
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([['Logging in to:', 'http://localhost:8080'], ['Successfully logged in!']]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // then check config changes
     const configPath = path.join(__dirname, 'fixtures', 'cli.config.yml');
     const cfg = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
@@ -112,15 +109,7 @@ test('Should fail to login with broken private key', done => {
   // execute login
   login({key: 'asd'}).then(() => {
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([
-      ['Logging in to:', 'http://localhost:8080'],
-      [
-        'Error logging in!',
-        'Error generating login token! Make sure your private key password is correct',
-        "Error: ENOENT: no such file or directory, open 'asd'",
-      ],
-    ]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // then check the config (should not change)
     const configPath = path.join(__dirname, 'fixtures', 'cli.config.yml');
     const cfg = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
@@ -146,15 +135,7 @@ test('Should not login with wrong certificate', done => {
     // check that server was called
     expect(failedLoginSrv.isDone()).toBeTruthy();
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([
-      ['Logging in to:', 'http://localhost:8080'],
-      [
-        'Error logging in!',
-        'Check your username and password and try again.',
-        'HTTPError: Response code 401 (Unauthorized)',
-      ],
-    ]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // restore inquirer
     inquirer.prompt.restore();
     // restore console

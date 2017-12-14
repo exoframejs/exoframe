@@ -4,7 +4,6 @@ const nock = require('nock');
 const sinon = require('sinon');
 
 // our packages
-const {cleanLogs} = require('./util');
 const {handler: remove} = require('../src/commands/remove');
 const {userConfig, updateConfig} = require('../src/config');
 
@@ -24,8 +23,7 @@ test('Should remove', done => {
     // check that server was called
     expect(rmServer.isDone()).toBeTruthy();
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([['Removing deployment:', id], ['Deployment removed!']]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // restore console
     console.log.restore();
     rmServer.done();
@@ -47,11 +45,7 @@ test('Should show remove error', done => {
     // check that server was called
     expect(rmServer.isDone()).toBeTruthy();
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([
-      ['Removing deployment:', id],
-      ['Error removing project:', 'HTTPError: Response code 500 (Internal Server Error)'],
-    ]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // restore console
     console.log.restore();
     rmServer.done();
@@ -73,11 +67,7 @@ test('Should show not found error', done => {
     // check that server was called
     expect(rmServer.isDone()).toBeTruthy();
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([
-      ['Removing deployment:', id],
-      ['Error: container was not found!', 'Please, check deployment ID and try again.'],
-    ]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // restore console
     console.log.restore();
     rmServer.done();
@@ -99,8 +89,7 @@ test('Should show not found error', done => {
     // check that server was called
     expect(rmServer.isDone()).toBeTruthy();
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([['Removing deployment:', id], ['Error!', 'Could not remove the deployment.']]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // restore console
     console.log.restore();
     rmServer.done();
@@ -124,11 +113,7 @@ test('Should deauth on 401', done => {
     // check that server was called
     expect(rmServer.isDone()).toBeTruthy();
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([
-      ['Removing deployment:', id],
-      ['Error: authorization expired!', 'Please, relogin and try again.'],
-    ]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // check config
     expect(userConfig.user).toBeUndefined();
     expect(userConfig.token).toBeUndefined();

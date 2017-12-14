@@ -9,7 +9,6 @@ const inquirer = require('inquirer');
 // our packages
 const {handler: updateEndpoint} = require('../src/commands/endpoint');
 const {handler: removeEndpoint} = require('../src/commands/endpoint-rm');
-const {cleanLogs} = require('./util');
 
 const configPath = path.join(__dirname, 'fixtures', 'cli.config.yml');
 const mockEndpoint = 'http://test.endpoint';
@@ -33,8 +32,7 @@ test('Should add new endpoint', done => {
   // execute login
   updateEndpoint({url: mockEndpoint}).then(() => {
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([['Updating endpoint URL to:', 'http://test.endpoint'], ['Endpoint URL updated!']]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // then check config changes
     const cfg = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
     expect(cfg.endpoint).toEqual(mockEndpoint);
@@ -57,8 +55,7 @@ test('Should add second new endpoint', done => {
   // execute login
   updateEndpoint({url: mockEndpoint2}).then(() => {
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([['Updating endpoint URL to:', mockEndpoint2], ['Endpoint URL updated!']]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // then check config changes
     const cfg = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
     expect(cfg.endpoint).toEqual(mockEndpoint2);
@@ -86,8 +83,7 @@ test('Should select old endpoint', done => {
   // execute login
   updateEndpoint({}).then(() => {
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([['Updating endpoint URL to:', 'http://localhost:8080'], ['Endpoint URL updated!']]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // then check config changes
     const cfg = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
     expect(cfg.endpoint).toEqual(origCfg.endpoint);
@@ -115,8 +111,7 @@ test('Should select old endpoint using URL param', done => {
   // execute login
   updateEndpoint({url: mockEndpoint}).then(() => {
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([['Updating endpoint URL to:', mockEndpoint], ['Endpoint URL updated!']]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // then check config changes
     const cfg = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
     expect(cfg.endpoint).toEqual(mockEndpoint);
@@ -143,8 +138,7 @@ test('Should show error on remove of non-existent endpoint', done => {
   // execute login
   removeEndpoint({}).then(() => {
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([['Error!', "Couldn't find endpoint with URL:", 'do-not-exist']]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // restore console
     console.log.restore();
     // restore inquirer
@@ -161,8 +155,7 @@ test('Should remove current endpoint using inquirer', done => {
   // execute login
   removeEndpoint({}).then(() => {
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([['Removing endpoint:', mockEndpoint], ['Endpoint removed!']]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // then check config changes
     const cfg = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
     expect(cfg.endpoint).toEqual(mockEndpoint2);
@@ -192,8 +185,7 @@ test('Should remove existing endpoint using param', done => {
     })
     .then(() => {
       // first check console output
-      const cleanedLogs = cleanLogs(consoleSpy.args);
-      expect(cleanedLogs).toEqual([['Removing endpoint:', mockEndpoint2], ['Endpoint removed!']]);
+      expect(consoleSpy.args).toMatchSnapshot();
       // then check config changes
       const cfg = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
       console.log(cfg);
@@ -215,8 +207,7 @@ test('Should not remove only endpoint', done => {
   // execute login
   removeEndpoint({}).then(() => {
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([['Error!', 'Cannot remove the only endpoint URL:', origCfg.endpoint]]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // then check config changes
     const cfg = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
     expect(cfg.endpoint).toEqual(origCfg.endpoint);

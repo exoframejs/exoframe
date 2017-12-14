@@ -7,7 +7,6 @@ const sinon = require('sinon');
 const inquirer = require('inquirer');
 
 // our packages
-const {cleanLogs} = require('./util');
 const {handler: config} = require('../src/commands/config');
 
 const configData = {
@@ -38,8 +37,7 @@ test('Should generate config file', done => {
   // execute login
   config().then(() => {
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([['Creating new config..'], ['Config created!']]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // then check config changes
     const cfg = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
     expect(cfg.name).toEqual(configData.name);

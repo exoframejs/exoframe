@@ -5,7 +5,6 @@ const sinon = require('sinon');
 const Stream = require('stream');
 
 // our packages
-const {cleanLogs} = require('./util');
 const {handler: logs} = require('../src/commands/logs');
 
 const id = 'test-id';
@@ -42,16 +41,7 @@ test('Should get logs', done => {
     // check that server was called
     expect(logServer.isDone()).toBeTruthy();
     // first check console output
-    const d1 = new Date(date1);
-    const d2 = new Date(date2);
-    const d3 = new Date(date3);
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([
-      ['Getting logs for deployment:', id, '\n'],
-      [`${d1.toLocaleDateString()} ${d1.toLocaleTimeString()} yarn start v0.24.4`],
-      [`${d2.toLocaleDateString()} ${d2.toLocaleTimeString()} $ node index.js `],
-      [`${d3.toLocaleDateString()} ${d3.toLocaleTimeString()} Listening on port 80`],
-    ]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // restore console
     console.log.restore();
     logServer.done();

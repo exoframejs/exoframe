@@ -5,7 +5,6 @@ const sinon = require('sinon');
 const inquirer = require('inquirer');
 
 // our packages
-const {cleanLogs} = require('./util');
 const {handler: update} = require('../src/commands/update');
 const {userConfig, updateConfig} = require('../src/config');
 
@@ -23,8 +22,7 @@ test('Should update traefik', done => {
     // check that server was called
     expect(updateServer.isDone()).toBeTruthy();
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([['Updating traefik on:', 'http://localhost:8080'], ['Successfully updated traefik!']]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // restore console
     console.log.restore();
     updateServer.done();
@@ -46,8 +44,7 @@ test('Should update server', done => {
     // check that server was called
     expect(updateServer.isDone()).toBeTruthy();
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([['Updating server on:', 'http://localhost:8080'], ['Successfully updated server!']]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // restore console
     console.log.restore();
     updateServer.done();
@@ -70,13 +67,7 @@ test('Should display update error', done => {
     // check that server was called
     expect(updateServer.isDone()).toBeTruthy();
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([
-      ['Updating traefik on:', 'http://localhost:8080'],
-      ['Error updating traefik:', 'Test error'],
-      ['Update log:\n'],
-      ['log'],
-    ]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // restore console
     console.log.restore();
     updateServer.done();
@@ -108,18 +99,7 @@ test('Should display versions', done => {
     // check that server was called
     expect(updateServer.isDone()).toBeTruthy();
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([
-      [],
-      ['Exoframe Server:'],
-      ['  current: 0.18.0'],
-      ['  latest: 0.19.1'],
-      [],
-      ['Traefik:'],
-      ['  current: v1.3.0'],
-      ['  latest: v1.3.2'],
-      [],
-    ]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // restore console
     console.log.restore();
     // restore inquirer
@@ -162,22 +142,7 @@ test('Should update all on user prompt', done => {
     expect(updateServerRun.isDone()).toBeTruthy();
     expect(updateTraefikRun.isDone()).toBeTruthy();
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([
-      [],
-      ['Exoframe Server:'],
-      ['  current: 0.18.0'],
-      ['  latest: 0.19.1'],
-      [],
-      ['Traefik:'],
-      ['  current: v1.3.0'],
-      ['  latest: v1.3.2'],
-      [],
-      ['Updating traefik on:', 'http://localhost:8080'],
-      ['Successfully updated traefik!'],
-      ['Updating server on:', 'http://localhost:8080'],
-      ['Successfully updated server!'],
-    ]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // restore console
     console.log.restore();
     // restore inquirer
@@ -206,11 +171,7 @@ test('Should deauth on 401', done => {
     // check that server was called
     expect(updateServer.isDone()).toBeTruthy();
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([
-      ['Updating traefik on:', 'http://localhost:8080'],
-      ['Error: authorization expired!', 'Please, relogin and try again.'],
-    ]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // check config
     expect(userConfig.user).toBeUndefined();
     expect(userConfig.token).toBeUndefined();

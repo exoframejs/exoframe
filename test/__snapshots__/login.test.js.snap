@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Should fail to login with broken private key 1`] = `
+Array [
+  Array [
+    "[1mLogging in to:[22m",
+    "http://localhost:8080",
+  ],
+  Array [
+    "[31mError logging in![39m",
+    "Error generating login token! Make sure your private key password is correct",
+    "Error: ENOENT: no such file or directory, open 'asd'",
+  ],
+]
+`;
+
+exports[`Should login 1`] = `
+Array [
+  Array [
+    "[1mLogging in to:[22m",
+    "http://localhost:8080",
+  ],
+  Array [
+    "[32mSuccessfully logged in![39m",
+  ],
+]
+`;
+
+exports[`Should login using key with passphrase 1`] = `
+Array [
+  Array [
+    "[1mLogging in to:[22m",
+    "http://localhost:8080",
+  ],
+  Array [
+    "[32mSuccessfully logged in![39m",
+  ],
+]
+`;
+
+exports[`Should not login with wrong certificate 1`] = `
+Array [
+  Array [
+    "[1mLogging in to:[22m",
+    "http://localhost:8080",
+  ],
+  Array [
+    "[31mError logging in![39m",
+    "Check your username and password and try again.",
+    "HTTPError: Response code 401 (Unauthorized)",
+  ],
+]
+`;

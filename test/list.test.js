@@ -4,7 +4,6 @@ const nock = require('nock');
 const sinon = require('sinon');
 
 // our packages
-const {cleanLogs} = require('./util');
 const {handler: list} = require('../src/commands/list');
 
 const services = [
@@ -75,24 +74,7 @@ test('Should get list of deployments', done => {
     // check that server was called
     expect(listServer.isDone()).toBeTruthy();
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([
-      ['3 deployments found on http://localhost:8080:\n'],
-      ['Deployments for test:'],
-      [],
-      [
-        '   ID          URL             Hostname       Status          \n' +
-          '   test        test.host       Not set        Up 10 minutes   \n' +
-          '   test2       Not set         Not set        Up 12 minutes   ',
-      ],
-      [],
-      ['Other deployments:'],
-      [],
-      [
-        '   ID          URL           Hostname       Status          \n' +
-          '   test3       Not set       Not set        Up 13 minutes   ',
-      ],
-    ]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // restore console
     console.log.restore();
     listServer.done();

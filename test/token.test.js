@@ -5,7 +5,6 @@ const sinon = require('sinon');
 const inquirer = require('inquirer');
 
 // our packages
-const {cleanLogs} = require('./util');
 const {handler: token} = require('../src/commands/token');
 const {userConfig, updateConfig} = require('../src/config');
 
@@ -25,15 +24,7 @@ test('Should generate token', done => {
     // check that server was called
     expect(tokenServer.isDone()).toBeTruthy();
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([
-      ['Generating new deployment token for:', 'http://localhost:8080'],
-      ['New token generated:'],
-      [''],
-      ['test'],
-      [''],
-      ['WARNING!', 'Make sure to write it down, you will not be able to get it again!'],
-    ]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // restore console
     console.log.restore();
     // restore inquirer
@@ -46,7 +37,7 @@ test('Should generate token', done => {
 
 // test list
 test('Should list tokens', done => {
-  const createDate = new Date();
+  const createDate = new Date(2017, 1, 1, 1, 1, 1, 1);
   // handle correct request
   const tokenServer = nock('http://localhost:8080')
     .get('/deployToken')
@@ -59,13 +50,7 @@ test('Should list tokens', done => {
     // check that server was called
     expect(tokenServer.isDone()).toBeTruthy();
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([
-      ['Listing deployment tokens for:', 'http://localhost:8080'],
-      ['Got generated tokens:'],
-      [''],
-      [`  > test [${createDate.toLocaleString()}]`],
-    ]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // restore console
     console.log.restore();
     // tear down nock
@@ -87,13 +72,7 @@ test('Should list zero tokens', done => {
     // check that server was called
     expect(tokenServer.isDone()).toBeTruthy();
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([
-      ['Listing deployment tokens for:', 'http://localhost:8080'],
-      ['Got generated tokens:'],
-      [''],
-      ['  > No deployment tokens available!'],
-    ]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // restore console
     console.log.restore();
     // tear down nock
@@ -124,11 +103,7 @@ test('Should remove token', done => {
     expect(tokenGetServer.isDone()).toBeTruthy();
     expect(tokenServer.isDone()).toBeTruthy();
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([
-      ['Removing deployment token for:', 'http://localhost:8080'],
-      ['Deployment token successfully removed!'],
-    ]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // restore console
     console.log.restore();
     // restore inquirer
@@ -158,11 +133,7 @@ test('Should deauth on 401 on creation', done => {
     // check that server was called
     expect(tokenServer.isDone()).toBeTruthy();
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([
-      ['Generating new deployment token for:', 'http://localhost:8080'],
-      ['Error: authorization expired!', 'Please, relogin and try again.'],
-    ]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // restore console
     console.log.restore();
     // restore inquirer
@@ -192,11 +163,7 @@ test('Should deauth on 401 on list', done => {
     // check that server was called
     expect(tokenServer.isDone()).toBeTruthy();
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([
-      ['Listing deployment tokens for:', 'http://localhost:8080'],
-      ['Error: authorization expired!', 'Please, relogin and try again.'],
-    ]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // restore console
     console.log.restore();
     // restore inquirer

@@ -8,7 +8,6 @@ const _ = require('highland');
 const {Readable} = require('stream');
 
 // our packages
-const {cleanLogs} = require('./util');
 const {userConfig, updateConfig} = require('../src/config');
 
 // require deploy with stub for opn
@@ -70,12 +69,7 @@ test('Should deploy', done => {
     // check that server was called
     expect(deployServer.isDone()).toBeTruthy();
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([
-      [`Deploying ${folderPath} to endpoint:`, 'http://localhost:8080'],
-      ['Your project is now deployed as:\n'],
-      ['   ID         URL             Hostname   \n   test       localhost       test       '],
-    ]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // restore console
     console.log.restore();
     // tear down nock
@@ -100,12 +94,7 @@ test('Should deploy without path', done => {
     // check that server was called
     expect(deployServer.isDone()).toBeTruthy();
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([
-      ['Deploying current project to endpoint:', 'http://localhost:8080'],
-      ['Your project is now deployed as:\n'],
-      ['   ID         URL             Hostname   \n   test       localhost       test       '],
-    ]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // restore console
     console.log.restore();
     // tear down nock
@@ -135,13 +124,7 @@ test('Should deploy without auth but with token', done => {
     // check that server was called
     expect(deployServer.isDone()).toBeTruthy();
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([
-      ['Deploying current project to endpoint:', 'http://localhost:8080'],
-      ['\nDeploying using given token..'],
-      ['Your project is now deployed as:\n'],
-      ['   ID         URL             Hostname   \n   test       localhost       test       '],
-    ]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // restore console
     console.log.restore();
     // tear down nock
@@ -168,12 +151,7 @@ test('Should execute update', done => {
     // check that server was called
     expect(updateServer.isDone()).toBeTruthy();
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([
-      ['Updating current project to endpoint:', 'http://localhost:8080'],
-      ['Your project is now deployed as:\n'],
-      ['   ID         URL             Hostname   \n   test       localhost       test       '],
-    ]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // restore console
     console.log.restore();
     // tear down nock
@@ -200,12 +178,7 @@ test('Should open webpage after deploy', done => {
     // make sure opn was called once
     expect(opnMock).toHaveBeenCalled();
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([
-      ['Deploying current project to endpoint:', 'http://localhost:8080'],
-      ['Your project is now deployed as:\n'],
-      ['   ID         URL             Hostname   \n   test       localhost       test       '],
-    ]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // restore console
     console.log.restore();
     // tear down nock
@@ -239,14 +212,7 @@ test('Should display error log', done => {
     // check that server was called
     expect(deployServer.isDone()).toBeTruthy();
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([
-      ['Deploying current project to endpoint:', 'http://localhost:8080'],
-      ['Error deploying project:', 'Build failed! See build log for details.'],
-      ['Build log:\n'],
-      ['Error log'],
-      ['here'],
-    ]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // restore console
     console.log.restore();
     // tear down nock
@@ -273,13 +239,7 @@ test('Should display error on malformed JSON', done => {
     // check that server was called
     expect(deployServer.isDone()).toBeTruthy();
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([
-      ['Deploying current project to endpoint:', 'http://localhost:8080'],
-      ['Error deploying project:', 'Bad Gateway'],
-      ['Build log:\n'],
-      ['No log available'],
-    ]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // restore console
     console.log.restore();
     // tear down nock
@@ -306,17 +266,8 @@ test('Should display verbose output', done => {
     // check that server was called
     expect(deployServer.isDone()).toBeTruthy();
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
     // check beginning of log
-    expect(cleanedLogs.slice(0, consoleSpy.args.length - 1)).toEqual([
-      ['Deploying current project to endpoint:', 'http://localhost:8080'],
-      ['\nIgnoring following paths:', ['.git', 'node_modules']],
-      ['[error]', 'Error parsing line:', 'Bad Gateway'],
-      ['Error deploying project:', 'Bad Gateway'],
-      ['Build log:\n'],
-      ['No log available'],
-      [''],
-    ]);
+    expect(consoleSpy.args.slice(0, consoleSpy.args.length - 1)).toMatchSnapshot();
     // check error correctness
     const err = consoleSpy.args[consoleSpy.args.length - 1][1];
     expect(err.message).toEqual('Error parsing output!');
@@ -348,13 +299,7 @@ test('Should display error on zero deployments', done => {
     // check that server was called
     expect(deployServer.isDone()).toBeTruthy();
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([
-      ['Deploying current project to endpoint:', 'http://localhost:8080'],
-      ['Error deploying project:', 'Error: Something went wrong!'],
-      ['Build log:\n'],
-      ['No log available'],
-    ]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // restore console
     console.log.restore();
     // tear down nock
@@ -376,11 +321,7 @@ test('Should not deploy with config without project name', done => {
   // execute deploy
   deploy().then(() => {
     // check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([
-      ['Deploying current project to endpoint:', 'http://localhost:8080'],
-      ['Please, check your config and try again:', 'Error: Project should have a valid name in config!'],
-    ]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // restore console
     console.log.restore();
     done();
@@ -398,11 +339,7 @@ test('Should not deploy with broken config', done => {
   // execute deploy
   deploy().then(() => {
     // check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([
-      ['Deploying current project to endpoint:', 'http://localhost:8080'],
-      ['Please, check your config and try again:', 'SyntaxError: Unexpected token I in JSON at position 0'],
-    ]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // restore console
     console.log.restore();
     done();
@@ -417,12 +354,7 @@ test('Should not deploy with non-existent path', done => {
   // execute deploy
   deploy({_: ['i-do-not-exist']}).then(() => {
     // check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([
-      ['Deploying i-do-not-exist to endpoint:', 'http://localhost:8080'],
-      [`Error! Path ${path.join(process.cwd(), 'i-do-not-exist')} do not exists`],
-      ['Please, check your arguments and try again.'],
-    ]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // restore console
     console.log.restore();
     done();
@@ -445,11 +377,7 @@ test('Should deauth on 401', done => {
     // check that server was called
     expect(deployServer.isDone()).toBeTruthy();
     // first check console output
-    const cleanedLogs = cleanLogs(consoleSpy.args);
-    expect(cleanedLogs).toEqual([
-      [`Deploying ${folderPath} to endpoint:`, 'http://localhost:8080'],
-      ['Error: authorization expired!', 'Please, relogin and try again.'],
-    ]);
+    expect(consoleSpy.args).toMatchSnapshot();
     // check config
     expect(userConfig.user).toBeUndefined();
     expect(userConfig.token).toBeUndefined();

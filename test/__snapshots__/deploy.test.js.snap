@@ -1,0 +1,243 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Should deauth on 401 1`] = `
+Array [
+  Array [
+    "[1mDeploying test/fixtures/test_html_project to endpoint:[22m",
+    "http://localhost:8080",
+  ],
+  Array [
+    "[31mError: authorization expired![39m",
+    "Please, relogin and try again.",
+  ],
+]
+`;
+
+exports[`Should deploy 1`] = `
+Array [
+  Array [
+    "[1mDeploying test/fixtures/test_html_project to endpoint:[22m",
+    "http://localhost:8080",
+  ],
+  Array [
+    "Your project is now deployed as:
+",
+  ],
+  Array [
+    "[31m   ID     [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m
+   test   [90m [39m   localhost   [90m [39m   test       ",
+  ],
+]
+`;
+
+exports[`Should deploy without auth but with token 1`] = `
+Array [
+  Array [
+    "[1mDeploying current project to endpoint:[22m",
+    "http://localhost:8080",
+  ],
+  Array [
+    "
+Deploying using given token..",
+  ],
+  Array [
+    "Your project is now deployed as:
+",
+  ],
+  Array [
+    "[31m   ID     [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m
+   test   [90m [39m   localhost   [90m [39m   test       ",
+  ],
+]
+`;
+
+exports[`Should deploy without path 1`] = `
+Array [
+  Array [
+    "[1mDeploying current project to endpoint:[22m",
+    "http://localhost:8080",
+  ],
+  Array [
+    "Your project is now deployed as:
+",
+  ],
+  Array [
+    "[31m   ID     [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m
+   test   [90m [39m   localhost   [90m [39m   test       ",
+  ],
+]
+`;
+
+exports[`Should display error log 1`] = `
+Array [
+  Array [
+    "[1mDeploying current project to endpoint:[22m",
+    "http://localhost:8080",
+  ],
+  Array [
+    "[31mError deploying project:[39m",
+    "Build failed! See build log for details.",
+  ],
+  Array [
+    "Build log:
+",
+  ],
+  Array [
+    "Error log",
+  ],
+  Array [
+    "here",
+  ],
+]
+`;
+
+exports[`Should display error on malformed JSON 1`] = `
+Array [
+  Array [
+    "[1mDeploying current project to endpoint:[22m",
+    "http://localhost:8080",
+  ],
+  Array [
+    "[31mError deploying project:[39m",
+    "Bad Gateway",
+  ],
+  Array [
+    "Build log:
+",
+  ],
+  Array [
+    "No log available",
+  ],
+]
+`;
+
+exports[`Should display error on zero deployments 1`] = `
+Array [
+  Array [
+    "[1mDeploying current project to endpoint:[22m",
+    "http://localhost:8080",
+  ],
+  Array [
+    "[31mError deploying project:[39m",
+    "Error: Something went wrong!",
+  ],
+  Array [
+    "Build log:
+",
+  ],
+  Array [
+    "No log available",
+  ],
+]
+`;
+
+exports[`Should display verbose output 1`] = `
+Array [
+  Array [
+    "[1mDeploying current project to endpoint:[22m",
+    "http://localhost:8080",
+  ],
+  Array [
+    "
+Ignoring following paths:",
+    Array [
+      ".git",
+      "node_modules",
+    ],
+  ],
+  Array [
+    "[31m[error][39m",
+    "Error parsing line:",
+    "Bad Gateway",
+  ],
+  Array [
+    "[31mError deploying project:[39m",
+    "Bad Gateway",
+  ],
+  Array [
+    "Build log:
+",
+  ],
+  Array [
+    "No log available",
+  ],
+  Array [
+    "",
+  ],
+]
+`;
+
+exports[`Should execute update 1`] = `
+Array [
+  Array [
+    "[1mUpdating current project to endpoint:[22m",
+    "http://localhost:8080",
+  ],
+  Array [
+    "Your project is now deployed as:
+",
+  ],
+  Array [
+    "[31m   ID     [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m
+   test   [90m [39m   localhost   [90m [39m   test       ",
+  ],
+]
+`;
+
+exports[`Should not deploy with broken config 1`] = `
+Array [
+  Array [
+    "[1mDeploying current project to endpoint:[22m",
+    "http://localhost:8080",
+  ],
+  Array [
+    "[31mPlease, check your config and try again:[39m",
+    "SyntaxError: Unexpected token I in JSON at position 0",
+  ],
+]
+`;
+
+exports[`Should not deploy with config without project name 1`] = `
+Array [
+  Array [
+    "[1mDeploying current project to endpoint:[22m",
+    "http://localhost:8080",
+  ],
+  Array [
+    "[31mPlease, check your config and try again:[39m",
+    "Error: Project should have a valid name in config!",
+  ],
+]
+`;
+
+exports[`Should not deploy with non-existent path 1`] = `
+Array [
+  Array [
+    "[1mDeploying i-do-not-exist to endpoint:[22m",
+    "http://localhost:8080",
+  ],
+  Array [
+    "[31mError! Path [1m/Users/yamalight/Projects/exoframe/exoframe-cli/i-do-not-exist[22m do not exists[39m",
+  ],
+  Array [
+    "Please, check your arguments and try again.",
+  ],
+]
+`;
+
+exports[`Should open webpage after deploy 1`] = `
+Array [
+  Array [
+    "[1mDeploying current project to endpoint:[22m",
+    "http://localhost:8080",
+  ],
+  Array [
+    "Your project is now deployed as:
+",
+  ],
+  Array [
+    "[31m   ID     [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m
+   test   [90m [39m   localhost   [90m [39m   test       ",
+  ],
+]
+`;
