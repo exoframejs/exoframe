@@ -10,7 +10,7 @@
     "exoframe": "bin/index.js"
   },
   "scripts": {
-    "test": "TZ=Greenland LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 NODE_ENV=testing jest --coverage --silent",
+    "test": "TZ=Greenland NODE_ENV=testing jest --coverage --silent",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "package": "pkg --targets node8.6.0-linux-x64,node8.6.0-win-x64,node8.6.0-macos-x64 -o exoframe index.js"
   },

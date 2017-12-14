@@ -11,6 +11,10 @@ const id = 'test-id';
 const date1 = '2017-05-18T15:16:40.120990460Z';
 const date2 = '2017-05-18T15:16:40.212591019Z';
 const date3 = '2017-05-18T15:16:40.375554362Z';
+const dateToLocaleDate = str => `${new Date(str).toLocaleDateString()} ${new Date(str).toLocaleTimeString()}`;
+const localeDate1 = dateToLocaleDate(date1);
+const localeDate2 = dateToLocaleDate(date2);
+const localeDate3 = dateToLocaleDate(date3);
 const dirtyLogs = [
   `\u0001\u0000\u0000\u0000\u0000\u0000\u0000g${date1} yarn start v0.24.4`,
   `\u0001\u0000\u0000\u0000\u0000\u0000\u0000${date2} $ node index.js `,
@@ -19,7 +23,7 @@ const dirtyLogs = [
 ];
 
 // test removal
-test('Should get logs', done => {
+test.only('Should get logs', done => {
   const readable = new Stream.Readable();
   const emitLogs = () => {
     dirtyLogs.forEach(item => readable.push(item));
@@ -41,7 +45,15 @@ test('Should get logs', done => {
     // check that server was called
     expect(logServer.isDone()).toBeTruthy();
     // first check console output
-    expect(consoleSpy.args).toMatchSnapshot();
+    const logsWithoutDates = consoleSpy.args.map(lines =>
+      lines.map(l =>
+        l
+          .replace(localeDate1, '')
+          .replace(localeDate2, '')
+          .replace(localeDate3, '')
+      )
+    );
+    expect(logsWithoutDates).toMatchSnapshot();
     // restore console
     console.log.restore();
     logServer.done();

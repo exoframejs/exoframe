@@ -50,7 +50,7 @@ test('Should list tokens', done => {
     // check that server was called
     expect(tokenServer.isDone()).toBeTruthy();
     // first check console output
-    expect(consoleSpy.args).toMatchSnapshot();
+    expect(consoleSpy.args.map(lines => lines.map(l => l.replace(createDate.toLocaleString(), '')))).toMatchSnapshot();
     // restore console
     console.log.restore();
     // tear down nock

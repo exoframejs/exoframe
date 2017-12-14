@@ -9,13 +9,13 @@ Array [
 ",
   ],
   Array [
-    "[90m5/18/2017 3:16:40 PM[39m yarn start v0.24.4",
+    "[90m[39m yarn start v0.24.4",
   ],
   Array [
-    "[90m5/18/2017 3:16:40 PM[39m $ node index.js ",
+    "[90m[39m $ node index.js ",
   ],
   Array [
-    "[90m5/18/2017 3:16:40 PM[39m Listening on port 80",
+    "[90m[39m Listening on port 80",
   ],
 ]
 `;
