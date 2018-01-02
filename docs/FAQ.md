@@ -2,7 +2,7 @@
 
 ## Is it ready for production?
 
-Yes. We've been using it to deploy our project since May 2017 without any issues.  
+Yes. We've been using it to deploy our project since May 2017 without any issues.
 
 ## Why do I need to enter username during login?
 
