@@ -17,6 +17,7 @@ const configData = {
   labels: 'label=1, other=2',
   hostname: 'host',
   restart: 'no',
+  template: 'static',
 };
 const configPath = path.join(process.cwd(), 'exoframe.json');
 
@@ -50,6 +51,7 @@ test('Should generate config file', done => {
     expect(cfg.env.OTHER).toEqual('2');
     expect(cfg.labels.label).toEqual('1');
     expect(cfg.labels.other).toEqual('2');
+    expect(cfg.template).toEqual(configData.template);
     // restore inquirer
     inquirer.prompt.restore();
     // restore console

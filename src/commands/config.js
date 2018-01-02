@@ -22,6 +22,7 @@ exports.handler = async () => {
     env: undefined,
     labels: undefined,
     hostname: '',
+    template: '',
   };
   try {
     fs.statSync(configPath);
@@ -99,8 +100,15 @@ exports.handler = async () => {
     default: defaultConfig.restart,
     choices: ['no', 'on-failure:2', 'always'],
   });
+  prompts.push({
+    type: 'input',
+    name: 'template',
+    message: 'Template [optional]:',
+    default: defaultConfig.template,
+    filter,
+  });
   // get values from user
-  const {name, domain, project, env, labels, hostname, restart} = await inquirer.prompt(prompts);
+  const {name, domain, project, env, labels, hostname, restart, template} = await inquirer.prompt(prompts);
   // init config object
   const config = {name, restart};
   if (domain && domain.length) {
@@ -125,6 +133,9 @@ exports.handler = async () => {
   }
   if (hostname && hostname.length) {
     config.hostname = hostname;
+  }
+  if (template && template.length) {
+    config.template = template;
   }
 
   // write config

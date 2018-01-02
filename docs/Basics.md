@@ -82,7 +82,10 @@ Config file has the following structure:
   // Add additional docker labels to your container [optional]
   "labels": {
     "my.custom.label": "value"
-  }
+  },
+  // template to be used for project deployment
+  // undefined by default, detected by server based on file structure
+  "template": "my-template"
 }
 ```
 
