@@ -21,6 +21,7 @@ const endpointRm = require('./commands/endpoint-rm');
 const config = require('./commands/config');
 const token = require('./commands/token');
 const update = require('./commands/update');
+const template = require('./commands/template');
 
 // init program
 yargs
@@ -37,4 +38,5 @@ yargs
   .command(remove)
   .command(token)
   .command(config)
-  .command(update).argv;
+  .command(update)
+  .command(template).argv;

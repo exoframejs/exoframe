@@ -1,0 +1,82 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Should deauth on 401 on creation 1`] = `
+Array [
+  Array [
+    "[1mAdding new deployment template for:[22m",
+    "http://localhost:8080",
+  ],
+  Array [
+    "[31mError: authorization expired![39m",
+    "Please, relogin and try again.",
+  ],
+]
+`;
+
+exports[`Should deauth on 401 on list 1`] = `
+Array [
+  Array [
+    "[1mListing deployment templates for:[22m",
+    "http://localhost:8080",
+  ],
+  Array [
+    "[31mError: authorization expired![39m",
+    "Please, relogin and try again.",
+  ],
+]
+`;
+
+exports[`Should install new template 1`] = `
+Array [
+  Array [
+    "[1mAdding new deployment template for:[22m",
+    "http://localhost:8080",
+  ],
+]
+`;
+
+exports[`Should list templates 1`] = `
+Array [
+  Array [
+    "[1mListing deployment templates for:[22m",
+    "http://localhost:8080",
+  ],
+  Array [
+    "[32m2 templates found on http://localhost:8080:[39m
+[32m[39m",
+  ],
+  Array [
+    "[31m   Template        [39m[90m [39m[31m   Version   [39m
+   template        [90m [39m   ^0.0.1    
+   otherTemplate   [90m [39m   ^1.0.0    ",
+  ],
+]
+`;
+
+exports[`Should list zero templates 1`] = `
+Array [
+  Array [
+    "[1mListing deployment templates for:[22m",
+    "http://localhost:8080",
+  ],
+  Array [
+    "[32m0 templates found on http://localhost:8080:[39m
+[32m[39m",
+  ],
+  Array [
+    "[31m   Template   [39m[90m [39m[31m   Version   [39m",
+  ],
+]
+`;
+
+exports[`Should remove template 1`] = `
+Array [
+  Array [
+    "[1mRemoving deployment template for:[22m",
+    "http://localhost:8080",
+  ],
+  Array [
+    "[32mTemplate successfully removed![39m",
+  ],
+]
+`;

@@ -103,7 +103,7 @@ exports.handler = async args => {
         return;
       }
 
-      console.log(chalk.red('Error getting deployment tokens:'), e.toString());
+      console.log(chalk.red('Error removing token:'), e.toString());
       return;
     }
 
