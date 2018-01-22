@@ -19,9 +19,9 @@ Be aware though - execution of deployments will result in (1) new Docker images 
 Depending on your project's complexity, this might require significant amount of resources during both steps resulting in failed deployments (note: if Docker goes out-of-memory during build, you will not get any specific error - just a failed deployment).  
 It is recommended to run Exoframe on a server with at least 1GB of RAM.
 
-## Supported project types
+## Supported project types & deployment templates
 
-Currently, Exoframe understands and can deploy the following project types:
+By default, Exoframe understands and can deploy the following project types:
 
 1. Static html based projects - will be deployed using [nginx](http://hub.docker.com/_/nginx) image
 2. Node.js based projects - will be deployed using [node:latest](https://hub.docker.com/_/node) image \*
@@ -30,21 +30,26 @@ Currently, Exoframe understands and can deploy the following project types:
 
 \* There are two things to keep in mind for Node.js projects: (1) they are started via `npm start`, so make sure you have specified start script in your `package.json`; (2) by default port 80 is exposed, so you need to make your app listen on that port. If you'd like to execute your app in any different way or expose more ports - please use Dockerfile deployment method.
 
+This list can be extended via deployment templates.  
+You can find the list of available templates [on npm](https://www.npmjs.com/search?q=exoframe-template).  
+Templates can be installed by executing `exoframe template` command and entering complete template package name.
+
 ## Commands
 
-| Command           | Description                                           |
-| ----------------- | ----------------------------------------------------- |
-| deploy [path]     | Deploy specified path                                 |
-| config            | Generate or update project config for current path    |
-| list              | List currently deployed projects                      |
-| rm <id>           | Remove existing deployment or project                 |
-| log <id>          | Get logs for existing deployment or project           |
-| token [ls         | rm]                                                   | Generate, list or remove deployment tokens |
-| login             | Login into Exoframe server                            |
-| endpoint [url]    | Selects or adds the endpoint of Exoframe server       |
-| rm-endpoint [url] | Removes an existing endpoint of Exoframe server       |
-| update [target]   | Gets current versions or updates given target (server | traefik | all) |
-| completion        | Generates bash completion script                      |
+| Command           | Description                                                          |
+| ----------------- | -------------------------------------------------------------------- |
+| deploy [path]     | Deploy specified path                                                |
+| config            | Generate or update project config for current path                   |
+| list              | List currently deployed projects                                     |
+| rm <id>           | Remove existing deployment or project                                |
+| log <id>          | Get logs for existing deployment or project                          |
+| template [ls, rm] | Add, list or remove deployment templates from the server             |
+| token [ls, rm]    | Generate, list or remove deployment tokens                           |
+| login             | Login into Exoframe server                                           |
+| endpoint [url]    | Selects or adds the endpoint of Exoframe server                      |
+| rm-endpoint [url] | Removes an existing endpoint of Exoframe server                      |
+| update [target]   | Gets current versions or updates given target (server, traefik, all) |
+| completion        | Generates bash completion script                                     |
 
 ## Project config file
 
