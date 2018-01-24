@@ -62,7 +62,12 @@ You can find a list of all commands and options in the [docs](./docs/README.md).
 
 ## Docs
 
-You can find project documentation in the [docs folder](./docs/README.md).
+* [Basics](Basics.md)
+* [FAQ](FAQ.md)
+* [Templates guide](TemplatesGuide.md)
+* [Using nightly versions](Nightly.md)
+* [Articles, video and related links](Links.md)
+* [Change Log](../CHANGELOG.md)
 
 ## License
 
