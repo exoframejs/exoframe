@@ -1,4 +1,19 @@
 
+2.0.1 / 2018-01-24
+==================
+
+Additions:
+  * Add 3rd party templates support
+  * Allow setting project template using config command
+  * Add way to set labels via config command
+
+Changes:
+  * Replace tap with jest and better parallelized tests
+  * Switch to snapshot testing for logs output
+
+Fixes:
+  * Make cli work with Exoframe server 2.0 backed by fastify
+
 1.0.4 / 2017-11-30
 ==================
 
