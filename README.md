@@ -62,12 +62,12 @@ You can find a list of all commands and options in the [docs](./docs/README.md).
 
 ## Docs
 
-* [Basics](Basics.md)
-* [FAQ](FAQ.md)
-* [Templates guide](TemplatesGuide.md)
-* [Using nightly versions](Nightly.md)
-* [Articles, video and related links](Links.md)
-* [Change Log](../CHANGELOG.md)
+* [Basics](docs/Basics.md)
+* [FAQ](docs/FAQ.md)
+* [Templates guide](docs/TemplatesGuide.md)
+* [Using nightly versions](docs/Nightly.md)
+* [Articles, video and related links](docs/Links.md)
+* [Change Log](CHANGELOG.md)
 
 ## License
 
