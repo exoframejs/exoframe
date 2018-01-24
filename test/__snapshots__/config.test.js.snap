@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Should generate config file 1`] = `
+Array [
+  Array [
+    "Creating new config..",
+  ],
+  Array [
+    "[32mConfig created![39m",
+  ],
+]
+`;

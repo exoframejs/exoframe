@@ -1,0 +1,124 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Should deauth on 401 1`] = `
+Array [
+  Array [
+    "[1mUpdating traefik on:[22m",
+    "http://localhost:8080",
+  ],
+  Array [
+    "[31mError: authorization expired![39m",
+    "Please, relogin and try again.",
+  ],
+]
+`;
+
+exports[`Should display update error 1`] = `
+Array [
+  Array [
+    "[1mUpdating traefik on:[22m",
+    "http://localhost:8080",
+  ],
+  Array [
+    "[31mError updating traefik:[39m",
+    "Test error",
+  ],
+  Array [
+    "Update log:
+",
+  ],
+  Array [
+    "log",
+  ],
+]
+`;
+
+exports[`Should display versions 1`] = `
+Array [
+  Array [],
+  Array [
+    "[1mExoframe Server:[22m",
+  ],
+  Array [
+    "  current: 0.18.0",
+  ],
+  Array [
+    "  latest: 0.19.1",
+  ],
+  Array [],
+  Array [
+    "[1mTraefik:[22m",
+  ],
+  Array [
+    "  current: v1.3.0",
+  ],
+  Array [
+    "  latest: v1.3.2",
+  ],
+  Array [],
+]
+`;
+
+exports[`Should update all on user prompt 1`] = `
+Array [
+  Array [],
+  Array [
+    "[1mExoframe Server:[22m",
+  ],
+  Array [
+    "  current: 0.18.0",
+  ],
+  Array [
+    "  latest: 0.19.1",
+  ],
+  Array [],
+  Array [
+    "[1mTraefik:[22m",
+  ],
+  Array [
+    "  current: v1.3.0",
+  ],
+  Array [
+    "  latest: v1.3.2",
+  ],
+  Array [],
+  Array [
+    "[1mUpdating traefik on:[22m",
+    "http://localhost:8080",
+  ],
+  Array [
+    "[32mSuccessfully updated traefik![39m",
+  ],
+  Array [
+    "[1mUpdating server on:[22m",
+    "http://localhost:8080",
+  ],
+  Array [
+    "[32mSuccessfully updated server![39m",
+  ],
+]
+`;
+
+exports[`Should update server 1`] = `
+Array [
+  Array [
+    "[1mUpdating server on:[22m",
+    "http://localhost:8080",
+  ],
+  Array [
+    "[32mSuccessfully updated server![39m",
+  ],
+]
+`;
+
+exports[`Should update traefik 1`] = `
+Array [
+  Array [
+    "[1mUpdating traefik on:[22m",
+    "http://localhost:8080",
+  ],
+  Array [
+    "[32mSuccessfully updated traefik![39m",
+  ],
+]
+`;

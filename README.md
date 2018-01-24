@@ -4,7 +4,6 @@
 
 [![Build Status](https://travis-ci.org/exoframejs/exoframe.svg?branch=master)](https://travis-ci.org/exoframejs/exoframe)
 [![Coverage Status](https://coveralls.io/repos/github/exoframejs/exoframe/badge.svg?branch=master)](https://coveralls.io/github/exoframejs/exoframe?branch=master)
-[![Greenkeeper badge](https://badges.greenkeeper.io/exoframejs/exoframe.svg)](https://greenkeeper.io/)
 [![npm](https://img.shields.io/npm/v/exoframe.svg)](https://www.npmjs.com/package/exoframe)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://opensource.org/licenses/MIT)
 
@@ -12,17 +11,17 @@ Exoframe is a self-hosted tool that allows simple one-command deployments using 
 
 ## Features
 
-- One-command project deployment
-- SSH key based auth
-- Rolling updates
-- Deploy tokens (e.g. to deploy from CI)
-- Automated HTTPS setup via letsencrypt *
-- Automated gzip compression *
-- Simple access to the logs of deployments
-- Docker-compose support
-- Multiple deployment endpoints and multi-user support
-- Simple update procedure for client, server and Traefik
-- Optional automatic subdomain assignment (i.e. every deployment gets its own subdomain)
+* One-command project deployment
+* SSH key based auth
+* Rolling updates
+* Deploy tokens (e.g. to deploy from CI)
+* Automated HTTPS setup via letsencrypt \*
+* Automated gzip compression \*
+* Simple access to the logs of deployments
+* Docker-compose support
+* Multiple deployment endpoints and multi-user support
+* Simple update procedure for client, server and Traefik
+* Optional automatic subdomain assignment (i.e. every deployment gets its own subdomain)
 
 \* Feature provided by [Traefik](https://traefik.io/)
 
@@ -63,7 +62,12 @@ You can find a list of all commands and options in the [docs](./docs/README.md).
 
 ## Docs
 
-You can find project documentation in the [docs folder](./docs/README.md).
+* [Basics](Basics.md)
+* [FAQ](FAQ.md)
+* [Templates guide](TemplatesGuide.md)
+* [Using nightly versions](Nightly.md)
+* [Articles, video and related links](Links.md)
+* [Change Log](../CHANGELOG.md)
 
 ## License
 

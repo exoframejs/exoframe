@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Should deauth on 401 1`] = `
+Array [
+  Array [
+    "[1mRemoving deployment:[22m",
+    "test-id",
+  ],
+  Array [
+    "[31mError: authorization expired![39m",
+    "Please, relogin and try again.",
+  ],
+]
+`;
+
+exports[`Should remove 1`] = `
+Array [
+  Array [
+    "[1mRemoving deployment:[22m",
+    "test-id",
+  ],
+  Array [
+    "[32mDeployment removed![39m",
+  ],
+]
+`;
+
+exports[`Should show not found error 1`] = `
+Array [
+  Array [
+    "[1mRemoving deployment:[22m",
+    "test-id",
+  ],
+  Array [
+    "[31mError: container was not found![39m",
+    "Please, check deployment ID and try again.",
+  ],
+]
+`;
+
+exports[`Should show not found error 2`] = `
+Array [
+  Array [
+    "[1mRemoving deployment:[22m",
+    "test-id",
+  ],
+  Array [
+    "[31mError![39m",
+    "Could not remove the deployment.",
+  ],
+]
+`;
+
+exports[`Should show remove error 1`] = `
+Array [
+  Array [
+    "[1mRemoving deployment:[22m",
+    "test-id",
+  ],
+  Array [
+    "[31mError removing project:[39m",
+    "HTTPError: Response code 500 (Internal Server Error)",
+  ],
+]
+`;

@@ -1,0 +1,93 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Should add new endpoint 1`] = `
+Array [
+  Array [
+    "[1mUpdating endpoint URL to:[22m",
+    "http://test.endpoint",
+  ],
+  Array [
+    "[32mEndpoint URL updated![39m",
+  ],
+]
+`;
+
+exports[`Should add second new endpoint 1`] = `
+Array [
+  Array [
+    "[1mUpdating endpoint URL to:[22m",
+    "http://test",
+  ],
+  Array [
+    "[32mEndpoint URL updated![39m",
+  ],
+]
+`;
+
+exports[`Should not remove only endpoint 1`] = `
+Array [
+  Array [
+    "[31mError![39m",
+    "[1mCannot remove the only endpoint URL:[22m",
+    "http://localhost:8080",
+  ],
+]
+`;
+
+exports[`Should remove current endpoint using inquirer 1`] = `
+Array [
+  Array [
+    "[1mRemoving endpoint:[22m",
+    "http://test.endpoint",
+  ],
+  Array [
+    "[32mEndpoint removed![39m",
+  ],
+]
+`;
+
+exports[`Should remove existing endpoint using param 1`] = `
+Array [
+  Array [
+    "[1mRemoving endpoint:[22m",
+    "http://test",
+  ],
+  Array [
+    "[32mEndpoint removed![39m",
+  ],
+]
+`;
+
+exports[`Should select old endpoint 1`] = `
+Array [
+  Array [
+    "[1mUpdating endpoint URL to:[22m",
+    "http://localhost:8080",
+  ],
+  Array [
+    "[32mEndpoint URL updated![39m",
+  ],
+]
+`;
+
+exports[`Should select old endpoint using URL param 1`] = `
+Array [
+  Array [
+    "[1mUpdating endpoint URL to:[22m",
+    "http://test.endpoint",
+  ],
+  Array [
+    "[32mEndpoint URL updated![39m",
+  ],
+]
+`;
+
+exports[`Should show error on remove of non-existent endpoint 1`] = `
+Array [
+  Array [
+    "[31mError![39m",
+    "Couldn't find endpoint with URL:",
+    "do-not-exist",
+  ],
+]
+`;

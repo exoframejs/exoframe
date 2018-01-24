@@ -20,7 +20,9 @@ exports.handler = async () => {
     project: '',
     restart: 'on-failure:2',
     env: undefined,
+    labels: undefined,
     hostname: '',
+    template: '',
   };
   try {
     fs.statSync(configPath);
@@ -67,7 +69,20 @@ exports.handler = async () => {
     name: 'env',
     message: 'Env variables [comma-separated, optional]:',
     default: defaultConfig.env
-      ? Object.keys(defaultConfig.env).map(k => `${k.toUpperCase()}=${defaultConfig.env[k]}`).join(', ')
+      ? Object.keys(defaultConfig.env)
+          .map(k => `${k.toUpperCase()}=${defaultConfig.env[k]}`)
+          .join(', ')
+      : '',
+    filter,
+  });
+  prompts.push({
+    type: 'input',
+    name: 'labels',
+    message: 'Labels [comma-separated, optional]:',
+    default: defaultConfig.labels
+      ? Object.keys(defaultConfig.labels)
+          .map(k => `${k}=${defaultConfig.labels[k]}`)
+          .join(', ')
       : '',
     filter,
   });
@@ -85,8 +100,15 @@ exports.handler = async () => {
     default: defaultConfig.restart,
     choices: ['no', 'on-failure:2', 'always'],
   });
+  prompts.push({
+    type: 'input',
+    name: 'template',
+    message: 'Template [optional]:',
+    default: defaultConfig.template,
+    filter,
+  });
   // get values from user
-  const {name, domain, project, env, hostname, restart} = await inquirer.prompt(prompts);
+  const {name, domain, project, env, labels, hostname, restart, template} = await inquirer.prompt(prompts);
   // init config object
   const config = {name, restart};
   if (domain && domain.length) {
@@ -102,8 +124,18 @@ exports.handler = async () => {
       .map(pair => ({key: pair[0].trim(), value: pair[1].trim()}))
       .reduce((prev, obj) => Object.assign(prev, {[obj.key]: obj.value}), {});
   }
+  if (labels && Object.keys(labels).length) {
+    config.labels = labels
+      .split(',')
+      .map(kv => kv.split('='))
+      .map(pair => ({key: pair[0].trim(), value: pair[1].trim()}))
+      .reduce((prev, obj) => Object.assign(prev, {[obj.key]: obj.value}), {});
+  }
   if (hostname && hostname.length) {
     config.hostname = hostname;
+  }
+  if (template && template.length) {
+    config.template = template;
   }
 
   // write config
