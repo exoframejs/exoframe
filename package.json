@@ -1,6 +1,6 @@
 {
   "name": "exoframe",
-  "version": "2.1.0-dev",
+  "version": "2.1.1-dev",
   "description": "Exoframe is a self-hosted tool that allows simple one-command deployments using Docker",
   "main": "index.js",
   "repository": "git@github.com:exoframejs/exoframe.git",
