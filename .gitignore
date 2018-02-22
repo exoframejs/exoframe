@@ -1,7 +1,8 @@
-node_modules
-test_project
+node_modules/
+test_project/
 coverage
 .nyc_output/
 exoframe-linux
 exoframe-macos
 exoframe-win.exe
+.idea/
