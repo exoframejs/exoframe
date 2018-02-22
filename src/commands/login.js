@@ -9,11 +9,12 @@ const jwt = require('jsonwebtoken');
 
 // our packages
 const {userConfig, updateConfig} = require('../config');
+const {handler: endpointHandler} = require('./endpoint');
 
 const validate = input => input && input.length > 0;
 const filter = input => input.trim();
 
-exports.command = 'login';
+exports.command = 'login [url]';
 exports.describe = 'login into exoframe server';
 exports.builder = {
   key: {
@@ -24,8 +25,17 @@ exports.builder = {
     alias: 'p',
     description: 'Passphrase for user private key (if set)',
   },
+  url: {
+    alias: 'u',
+    default: '',
+    description: 'URL of a new endpoint',
+  },
 };
-exports.handler = async ({key, passphrase}) => {
+exports.handler = async ({key, passphrase, url}) => {
+  if(url && url.length) {
+    await endpointHandler({url});
+  }
+
   console.log(chalk.bold('Logging in to:'), userConfig.endpoint);
 
   // get user private keys
