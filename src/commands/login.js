@@ -32,7 +32,7 @@ exports.builder = {
   },
 };
 exports.handler = async ({key, passphrase, url}) => {
-  if(url && url.length) {
+  if (url && url.length) {
     await endpointHandler({url});
   }
 

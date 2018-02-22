@@ -1,4 +1,7 @@
 /* eslint-env jest */
+// mock config for testing
+jest.mock('../src/config', () => require('./__mocks__/config'));
+
 // npm packages
 const nock = require('nock');
 const sinon = require('sinon');
@@ -6,7 +9,7 @@ const inquirer = require('inquirer');
 
 // our packages
 const {handler: token} = require('../src/commands/token');
-const {userConfig, updateConfig} = require('../src/config');
+const cfg = require('../src/config');
 
 // test generation
 test('Should generate token', done => {
@@ -117,8 +120,8 @@ test('Should remove token', done => {
 
 // test deauth
 test('Should deauth on 401 on creation', done => {
-  // copy original config for restoration
-  const originalConfig = Object.assign({}, userConfig);
+  // save current config state
+  cfg.__save('token');
   // handle correct request
   const tokenServer = nock('http://localhost:8080')
     .post('/deployToken')
@@ -140,15 +143,13 @@ test('Should deauth on 401 on creation', done => {
     inquirer.prompt.restore();
     // tear down nock
     tokenServer.done();
-    // restore original config
-    updateConfig(originalConfig);
     done();
   });
 });
 
 test('Should deauth on 401 on list', done => {
-  // copy original config for restoration
-  const originalConfig = Object.assign({}, userConfig);
+  // restore config with auth
+  cfg.__restore('token');
   // handle correct request
   const tokenServer = nock('http://localhost:8080')
     .get('/deployToken')
@@ -170,8 +171,6 @@ test('Should deauth on 401 on list', done => {
     inquirer.prompt.restore();
     // tear down nock
     tokenServer.done();
-    // restore original config
-    updateConfig(originalConfig);
     done();
   });
 });

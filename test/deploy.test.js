@@ -1,4 +1,7 @@
 /* eslint-env jest */
+// mock config for testing
+jest.mock('../src/config', () => require('./__mocks__/config'));
+
 // npm packages
 const fs = require('fs');
 const path = require('path');
@@ -8,7 +11,7 @@ const _ = require('highland');
 const {Readable} = require('stream');
 
 // our packages
-const {userConfig, updateConfig} = require('../src/config');
+const cfg = require('../src/config');
 
 // require deploy with stub for opn
 jest.mock('opn', () => jest.fn());
@@ -108,7 +111,7 @@ test('Should deploy without auth but with token', done => {
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
   // copy original config for restoration
-  const originalConfig = Object.assign({}, userConfig);
+  const originalConfig = Object.assign({}, cfg.userConfig);
 
   // handle correct request
   const deployServer = nock('http://localhost:8080')
@@ -116,7 +119,7 @@ test('Should deploy without auth but with token', done => {
     .reply(() => replyWithStream([{message: 'Deployment success!', deployments, level: 'info'}]));
 
   // remove auth from config
-  updateConfig({endpoint: 'http://localhost:8080'});
+  cfg.updateConfig({endpoint: 'http://localhost:8080'});
 
   // execute login
   deploy({token: 'test-token'}).then(() => {
@@ -130,7 +133,7 @@ test('Should deploy without auth but with token', done => {
     // tear down nock
     deployServer.done();
     // restore original config
-    updateConfig(originalConfig);
+    cfg.updateConfig(originalConfig);
     done();
   });
 });
@@ -314,9 +317,9 @@ test('Should not deploy with config without project name', done => {
   const consoleSpy = sinon.spy(console, 'log');
 
   // corrupt config with string
-  const cfg = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'exoframe.json')));
-  cfg.name = '';
-  fs.writeFileSync(path.join(__dirname, '..', 'exoframe.json'), JSON.stringify(cfg));
+  const exoConfig = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'exoframe.json')));
+  exoConfig.name = '';
+  fs.writeFileSync(path.join(__dirname, '..', 'exoframe.json'), JSON.stringify(exoConfig));
 
   // execute deploy
   deploy().then(() => {
@@ -371,8 +374,6 @@ test('Should not deploy with non-existent path', done => {
 
 // test
 test('Should deauth on 401', done => {
-  // copy original config for restoration
-  const originalConfig = Object.assign({}, userConfig);
   // handle correct request
   const deployServer = nock('http://localhost:8080')
     .post('/deploy')
@@ -387,14 +388,12 @@ test('Should deauth on 401', done => {
     // first check console output
     expect(consoleSpy.args).toMatchSnapshot();
     // check config
-    expect(userConfig.user).toBeUndefined();
-    expect(userConfig.token).toBeUndefined();
+    expect(cfg.userConfig.user).toBeUndefined();
+    expect(cfg.userConfig.token).toBeUndefined();
     // restore console
     console.log.restore();
     // tear down nock
     deployServer.done();
-    // restore original config
-    updateConfig(originalConfig);
     done();
   });
 });

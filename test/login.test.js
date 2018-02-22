@@ -1,8 +1,10 @@
 /* eslint-env jest */
+// mock config for testing
+jest.mock('../src/config', () => require('./__mocks__/config'));
+
 // npm packages
 const fs = require('fs');
 const path = require('path');
-const yaml = require('js-yaml');
 const nock = require('nock');
 const sinon = require('sinon');
 const inquirer = require('inquirer');
@@ -10,6 +12,7 @@ const jwt = require('jsonwebtoken');
 
 // our packages
 const {handler: login} = require('../src/commands/login');
+const cfg = require('../src/config');
 
 const token = 'test-token';
 const loginRequest = {phrase: 'test', uid: '123'};
@@ -30,6 +33,7 @@ const correctLoginWithPassphrase = {
 };
 const failedLogin = {user: {username: 'broken'}, token: reqTokenBroken, requestId: loginRequest.uid};
 const wrongUser = {username: 'wrong', privateKeyName: 'i am broken', password: ''};
+const testEndpointUrl = 'http://my-awesome-endpoint';
 
 // handle correct request
 nock('http://localhost:8080')
@@ -46,6 +50,14 @@ const failedLoginSrv = nock('http://localhost:8080')
   .post('/login', failedLogin)
   .reply(401);
 
+// handle login request to second test endpoint
+nock(testEndpointUrl)
+  .get('/login')
+  .reply(200, loginRequest);
+const correctEndpointLoginSrv = nock(testEndpointUrl)
+  .post('/login', correctLogin)
+  .reply(200, {token});
+
 // test login
 test('Should login', done => {
   // stup inquirer answers
@@ -60,10 +72,8 @@ test('Should login', done => {
     // first check console output
     expect(consoleSpy.args).toMatchSnapshot();
     // then check config changes
-    const configPath = path.join(__dirname, 'fixtures', 'cli.config.yml');
-    const cfg = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
-    expect(cfg.token).toEqual(token);
-    expect(cfg.user.username).toEqual(correctLogin.user.username);
+    expect(cfg.userConfig.token).toEqual(token);
+    expect(cfg.userConfig.user.username).toEqual(correctLogin.user.username);
     // restore inquirer
     inquirer.prompt.restore();
     // restore console
@@ -88,10 +98,8 @@ test('Should login using key with passphrase', done => {
     // first check console output
     expect(consoleSpy.args).toMatchSnapshot();
     // then check config changes
-    const configPath = path.join(__dirname, 'fixtures', 'cli.config.yml');
-    const cfg = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
-    expect(cfg.token).toEqual(token);
-    expect(cfg.user.username).toEqual(correctLoginWithPassphrase.user.username);
+    expect(cfg.userConfig.token).toEqual(token);
+    expect(cfg.userConfig.user.username).toEqual(correctLoginWithPassphrase.user.username);
     // restore inquirer
     inquirer.prompt.restore();
     // restore console
@@ -111,10 +119,8 @@ test('Should fail to login with broken private key', done => {
     // first check console output
     expect(consoleSpy.args).toMatchSnapshot();
     // then check the config (should not change)
-    const configPath = path.join(__dirname, 'fixtures', 'cli.config.yml');
-    const cfg = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
-    expect(cfg.token).toEqual(token);
-    expect(cfg.user.username).toEqual(correctLogin.user.username);
+    expect(cfg.userConfig.token).toEqual(token);
+    expect(cfg.userConfig.user.username).toEqual(correctLogin.user.username);
     // restore inquirer
     inquirer.prompt.restore();
     // restore console
@@ -144,7 +150,6 @@ test('Should not login with wrong certificate', done => {
   });
 });
 
-
 // test login
 test('Should login and update endpoint when endpoint was provided', done => {
   // stup inquirer answers
@@ -152,19 +157,16 @@ test('Should login and update endpoint when endpoint was provided', done => {
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
   // execute login
-  const testEndpointUrl = 'my-awesome-endpoint';
-  login({url: testEndpointUrl}).then(() => {
+  login({url: testEndpointUrl, key: privateKeyName}).then(() => {
     // make sure log in was successful
     // check that server was called
-    expect(correctLoginSrv.isDone()).toBeTruthy();
+    expect(correctEndpointLoginSrv.isDone()).toBeTruthy();
     // first check console output
     expect(consoleSpy.args).toMatchSnapshot();
     // then check config changes
-    const configPath = path.join(__dirname, 'fixtures', 'cli.config.yml');
-    const cfg = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
-    expect(cfg.token).toEqual(token);
-    expect(cfg.user.username).toEqual(correctLogin.user.username);
-    expect(cfg.endpoint).toEqual(testEndpointUrl);
+    expect(cfg.userConfig.token).toEqual(token);
+    expect(cfg.userConfig.user.username).toEqual(correctLogin.user.username);
+    expect(cfg.userConfig.endpoint).toEqual(testEndpointUrl);
     // restore inquirer
     inquirer.prompt.restore();
     // restore console
