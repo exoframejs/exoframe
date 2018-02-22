@@ -143,3 +143,32 @@ test('Should not login with wrong certificate', done => {
     done();
   });
 });
+
+
+// test login
+test('Should login and update endpoint when endpoint was provided', done => {
+  // stup inquirer answers
+  sinon.stub(inquirer, 'prompt').callsFake(() => Promise.resolve(correctLogin.user));
+  // spy on console
+  const consoleSpy = sinon.spy(console, 'log');
+  // execute login
+  const testEndpointUrl = 'my-awesome-endpoint';
+  login({url: testEndpointUrl}).then(() => {
+    // make sure log in was successful
+    // check that server was called
+    expect(correctLoginSrv.isDone()).toBeTruthy();
+    // first check console output
+    expect(consoleSpy.args).toMatchSnapshot();
+    // then check config changes
+    const configPath = path.join(__dirname, 'fixtures', 'cli.config.yml');
+    const cfg = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
+    expect(cfg.token).toEqual(token);
+    expect(cfg.user.username).toEqual(correctLogin.user.username);
+    expect(cfg.endpoint).toEqual(testEndpointUrl);
+    // restore inquirer
+    inquirer.prompt.restore();
+    // restore console
+    console.log.restore();
+    done();
+  });
+});
