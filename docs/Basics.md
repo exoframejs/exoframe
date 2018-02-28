@@ -94,6 +94,18 @@ Config file has the following structure:
 }
 ```
 
+## Project ignore file
+
+In some cases you might want to ignore particular files during project deployment (e.g. tests, fixtures, node_modules, etc.).  
+You can specify ignored files using `.exoframeignore` file in the root of the project.  
+Each line is then used by the [ignore](https://github.com/kaelzhang/node-ignore) module during deployment process.  
+When not provided ignore file contains the following entries:
+
+```
+.git
+node_modules
+```
+
 ## CLI Configuration
 
 Exoframe stores its config in `~/.exoframe/cli.config.yml`.  
