@@ -1,4 +1,15 @@
 
+2.1.0 / 2018-02-28
+==================
+
+Additions:
+  * Add support for .exoframeignore
+  * Login command now accepts an endpoint as an optional argument
+  * Add logo
+
+Changes:
+  * Update dependencies
+
 2.0.1 / 2018-01-24
 ==================
 
