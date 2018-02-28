@@ -30,6 +30,10 @@ const folder = 'test_html_project';
 const folderPath = path.join('test', 'fixtures', folder);
 const testFolder = path.join(__dirname, 'fixtures', folder);
 
+const ignoreFolder = 'test_ignore_project';
+const ignoreFolderPath = path.join('test', 'fixtures', ignoreFolder);
+const ignoreTestFolder = path.join(__dirname, 'fixtures', ignoreFolder);
+
 const deployments = [
   {
     Id: '123',
@@ -276,6 +280,46 @@ test('Should display verbose output', done => {
     expect(err.message).toEqual('Error parsing output!');
     expect(err.response).toBeDefined();
     expect(err.response.error).toEqual('Bad Gateway');
+    // restore console
+    console.log.restore();
+    // tear down nock
+    deployServer.done();
+    done();
+  });
+});
+
+// test ignore config
+test('Should ignore specified files', done => {
+  // spy on console
+  const consoleSpy = sinon.spy(console, 'log');
+
+  // handle correct request
+  const deployServer = nock('http://localhost:8080')
+    .post('/deploy')
+    .reply((uri, requestBody) => {
+      const exoignore = fs.readFileSync(path.join(ignoreTestFolder, '.exoframeignore'));
+      const ignoreme = fs.readFileSync(path.join(ignoreTestFolder, 'ignore.me'));
+      const index = fs.readFileSync(path.join(ignoreTestFolder, 'index.js'));
+      const packageJson = fs.readFileSync(path.join(ignoreTestFolder, 'package.json'));
+      const exocfg = fs.readFileSync(path.join(ignoreTestFolder, 'exoframe.json'));
+      const yarnLock = fs.readFileSync(path.join(ignoreTestFolder, 'yarn.lock'));
+      expect(requestBody).toContain(index);
+      expect(requestBody).toContain(packageJson);
+      expect(requestBody).toContain(exocfg);
+      expect(requestBody).not.toContain(exoignore);
+      expect(requestBody).not.toContain(ignoreme);
+      expect(requestBody).not.toContain(yarnLock);
+
+      return replyWithStream([{message: 'Deployment success!', deployments, level: 'info'}]);
+    });
+
+  // execute login
+  deploy({_: [ignoreFolderPath]}).then(() => {
+    // make sure log in was successful
+    // check that server was called
+    expect(deployServer.isDone()).toBeTruthy();
+    // first check console output
+    expect(consoleSpy.args).toMatchSnapshot();
     // restore console
     console.log.restore();
     // tear down nock
