@@ -1,4 +1,7 @@
 /* eslint-env jest */
+// mock config for testing
+jest.mock('../src/config', () => require('./__mocks__/config'));
+
 // npm packages
 const fs = require('fs');
 const path = require('path');

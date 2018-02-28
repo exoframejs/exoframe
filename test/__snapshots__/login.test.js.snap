@@ -26,6 +26,25 @@ Array [
 ]
 `;
 
+exports[`Should login and update endpoint when endpoint was provided 1`] = `
+Array [
+  Array [
+    "[1mUpdating endpoint URL to:[22m",
+    "http://my-awesome-endpoint",
+  ],
+  Array [
+    "[32mEndpoint URL updated![39m",
+  ],
+  Array [
+    "[1mLogging in to:[22m",
+    "http://my-awesome-endpoint",
+  ],
+  Array [
+    "[32mSuccessfully logged in![39m",
+  ],
+]
+`;
+
 exports[`Should login using key with passphrase 1`] = `
 Array [
   Array [

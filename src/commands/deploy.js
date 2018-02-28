@@ -15,7 +15,7 @@ const {userConfig, isLoggedIn, logout} = require('../config');
 const {tableBorder, tableStyle} = require('../config/table');
 const formatServices = require('../util/formatServices');
 
-const ignores = ['.git', 'node_modules'];
+const defaultIgnores = ['.git', 'node_modules', '.exoframeignore'];
 
 const streamToResponse = ({tarStream, remoteUrl, options, verbose}) =>
   new Promise((resolve, reject) => {
@@ -147,6 +147,20 @@ exports.handler = async (args = {}) => {
     spinner && spinner.fail('Your exoframe.json is not valid');
     console.log(chalk.red('Please, check your config and try again:'), e.toString());
     return;
+  }
+
+  // try read ingore file
+  const ignorePath = path.join(workdir, '.exoframeignore');
+  let ignores = defaultIgnores;
+  try {
+    ignores = fs
+      .readFileSync(ignorePath)
+      .toString()
+      .split('\n')
+      .filter(line => line && line.length > 0)
+      .concat(['.exoframeignore']);
+  } catch (e) {
+    verbose && console.log('\nNo .exoframeignore file found, using default ignores');
   }
 
   // create tar stream from current folder

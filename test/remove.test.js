@@ -1,11 +1,14 @@
 /* eslint-env jest */
+// mock config for testing
+jest.mock('../src/config', () => require('./__mocks__/config'));
+
 // npm packages
 const nock = require('nock');
 const sinon = require('sinon');
 
 // our packages
 const {handler: remove} = require('../src/commands/remove');
-const {userConfig, updateConfig} = require('../src/config');
+const cfg = require('../src/config');
 
 const id = 'test-id';
 
@@ -99,8 +102,6 @@ test('Should show not found error', done => {
 
 // test
 test('Should deauth on 401', done => {
-  // copy original config for restoration
-  const originalConfig = Object.assign({}, userConfig);
   // handle correct request
   const rmServer = nock('http://localhost:8080')
     .post(`/remove/${id}`)
@@ -115,14 +116,12 @@ test('Should deauth on 401', done => {
     // first check console output
     expect(consoleSpy.args).toMatchSnapshot();
     // check config
-    expect(userConfig.user).toBeUndefined();
-    expect(userConfig.token).toBeUndefined();
+    expect(cfg.userConfig.user).toBeUndefined();
+    expect(cfg.userConfig.token).toBeUndefined();
     // restore console
     console.log.restore();
     // tear down nock
     rmServer.done();
-    // restore original config
-    updateConfig(originalConfig);
     done();
   });
 });

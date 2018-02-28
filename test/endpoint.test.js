@@ -1,28 +1,22 @@
 /* eslint-env jest */
+// mock config for testing
+jest.mock('../src/config', () => require('./__mocks__/config'));
+
 // npm packages
-const fs = require('fs');
-const path = require('path');
-const yaml = require('js-yaml');
 const sinon = require('sinon');
 const inquirer = require('inquirer');
 
 // our packages
 const {handler: updateEndpoint} = require('../src/commands/endpoint');
 const {handler: removeEndpoint} = require('../src/commands/endpoint-rm');
+const cfg = require('../src/config');
 
-const configPath = path.join(__dirname, 'fixtures', 'cli.config.yml');
 const mockEndpoint = 'http://test.endpoint';
 const mockEndpoint2 = 'http://test';
 
-// load original config
 let origCfg;
 beforeAll(() => {
-  origCfg = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
-});
-
-afterAll(() => {
-  // restore original config
-  fs.writeFileSync(configPath, yaml.safeDump(origCfg), 'utf8');
+  origCfg = Object.assign({}, cfg.userConfig);
 });
 
 // test config generation
@@ -34,14 +28,13 @@ test('Should add new endpoint', done => {
     // first check console output
     expect(consoleSpy.args).toMatchSnapshot();
     // then check config changes
-    const cfg = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
-    expect(cfg.endpoint).toEqual(mockEndpoint);
-    expect(cfg.user).toEqual(null);
-    expect(cfg.token).toEqual(null);
-    expect(cfg.endpoints.length).toEqual(1);
-    expect(cfg.endpoints[0].endpoint).toEqual(origCfg.endpoint);
-    expect(cfg.endpoints[0].user.username).toEqual(origCfg.user.username);
-    expect(cfg.endpoints[0].token).toEqual(origCfg.token);
+    expect(cfg.userConfig.endpoint).toEqual(mockEndpoint);
+    expect(cfg.userConfig.user).toEqual(null);
+    expect(cfg.userConfig.token).toEqual(null);
+    expect(cfg.userConfig.endpoints.length).toEqual(1);
+    expect(cfg.userConfig.endpoints[0].endpoint).toEqual(origCfg.endpoint);
+    expect(cfg.userConfig.endpoints[0].user.username).toEqual(origCfg.user.username);
+    expect(cfg.userConfig.endpoints[0].token).toEqual(origCfg.token);
     // restore console
     console.log.restore();
     done();
@@ -57,17 +50,16 @@ test('Should add second new endpoint', done => {
     // first check console output
     expect(consoleSpy.args).toMatchSnapshot();
     // then check config changes
-    const cfg = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
-    expect(cfg.endpoint).toEqual(mockEndpoint2);
-    expect(cfg.user).toBeNull();
-    expect(cfg.token).toBeNull();
-    expect(cfg.endpoints.length).toEqual(2);
-    expect(cfg.endpoints[0].endpoint).toEqual(origCfg.endpoint);
-    expect(cfg.endpoints[0].user.username).toEqual(origCfg.user.username);
-    expect(cfg.endpoints[0].token).toEqual(origCfg.token);
-    expect(cfg.endpoints[1].endpoint).toEqual(mockEndpoint);
-    expect(cfg.endpoints[1].user).toBeNull();
-    expect(cfg.endpoints[1].token).toBeNull();
+    expect(cfg.userConfig.endpoint).toEqual(mockEndpoint2);
+    expect(cfg.userConfig.user).toBeNull();
+    expect(cfg.userConfig.token).toBeNull();
+    expect(cfg.userConfig.endpoints.length).toEqual(2);
+    expect(cfg.userConfig.endpoints[0].endpoint).toEqual(origCfg.endpoint);
+    expect(cfg.userConfig.endpoints[0].user.username).toEqual(origCfg.user.username);
+    expect(cfg.userConfig.endpoints[0].token).toEqual(origCfg.token);
+    expect(cfg.userConfig.endpoints[1].endpoint).toEqual(mockEndpoint);
+    expect(cfg.userConfig.endpoints[1].user).toBeNull();
+    expect(cfg.userConfig.endpoints[1].token).toBeNull();
     // restore console
     console.log.restore();
     done();
@@ -85,17 +77,16 @@ test('Should select old endpoint', done => {
     // first check console output
     expect(consoleSpy.args).toMatchSnapshot();
     // then check config changes
-    const cfg = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
-    expect(cfg.endpoint).toEqual(origCfg.endpoint);
-    expect(cfg.user.username).toEqual(origCfg.user.username);
-    expect(cfg.token).toEqual(origCfg.token);
-    expect(cfg.endpoints.length).toEqual(2);
-    expect(cfg.endpoints[0].endpoint).toEqual(mockEndpoint);
-    expect(cfg.endpoints[0].user).toBeNull();
-    expect(cfg.endpoints[0].token).toBeNull();
-    expect(cfg.endpoints[1].endpoint).toEqual(mockEndpoint2);
-    expect(cfg.endpoints[1].user).toBeNull();
-    expect(cfg.endpoints[1].token).toBeNull();
+    expect(cfg.userConfig.endpoint).toEqual(origCfg.endpoint);
+    expect(cfg.userConfig.user.username).toEqual(origCfg.user.username);
+    expect(cfg.userConfig.token).toEqual(origCfg.token);
+    expect(cfg.userConfig.endpoints.length).toEqual(2);
+    expect(cfg.userConfig.endpoints[0].endpoint).toEqual(mockEndpoint);
+    expect(cfg.userConfig.endpoints[0].user).toBeNull();
+    expect(cfg.userConfig.endpoints[0].token).toBeNull();
+    expect(cfg.userConfig.endpoints[1].endpoint).toEqual(mockEndpoint2);
+    expect(cfg.userConfig.endpoints[1].user).toBeNull();
+    expect(cfg.userConfig.endpoints[1].token).toBeNull();
     // restore console
     console.log.restore();
     // restore inquirer
@@ -113,17 +104,16 @@ test('Should select old endpoint using URL param', done => {
     // first check console output
     expect(consoleSpy.args).toMatchSnapshot();
     // then check config changes
-    const cfg = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
-    expect(cfg.endpoint).toEqual(mockEndpoint);
-    expect(cfg.user).toBeNull();
-    expect(cfg.token).toBeNull();
-    expect(cfg.endpoints.length).toEqual(2);
-    expect(cfg.endpoints[0].endpoint).toEqual(mockEndpoint2);
-    expect(cfg.endpoints[0].user).toBeNull();
-    expect(cfg.endpoints[0].token).toBeNull();
-    expect(cfg.endpoints[1].endpoint).toEqual(origCfg.endpoint);
-    expect(cfg.endpoints[1].user.username).toEqual(origCfg.user.username);
-    expect(cfg.endpoints[1].token).toEqual(origCfg.token);
+    expect(cfg.userConfig.endpoint).toEqual(mockEndpoint);
+    expect(cfg.userConfig.user).toBeNull();
+    expect(cfg.userConfig.token).toBeNull();
+    expect(cfg.userConfig.endpoints.length).toEqual(2);
+    expect(cfg.userConfig.endpoints[0].endpoint).toEqual(mockEndpoint2);
+    expect(cfg.userConfig.endpoints[0].user).toBeNull();
+    expect(cfg.userConfig.endpoints[0].token).toBeNull();
+    expect(cfg.userConfig.endpoints[1].endpoint).toEqual(origCfg.endpoint);
+    expect(cfg.userConfig.endpoints[1].user.username).toEqual(origCfg.user.username);
+    expect(cfg.userConfig.endpoints[1].token).toEqual(origCfg.token);
     // restore console
     console.log.restore();
     done();
@@ -157,14 +147,13 @@ test('Should remove current endpoint using inquirer', done => {
     // first check console output
     expect(consoleSpy.args).toMatchSnapshot();
     // then check config changes
-    const cfg = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
-    expect(cfg.endpoint).toEqual(mockEndpoint2);
-    expect(cfg.user).toBeNull();
-    expect(cfg.token).toBeNull();
-    expect(cfg.endpoints.length).toEqual(1);
-    expect(cfg.endpoints[0].endpoint).toEqual(origCfg.endpoint);
-    expect(cfg.endpoints[0].user.username).toEqual(origCfg.user.username);
-    expect(cfg.endpoints[0].token).toEqual(origCfg.token);
+    expect(cfg.userConfig.endpoint).toEqual(mockEndpoint2);
+    expect(cfg.userConfig.user).toBeNull();
+    expect(cfg.userConfig.token).toBeNull();
+    expect(cfg.userConfig.endpoints.length).toEqual(1);
+    expect(cfg.userConfig.endpoints[0].endpoint).toEqual(origCfg.endpoint);
+    expect(cfg.userConfig.endpoints[0].user.username).toEqual(origCfg.user.username);
+    expect(cfg.userConfig.endpoints[0].token).toEqual(origCfg.token);
     // restore console
     console.log.restore();
     // restore inquirer
@@ -187,12 +176,10 @@ test('Should remove existing endpoint using param', done => {
       // first check console output
       expect(consoleSpy.args).toMatchSnapshot();
       // then check config changes
-      const cfg = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
-      console.log(cfg);
-      expect(cfg.endpoint).toEqual(origCfg.endpoint);
-      expect(cfg.user.username).toEqual(origCfg.user.username);
-      expect(cfg.token).toEqual(origCfg.token);
-      expect(cfg.endpoints.length).toEqual(0);
+      expect(cfg.userConfig.endpoint).toEqual(origCfg.endpoint);
+      expect(cfg.userConfig.user.username).toEqual(origCfg.user.username);
+      expect(cfg.userConfig.token).toEqual(origCfg.token);
+      expect(cfg.userConfig.endpoints.length).toEqual(0);
       // restore console
       console.log.restore();
       done();
@@ -209,11 +196,10 @@ test('Should not remove only endpoint', done => {
     // first check console output
     expect(consoleSpy.args).toMatchSnapshot();
     // then check config changes
-    const cfg = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
-    expect(cfg.endpoint).toEqual(origCfg.endpoint);
-    expect(cfg.user.username).toEqual(origCfg.user.username);
-    expect(cfg.token).toEqual(origCfg.token);
-    expect(cfg.endpoints.length).toEqual(0);
+    expect(cfg.userConfig.endpoint).toEqual(origCfg.endpoint);
+    expect(cfg.userConfig.user.username).toEqual(origCfg.user.username);
+    expect(cfg.userConfig.token).toEqual(origCfg.token);
+    expect(cfg.userConfig.endpoints.length).toEqual(0);
     // restore console
     console.log.restore();
     // restore inquirer

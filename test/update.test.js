@@ -1,4 +1,7 @@
 /* eslint-env jest */
+// mock config for testing
+jest.mock('../src/config', () => require('./__mocks__/config'));
+
 // npm packages
 const nock = require('nock');
 const sinon = require('sinon');
@@ -6,7 +9,7 @@ const inquirer = require('inquirer');
 
 // our packages
 const {handler: update} = require('../src/commands/update');
-const {userConfig, updateConfig} = require('../src/config');
+const {userConfig} = require('../src/config');
 
 // test update
 test('Should update traefik', done => {
@@ -157,8 +160,6 @@ test('Should update all on user prompt', done => {
 
 // test deauth
 test('Should deauth on 401', done => {
-  // copy original config for restoration
-  const originalConfig = Object.assign({}, userConfig);
   // handle correct request
   const updateServer = nock('http://localhost:8080')
     .post(`/update/traefik`)
@@ -179,8 +180,6 @@ test('Should deauth on 401', done => {
     console.log.restore();
     // tear down nock
     updateServer.done();
-    // restore original config
-    updateConfig(originalConfig);
     done();
   });
 });

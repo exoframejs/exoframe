@@ -1,6 +1,6 @@
 {
   "name": "exoframe",
-  "version": "2.0.1",
+  "version": "2.1.1-dev",
   "description": "Exoframe is a self-hosted tool that allows simple one-command deployments using Docker",
   "main": "index.js",
   "repository": "git@github.com:exoframejs/exoframe.git",
@@ -16,26 +16,26 @@
   },
   "dependencies": {
     "boxen": "^1.2.2",
-    "chalk": "^2.3.0",
+    "chalk": "^2.3.1",
     "cli-table": "^0.3.1",
-    "got": "^8.0.3",
+    "got": "^8.2.0",
     "highland": "^2.11.1",
     "ignore": "^3.3.7",
-    "inquirer": "^5.0.1",
+    "inquirer": "^5.1.0",
     "js-yaml": "^3.10.0",
     "jsonwebtoken": "^8.1.1",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.5",
     "opn": "^5.2.0",
-    "ora": "^1.3.0",
+    "ora": "^2.0.0",
     "tar-fs": "^1.16.0",
     "update-notifier": "^2.3.0",
     "yargs": "^11.0.0"
   },
   "devDependencies": {
     "coveralls": "^3.0.0",
-    "jest": "^22.1.4",
-    "nock": "^9.1.6",
+    "jest": "^22.4.2",
+    "nock": "^9.2.3",
     "pkg": "^4.3.0",
-    "sinon": "^4.2.1"
+    "sinon": "^4.4.2"
   }
 }

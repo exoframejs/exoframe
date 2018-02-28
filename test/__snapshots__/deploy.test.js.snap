@@ -139,10 +139,15 @@ Array [
   ],
   Array [
     "
+No .exoframeignore file found, using default ignores",
+  ],
+  Array [
+    "
 Ignoring following paths:",
     Array [
       ".git",
       "node_modules",
+      ".exoframeignore",
     ],
   ],
   Array [
@@ -171,6 +176,23 @@ exports[`Should execute update 1`] = `
 Array [
   Array [
     "[1mUpdating current project to endpoint:[22m",
+    "http://localhost:8080",
+  ],
+  Array [
+    "Your project is now deployed as:
+",
+  ],
+  Array [
+    "[31m   ID     [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m
+   test   [90m [39m   localhost   [90m [39m   test       ",
+  ],
+]
+`;
+
+exports[`Should ignore specified files 1`] = `
+Array [
+  Array [
+    "[1mDeploying test/fixtures/test_ignore_project to endpoint:[22m",
     "http://localhost:8080",
   ],
   Array [

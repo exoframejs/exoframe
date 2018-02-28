@@ -1,4 +1,7 @@
 /* eslint-env jest */
+// mock config for testing
+jest.mock('../src/config', () => require('./__mocks__/config'));
+
 // npm packages
 const nock = require('nock');
 const sinon = require('sinon');
@@ -6,7 +9,7 @@ const inquirer = require('inquirer');
 
 // our packages
 const {handler: template} = require('../src/commands/template');
-const {userConfig, updateConfig} = require('../src/config');
+const cfg = require('../src/config');
 
 // test generation
 test('Should install new template', done => {
@@ -115,8 +118,8 @@ test('Should remove template', done => {
 
 // test deauth
 test('Should deauth on 401 on creation', done => {
-  // copy original config for restoration
-  const originalConfig = Object.assign({}, userConfig);
+  // save config for restoration
+  cfg.__save('template');
   // handle correct request
   const templateServer = nock('http://localhost:8080')
     .post('/templates')
@@ -138,15 +141,13 @@ test('Should deauth on 401 on creation', done => {
     inquirer.prompt.restore();
     // tear down nock
     templateServer.done();
-    // restore original config
-    updateConfig(originalConfig);
     done();
   });
 });
 
 test('Should deauth on 401 on list', done => {
-  // copy original config for restoration
-  const originalConfig = Object.assign({}, userConfig);
+  // restore original config
+  cfg.__restore('template');
   // handle correct request
   const templateServer = nock('http://localhost:8080')
     .get('/templates')
@@ -168,8 +169,6 @@ test('Should deauth on 401 on list', done => {
     inquirer.prompt.restore();
     // tear down nock
     templateServer.done();
-    // restore original config
-    updateConfig(originalConfig);
     done();
   });
 });

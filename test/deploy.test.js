@@ -1,4 +1,7 @@
 /* eslint-env jest */
+// mock config for testing
+jest.mock('../src/config', () => require('./__mocks__/config'));
+
 // npm packages
 const fs = require('fs');
 const path = require('path');
@@ -8,7 +11,7 @@ const _ = require('highland');
 const {Readable} = require('stream');
 
 // our packages
-const {userConfig, updateConfig} = require('../src/config');
+const cfg = require('../src/config');
 
 // require deploy with stub for opn
 jest.mock('opn', () => jest.fn());
@@ -26,6 +29,10 @@ const replyWithStream = dataArr => {
 const folder = 'test_html_project';
 const folderPath = path.join('test', 'fixtures', folder);
 const testFolder = path.join(__dirname, 'fixtures', folder);
+
+const ignoreFolder = 'test_ignore_project';
+const ignoreFolderPath = path.join('test', 'fixtures', ignoreFolder);
+const ignoreTestFolder = path.join(__dirname, 'fixtures', ignoreFolder);
 
 const deployments = [
   {
@@ -108,7 +115,7 @@ test('Should deploy without auth but with token', done => {
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
   // copy original config for restoration
-  const originalConfig = Object.assign({}, userConfig);
+  const originalConfig = Object.assign({}, cfg.userConfig);
 
   // handle correct request
   const deployServer = nock('http://localhost:8080')
@@ -116,7 +123,7 @@ test('Should deploy without auth but with token', done => {
     .reply(() => replyWithStream([{message: 'Deployment success!', deployments, level: 'info'}]));
 
   // remove auth from config
-  updateConfig({endpoint: 'http://localhost:8080'});
+  cfg.updateConfig({endpoint: 'http://localhost:8080'});
 
   // execute login
   deploy({token: 'test-token'}).then(() => {
@@ -130,7 +137,7 @@ test('Should deploy without auth but with token', done => {
     // tear down nock
     deployServer.done();
     // restore original config
-    updateConfig(originalConfig);
+    cfg.updateConfig(originalConfig);
     done();
   });
 });
@@ -281,6 +288,46 @@ test('Should display verbose output', done => {
   });
 });
 
+// test ignore config
+test('Should ignore specified files', done => {
+  // spy on console
+  const consoleSpy = sinon.spy(console, 'log');
+
+  // handle correct request
+  const deployServer = nock('http://localhost:8080')
+    .post('/deploy')
+    .reply((uri, requestBody) => {
+      const exoignore = fs.readFileSync(path.join(ignoreTestFolder, '.exoframeignore'));
+      const ignoreme = fs.readFileSync(path.join(ignoreTestFolder, 'ignore.me'));
+      const index = fs.readFileSync(path.join(ignoreTestFolder, 'index.js'));
+      const packageJson = fs.readFileSync(path.join(ignoreTestFolder, 'package.json'));
+      const exocfg = fs.readFileSync(path.join(ignoreTestFolder, 'exoframe.json'));
+      const yarnLock = fs.readFileSync(path.join(ignoreTestFolder, 'yarn.lock'));
+      expect(requestBody).toContain(index);
+      expect(requestBody).toContain(packageJson);
+      expect(requestBody).toContain(exocfg);
+      expect(requestBody).not.toContain(exoignore);
+      expect(requestBody).not.toContain(ignoreme);
+      expect(requestBody).not.toContain(yarnLock);
+
+      return replyWithStream([{message: 'Deployment success!', deployments, level: 'info'}]);
+    });
+
+  // execute login
+  deploy({_: [ignoreFolderPath]}).then(() => {
+    // make sure log in was successful
+    // check that server was called
+    expect(deployServer.isDone()).toBeTruthy();
+    // first check console output
+    expect(consoleSpy.args).toMatchSnapshot();
+    // restore console
+    console.log.restore();
+    // tear down nock
+    deployServer.done();
+    done();
+  });
+});
+
 // test
 test('Should display error on zero deployments', done => {
   // spy on console
@@ -314,9 +361,9 @@ test('Should not deploy with config without project name', done => {
   const consoleSpy = sinon.spy(console, 'log');
 
   // corrupt config with string
-  const cfg = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'exoframe.json')));
-  cfg.name = '';
-  fs.writeFileSync(path.join(__dirname, '..', 'exoframe.json'), JSON.stringify(cfg));
+  const exoConfig = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'exoframe.json')));
+  exoConfig.name = '';
+  fs.writeFileSync(path.join(__dirname, '..', 'exoframe.json'), JSON.stringify(exoConfig));
 
   // execute deploy
   deploy().then(() => {
@@ -371,8 +418,6 @@ test('Should not deploy with non-existent path', done => {
 
 // test
 test('Should deauth on 401', done => {
-  // copy original config for restoration
-  const originalConfig = Object.assign({}, userConfig);
   // handle correct request
   const deployServer = nock('http://localhost:8080')
     .post('/deploy')
@@ -387,14 +432,12 @@ test('Should deauth on 401', done => {
     // first check console output
     expect(consoleSpy.args).toMatchSnapshot();
     // check config
-    expect(userConfig.user).toBeUndefined();
-    expect(userConfig.token).toBeUndefined();
+    expect(cfg.userConfig.user).toBeUndefined();
+    expect(cfg.userConfig.token).toBeUndefined();
     // restore console
     console.log.restore();
     // tear down nock
     deployServer.done();
-    // restore original config
-    updateConfig(originalConfig);
     done();
   });
 });

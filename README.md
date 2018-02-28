@@ -1,4 +1,4 @@
-# Exoframe
+<img alt="Exoframe" src="./logo/svg/exo_blue.svg" width="300">
 
 > Simple Docker deployment tool
 
@@ -64,10 +64,17 @@ You can find a list of all commands and options in the [docs](./docs/README.md).
 
 * [Basics](docs/Basics.md)
 * [FAQ](docs/FAQ.md)
+* [Contrubiton Guideline](docs/Contributing.md)
 * [Templates guide](docs/TemplatesGuide.md)
 * [Using nightly versions](docs/Nightly.md)
 * [Articles, video and related links](docs/Links.md)
 * [Change Log](CHANGELOG.md)
+
+## Special thanks
+
+Thanks to:
+
+* [Ivan Semenov](https://www.behance.net/ivan_semenov) for making [an awesome logo](./logo/README.md)
 
 ## License
 
