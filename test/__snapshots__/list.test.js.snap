@@ -7,6 +7,10 @@ Array [
 [32m[39m",
   ],
   Array [
+    "> [34m[1m[4mNormal[24m[22m[39m deployments:
+",
+  ],
+  Array [
     "Deployments for [1mtest[22m:",
   ],
   Array [],
@@ -23,6 +27,37 @@ Array [
   Array [
     "[31m   ID      [39m[90m [39m[31m   URL       [39m[90m [39m[31m   Hostname   [39m[90m [39m[31m   Status          [39m
    test3   [90m [39m   Not set   [90m [39m   Not set    [90m [39m   Up 13 minutes   ",
+  ],
+]
+`;
+
+exports[`Should get list of swarm deployments 1`] = `
+Array [
+  Array [
+    "[32m3 deployments found on http://localhost:8080:[39m
+[32m[39m",
+  ],
+  Array [
+    "> [34m[1m[4mSwarm mode[24m[22m[39m deployments:
+",
+  ],
+  Array [
+    "Deployments for [1mtest-service[22m:",
+  ],
+  Array [],
+  Array [
+    "[31m   ID                 [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname    [39m[90m [39m[31m   Status   [39m
+   test-service-one   [90m [39m   Not set     [90m [39m   Not set     [90m [39m            
+   test-service-two   [90m [39m   test.host   [90m [39m   test.host   [90m [39m            ",
+  ],
+  Array [],
+  Array [
+    "Other deployments:",
+  ],
+  Array [],
+  Array [
+    "[31m   ID                   [39m[90m [39m[31m   URL            [39m[90m [39m[31m   Hostname   [39m[90m [39m[31m   Status   [39m
+   test-service-three   [90m [39m   other.domain   [90m [39m   Not set    [90m [39m            ",
   ],
 ]
 `;
