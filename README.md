@@ -22,6 +22,7 @@ Exoframe is a self-hosted tool that allows simple one-command deployments using 
 * Multiple deployment endpoints and multi-user support
 * Simple update procedure for client, server and Traefik
 * Optional automatic subdomain assignment (i.e. every deployment gets its own subdomain)
+* Swarm mode deployments
 
 \* Feature provided by [Traefik](https://traefik.io/)
 
