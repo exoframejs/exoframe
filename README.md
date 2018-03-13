@@ -1,4 +1,4 @@
-<img alt="Exoframe" src="./logo/svg/exo_blue.svg" width="300">
+<img alt="Exoframe" src="./logo/png/exo_blue.png" width="300">
 
 > Simple Docker deployment tool
 
@@ -23,6 +23,7 @@ Exoframe is a self-hosted tool that allows simple one-command deployments using 
 * Simple update procedure for client, server and Traefik
 * Optional automatic subdomain assignment (i.e. every deployment gets its own subdomain)
 * Swarm mode deployments
+* Complex recipes support (i.e. deploy complex systems in one command)
 
 \* Feature provided by [Traefik](https://traefik.io/)
 
@@ -67,6 +68,7 @@ You can find a list of all commands and options in the [docs](./docs/README.md).
 * [FAQ](docs/FAQ.md)
 * [Contrubiton Guideline](docs/Contributing.md)
 * [Templates guide](docs/TemplatesGuide.md)
+* [Recipes guide](docs/RecipesGuide.md)
 * [Using nightly versions](docs/Nightly.md)
 * [Articles, video and related links](docs/Links.md)
 * [Change Log](CHANGELOG.md)
