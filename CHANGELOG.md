@@ -1,4 +1,10 @@
 
+2.1.1 / 2018-03-16
+==================
+
+Fixes:
+  * Aggregate service aliases from all networks to fix service listing
+
 2.1.0 / 2018-02-28
 ==================
 
