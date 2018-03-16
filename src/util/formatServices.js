@@ -8,10 +8,12 @@ module.exports = services =>
       const domain = svc.Config.Labels['traefik.frontend.rule']
         ? svc.Config.Labels['traefik.frontend.rule'].replace('Host:', '')
         : 'Not set';
-      const aliases =
-        svc.NetworkSettings.Networks.exoframe && svc.NetworkSettings.Networks.exoframe.Aliases
-          ? svc.NetworkSettings.Networks.exoframe.Aliases.filter(alias => !svc.Id.startsWith(alias))
-          : [];
+      const networks = svc.NetworkSettings.Networks;
+      const aliases = Object.keys(networks)
+        .map(networkName => networks[networkName])
+        .filter(net => net.Aliases && net.Aliases.length > 0)
+        .map(net => net.Aliases.filter(alias => !svc.Id.startsWith(alias)))
+        .reduce((acc, val) => acc.concat(val), []);
       const project = svc.Config.Labels['exoframe.project'];
       const host = aliases.shift() || 'Not set';
       const status = svc.State ? svc.State.Status : '';
@@ -23,7 +25,9 @@ module.exports = services =>
     const domain = svc.Spec.Labels['traefik.frontend.rule']
       ? svc.Spec.Labels['traefik.frontend.rule'].replace('Host:', '')
       : 'Not set';
-    const aliases = svc.Spec.Networks && svc.Spec.Networks.length > 0 ? svc.Spec.Networks.map(n => n.Aliases) : [];
+    const aliases = svc.Spec.Networks.filter(net => net.Aliases && net.Aliases.length > 0)
+      .map(net => net.Aliases.filter(alias => !svc.ID.startsWith(alias)))
+      .reduce((acc, val) => acc.concat(val), []);
     const project = svc.Spec.Labels['exoframe.project'];
     const host = aliases.shift() || 'Not set';
     const status = svc.State ? svc.State.Status : '';
