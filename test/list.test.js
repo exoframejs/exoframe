@@ -61,6 +61,26 @@ const services = [
       },
     },
   },
+  {
+    Id: '444',
+    Name: '/test4',
+    Config: {
+      Labels: {'exoframe.project': 'somethingelse'},
+    },
+    State: {
+      Status: 'Up 10 minutes',
+    },
+    NetworkSettings: {
+      Networks: {
+        default: {
+          Aliases: null,
+        },
+        traefik: {
+          Aliases: ['alias4'],
+        },
+      },
+    },
+  },
 ];
 
 // test removal
