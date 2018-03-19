@@ -70,7 +70,7 @@ You can find a list of all commands and options in the [docs](./docs/README.md).
 * [Templates guide](docs/TemplatesGuide.md)
 * [Recipes guide](docs/RecipesGuide.md)
 * [Using nightly versions](docs/Nightly.md)
-* [Articles, video and related links](docs/Links.md)
+* [Tutorials, articles, video and related links](docs/Links.md)
 * [Change Log](CHANGELOG.md)
 
 ## Special thanks
