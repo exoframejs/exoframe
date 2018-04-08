@@ -192,7 +192,7 @@ exports.handler = async (args = {}) => {
       err.response = res;
       throw err;
     }
-    spinner && spinner.succeed('Upload finsihed!');
+    spinner && spinner.succeed('Upload finished!');
 
     // log response in verbose-verbose mode
     verbose > 2 && console.log(chalk.gray('Server response:'), JSON.stringify(res, null, 2), '\n');
