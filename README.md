@@ -66,7 +66,7 @@ You can find a list of all commands and options in the [docs](./docs/README.md).
 
 * [Basics](docs/Basics.md)
 * [FAQ](docs/FAQ.md)
-* [Contrubiton Guideline](docs/Contributing.md)
+* [Contribution Guideline](docs/Contributing.md)
 * [Templates guide](docs/TemplatesGuide.md)
 * [Recipes guide](docs/RecipesGuide.md)
 * [Using nightly versions](docs/Nightly.md)
