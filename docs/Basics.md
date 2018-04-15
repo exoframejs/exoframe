@@ -64,7 +64,7 @@ You can find the list of available recipes [on npm](https://www.npmjs.com/search
 ## Project config file
 
 All of the configuration for the deployed projects is done using `exoframe.json` config file.  
-It can either be generated/updated using `exoframe config` command or created manually.  
+It can either be generated/updated using `exoframe config` (or `exoframe init`) command or created manually.  
 If it doesn't exist during deployment, Exoframe will generate simple config file that only contains name of the current project.
 
 Config file has the following structure:
