@@ -32,5 +32,20 @@ Array [
     "[1mSetting new deployment using recipe at:[22m",
     "http://localhost:8080",
   ],
+  Array [
+    "",
+  ],
+  Array [
+    "",
+  ],
+  Array [
+    "1",
+  ],
+  Array [
+    "2",
+  ],
+  Array [
+    "",
+  ],
 ]
 `;

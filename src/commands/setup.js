@@ -100,15 +100,15 @@ exports.handler = async args => {
     });
 
     const {body: finalBody} = await got(remoteUrl, answerOptions);
-    const showSetupLog = verbose || !finalBody.success;
-    if (showSetupLog) {
-      console.log('');
-      console.log('Log:');
-      (finalBody.log || ['No log available'])
-        .filter(l => l !== undefined)
-        .filter(l => l && l.message && l.message.length > 0)
-        .forEach(line => console.log(line.message.trim()));
-    }
+    const showFullSetupLog = verbose || !finalBody.success;
+    console.log('');
+    showFullSetupLog ? console.log('Log:') : console.log('');
+    (finalBody.log || [{message: 'No log available', level: 'debug'}])
+      .filter(l => l !== undefined)
+      .filter(l => showFullSetupLog || l.level === 'info')
+      .filter(l => l && l.message && l.message.length > 0)
+      .forEach(line => console.log(line.message.trim()));
+    console.log('');
 
     if (!finalBody.success) {
       spinner.fail('Error executing recipe!');
