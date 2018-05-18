@@ -41,7 +41,7 @@ test('Should execute new setup', done => {
   sinon
     .stub(inquirer, 'prompt')
     .onFirstCall()
-    .callsFake(() => Promise.resolve({recipeName: 'test'}))
+    .callsFake(() => Promise.resolve({givenRecipeName: 'test'}))
     .onSecondCall()
     .callsFake(() => Promise.resolve({test1: 'answer1', test2: 'answer2'}));
   // execute login
@@ -75,7 +75,7 @@ test('Should deauth on 401 on questions list', done => {
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
   // stup inquirer answers
-  sinon.stub(inquirer, 'prompt').callsFake(() => Promise.resolve({recipeName: 'test'}));
+  sinon.stub(inquirer, 'prompt').callsFake(() => Promise.resolve({givenRecipeName: 'test'}));
   // execute login
   setup({}).then(() => {
     // make sure log in was successful
@@ -107,7 +107,7 @@ test('Should deauth on 401 on list', done => {
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
   // stup inquirer answers
-  sinon.stub(inquirer, 'prompt').callsFake(() => Promise.resolve({recipeName: 'test'}));
+  sinon.stub(inquirer, 'prompt').callsFake(() => Promise.resolve({givenRecipeName: 'test'}));
   // execute login
   setup({cmd: 'ls'}).then(() => {
     // make sure log in was successful

@@ -7,9 +7,12 @@ const ora = require('ora');
 // our packages
 const {userConfig, isLoggedIn, logout} = require('../config');
 
-exports.command = ['setup'];
+exports.command = ['setup [recipe]'];
 exports.describe = 'setup new deployment using recipe';
 exports.builder = {
+  recipe: {
+    description: 'Name of the recipe to setup',
+  },
   verbose: {
     alias: 'v',
     description: 'Verbose mode; will output more information',
@@ -23,7 +26,7 @@ exports.handler = async args => {
   // services request url
   const remoteUrl = `${userConfig.endpoint}/setup`;
   // get command
-  const {verbose} = args;
+  const {verbose, recipe} = args;
   // construct shared request params
   const baseOptions = {
     headers: {
@@ -34,14 +37,20 @@ exports.handler = async args => {
 
   console.log(chalk.bold('Setting new deployment using recipe at:'), userConfig.endpoint);
 
-  // ask for Recipe name
-  const prompts = [];
-  prompts.push({
-    type: 'input',
-    name: 'recipeName',
-    message: 'Recipe name:',
-  });
-  const {recipeName} = await inquirer.prompt(prompts);
+  // get recipe name from params
+  let recipeName = recipe;
+
+  // ask for Recipe name if not given
+  if (!recipeName) {
+    const prompts = [];
+    prompts.push({
+      type: 'input',
+      name: 'givenRecipeName',
+      message: 'Recipe name:',
+    });
+    const {givenRecipeName} = await inquirer.prompt(prompts);
+    recipeName = givenRecipeName;
+  }
 
   // ask for questions for this recipe
   const options = Object.assign({}, baseOptions, {
