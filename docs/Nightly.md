@@ -20,4 +20,4 @@ First, you need to modify server config and add the following line:
 updateChannel: nightly
 ```
 
-Then, you need to run `exoframe server update` against the endpoint you've configured to update to latest nightly build of server.
+Then, you need to run `exoframe update server` against the endpoint you've configured to update to latest nightly build of server.

@@ -1,13 +1,10 @@
 // npm packages
-const _ = require('lodash');
 const got = require('got');
 const chalk = require('chalk');
-const Table = require('cli-table');
 
 // our packages
 const {userConfig, isLoggedIn, logout} = require('../config');
-const {tableBorder, tableStyle} = require('../config/table');
-const formatServices = require('../util/formatServices');
+const renderServices = require('../util/renderServices');
 
 exports.command = ['list', 'ls'];
 exports.describe = 'list deployments';
@@ -27,10 +24,18 @@ exports.handler = async () => {
     json: true,
   };
   // try sending request
+  let containers = [];
   let services = [];
   try {
     const {body} = await got(remoteUrl, options);
-    services = body;
+    if (!body) {
+      services = undefined;
+      containers = undefined;
+    } else {
+      const {containers: userContainers, services: userServices} = body;
+      containers = userContainers || [];
+      services = userServices || [];
+    }
   } catch (e) {
     // if authorization is expired/broken/etc
     if (e.statusCode === 401) {
@@ -43,54 +48,23 @@ exports.handler = async () => {
     return;
   }
   // check for errors
-  if (!services) {
+  if (!containers && !services) {
     throw new Error('Server returned empty response!');
   }
-  if (services.length > 0) {
+  if (containers.length > 0 || services.length > 0) {
     // print count
-    console.log(chalk.green(`${services.length} deployments found on ${userConfig.endpoint}:\n`));
+    console.log(chalk.green(`${containers.length + services.length} deployments found on ${userConfig.endpoint}:\n`));
 
-    // populate table
-    const formattedServices = formatServices(services);
+    // render containers
+    if (containers.length > 0) {
+      console.log(`> ${chalk.blue.bold.underline('Normal')} deployments:\n`);
+      renderServices(containers);
+    }
 
-    // create table
-    const resultTable = new Table({
-      head: ['ID', 'URL', 'Hostname', 'Status'],
-      chars: tableBorder,
-      style: tableStyle,
-    });
-
-    // group by project
-    const groupedServices = _.groupBy(formattedServices, 'project');
-    // populate tables
-    Object.keys(groupedServices).forEach(svcKey => {
-      const svcList = groupedServices[svcKey];
-      // if there's only one deployment in project - add it to global table
-      if (svcList.length === 1) {
-        const {name, domain, host, status} = svcList.pop();
-        resultTable.push([name, domain, host, status]);
-        return;
-      }
-
-      console.log(`Deployments for ${chalk.bold(svcKey)}:`);
-      console.log();
-      const projectTable = new Table({
-        head: ['ID', 'URL', 'Hostname', 'Status'],
-        chars: tableBorder,
-        style: tableStyle,
-      });
-      svcList.forEach(({name, domain, host, status}) => {
-        projectTable.push([name, domain, host, status]);
-      });
-      console.log(projectTable.toString());
-      console.log();
-    });
-
-    // draw table
-    if (resultTable.length > 0) {
-      console.log(`Other deployments:`);
-      console.log();
-      console.log(resultTable.toString());
+    // render services
+    if (services.length > 0) {
+      console.log(`> ${chalk.blue.bold.underline('Swarm mode')} deployments:\n`);
+      renderServices(services);
     }
   } else {
     console.log(chalk.green(`No deployments found on ${userConfig.endpoint}!`));

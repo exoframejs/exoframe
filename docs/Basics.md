@@ -23,16 +23,25 @@ It is recommended to run Exoframe on a server with at least 1GB of RAM.
 
 By default, Exoframe understands and can deploy the following project types:
 
-1. Static html based projects - will be deployed using [nginx](http://hub.docker.com/_/nginx) image
-2. Node.js based projects - will be deployed using [node:latest](https://hub.docker.com/_/node) image \*
-3. Docker based project - will be deployed using your [Dockerfile](https://docs.docker.com/engine/reference/builder/)
-4. Docker-Compose based projects - will be deployed using your [docker-compose](https://docs.docker.com/compose/compose-file/) file
+1.  Static html based projects - will be deployed using [nginx](http://hub.docker.com/_/nginx) image
+2.  Node.js based projects - will be deployed using [node:latest](https://hub.docker.com/_/node) image \*
+3.  Docker based project - will be deployed using your [Dockerfile](https://docs.docker.com/engine/reference/builder/)
+4.  Docker-Compose based projects - will be deployed using your [docker-compose](https://docs.docker.com/compose/compose-file/) file
 
 \* There are two things to keep in mind for Node.js projects: (1) they are started via `npm start`, so make sure you have specified start script in your `package.json`; (2) by default port 80 is exposed, so you need to make your app listen on that port. If you'd like to execute your app in any different way or expose more ports - please use Dockerfile deployment method.
 
 This list can be extended via deployment templates.  
 You can find the list of available templates [on npm](https://www.npmjs.com/search?q=exoframe-template).  
 Templates can be installed by executing `exoframe template` command and entering complete template package name.
+
+## Complex recipes
+
+Exoframe also provides support for third-party complex deployment recipes.  
+They allow to quickly and easily deploy complex projects.
+
+For example, you can deploy Wordpress with PHPMyAdmin by simply executing `exoframe setup` and entering [exoframe-recipe-wordpress](https://github.com/exoframejs/exoframe-recipe-wordpress) as desired recipe.
+
+You can find the list of available recipes [on npm](https://www.npmjs.com/search?q=exoframe-recipe).
 
 ## Commands
 
@@ -44,6 +53,7 @@ Templates can be installed by executing `exoframe template` command and entering
 | rm <id>           | Remove existing deployment or project                                |
 | log <id>          | Get logs for existing deployment or project                          |
 | template [ls, rm] | Add, list or remove deployment templates from the server             |
+| setup             | Setup a complex recipe deployment                                    |
 | token [ls, rm]    | Generate, list or remove deployment tokens                           |
 | login             | Login into Exoframe server                                           |
 | endpoint [url]    | Selects or adds the endpoint of Exoframe server                      |
@@ -54,7 +64,7 @@ Templates can be installed by executing `exoframe template` command and entering
 ## Project config file
 
 All of the configuration for the deployed projects is done using `exoframe.json` config file.  
-It can either be generated/updated using `exoframe config` command or created manually.  
+It can either be generated/updated using `exoframe config` (or `exoframe init`) command or created manually.  
 If it doesn't exist during deployment, Exoframe will generate simple config file that only contains name of the current project.
 
 Config file has the following structure:
@@ -120,9 +130,9 @@ endpoint: 'http://localhost:8080' # your endpoint URL, defaults to localhost
 Sometimes you might need to deploy things from environments that don't have your private key (e.g. CI/CD services).  
 For this cases you can use deployment tokens. Here's how it works:
 
-1. Make sure you are logged in to your Exoframe server
-2. Generate new deployment token using `exoframe token` command
-3. Use the new token to deploy your service without need to authenticate: `exoframe deploy -t $TOKEN`
+1.  Make sure you are logged in to your Exoframe server
+2.  Generate new deployment token using `exoframe token` command
+3.  Use the new token to deploy your service without need to authenticate: `exoframe deploy -t $TOKEN`
 
 ## Updating deployed project
 
@@ -130,8 +140,8 @@ Exoframe provides a way to easily update already deployed projects.
 This can be done by passing `--update` (or `-u`) flag to deploy command.  
 The way it works is quite simple:
 
-1. Exoframe deploys new version of the given project
-2. Exoframe then waits for them to start up
-3. Exoframe removes the old running deployments for current project
+1.  Exoframe deploys new version of the given project
+2.  Exoframe then waits for them to start up
+3.  Exoframe removes the old running deployments for current project
 
 This can be used together with deployment tokens to achieve simple continuous deployment for your projects.

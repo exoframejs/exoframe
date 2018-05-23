@@ -9,7 +9,7 @@ const sinon = require('sinon');
 // our packages
 const {handler: list} = require('../src/commands/list');
 
-const services = [
+const containers = [
   {
     Id: '123',
     Name: '/test',
@@ -83,12 +83,82 @@ const services = [
   },
 ];
 
-// test removal
+const services = [
+  {
+    ID: '12345',
+    Spec: {
+      Name: 'test-service-one',
+      Labels: {
+        'exoframe.project': 'test-service',
+      },
+      Networks: [
+        {
+          Target: 'netid',
+        },
+      ],
+    },
+  },
+  {
+    ID: '0987',
+    Spec: {
+      Name: 'test-service-two',
+      Labels: {
+        'exoframe.project': 'test-service',
+        'traefik.frontend.rule': 'Host:test.host',
+      },
+      Networks: [
+        {
+          Target: 'netid',
+          Aliases: ['test.host'],
+        },
+      ],
+    },
+  },
+  {
+    ID: '321',
+    Spec: {
+      Name: 'test-service-three',
+      Labels: {
+        'exoframe.project': 'test-project',
+        'traefik.frontend.rule': 'Host:other.domain',
+      },
+      Networks: [
+        {
+          Target: 'netid',
+        },
+      ],
+    },
+  },
+];
+
+// test list
 test('Should get list of deployments', done => {
   // handle correct request
   const listServer = nock('http://localhost:8080')
     .get(`/list`)
-    .reply(200, services);
+    .reply(200, {containers});
+  // spy on console
+  const consoleSpy = sinon.spy(console, 'log');
+  // execute login
+  list().then(() => {
+    // make sure log in was successful
+    // check that server was called
+    expect(listServer.isDone()).toBeTruthy();
+    // first check console output
+    expect(consoleSpy.args).toMatchSnapshot();
+    // restore console
+    console.log.restore();
+    listServer.done();
+    done();
+  });
+});
+
+// test swarm list
+test('Should get list of swarm deployments', done => {
+  // handle correct request
+  const listServer = nock('http://localhost:8080')
+    .get(`/list`)
+    .reply(200, {services});
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
   // execute login

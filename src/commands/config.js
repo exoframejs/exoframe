@@ -5,9 +5,9 @@ const chalk = require('chalk');
 const inquirer = require('inquirer');
 
 const validate = input => input && input.length > 0;
-const filter = input => input.trim();
+const filter = input => (input ? input.trim() : '');
 
-exports.command = 'config';
+exports.command = ['config', 'init'];
 exports.describe = 'generate new config file for current project';
 exports.builder = {};
 exports.handler = async () => {

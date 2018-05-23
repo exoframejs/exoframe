@@ -22,6 +22,7 @@ const config = require('./commands/config');
 const token = require('./commands/token');
 const update = require('./commands/update');
 const template = require('./commands/template');
+const setup = require('./commands/setup');
 
 // init program
 yargs
@@ -39,4 +40,5 @@ yargs
   .command(token)
   .command(config)
   .command(update)
-  .command(template).argv;
+  .command(template)
+  .command(setup).argv;
