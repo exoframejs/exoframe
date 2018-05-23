@@ -1,4 +1,13 @@
 
+3.0.0 / 2018-05-23
+==================
+
+Additions:
+  * Add tutorial on running Exoframe on basic AWS-based swarm cluster
+  * Add complex recipes support
+  * Add swarm support
+  * Add config alias (`exoframe init`)
+
 2.1.1 / 2018-03-16
 ==================
 

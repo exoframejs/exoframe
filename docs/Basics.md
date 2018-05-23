@@ -53,7 +53,7 @@ You can find the list of available recipes [on npm](https://www.npmjs.com/search
 | rm <id>           | Remove existing deployment or project                                |
 | log <id>          | Get logs for existing deployment or project                          |
 | template [ls, rm] | Add, list or remove deployment templates from the server             |
-| setup             | Setup a complex recipe deployment                                    |
+| setup [recipe]    | Setup a complex recipe deployment                                    |
 | token [ls, rm]    | Generate, list or remove deployment tokens                           |
 | login             | Login into Exoframe server                                           |
 | endpoint [url]    | Selects or adds the endpoint of Exoframe server                      |

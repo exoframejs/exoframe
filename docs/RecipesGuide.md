@@ -47,6 +47,11 @@ const recipeProps = {
     // executes `docker build` in project temp dir
     // returns following object: {log, image}
     build,
+    // exoframe build from params function
+    // has following signature: ({tarStream, tag, logLine = noop}) => {}
+    // executes `docker build` on given tarStream with given tag
+    // return following object: {log, image}
+    buildFromParams,
     // exoframe start function
     // has the following signature: async ({image, username, resultStream}) => {}
     // executes `docker start` with given image while setting all required labels, env vars, etc
@@ -77,6 +82,11 @@ const recipeProps = {
     // exoframe network get function
     // returns currently used exoframe network
     getNetwork,
+    // exoframe network creation function
+    // has the following signature: async (networkName) => {}
+    // finds or creates new network with given name
+    // returns dockerode network object
+    createNetwork,
   },
   // exoframe utilities & logger
   // see code here: https://github.com/exoframejs/exoframe-server/blob/master/src/util/index.js
@@ -256,3 +266,4 @@ exports.runSetup = async ({answers, serverConfig, username, docker, util}) => {
 ## Examples
 
 * [Wordpress recipe](https://github.com/exoframejs/exoframe-recipe-wordpress) (incl. Wordpress, MariaDB and PHPMyAdmin)
+* [HOBBIT project recipe](https://github.com/hobbit-project/exoframe-recipe-hobbit) (very complex recipe incl. volumes with configs, pre-setup scripts, etc.)
