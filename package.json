@@ -37,5 +37,8 @@
     "nock": "^9.2.6",
     "pkg": "^4.3.1",
     "sinon": "^5.0.7"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }
