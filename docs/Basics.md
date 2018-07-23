@@ -98,6 +98,16 @@ Config file has the following structure:
   "labels": {
     "my.custom.label": "value"
   },
+  // rate-limit config
+  // see "advanced topics" for more info
+  "rate-limit": {
+    // rate-limit time period
+    "period": "1s",
+    // request rate over given time period
+    "average": 1,
+    // max burst request rate over given time period
+    "burst": 5,
+  },
   // template to be used for project deployment
   // undefined by default, detected by server based on file structure
   "template": "my-template"

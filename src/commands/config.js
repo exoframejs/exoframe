@@ -23,6 +23,11 @@ exports.handler = async () => {
     labels: undefined,
     hostname: '',
     template: '',
+    rateLimit: {
+      period: '1s',
+      average: 1,
+      burst: 5,
+    },
   };
   try {
     fs.statSync(configPath);
@@ -87,6 +92,36 @@ exports.handler = async () => {
     filter,
   });
   prompts.push({
+    type: 'confirm',
+    name: 'enableRatelimit',
+    message: 'Enable rate-limit? [optional]',
+    default: !!defaultConfig.rateLimit,
+  });
+  prompts.push({
+    type: 'input',
+    name: 'ratelimitPeriod',
+    message: 'Rate-limit period (in seconds)',
+    default: defaultConfig.rateLimit ? defaultConfig.rateLimit.period.replace('s', '') : '1',
+    filter: val => `${val.trim()}s`,
+    when: ({enableRatelimit}) => enableRatelimit,
+  });
+  prompts.push({
+    type: 'input',
+    name: 'ratelimitAverage',
+    message: 'Rate-limit average request rate',
+    default: defaultConfig.rateLimit ? defaultConfig.rateLimit.average : '1',
+    filter: val => Number(val.trim()),
+    when: ({enableRatelimit}) => enableRatelimit,
+  });
+  prompts.push({
+    type: 'input',
+    name: 'ratelimitBurst',
+    message: 'Rate-limit burst request rate',
+    default: defaultConfig.rateLimit ? defaultConfig.rateLimit.burst : '5',
+    filter: val => Number(val.trim()),
+    when: ({enableRatelimit}) => enableRatelimit,
+  });
+  prompts.push({
     type: 'input',
     name: 'hostname',
     message: 'Hostname [optional]:',
@@ -108,7 +143,20 @@ exports.handler = async () => {
     filter,
   });
   // get values from user
-  const {name, domain, project, env, labels, hostname, restart, template} = await inquirer.prompt(prompts);
+  const {
+    name,
+    domain,
+    project,
+    env,
+    labels,
+    enableRatelimit,
+    ratelimitPeriod,
+    ratelimitAverage,
+    ratelimitBurst,
+    hostname,
+    restart,
+    template,
+  } = await inquirer.prompt(prompts);
   // init config object
   const config = {name, restart};
   if (domain && domain.length) {
@@ -130,6 +178,13 @@ exports.handler = async () => {
       .map(kv => kv.split('='))
       .map(pair => ({key: pair[0].trim(), value: pair[1].trim()}))
       .reduce((prev, obj) => Object.assign(prev, {[obj.key]: obj.value}), {});
+  }
+  if (enableRatelimit) {
+    config.rateLimit = {
+      period: ratelimitPeriod,
+      average: ratelimitAverage,
+      burst: ratelimitBurst,
+    };
   }
   if (hostname && hostname.length) {
     config.hostname = hostname;

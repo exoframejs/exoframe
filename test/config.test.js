@@ -21,6 +21,10 @@ const configData = {
   hostname: 'host',
   restart: 'no',
   template: 'static',
+  enableRatelimit: true,
+  ratelimitPeriod: 10,
+  ratelimitAverage: 20,
+  ratelimitBurst: 30,
 };
 const configPath = path.join(process.cwd(), 'exoframe.json');
 
@@ -55,6 +59,11 @@ test('Should generate config file', done => {
     expect(cfg.labels.label).toEqual('1');
     expect(cfg.labels.other).toEqual('2');
     expect(cfg.template).toEqual(configData.template);
+    expect(cfg.rateLimit).toEqual({
+      period: configData.ratelimitPeriod,
+      average: configData.ratelimitAverage,
+      burst: configData.ratelimitBurst,
+    });
     // restore inquirer
     inquirer.prompt.restore();
     // restore console
