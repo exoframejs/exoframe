@@ -265,5 +265,5 @@ exports.runSetup = async ({answers, serverConfig, username, docker, util}) => {
 
 ## Examples
 
-* [Wordpress recipe](https://github.com/exoframejs/exoframe-recipe-wordpress) (incl. Wordpress, MariaDB and PHPMyAdmin)
-* [HOBBIT project recipe](https://github.com/hobbit-project/exoframe-recipe-hobbit) (very complex recipe incl. volumes with configs, pre-setup scripts, etc.)
+- [Wordpress recipe](https://github.com/exoframejs/exoframe-recipe-wordpress) (incl. Wordpress, MariaDB and PHPMyAdmin)
+- [HOBBIT project recipe](https://github.com/hobbit-project/exoframe-recipe-hobbit) (very complex recipe incl. volumes with configs, pre-setup scripts, etc.)

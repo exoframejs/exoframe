@@ -11,19 +11,19 @@ Exoframe is a self-hosted tool that allows simple one-command deployments using 
 
 ## Features
 
-* One-command project deployment
-* SSH key based auth
-* Rolling updates
-* Deploy tokens (e.g. to deploy from CI)
-* Automated HTTPS setup via letsencrypt \*
-* Automated gzip compression \*
-* Simple access to the logs of deployments
-* Docker-compose support
-* Multiple deployment endpoints and multi-user support
-* Simple update procedure for client, server and Traefik
-* Optional automatic subdomain assignment (i.e. every deployment gets its own subdomain)
-* Swarm mode deployments
-* Complex recipes support (i.e. deploy complex systems in one command)
+- One-command project deployment
+- SSH key based auth
+- Rolling updates
+- Deploy tokens (e.g. to deploy from CI)
+- Automated HTTPS setup via letsencrypt \*
+- Automated gzip compression \*
+- Simple access to the logs of deployments
+- Docker-compose support
+- Multiple deployment endpoints and multi-user support
+- Simple update procedure for client, server and Traefik
+- Optional automatic subdomain assignment (i.e. every deployment gets its own subdomain)
+- Swarm mode deployments
+- Complex recipes support (i.e. deploy complex systems in one command)
 
 \* Feature provided by [Traefik](https://traefik.io/)
 
@@ -64,20 +64,21 @@ You can find a list of all commands and options in the [docs](./docs/README.md).
 
 ## Docs
 
-* [Basics](docs/Basics.md)
-* [FAQ](docs/FAQ.md)
-* [Contribution Guideline](docs/Contributing.md)
-* [Templates guide](docs/TemplatesGuide.md)
-* [Recipes guide](docs/RecipesGuide.md)
-* [Using nightly versions](docs/Nightly.md)
-* [Tutorials, articles, video and related links](docs/Links.md)
-* [Change Log](CHANGELOG.md)
+- [Basics](docs/Basics.md)
+- [Advanced topics](docs/Advanced.md)
+- [FAQ](docs/FAQ.md)
+- [Contribution Guideline](docs/Contributing.md)
+- [Templates guide](docs/TemplatesGuide.md)
+- [Recipes guide](docs/RecipesGuide.md)
+- [Using nightly versions](docs/Nightly.md)
+- [Tutorials, articles, video and related links](docs/Links.md)
+- [Change Log](CHANGELOG.md)
 
 ## Special thanks
 
 Thanks to:
 
-* [Ivan Semenov](https://www.behance.net/ivan_semenov) for making [an awesome logo](./logo/README.md)
+- [Ivan Semenov](https://www.behance.net/ivan_semenov) for making [an awesome logo](./logo/README.md)
 
 ## License
 

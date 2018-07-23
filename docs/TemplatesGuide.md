@@ -159,7 +159,7 @@ exports.executeTemplate = async ({username, tempDockerDir, resultStream, util, d
 
 ## Examples
 
-* [Core templates](https://github.com/exoframejs/exoframe-server/tree/master/src/docker/templates) (incl. node, nginx, dockerfile and docker-compose)
-* [Maven template](https://github.com/exoframejs/exoframe-template-maven)
-* [Java template](https://github.com/exoframejs/exoframe-template-java)
-* [Tomcat template](https://github.com/exoframejs/exoframe-template-tomcat)
+- [Core templates](https://github.com/exoframejs/exoframe-server/tree/master/src/docker/templates) (incl. node, nginx, dockerfile and docker-compose)
+- [Maven template](https://github.com/exoframejs/exoframe-template-maven)
+- [Java template](https://github.com/exoframejs/exoframe-template-java)
+- [Tomcat template](https://github.com/exoframejs/exoframe-template-tomcat)
