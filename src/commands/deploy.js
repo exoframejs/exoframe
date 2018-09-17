@@ -1,6 +1,6 @@
 // npm modules
 const chalk = require('chalk');
-const ignore = require('ignore');
+const multimatch = require('multimatch');
 const tar = require('tar-fs');
 const got = require('got');
 const path = require('path');
@@ -164,9 +164,12 @@ exports.handler = async (args = {}) => {
   }
 
   // create tar stream from current folder
-  const ig = ignore().add(ignores);
   const tarStream = tar.pack(workdir, {
-    ignore: name => ig.ignores(name),
+    ignore: name => {
+      const relativePath = name.replace(`${workdir}/`, '');
+      const result = multimatch([relativePath], ignores).length !== 0;
+      return result;
+    },
   });
   // if in verbose mode - log ignores
   verbose && console.log('\nIgnoring following paths:', ignores);
