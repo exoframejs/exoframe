@@ -17,24 +17,20 @@ const formatServices = require('../util/formatServices');
 
 const defaultIgnores = ['.git', 'node_modules', '.exoframeignore'];
 
-const streamToResponse = ({tarStream, remoteUrl, options, verbose, handleUpload, handleDownload}) =>
+const streamToResponse = ({tarStream, remoteUrl, options, verbose, spinner}) =>
   new Promise((resolve, reject) => {
     // store error and result
     let error;
     let result = {};
     // pipe stream to remote
-    const stream = _(
-      tarStream.pipe(
-        got.stream
-          .post(remoteUrl, options)
-          .on('uploadProgress', handleUpload)
-          .on('downloadProgress', handleDownload)
-      )
-    )
+    const stream = _(tarStream.pipe(got.stream.post(remoteUrl, options)))
       .split()
       .filter(l => l && l.length);
     // store output
     stream.on('data', str => {
+      if (spinner) {
+        spinner.text = 'Project uploaded! Waiting for deployment..';
+      }
       const s = str.toString();
       try {
         const data = JSON.parse(s);
@@ -195,13 +191,10 @@ exports.handler = async (args = {}) => {
 
   // pipe stream to remote
   try {
-    const handleUpload = () => {
+    if (spinner) {
       spinner.text = `Uploading project..`;
-    };
-    const handleDownload = () => {
-      spinner.text = 'Project uploaded! Waiting for deployment..';
-    };
-    const res = await streamToResponse({tarStream, remoteUrl, options, verbose, handleUpload, handleDownload});
+    }
+    const res = await streamToResponse({tarStream, remoteUrl, options, verbose, spinner});
     // check deployments
     if (!res.deployments || !res.deployments.length) {
       const err = new Error('Something went wrong!');
