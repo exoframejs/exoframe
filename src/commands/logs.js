@@ -7,8 +7,14 @@ const {userConfig, isLoggedIn, logout} = require('../config');
 
 exports.command = ['logs <id>', 'log <id>'];
 exports.describe = 'get logs for given deployment';
-exports.builder = {};
-exports.handler = ({id}) =>
+exports.builder = {
+  follow: {
+    alias: 'f',
+    description: 'Follow log output',
+    count: true,
+  },
+};
+exports.handler = ({id, follow}) =>
   new Promise(resolve => {
     if (!isLoggedIn()) {
       return;
@@ -18,11 +24,17 @@ exports.handler = ({id}) =>
 
     // services request url
     const remoteUrl = `${userConfig.endpoint}/logs/${id}`;
+    // construct query
+    const query = {};
+    if (follow) {
+      query.follow = 'true';
+    }
     // construct shared request params
     const options = {
       headers: {
         Authorization: `Bearer ${userConfig.token}`,
       },
+      query,
     };
     // try sending request
     const logStream = got.stream(remoteUrl, options);
