@@ -17,13 +17,20 @@ const formatServices = require('../util/formatServices');
 
 const defaultIgnores = ['.git', 'node_modules', '.exoframeignore'];
 
-const streamToResponse = ({tarStream, remoteUrl, options, verbose}) =>
+const streamToResponse = ({tarStream, remoteUrl, options, verbose, handleUpload, handleDownload}) =>
   new Promise((resolve, reject) => {
     // store error and result
     let error;
     let result = {};
     // pipe stream to remote
-    const stream = _(tarStream.pipe(got.stream.post(remoteUrl, options)))
+    const stream = _(
+      tarStream.pipe(
+        got.stream
+          .post(remoteUrl, options)
+          .on('uploadProgress', handleUpload)
+          .on('downloadProgress', handleDownload)
+      )
+    )
       .split()
       .filter(l => l && l.length);
     // store output
@@ -188,14 +195,20 @@ exports.handler = async (args = {}) => {
 
   // pipe stream to remote
   try {
-    const res = await streamToResponse({tarStream, remoteUrl, options, verbose});
+    const handleUpload = () => {
+      spinner.text = `Uploading project..`;
+    };
+    const handleDownload = () => {
+      spinner.text = 'Project uploaded! Waiting for deployment..';
+    };
+    const res = await streamToResponse({tarStream, remoteUrl, options, verbose, handleUpload, handleDownload});
     // check deployments
     if (!res.deployments || !res.deployments.length) {
       const err = new Error('Something went wrong!');
       err.response = res;
       throw err;
     }
-    spinner && spinner.succeed('Upload finished!');
+    spinner && spinner.succeed('Deployment finished!');
 
     // log response in verbose-verbose mode
     verbose > 2 && console.log(chalk.gray('Server response:'), JSON.stringify(res, null, 2), '\n');
