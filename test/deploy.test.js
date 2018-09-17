@@ -256,7 +256,7 @@ test('Should display error on malformed JSON', done => {
 });
 
 // test
-test.only('Should display verbose output', done => {
+test('Should display verbose output', done => {
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
 
