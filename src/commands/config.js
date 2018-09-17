@@ -7,6 +7,23 @@ const inquirer = require('inquirer');
 const validate = input => input && input.length > 0;
 const filter = input => (input ? input.trim() : '');
 
+const pairValidation = input => {
+  if (!input) {
+    return true;
+  }
+
+  const pairs = input.split(',');
+  const res = pairs.map(pair => {
+    const s = pair.split('=');
+    const [key, val] = s;
+    return key && val;
+  });
+  if (res.some(r => !r)) {
+    return `Value should be specified in 'key=val,key2=val2' format!`;
+  }
+  return true;
+};
+
 exports.command = ['config', 'init'];
 exports.describe = 'generate new config file for current project';
 exports.builder = {};
@@ -79,6 +96,7 @@ exports.handler = async () => {
           .join(', ')
       : '',
     filter,
+    validate: pairValidation,
   });
   prompts.push({
     type: 'input',
@@ -90,6 +108,7 @@ exports.handler = async () => {
           .join(', ')
       : '',
     filter,
+    validate: pairValidation,
   });
   prompts.push({
     type: 'confirm',
@@ -102,7 +121,7 @@ exports.handler = async () => {
     name: 'ratelimitPeriod',
     message: 'Rate-limit period (in seconds)',
     default: defaultConfig.rateLimit ? defaultConfig.rateLimit.period.replace('s', '') : '1',
-    filter: val => `${val.trim()}s`,
+    filter: val => `${val}s`,
     when: ({enableRatelimit}) => enableRatelimit,
   });
   prompts.push({
@@ -110,7 +129,7 @@ exports.handler = async () => {
     name: 'ratelimitAverage',
     message: 'Rate-limit average request rate',
     default: defaultConfig.rateLimit ? defaultConfig.rateLimit.average : '1',
-    filter: val => Number(val.trim()),
+    filter: val => Number(val),
     when: ({enableRatelimit}) => enableRatelimit,
   });
   prompts.push({
@@ -118,7 +137,7 @@ exports.handler = async () => {
     name: 'ratelimitBurst',
     message: 'Rate-limit burst request rate',
     default: defaultConfig.rateLimit ? defaultConfig.rateLimit.burst : '5',
-    filter: val => Number(val.trim()),
+    filter: val => Number(val),
     when: ({enableRatelimit}) => enableRatelimit,
   });
   prompts.push({
