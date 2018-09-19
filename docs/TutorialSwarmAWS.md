@@ -6,9 +6,9 @@ This tutorial will guide you through setup of Exoframe on basic AWS Docker Swarm
 
 This tutorial assumes you have the following things installed on your machine:
 
-* [Docker](https://docs.docker.com/install/)
-* [Docker-machine](https://docs.docker.com/machine/install-machine/)
-* [AWS cli](https://docs.aws.amazon.com/cli/latest/userguide/installing.html)
+- [Docker](https://docs.docker.com/install/)
+- [Docker-machine](https://docs.docker.com/machine/install-machine/)
+- [AWS cli](https://docs.aws.amazon.com/cli/latest/userguide/installing.html)
 
 ## Step 1: Get AWS account & access key and secret
 

@@ -2,8 +2,8 @@
 
 ## Concepts
 
-* **Project** - one or more deployments grouped together (e.g. started via docker-compose)
-* **Deployment** - one and only one deployed service
+- **Project** - one or more deployments grouped together (e.g. started via docker-compose)
+- **Deployment** - one and only one deployed service
 
 ## Requirements
 
@@ -12,8 +12,8 @@ Most intensive task from CLI side is packaging the project and streaming that to
 
 Running Exoframe server on its own also doesn't require too much resources:
 
-* Exoframe Server consumes ~50mb of RAM
-* Traefik started along with server consumes ~60mb of RAM
+- Exoframe Server consumes ~50mb of RAM
+- Traefik started along with server consumes ~60mb of RAM
 
 Be aware though - execution of deployments will result in (1) new Docker images being built and (2) new Docker containers being started.  
 Depending on your project's complexity, this might require significant amount of resources during both steps resulting in failed deployments (note: if Docker goes out-of-memory during build, you will not get any specific error - just a failed deployment).  
@@ -97,6 +97,16 @@ Config file has the following structure:
   // Add additional docker labels to your container [optional]
   "labels": {
     "my.custom.label": "value"
+  },
+  // rate-limit config
+  // see "advanced topics" for more info
+  "rate-limit": {
+    // rate-limit time period
+    "period": "1s",
+    // request rate over given time period
+    "average": 1,
+    // max burst request rate over given time period
+    "burst": 5,
   },
   // template to be used for project deployment
   // undefined by default, detected by server based on file structure

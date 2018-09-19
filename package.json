@@ -1,6 +1,6 @@
 {
   "name": "exoframe",
-  "version": "3.0.1",
+  "version": "3.1.0",
   "description": "Exoframe is a self-hosted tool that allows simple one-command deployments using Docker",
   "main": "index.js",
   "repository": "git@github.com:exoframejs/exoframe.git",
@@ -12,30 +12,33 @@
   "scripts": {
     "test": "TZ=Greenland NODE_ENV=testing jest --coverage --silent --maxWorkers=2 --ci",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "package": "pkg --targets node8.9.0-linux-x64,node8.9.0-win-x64,node8.9.0-macos-x64 -o exoframe index.js"
+    "package": "pkg --targets node8.11.3-linux-x64,node8.11.3-win-x64,node8.11.3-macos-x64 -o exoframe index.js"
   },
   "dependencies": {
-    "boxen": "^1.2.2",
+    "boxen": "^2.0.0",
     "chalk": "^2.4.1",
     "cli-table": "^0.3.1",
-    "got": "^8.3.1",
+    "got": "^9.2.2",
     "highland": "^2.13.0",
-    "ignore": "^3.3.8",
-    "inquirer": "^5.2.0",
-    "js-yaml": "^3.11.0",
-    "jsonwebtoken": "^8.2.1",
-    "lodash": "^4.17.10",
+    "inquirer": "^6.2.0",
+    "js-yaml": "^3.12.0",
+    "jsonwebtoken": "^8.3.0",
+    "lodash": "^4.17.11",
+    "multimatch": "^2.1.0",
     "opn": "^5.3.0",
-    "ora": "^2.1.0",
-    "tar-fs": "^1.16.2",
+    "ora": "^3.0.0",
+    "tar-fs": "^1.16.3",
     "update-notifier": "^2.5.0",
-    "yargs": "^11.0.0"
+    "yargs": "^12.0.2"
   },
   "devDependencies": {
-    "coveralls": "^3.0.1",
-    "jest": "^22.4.4",
-    "nock": "^9.2.6",
-    "pkg": "^4.3.1",
-    "sinon": "^5.0.7"
+    "coveralls": "^3.0.2",
+    "jest": "^23.6.0",
+    "nock": "^10.0.0",
+    "pkg": "^4.3.4",
+    "sinon": "^6.3.3"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }

@@ -1,6 +1,6 @@
 // npm modules
 const chalk = require('chalk');
-const ignore = require('ignore');
+const multimatch = require('multimatch');
 const tar = require('tar-fs');
 const got = require('got');
 const path = require('path');
@@ -17,7 +17,7 @@ const formatServices = require('../util/formatServices');
 
 const defaultIgnores = ['.git', 'node_modules', '.exoframeignore'];
 
-const streamToResponse = ({tarStream, remoteUrl, options, verbose}) =>
+const streamToResponse = ({tarStream, remoteUrl, options, verbose, spinner}) =>
   new Promise((resolve, reject) => {
     // store error and result
     let error;
@@ -28,6 +28,9 @@ const streamToResponse = ({tarStream, remoteUrl, options, verbose}) =>
       .filter(l => l && l.length);
     // store output
     stream.on('data', str => {
+      if (spinner) {
+        spinner.text = 'Project uploaded! Waiting for deployment..';
+      }
       const s = str.toString();
       try {
         const data = JSON.parse(s);
@@ -164,9 +167,12 @@ exports.handler = async (args = {}) => {
   }
 
   // create tar stream from current folder
-  const ig = ignore().add(ignores);
   const tarStream = tar.pack(workdir, {
-    ignore: name => ig.ignores(name),
+    ignore: name => {
+      const relativePath = name.replace(`${workdir}/`, '');
+      const result = multimatch([relativePath], ignores).length !== 0;
+      return result;
+    },
   });
   // if in verbose mode - log ignores
   verbose && console.log('\nIgnoring following paths:', ignores);
@@ -185,14 +191,17 @@ exports.handler = async (args = {}) => {
 
   // pipe stream to remote
   try {
-    const res = await streamToResponse({tarStream, remoteUrl, options, verbose});
+    if (spinner) {
+      spinner.text = `Uploading project..`;
+    }
+    const res = await streamToResponse({tarStream, remoteUrl, options, verbose, spinner});
     // check deployments
     if (!res.deployments || !res.deployments.length) {
       const err = new Error('Something went wrong!');
       err.response = res;
       throw err;
     }
-    spinner && spinner.succeed('Upload finished!');
+    spinner && spinner.succeed('Deployment finished!');
 
     // log response in verbose-verbose mode
     verbose > 2 && console.log(chalk.gray('Server response:'), JSON.stringify(res, null, 2), '\n');
