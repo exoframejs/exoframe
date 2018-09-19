@@ -1,3 +1,7 @@
+# 3.1.1 / 2018-09-19
+
+- Update npm deploy token for travis
+
 # 3.1.0 / 2018-09-19
 
 - Add option to follow logs
