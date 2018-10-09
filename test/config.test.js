@@ -25,6 +25,7 @@ const configData = {
   ratelimitPeriod: 10,
   ratelimitAverage: 20,
   ratelimitBurst: 30,
+  basicAuth: 'user:somehash,user2:somehash2'
 };
 const configPath = path.join(process.cwd(), 'exoframe.json');
 
@@ -64,6 +65,7 @@ test('Should generate config file', done => {
       average: configData.ratelimitAverage,
       burst: configData.ratelimitBurst,
     });
+    expect(cfg.basicAuth).toEqual(configData.basicAuth);
     // restore inquirer
     inquirer.prompt.restore();
     // restore console
