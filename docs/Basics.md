@@ -110,7 +110,11 @@ Config file has the following structure:
   },
   // template to be used for project deployment
   // undefined by default, detected by server based on file structure
-  "template": "my-template"
+  "template": "my-template",
+  // basic auth, [optional]
+  // this field allows you to have basic auth to access your deployed service
+  // format is in user:pwhash
+  "basicAuth": "user:$apr1$$9Cv/OMGj$$ZomWQzuQbL.3TRCS81A1g/"
 }
 ```
 
