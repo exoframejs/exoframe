@@ -45,6 +45,7 @@ exports.handler = async () => {
       average: 1,
       burst: 5,
     },
+    basicAuth: ''
   };
   try {
     fs.statSync(configPath);
@@ -161,6 +162,13 @@ exports.handler = async () => {
     default: defaultConfig.template,
     filter,
   });
+  prompts.push({
+    type: 'input',
+    name: 'basicAuth',
+    message: 'Basic Auth [optional]:',
+    default: defaultConfig.basicAuth,
+    filter
+  });
   // get values from user
   const {
     name,
@@ -175,6 +183,7 @@ exports.handler = async () => {
     hostname,
     restart,
     template,
+    basicAuth,
   } = await inquirer.prompt(prompts);
   // init config object
   const config = {name, restart};
@@ -210,6 +219,9 @@ exports.handler = async () => {
   }
   if (template && template.length) {
     config.template = template;
+  }
+  if (basicAuth && basicAuth.length) {
+    config.basicAuth = basicAuth;
   }
 
   // write config
