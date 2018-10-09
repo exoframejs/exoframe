@@ -100,7 +100,7 @@ Config file has the following structure:
   },
   // rate-limit config
   // see "advanced topics" for more info
-  "rate-limit": {
+  "rateLimit": {
     // rate-limit time period
     "period": "1s",
     // request rate over given time period
