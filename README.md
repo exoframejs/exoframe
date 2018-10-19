@@ -66,6 +66,8 @@ You can find a list of all commands and options in the [docs](./docs/README.md).
 ## Docs
 
 - [Basics](docs/Basics.md)
+- [Server Installation](docs/ServerInstallation.md)
+- [Server Configuration](docs/ServerConfiguration.md)
 - [Advanced topics](docs/Advanced.md)
 - [FAQ](docs/FAQ.md)
 - [Contribution Guideline](docs/Contributing.md)
