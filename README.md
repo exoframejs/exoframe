@@ -63,18 +63,6 @@ exoframe
 
 You can find a list of all commands and options in the [docs](./docs/README.md).
 
-## Docs
-
-- [Basics](docs/Basics.md)
-- [Advanced topics](docs/Advanced.md)
-- [FAQ](docs/FAQ.md)
-- [Contribution Guideline](docs/Contributing.md)
-- [Templates guide](docs/TemplatesGuide.md)
-- [Recipes guide](docs/RecipesGuide.md)
-- [Using nightly versions](docs/Nightly.md)
-- [Tutorials, articles, video and related links](docs/Links.md)
-- [Change Log](CHANGELOG.md)
-
 ## Special thanks
 
 Thanks to:
