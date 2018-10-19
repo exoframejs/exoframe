@@ -67,7 +67,3 @@ docker service create \
 ```
 
 Note that both Exoframe server and Traefik will be run on your manager node.
-
-## License
-
-Licensed under MIT.
