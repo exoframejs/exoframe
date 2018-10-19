@@ -1,5 +1,5 @@
 
-## Configuration
+## Server Configuration
 
 Exoframe stores its config in `~/.exoframe/server.config.yml`.  
 Currently it contains the following settings:
@@ -48,7 +48,3 @@ swarm: false
 ```
 
 _Warning:_ Most changes to config are applied immediately. With exception of Letsencrypt config. If you are enabling letsencrypt after Traefik instance has been started, you'll need to remove Traefik and then restart Exoframe server for changes to take effect.
-
-## Docs
-
-[Read more about Exoframe and how it works in the main repo](https://github.com/exoframejs/exoframe).
