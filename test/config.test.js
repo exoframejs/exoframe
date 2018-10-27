@@ -8,6 +8,7 @@ const path = require('path');
 const yaml = require('js-yaml');
 const sinon = require('sinon');
 const inquirer = require('inquirer');
+const md5 = require('apache-md5');
 
 // our packages
 const {handler: config} = require('../src/commands/config');
@@ -25,9 +26,16 @@ const configData = {
   ratelimitPeriod: 10,
   ratelimitAverage: 20,
   ratelimitBurst: 30,
-  basicAuth: 'user:somehash,user2:somehash2'
+  basicAuth: [{username: 'user1', password: 'pass'}, {username:'user2', password:'pass'}],
 };
 const configPath = path.join(process.cwd(), 'exoframe.json');
+
+const verifyBasicAuth = (input, actual) => {
+  actual.split(',').forEach((element, index) => {
+    const hash = element.split(':')[1]
+    expect(hash).toEqual(md5(input[index].password, hash))
+  });
+};
 
 beforeAll(() => {
   try {
@@ -65,7 +73,7 @@ test('Should generate config file', done => {
       average: configData.ratelimitAverage,
       burst: configData.ratelimitBurst,
     });
-    expect(cfg.basicAuth).toEqual(configData.basicAuth);
+    verifyBasicAuth(configData.basicAuth, cfg.basicAuth);
     // restore inquirer
     inquirer.prompt.restore();
     // restore console
