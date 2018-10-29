@@ -3,10 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
 const inquirer = require('inquirer');
-const inquirerRecursive = require('inquirer-recursive');
 const md5 = require('apache-md5');
-
-inquirer.registerPrompt('recursive', inquirerRecursive);
 
 const validate = input => input && input.length > 0;
 const filter = input => (input ? input.trim() : '');
@@ -167,29 +164,44 @@ exports.handler = async () => {
     filter,
   });
   prompts.push({
-    type: 'recursive',
+    type: 'confirm',
     name: 'basicAuth',
     message: 'Add a basic auth user? [optional]:',
-    default: defaultConfig.basicAuth,
-    prompts: [
-      {
-        type: 'input',
-        name: 'username',
-        message: 'Username for Basic Auth:',
-        default: '',
-        validate,
-        filter,
-      },
-      {
-        type: 'password',
-        name: 'password',
-        message: 'Password for Basic auth:',
-        default: '',
-        validate,
-        filter,
-      }
-    ]
-  })
+  });
+
+  // prompts for recursive questions
+  const recursivePrompts = []
+  recursivePrompts.push({
+    type: 'input',
+    name: 'username',
+    message: 'Username for Basic Auth:',
+    filter,
+    validate,
+  });
+  recursivePrompts.push({
+    type: 'password',
+    name: 'password',
+    message: 'Password for Basic auth:',
+    filter,
+    validate,
+  });
+  recursivePrompts.push({
+    type: 'confirm',
+    name: 'askAgain',
+    message: 'Add another user?',
+    default: false,
+  });
+
+  const askForUsers = async users => {
+    const {username, password, askAgain} = await inquirer.prompt(recursivePrompts);
+    users.push({username, password});
+    if (askAgain) {
+      return askForUsers(users);
+    } else {
+      return users;
+    }
+  };
+
   // get values from user
   const {
     name,
@@ -206,6 +218,13 @@ exports.handler = async () => {
     template,
     basicAuth,
   } = await inquirer.prompt(prompts);
+
+  const users = [];
+
+  if (basicAuth) {
+    await askForUsers(users);
+  }
+
   // init config object
   const config = {name, restart};
   if (domain && domain.length) {
@@ -241,9 +260,9 @@ exports.handler = async () => {
   if (template && template.length) {
     config.template = template;
   }
-  if (basicAuth && basicAuth.length !== 0) {
-    config.basicAuth = basicAuth.reduce((acc, curr, index) => {
-      const delimeter = basicAuth.length - 1 === index ? '' : ',';
+  if (users.length !== 0) {
+    config.basicAuth = users.reduce((acc, curr, index) => {
+      const delimeter = users.length - 1 === index ? '' : ',';
       const pair = `${curr.username}:${md5(curr.password)}`;
       return `${acc}${pair}${delimeter}`;
     }, '');

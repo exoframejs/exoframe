@@ -26,7 +26,9 @@ const configData = {
   ratelimitPeriod: 10,
   ratelimitAverage: 20,
   ratelimitBurst: 30,
-  basicAuth: [{username: 'user1', password: 'pass'}, {username:'user2', password:'pass'}],
+  basicAuth: 'yes',
+  username: 'user1',
+  password: 'pass',
 };
 const configPath = path.join(process.cwd(), 'exoframe.json');
 
@@ -73,7 +75,8 @@ test('Should generate config file', done => {
       average: configData.ratelimitAverage,
       burst: configData.ratelimitBurst,
     });
-    verifyBasicAuth(configData.basicAuth, cfg.basicAuth);
+    const { username, password } = configData;
+    verifyBasicAuth([{username, password}], cfg.basicAuth);
     // restore inquirer
     inquirer.prompt.restore();
     // restore console
