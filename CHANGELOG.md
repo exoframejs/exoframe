@@ -1,3 +1,17 @@
+# 3.2.0 / 2018-12-10
+
+Additions:
+
+- Added support for basic http auth
+
+Changes:
+
+- Moved server docs to main repo
+
+Fixes:
+
+- Fixed rateLimit field wrong format in config docs
+
 # 3.1.1 / 2018-09-19
 
 - Update npm deploy token for travis
