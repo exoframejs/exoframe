@@ -49,3 +49,26 @@ This will define how many requests (`average`) over given time (`period`) can be
 For the example above - an average of 5 requests every 3 seconds is allowed with busts of up to 10 requests.
 
 For more information, see [Traefik rate-limiting docs](https://docs.traefik.io/configuration/commons/#rate-limiting).
+
+## Secrets
+
+Exoframe allows you to create server-side secret values that can be used during service deployments.
+To use secrets you first need to create one. This can be done by running:
+
+```
+$ exoframe secret new
+```
+
+Once you specify the name and value, Exoframe server will create new secret _for your current user_.
+After creation the secret can be used in `exoframe.json` config file by using secret name and prefixing it with `@`, like so (in this example the secret was name `my-secret`):
+
+```json
+"env": {
+  "SECRET_KEY": "@my-secret"
+},
+```
+
+Current caveats:
+
+- Currently secrets only work for environment variables
+- Currently secrets work only for normal deployments (any template or recipe that uses `startFromParams` won't have secrets expanded)

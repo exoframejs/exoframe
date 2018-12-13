@@ -15,9 +15,11 @@ Exoframe is a self-hosted tool that allows simple one-command deployments using 
 - SSH key based auth
 - Rolling updates
 - Deploy tokens (e.g. to deploy from CI)
+- Deploy secrets (e.g. to hide sensitive env vars)
 - Automated HTTPS setup via letsencrypt \*
 - Automated gzip compression \*
 - Rate-limit support \*
+- Basic HTTP Auth support \*
 - Simple access to the logs of deployments
 - Docker-compose support
 - Multiple deployment endpoints and multi-user support
