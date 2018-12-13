@@ -1,3 +1,7 @@
+# 3.3.0 / 2018-12-13
+
+- Add basic secrets support and docs
+
 # 3.2.0 / 2018-12-10
 
 Additions:
