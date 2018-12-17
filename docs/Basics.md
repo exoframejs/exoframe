@@ -139,6 +139,10 @@ Currently it contains list of endpoint URLs with associated usernames and authen
 endpoint: 'http://localhost:8080' # your endpoint URL, defaults to localhost
 ```
 
+## SSH key auth
+
+The SSK key needs to be RSA and in PEM format. To ensure your key is generated in a format that works you can generate with this command: `ssh-keygen -t rsa -b 4096 -C "your_email@example.com" -m 'PEM'`. This follows the [GitHub Instructions](https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/) with an additional flag ensuring it is the right format.
+
 ## Deployment tokens
 
 Sometimes you might need to deploy things from environments that don't have your private key (e.g. CI/CD services).  
