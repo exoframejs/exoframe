@@ -11,7 +11,7 @@ exports.describe = 'create, list or remove deployment secrets';
 exports.builder = {
   cmd: {
     default: 'new',
-    description: 'command to execute [new | ls | rm]',
+    description: 'command to execute [new | ls | get | rm]',
   },
 };
 exports.handler = async args => {
@@ -24,11 +24,13 @@ exports.handler = async args => {
   // get command
   const {cmd} = args;
   // if remove or ls - fetch secrets from remote, then do work
-  if (cmd === 'ls' || cmd === 'rm') {
-    console.log(
-      chalk.bold(`${cmd === 'ls' ? 'Listing' : 'Removing'} deployment secret${cmd === 'ls' ? 's' : ''} for:`),
-      userConfig.endpoint
-    );
+  if (cmd === 'ls' || cmd === 'rm' || cmd === 'get') {
+    const actions = {
+      ls: 'Listing',
+      rm: 'Removing',
+      get: 'Getting',
+    };
+    console.log(chalk.bold(`${actions[cmd]} deployment secret${cmd === 'ls' ? 's' : ''} for:`), userConfig.endpoint);
 
     // get secrets from server
     // construct shared request params
@@ -71,11 +73,61 @@ exports.handler = async args => {
     const prompts = [];
     prompts.push({
       type: 'list',
-      name: 'rmSecret',
+      name: 'selectedSecret',
       message: 'Choose secret to remove:',
       choices: secrets.map(t => t.name),
     });
-    const {rmSecret} = await inquirer.prompt(prompts);
+    const {selectedSecret} = await inquirer.prompt(prompts);
+
+    // if getting secret - ask user once more if he's sure
+    if (cmd === 'get') {
+      const {doGet} = await inquirer.prompt([
+        {
+          type: 'confirm',
+          name: 'doGet',
+          message: 'Get secret value? (will be shown in plain text)',
+          default: false,
+        },
+      ]);
+
+      if (!doGet) {
+        console.log(chalk.red('Stopping!'), 'User decided not to read secret value..');
+        return;
+      }
+
+      // get secrets from server
+      // construct shared request params
+      const options = {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${userConfig.token}`,
+        },
+        json: true,
+      };
+      let secret = undefined;
+      try {
+        const {body} = await got(`${remoteUrl}/${selectedSecret}`, options);
+        secret = body.secret;
+      } catch (e) {
+        // if authorization is expired/broken/etc
+        if (e.statusCode === 401) {
+          logout(userConfig);
+          console.log(chalk.red('Error: authorization expired!'), 'Please, relogin and try again.');
+          return;
+        }
+
+        console.log(chalk.red('Error getting deployment secret:'), e.toString());
+        return;
+      }
+
+      console.log(chalk.bold('New secret generated:'));
+      console.log('');
+      console.log(`Name: ${secret.name}`);
+      console.log(`Value: ${secret.value}`);
+      console.log(`Date: ${new Date(secret.meta.created).toLocaleString()}`);
+
+      return;
+    }
 
     // construct shared request params
     const rmOptions = {
@@ -85,7 +137,7 @@ exports.handler = async args => {
       },
       json: true,
       body: {
-        secretName: rmSecret,
+        secretName: selectedSecret,
       },
     };
     try {
@@ -150,7 +202,7 @@ exports.handler = async args => {
     console.log(`Name: ${body.name}`);
     console.log(`Value: ${body.value}`);
     console.log('');
-    console.log(chalk.yellow('WARNING!'), `Make sure to write it down, you will not be able to get it's value again!`);
+    console.log(chalk.green('DONE!'));
   } catch (e) {
     // if authorization is expired/broken/etc
     if (e.statusCode === 401) {

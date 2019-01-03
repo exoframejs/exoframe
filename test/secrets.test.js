@@ -67,6 +67,45 @@ test('Should list secrets', done => {
   });
 });
 
+// test getting
+test('Should get secret value', done => {
+  const createDate = new Date(2018, 1, 1, 1, 1, 1, 1);
+  // handle correct request
+  const secretGetServer = nock('http://localhost:8080')
+    .get('/secrets')
+    .reply(200, {secrets: [{name: testSecret.secretName, meta: {created: createDate}}]});
+  // handle correct request
+  const secretServer = nock('http://localhost:8080')
+    .get(`/secrets/${testSecret.secretName}`)
+    .reply(200, {secret: {...testSecret, meta: {created: createDate}}});
+  // spy on console
+  const consoleSpy = sinon.spy(console, 'log');
+  // stup inquirer answers
+  sinon
+    .stub(inquirer, 'prompt')
+    .onFirstCall()
+    .callsFake(() => Promise.resolve({selectedSecret: testSecret.secretName}))
+    .onSecondCall()
+    .callsFake(() => Promise.resolve({doGet: true}));
+  // execute login
+  secrets({cmd: 'get'}).then(() => {
+    // make sure log in was successful
+    // check that server was called
+    expect(secretGetServer.isDone()).toBeTruthy();
+    expect(secretServer.isDone()).toBeTruthy();
+    // first check console output
+    expect(consoleSpy.args).toMatchSnapshot();
+    // restore console
+    console.log.restore();
+    // restore inquirer
+    inquirer.prompt.restore();
+    // tear down nock
+    secretGetServer.done();
+    secretServer.done();
+    done();
+  });
+});
+
 test('Should list zero secrets', done => {
   // handle correct request
   const secretsServer = nock('http://localhost:8080')
@@ -103,7 +142,7 @@ test('Should remove secret', done => {
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
   // stup inquirer answers
-  sinon.stub(inquirer, 'prompt').callsFake(() => Promise.resolve({rmSecret: testSecret.secretName}));
+  sinon.stub(inquirer, 'prompt').callsFake(() => Promise.resolve({selectedSecret: testSecret.secretName}));
   // execute login
   secrets({cmd: 'rm'}).then(() => {
     // make sure log in was successful
