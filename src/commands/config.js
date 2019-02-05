@@ -46,7 +46,7 @@ exports.handler = async () => {
       average: 1,
       burst: 5,
     },
-    basicAuth: ''
+    basicAuth: '',
   };
   try {
     fs.statSync(configPath);
@@ -170,7 +170,7 @@ exports.handler = async () => {
   });
 
   // prompts for recursive questions
-  const recursivePrompts = []
+  const recursivePrompts = [];
   recursivePrompts.push({
     type: 'input',
     name: 'username',

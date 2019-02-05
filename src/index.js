@@ -1,3 +1,4 @@
+/* eslint no-unused-expressions: off */
 // npm packages
 const yargs = require('yargs');
 

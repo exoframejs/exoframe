@@ -104,7 +104,7 @@ exports.handler = async args => {
         },
         json: true,
       };
-      let secret = undefined;
+      let secret;
       try {
         const {body} = await got(`${remoteUrl}/${selectedSecret}`, options);
         secret = body.secret;
