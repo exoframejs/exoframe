@@ -25,7 +25,9 @@ module.exports = services =>
     const domain = svc.Spec.Labels['traefik.frontend.rule']
       ? svc.Spec.Labels['traefik.frontend.rule'].replace('Host:', '')
       : 'Not set';
-    const aliases = svc.Spec.Networks.filter(net => net.Aliases && net.Aliases.length > 0)
+    const networks = svc.Spec.Networks || svc.Spec.TaskTemplate.Networks;
+    const aliases = networks
+      .filter(net => net.Aliases && net.Aliases.length > 0)
       .map(net => net.Aliases.filter(alias => !svc.ID.startsWith(alias)))
       .reduce((acc, val) => acc.concat(val), []);
     const project = svc.Spec.Labels['exoframe.project'];
