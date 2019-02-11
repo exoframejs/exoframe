@@ -20,7 +20,24 @@ const pairValidation = input => {
     return key && val;
   });
   if (res.some(r => !r)) {
-    return `Value should be specified in 'key=val,key2=val2' format!`;
+    return `Values should be specified in 'key=val,key2=val2' format!`;
+  }
+  return true;
+};
+
+const volumeValidation = input => {
+  if (!input) {
+    return true;
+  }
+
+  const pairs = input.split(',');
+  const res = pairs.map(pair => {
+    const s = pair.split(':');
+    const [key, val] = s;
+    return key && val;
+  });
+  if (res.some(r => !r)) {
+    return `Values should be specified in 'src:dest,src2:dest2' format!`;
   }
   return true;
 };
@@ -113,6 +130,14 @@ exports.handler = async () => {
     validate: pairValidation,
   });
   prompts.push({
+    type: 'input',
+    name: 'volumes',
+    message: 'Volumes [comma-separated, optional]:',
+    default: defaultConfig.volumes ? defaultConfig.volumes.join(', ') : '',
+    filter,
+    validate: volumeValidation,
+  });
+  prompts.push({
     type: 'confirm',
     name: 'enableRatelimit',
     message: 'Enable rate-limit? [optional]',
@@ -167,6 +192,7 @@ exports.handler = async () => {
     type: 'confirm',
     name: 'basicAuth',
     message: 'Add a basic auth user? [optional]:',
+    default: Boolean(defaultConfig.basicAuth),
   });
 
   // prompts for recursive questions
@@ -209,6 +235,7 @@ exports.handler = async () => {
     project,
     env,
     labels,
+    volumes,
     enableRatelimit,
     ratelimitPeriod,
     ratelimitAverage,
@@ -246,6 +273,9 @@ exports.handler = async () => {
       .map(kv => kv.split('='))
       .map(pair => ({key: pair[0].trim(), value: pair[1].trim()}))
       .reduce((prev, obj) => Object.assign(prev, {[obj.key]: obj.value}), {});
+  }
+  if (volumes && volumes.length) {
+    config.volumes = volumes.split(',').map(v => v.trim());
   }
   if (enableRatelimit) {
     config.rateLimit = {

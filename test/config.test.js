@@ -26,23 +26,27 @@ const configData = {
   ratelimitPeriod: 10,
   ratelimitAverage: 20,
   ratelimitBurst: 30,
+  volumes: 'test:/volume',
   basicAuth: true,
 };
-const users = [{
-  username: 'user1',
-  password: 'pass',
-  askAgain: true
-}, {
-  username: 'user2',
-  password: 'pass',
-  askAgain: false
-}];
+const users = [
+  {
+    username: 'user1',
+    password: 'pass',
+    askAgain: true,
+  },
+  {
+    username: 'user2',
+    password: 'pass',
+    askAgain: false,
+  },
+];
 const configPath = path.join(process.cwd(), 'exoframe.json');
 
 const verifyBasicAuth = (input, actual) => {
   actual.split(',').forEach((element, index) => {
-    const hash = element.split(':')[1]
-    expect(hash).toEqual(md5(input[index].password, hash))
+    const hash = element.split(':')[1];
+    expect(hash).toEqual(md5(input[index].password, hash));
   });
 };
 
@@ -58,10 +62,14 @@ beforeAll(() => {
 // test config generation
 test('Should generate config file', done => {
   // stup inquirer answers
-  sinon.stub(inquirer, 'prompt')
-  .onFirstCall().callsFake(() => Promise.resolve(configData))
-  .onSecondCall().callsFake(() => Promise.resolve(users[0]))
-  .onThirdCall().callsFake(() => Promise.resolve(users[1]));
+  sinon
+    .stub(inquirer, 'prompt')
+    .onFirstCall()
+    .callsFake(() => Promise.resolve(configData))
+    .onSecondCall()
+    .callsFake(() => Promise.resolve(users[0]))
+    .onThirdCall()
+    .callsFake(() => Promise.resolve(users[1]));
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
   // execute login
