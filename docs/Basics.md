@@ -120,6 +120,14 @@ Config file has the following structure:
   // template to be used for project deployment
   // undefined by default, detected by server based on file structure
   "template": "my-template",
+  // image to be used to deploy current project
+  // this option overrides any other type of deployment and makes
+  // exoframe deploy project using given image name
+  "image": "",
+  // image file to load image from
+  // exoframe will load given tar file into docker daemon before
+  // execting image deployment
+  "imageFile": "",
   // basic auth, [optional]
   // this field allows you to have basic auth to access your deployed service
   // format is in user:pwhash
