@@ -188,13 +188,37 @@ exports.handler = async () => {
     default: defaultConfig.template,
     filter,
   });
+  // docker image deployment part
+  prompts.push({
+    type: 'confirm',
+    name: 'deployWithImage',
+    message: 'Deploy using docker image? [optional]:',
+    default: Boolean(defaultConfig.image),
+  });
+  prompts.push({
+    type: 'input',
+    name: 'image',
+    message: 'Deploy using docker image:',
+    default: defaultConfig.image || '',
+    filter,
+    when: ({deployWithImage}) => deployWithImage,
+  });
+  prompts.push({
+    type: 'input',
+    name: 'imageFile',
+    message: 'Load docker image from tar file [optional]:',
+    default: defaultConfig.imageFile || '',
+    filter,
+    when: ({deployWithImage}) => deployWithImage,
+  });
+
+  // basic auth part
   prompts.push({
     type: 'confirm',
     name: 'basicAuth',
     message: 'Add a basic auth user? [optional]:',
     default: Boolean(defaultConfig.basicAuth),
   });
-
   // prompts for recursive questions
   const recursivePrompts = [];
   recursivePrompts.push({
@@ -243,6 +267,8 @@ exports.handler = async () => {
     hostname,
     restart,
     template,
+    image,
+    imageFile,
     basicAuth,
   } = await inquirer.prompt(prompts);
 
@@ -289,6 +315,12 @@ exports.handler = async () => {
   }
   if (template && template.length) {
     config.template = template;
+  }
+  if (image && image.length) {
+    config.image = image;
+  }
+  if (imageFile && imageFile.length) {
+    config.imageFile = imageFile;
   }
   if (users.length !== 0) {
     config.basicAuth = users.reduce((acc, curr, index) => {
