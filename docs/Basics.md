@@ -62,6 +62,12 @@ You can find the list of available recipes [on npm](https://www.npmjs.com/search
 | update [target]      | Gets current versions or updates given target (server, traefik, all) |
 | completion           | Generates bash completion script                                     |
 
+## Special commands
+
+Exoframe CLI has a number of special commands, specifically:
+
+- `exoframe logs exoframe-server` - will return current server logs (only works when running server as container)
+
 ## Project config file
 
 All of the configuration for the deployed projects is done using `exoframe.json` config file.  
