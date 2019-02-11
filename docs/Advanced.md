@@ -72,3 +72,9 @@ Current caveats:
 
 - Currently secrets only work for environment variables
 - Currently secrets work only for normal deployments (any template or recipe that uses `startFromParams` won't have secrets expanded)
+
+## Plugins
+
+Exoframe-Server supports extension of core features using plugins.  
+Plugins are installed and loaded automatically once corresponding config is added to [server configuration](ServerConfiguration.md).  
+Refer to specific plugins docs to see how to configure them.
