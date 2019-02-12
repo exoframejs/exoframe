@@ -107,6 +107,12 @@ Config file has the following structure:
   "labels": {
     "my.custom.label": "value"
   },
+  // Add additional docker volumes ot your container [optional]
+  // while you can use server paths in sourceVolume place
+  // it is recommended to use named volumes
+  "volumes": [
+    "sourceVolume:/path/in/container"
+  ],
   // rate-limit config
   // see "advanced topics" for more info
   "rateLimit": {
