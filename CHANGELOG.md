@@ -1,3 +1,21 @@
+# 4.0.0 / 2019-02-12
+
+BREAKING CHANGES:
+
+- Docker Swarm support on server is now a plugin (see [plugin docs](https://github.com/exoframejs/exoframe-plugin-swarm) for more info)
+
+Additions:
+
+- Add plugins support
+- Add method to get secret value
+- Add way to get exoframe-server logs
+- Add support for volumes for deployments
+- Add way to deploy projects from image and image tar file
+
+Changes:
+
+- Multiple documentation improvements
+
 # 3.3.0 / 2018-12-13
 
 - Add basic secrets support and docs
