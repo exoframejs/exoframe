@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
 const inquirer = require('inquirer');
+const md5 = require('apache-md5');
 
 const validate = input => input && input.length > 0;
 const filter = input => (input ? input.trim() : '');
@@ -19,7 +20,24 @@ const pairValidation = input => {
     return key && val;
   });
   if (res.some(r => !r)) {
-    return `Value should be specified in 'key=val,key2=val2' format!`;
+    return `Values should be specified in 'key=val,key2=val2' format!`;
+  }
+  return true;
+};
+
+const volumeValidation = input => {
+  if (!input) {
+    return true;
+  }
+
+  const pairs = input.split(',');
+  const res = pairs.map(pair => {
+    const s = pair.split(':');
+    const [key, val] = s;
+    return key && val;
+  });
+  if (res.some(r => !r)) {
+    return `Values should be specified in 'src:dest,src2:dest2' format!`;
   }
   return true;
 };
@@ -45,6 +63,7 @@ exports.handler = async () => {
       average: 1,
       burst: 5,
     },
+    basicAuth: '',
   };
   try {
     fs.statSync(configPath);
@@ -111,6 +130,14 @@ exports.handler = async () => {
     validate: pairValidation,
   });
   prompts.push({
+    type: 'input',
+    name: 'volumes',
+    message: 'Volumes [comma-separated, optional]:',
+    default: defaultConfig.volumes ? defaultConfig.volumes.join(', ') : '',
+    filter,
+    validate: volumeValidation,
+  });
+  prompts.push({
     type: 'confirm',
     name: 'enableRatelimit',
     message: 'Enable rate-limit? [optional]',
@@ -161,6 +188,70 @@ exports.handler = async () => {
     default: defaultConfig.template,
     filter,
   });
+  // docker image deployment part
+  prompts.push({
+    type: 'confirm',
+    name: 'deployWithImage',
+    message: 'Deploy using docker image? [optional]:',
+    default: Boolean(defaultConfig.image),
+  });
+  prompts.push({
+    type: 'input',
+    name: 'image',
+    message: 'Deploy using docker image:',
+    default: defaultConfig.image || '',
+    filter,
+    when: ({deployWithImage}) => deployWithImage,
+  });
+  prompts.push({
+    type: 'input',
+    name: 'imageFile',
+    message: 'Load docker image from tar file [optional]:',
+    default: defaultConfig.imageFile || '',
+    filter,
+    when: ({deployWithImage}) => deployWithImage,
+  });
+
+  // basic auth part
+  prompts.push({
+    type: 'confirm',
+    name: 'basicAuth',
+    message: 'Add a basic auth user? [optional]:',
+    default: Boolean(defaultConfig.basicAuth),
+  });
+  // prompts for recursive questions
+  const recursivePrompts = [];
+  recursivePrompts.push({
+    type: 'input',
+    name: 'username',
+    message: 'Username for Basic Auth:',
+    filter,
+    validate,
+  });
+  recursivePrompts.push({
+    type: 'password',
+    name: 'password',
+    message: 'Password for Basic auth:',
+    filter,
+    validate,
+  });
+  recursivePrompts.push({
+    type: 'confirm',
+    name: 'askAgain',
+    message: 'Add another user?',
+    default: false,
+  });
+
+  const askForUsers = async users => {
+    const {username, password, askAgain} = await inquirer.prompt(recursivePrompts);
+    users.push({username, password});
+    if (askAgain) {
+      return askForUsers(users);
+    } else {
+      return users;
+    }
+  };
+
   // get values from user
   const {
     name,
@@ -168,6 +259,7 @@ exports.handler = async () => {
     project,
     env,
     labels,
+    volumes,
     enableRatelimit,
     ratelimitPeriod,
     ratelimitAverage,
@@ -175,7 +267,17 @@ exports.handler = async () => {
     hostname,
     restart,
     template,
+    image,
+    imageFile,
+    basicAuth,
   } = await inquirer.prompt(prompts);
+
+  const users = [];
+
+  if (basicAuth) {
+    await askForUsers(users);
+  }
+
   // init config object
   const config = {name, restart};
   if (domain && domain.length) {
@@ -198,6 +300,9 @@ exports.handler = async () => {
       .map(pair => ({key: pair[0].trim(), value: pair[1].trim()}))
       .reduce((prev, obj) => Object.assign(prev, {[obj.key]: obj.value}), {});
   }
+  if (volumes && volumes.length) {
+    config.volumes = volumes.split(',').map(v => v.trim());
+  }
   if (enableRatelimit) {
     config.rateLimit = {
       period: ratelimitPeriod,
@@ -210,6 +315,19 @@ exports.handler = async () => {
   }
   if (template && template.length) {
     config.template = template;
+  }
+  if (image && image.length) {
+    config.image = image;
+  }
+  if (imageFile && imageFile.length) {
+    config.imageFile = imageFile;
+  }
+  if (users.length !== 0) {
+    config.basicAuth = users.reduce((acc, curr, index) => {
+      const delimeter = users.length - 1 === index ? '' : ',';
+      const pair = `${curr.username}:${md5(curr.password)}`;
+      return `${acc}${pair}${delimeter}`;
+    }, '');
   }
 
   // write config

@@ -45,21 +45,28 @@ You can find the list of available recipes [on npm](https://www.npmjs.com/search
 
 ## Commands
 
-| Command           | Description                                                          |
-| ----------------- | -------------------------------------------------------------------- |
-| deploy [path]     | Deploy specified path                                                |
-| config            | Generate or update project config for current path                   |
-| list              | List currently deployed projects                                     |
-| rm <id>           | Remove existing deployment or project                                |
-| log <id>          | Get logs for existing deployment or project                          |
-| template [ls, rm] | Add, list or remove deployment templates from the server             |
-| setup [recipe]    | Setup a complex recipe deployment                                    |
-| token [ls, rm]    | Generate, list or remove deployment tokens                           |
-| login             | Login into Exoframe server                                           |
-| endpoint [url]    | Selects or adds the endpoint of Exoframe server                      |
-| rm-endpoint [url] | Removes an existing endpoint of Exoframe server                      |
-| update [target]   | Gets current versions or updates given target (server, traefik, all) |
-| completion        | Generates bash completion script                                     |
+| Command              | Description                                                          |
+| -------------------- | -------------------------------------------------------------------- |
+| deploy [path]        | Deploy specified path                                                |
+| config               | Generate or update project config for current path                   |
+| list                 | List currently deployed projects                                     |
+| rm <id>              | Remove existing deployment or project                                |
+| log <id>             | Get logs for existing deployment or project                          |
+| template [ls, rm]    | Add, list or remove deployment templates from the server             |
+| setup [recipe]       | Setup a complex recipe deployment                                    |
+| token [ls, rm]       | Generate, list or remove deployment tokens                           |
+| secret [new, ls, rm] | Create, list or remove deployment secrets                            |
+| login                | Login into Exoframe server                                           |
+| endpoint [url]       | Selects or adds the endpoint of Exoframe server                      |
+| rm-endpoint [url]    | Removes an existing endpoint of Exoframe server                      |
+| update [target]      | Gets current versions or updates given target (server, traefik, all) |
+| completion           | Generates bash completion script                                     |
+
+## Special commands
+
+Exoframe CLI has a number of special commands, specifically:
+
+- `exoframe logs exoframe-server` - will return current server logs (only works when running server as container)
 
 ## Project config file
 
@@ -88,7 +95,9 @@ Config file has the following structure:
   // object of key-values for env vars [optional]
   // no env vars are assigned by default
   "env": {
-    "ENV_VAR": "123"
+    "ENV_VAR": "123",
+    // you can use secrets to hide sensitive values from env vars
+    "OTHER_VAR": "@my-secret"
   },
   // internal hostname for container [optional]
   // see docker docs for more info
@@ -98,9 +107,15 @@ Config file has the following structure:
   "labels": {
     "my.custom.label": "value"
   },
+  // Add additional docker volumes ot your container [optional]
+  // while you can use server paths in sourceVolume place
+  // it is recommended to use named volumes
+  "volumes": [
+    "sourceVolume:/path/in/container"
+  ],
   // rate-limit config
   // see "advanced topics" for more info
-  "rate-limit": {
+  "rateLimit": {
     // rate-limit time period
     "period": "1s",
     // request rate over given time period
@@ -110,7 +125,19 @@ Config file has the following structure:
   },
   // template to be used for project deployment
   // undefined by default, detected by server based on file structure
-  "template": "my-template"
+  "template": "my-template",
+  // image to be used to deploy current project
+  // this option overrides any other type of deployment and makes
+  // exoframe deploy project using given image name
+  "image": "",
+  // image file to load image from
+  // exoframe will load given tar file into docker daemon before
+  // execting image deployment
+  "imageFile": "",
+  // basic auth, [optional]
+  // this field allows you to have basic auth to access your deployed service
+  // format is in user:pwhash
+  "basicAuth": "user:$apr1$$9Cv/OMGj$$ZomWQzuQbL.3TRCS81A1g/"
 }
 ```
 
@@ -134,6 +161,10 @@ Currently it contains list of endpoint URLs with associated usernames and authen
 ```yaml
 endpoint: 'http://localhost:8080' # your endpoint URL, defaults to localhost
 ```
+
+## SSH key auth
+
+The SSK key needs to be RSA and in PEM format. To ensure your key is generated in a format that works you can generate with this command: `ssh-keygen -t rsa -b 4096 -C "your_email@example.com" -m 'PEM'`. This follows the [GitHub Instructions](https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/) with an additional flag ensuring it is the right format.
 
 ## Deployment tokens
 

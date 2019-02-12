@@ -1,34 +1,13 @@
 {
-  "extends": ["airbnb", "prettier"],
-  "parserOptions": {
-    "ecmaVersion": 2017,
-    "sourceType": "module",
-    "ecmaFeatures": {
-      "jsx": true
-    }
-  },
+  "parser": "babel-eslint",
+  "extends": ["standard", "prettier"],
   "plugins": ["prettier"],
-  "env": {
-    "es6": true,
-    "node": true
-  },
   "rules": {
-    "arrow-parens": "off",
-    "object-curly-spacing": ["warn", "never"],
     "max-len": ["error", 120, 4],
-    "no-confusing-arrow": "warn",
-    "no-underscore-dangle": "off",
-    "comma-dangle": [
-      "error",
-      {
-        "arrays": "always-multiline",
-        "objects": "always-multiline",
-        "imports": "always-multiline",
-        "exports": "always-multiline",
-        "functions": "ignore"
-      }
-    ],
-    "react/jsx-filename-extension": "off",
+    "camelcase": "off",
+    "promise/param-names": "off",
+    "prefer-promise-reject-errors": "off",
+    "no-control-regex": "off",
     "prettier/prettier": [
       "error",
       {
@@ -37,11 +16,6 @@
         "bracketSpacing": false,
         "printWidth": 120
       }
-    ],
-    "global-require": "off",
-    "no-console": "off",
-    "no-unused-expressions": "off",
-    "no-param-reassign": "off",
-    "no-return-assign": "off"
+    ]
   }
 }

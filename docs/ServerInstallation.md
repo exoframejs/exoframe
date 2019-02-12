@@ -36,6 +36,9 @@ docker run -d \
 --label traefik.backend=exoframe-server
 
 # this is used to tell traefik on which domain should Exoframe server be listening
+# NOTE: it is important, that it is prefixed with "exoframe", or anything really,
+#       so that exoframe has its own domain and does not interfere with your
+#       application's url config.
 --label traefik.frontend.rule=Host:exoframe.your-host.com
 ```
 

@@ -8,6 +8,7 @@ const path = require('path');
 const yaml = require('js-yaml');
 const sinon = require('sinon');
 const inquirer = require('inquirer');
+const md5 = require('apache-md5');
 
 // our packages
 const {handler: config} = require('../src/commands/config');
@@ -25,8 +26,29 @@ const configData = {
   ratelimitPeriod: 10,
   ratelimitAverage: 20,
   ratelimitBurst: 30,
+  volumes: 'test:/volume',
+  basicAuth: true,
 };
+const users = [
+  {
+    username: 'user1',
+    password: 'pass',
+    askAgain: true,
+  },
+  {
+    username: 'user2',
+    password: 'pass',
+    askAgain: false,
+  },
+];
 const configPath = path.join(process.cwd(), 'exoframe.json');
+
+const verifyBasicAuth = (input, actual) => {
+  actual.split(',').forEach((element, index) => {
+    const hash = element.split(':')[1];
+    expect(hash).toEqual(md5(input[index].password, hash));
+  });
+};
 
 beforeAll(() => {
   try {
@@ -40,7 +62,14 @@ beforeAll(() => {
 // test config generation
 test('Should generate config file', done => {
   // stup inquirer answers
-  sinon.stub(inquirer, 'prompt').callsFake(() => Promise.resolve(configData));
+  sinon
+    .stub(inquirer, 'prompt')
+    .onFirstCall()
+    .callsFake(() => Promise.resolve(configData))
+    .onSecondCall()
+    .callsFake(() => Promise.resolve(users[0]))
+    .onThirdCall()
+    .callsFake(() => Promise.resolve(users[1]));
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
   // execute login
@@ -64,6 +93,7 @@ test('Should generate config file', done => {
       average: configData.ratelimitAverage,
       burst: configData.ratelimitBurst,
     });
+    verifyBasicAuth(users, cfg.basicAuth);
     // restore inquirer
     inquirer.prompt.restore();
     // restore console

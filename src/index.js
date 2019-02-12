@@ -1,3 +1,4 @@
+/* eslint no-unused-expressions: off */
 // npm packages
 const yargs = require('yargs');
 
@@ -23,6 +24,7 @@ const token = require('./commands/token');
 const update = require('./commands/update');
 const template = require('./commands/template');
 const setup = require('./commands/setup');
+const secrets = require('./commands/secrets');
 
 // init program
 yargs
@@ -41,4 +43,5 @@ yargs
   .command(config)
   .command(update)
   .command(template)
-  .command(setup).argv;
+  .command(setup)
+  .command(secrets).argv;
