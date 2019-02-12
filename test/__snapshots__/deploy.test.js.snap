@@ -24,8 +24,8 @@ Array [
 ",
   ],
   Array [
-    "[31m   ID     [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m
-   test   [90m [39m   localhost   [90m [39m   test       ",
+    "   ID         URL             Hostname   
+   test       localhost       test       ",
   ],
 ]
 `;
@@ -45,8 +45,8 @@ Deploying using given token..",
 ",
   ],
   Array [
-    "[31m   ID     [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m
-   test   [90m [39m   localhost   [90m [39m   test       ",
+    "   ID         URL             Hostname   
+   test       localhost       test       ",
   ],
 ]
 `;
@@ -62,8 +62,8 @@ Array [
 ",
   ],
   Array [
-    "[31m   ID     [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m
-   test   [90m [39m   localhost   [90m [39m   test       ",
+    "   ID         URL             Hostname   
+   test       localhost       test       ",
   ],
 ]
 `;
@@ -183,8 +183,8 @@ Array [
 ",
   ],
   Array [
-    "[31m   ID     [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m
-   test   [90m [39m   localhost   [90m [39m   test       ",
+    "   ID         URL             Hostname   
+   test       localhost       test       ",
   ],
 ]
 `;
@@ -200,8 +200,8 @@ Array [
 ",
   ],
   Array [
-    "[31m   ID     [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m
-   test   [90m [39m   localhost   [90m [39m   test       ",
+    "   ID         URL             Hostname   
+   test       localhost       test       ",
   ],
 ]
 `;
@@ -255,8 +255,8 @@ Array [
 ",
   ],
   Array [
-    "[31m   ID     [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m
-   test   [90m [39m   localhost   [90m [39m   test       ",
+    "   ID         URL             Hostname   
+   test       localhost       test       ",
   ],
 ]
 `;
