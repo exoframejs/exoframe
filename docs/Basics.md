@@ -132,7 +132,7 @@ Config file has the following structure:
   "image": "",
   // image file to load image from
   // exoframe will load given tar file into docker daemon before
-  // execting image deployment
+  // executing image deployment
   "imageFile": "",
   // basic auth, [optional]
   // this field allows you to have basic auth to access your deployed service
@@ -159,7 +159,7 @@ Exoframe stores its config in `~/.exoframe/cli.config.yml`.
 Currently it contains list of endpoint URLs with associated usernames and authentication tokens:
 
 ```yaml
-endpoint: 'http://localhost:8080' # your endpoint URL, defaults to localhost
+endpoint: "http://localhost:8080" # your endpoint URL, defaults to localhost
 ```
 
 ## SSH key auth
@@ -186,3 +186,7 @@ The way it works is quite simple:
 3.  Exoframe removes the old running deployments for current project
 
 This can be used together with deployment tokens to achieve simple continuous deployment for your projects.
+
+### Updating the server
+
+The server can simply be updated by invoking `exoframe update server`.
