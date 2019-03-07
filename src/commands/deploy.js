@@ -79,6 +79,10 @@ exports.builder = {
     alias: 't',
     description: 'Deployment token to be used for authentication',
   },
+  config: {
+    alias: 'c',
+    description: 'Configuration file to be used for deployment',
+  },
   update: {
     alias: 'u',
     description: 'Update current project instead of simple deployment',
@@ -123,7 +127,9 @@ exports.handler = async (args = {}) => {
   }
 
   // create config if doesn't exist
-  const configPath = path.join(workdir, 'exoframe.json');
+  const configFilename = args.config || 'exoframe.json';
+  const configPath = path.join(workdir, configFilename);
+
   try {
     fs.statSync(configPath);
   } catch (e) {
