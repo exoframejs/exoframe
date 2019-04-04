@@ -175,7 +175,6 @@ exports.handler = async (args = {}) => {
   // create tar stream from current folder
   const tarStream = tar.pack(workdir, {
     map: headers => {
-      console.log(headers.name)
       if (args.config) {
         const filename = headers.name
         return {
