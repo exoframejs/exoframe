@@ -186,6 +186,7 @@ exports.handler = async (args = {}) => {
       }
     },
     ignore: name => {
+      if (args.config && name === 'exoframe.json') return true 
       const relativePath = name.replace(`${workdir}/`, '');
       const result = multimatch([relativePath], ignores).length !== 0;
       return result;
