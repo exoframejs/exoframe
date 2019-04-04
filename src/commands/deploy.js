@@ -174,6 +174,18 @@ exports.handler = async (args = {}) => {
 
   // create tar stream from current folder
   const tarStream = tar.pack(workdir, {
+    map: headers => {
+      console.log(headers.name)
+      if (args.config) {
+        const filename = headers.name
+        return {
+          ...headers, 
+          name: filename === args.config ? 'exoframe.json' : filename 
+        }
+      } else {
+        return headers
+      }
+    },
     ignore: name => {
       const relativePath = name.replace(`${workdir}/`, '');
       const result = multimatch([relativePath], ignores).length !== 0;
