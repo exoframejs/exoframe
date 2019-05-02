@@ -28,7 +28,7 @@ For more info and options see the aforementioned [Traefik frontend matchers](htt
 Exoframe allows you to enable basic IP-based rate-limiting integrated into Traefik.  
 To do that, simply specify the following fields in the project config file:
 
-```json
+```js
 {
   // adding this object will enable IP-based rate-limiting
   "rate-limit": {
