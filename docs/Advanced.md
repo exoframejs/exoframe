@@ -46,7 +46,7 @@ If you have a docker-compose.yml file, __any domain set in exoframe.json will be
 Exoframe allows you to enable basic IP-based rate-limiting integrated into Traefik.  
 To do that, simply specify the following fields in the project config file:
 
-```json
+```js
 {
   // adding this object will enable IP-based rate-limiting
   "rate-limit": {
