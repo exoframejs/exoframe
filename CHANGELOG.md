@@ -1,3 +1,10 @@
+# 4.0.1 / 2019-05-07
+
+- Use node 10.x for pkg and travis
+- Update dependencies to latest versions
+- Add some docs about docker-compose and Traefik rules
+- Doc typos and syntax fixes
+
 # 4.0.0 / 2019-02-12
 
 BREAKING CHANGES:
