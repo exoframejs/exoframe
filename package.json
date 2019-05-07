@@ -16,28 +16,28 @@
   },
   "dependencies": {
     "apache-md5": "^1.1.2",
-    "boxen": "^2.1.0",
+    "boxen": "^3.2.0",
     "chalk": "^2.4.2",
     "cli-table": "^0.3.1",
     "got": "^9.6.0",
-    "highland": "^2.13.0",
-    "inquirer": "^6.2.2",
-    "js-yaml": "^3.12.1",
-    "jsonwebtoken": "^8.4.0",
+    "highland": "^2.13.4",
+    "inquirer": "^6.3.1",
+    "js-yaml": "^3.13.1",
+    "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.11",
-    "multimatch": "^3.0.0",
-    "opn": "^5.4.0",
-    "ora": "^3.1.0",
+    "multimatch": "^4.0.0",
+    "open": "^6.2.0",
+    "ora": "^3.4.0",
     "tar-fs": "^2.0.0",
     "update-notifier": "^2.5.0",
-    "yargs": "^13.1.0"
+    "yargs": "^13.2.2"
   },
   "devDependencies": {
-    "coveralls": "^3.0.2",
-    "jest": "^24.1.0",
+    "coveralls": "^3.0.3",
+    "jest": "^24.8.0",
     "nock": "^10.0.6",
-    "pkg": "^4.3.7",
-    "sinon": "^7.2.3"
+    "pkg": "^4.3.8",
+    "sinon": "^7.3.2"
   },
   "jest": {
     "testEnvironment": "node"

@@ -14,8 +14,8 @@ const {Readable} = require('stream');
 const cfg = require('../src/config');
 
 // require deploy with stub for opn
-jest.mock('opn', () => jest.fn());
-const opnMock = require('opn');
+jest.mock('open', () => jest.fn());
+const openMock = require('open');
 const {handler: deploy} = require('../src/commands/deploy');
 
 // reply with stream helper
@@ -183,7 +183,7 @@ test('Should open webpage after deploy', done => {
     // check that server was called
     expect(deployServer.isDone()).toBeTruthy();
     // make sure opn was called once
-    expect(opnMock).toHaveBeenCalled();
+    expect(openMock).toHaveBeenCalled();
     // first check console output
     expect(consoleSpy.args).toMatchSnapshot();
     // restore console
