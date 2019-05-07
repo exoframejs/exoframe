@@ -23,12 +23,30 @@ Here's a few examples of basic use cases:
 
 For more info and options see the aforementioned [Traefik frontend matchers](https://docs.traefik.io/basics/#matchers) docs.
 
+## Docker-compose based deployment
+
+Deploying using docker compose works almost the same as using a normal docker compose file, but there are a few labels you should use to ensure Traefik can correctly access your application.
+
+    version: '2'
+    services:
+      web:
+        build: .
+        labels:
+          traefik.frontend.rule: 'Host:test.dev'
+          traefik.port: 8080 # default: 80
+      redis:
+        image: "redis:alpine"
+
+Any of the [configuration options](https://docs.traefik.io/configuration/backends/docker/#on-containers) for the default Traefik docker setup can be used.
+
+If you have a docker-compose.yml file, __any domain set in exoframe.json will be ignored__.
+
 ## Rate limiting
 
 Exoframe allows you to enable basic IP-based rate-limiting integrated into Traefik.  
 To do that, simply specify the following fields in the project config file:
 
-```json
+```js
 {
   // adding this object will enable IP-based rate-limiting
   "rate-limit": {

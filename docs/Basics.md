@@ -26,7 +26,7 @@ By default, Exoframe understands and can deploy the following project types:
 1.  Static html based projects - will be deployed using [nginx](http://hub.docker.com/_/nginx) image
 2.  Node.js based projects - will be deployed using [node:latest](https://hub.docker.com/_/node) image \*
 3.  Docker based project - will be deployed using your [Dockerfile](https://docs.docker.com/engine/reference/builder/)
-4.  Docker-Compose based projects - will be deployed using your [docker-compose](https://docs.docker.com/compose/compose-file/) file
+4.  [Docker-Compose based projects](docs/Advanced.md#Docker-Compose based deployment) - will be deployed using your [docker-compose](https://docs.docker.com/compose/compose-file/) file
 
 \* There are two things to keep in mind for Node.js projects: (1) they are started via `npm start`, so make sure you have specified start script in your `package.json`; (2) by default port 80 is exposed, so you need to make your app listen on that port. If you'd like to execute your app in any different way or expose more ports - please use Dockerfile deployment method.
 
@@ -132,7 +132,7 @@ Config file has the following structure:
   "image": "",
   // image file to load image from
   // exoframe will load given tar file into docker daemon before
-  // execting image deployment
+  // executing image deployment
   "imageFile": "",
   // basic auth, [optional]
   // this field allows you to have basic auth to access your deployed service
@@ -159,7 +159,7 @@ Exoframe stores its config in `~/.exoframe/cli.config.yml`.
 Currently it contains list of endpoint URLs with associated usernames and authentication tokens:
 
 ```yaml
-endpoint: 'http://localhost:8080' # your endpoint URL, defaults to localhost
+endpoint: "http://localhost:8080" # your endpoint URL, defaults to localhost
 ```
 
 ## SSH key auth
@@ -186,3 +186,7 @@ The way it works is quite simple:
 3.  Exoframe removes the old running deployments for current project
 
 This can be used together with deployment tokens to achieve simple continuous deployment for your projects.
+
+### Updating the server
+
+The server can simply be updated by invoking `exoframe update server`.

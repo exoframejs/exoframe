@@ -7,7 +7,7 @@ const path = require('path');
 const fs = require('fs');
 const ora = require('ora');
 const Table = require('cli-table');
-const opn = require('opn');
+const open = require('open');
 const _ = require('highland');
 
 // my modules
@@ -226,7 +226,7 @@ exports.handler = async (args = {}) => {
 
     // open in browser
     if (args.open && formattedServices[0].domain && formattedServices[0].domain !== 'not set') {
-      opn(`http://${formattedServices[0].domain.split(',')[0].trim()}`);
+      open(`http://${formattedServices[0].domain.split(',')[0].trim()}`);
     }
   } catch (e) {
     spinner && spinner.fail('Deployment failed!');
