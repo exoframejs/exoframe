@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "apache-md5": "^1.1.2",
-    "boxen": "^3.2.0",
+    "boxen": "^4.0.0",
     "chalk": "^2.4.2",
     "cli-table": "^0.3.1",
     "got": "^9.6.0",
@@ -26,17 +26,17 @@
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.11",
     "multimatch": "^4.0.0",
-    "open": "^6.2.0",
+    "open": "^6.3.0",
     "ora": "^3.4.0",
     "tar-fs": "^2.0.0",
-    "update-notifier": "^2.5.0",
-    "yargs": "^13.2.2"
+    "update-notifier": "^3.0.0",
+    "yargs": "^13.2.4"
   },
   "devDependencies": {
     "coveralls": "^3.0.3",
     "jest": "^24.8.0",
     "nock": "^10.0.6",
-    "pkg": "^4.3.8",
+    "pkg": "^4.4.0",
     "sinon": "^7.3.2"
   },
   "jest": {
