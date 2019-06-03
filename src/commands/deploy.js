@@ -210,15 +210,15 @@ exports.handler = async (args = {}) => {
     console.log('Your project is now deployed as:\n');
     // create table
     const resultTable = new Table({
-      head: ['ID', 'URL', 'Hostname'],
+      head: ['ID', 'URL', 'Hostname', 'Type'],
       chars: tableBorder,
       style: tableStyle,
     });
 
     // process deployments
     const formattedServices = formatServices(res.deployments);
-    formattedServices.forEach(({name, domain, host}) => {
-      resultTable.push([name, domain, host]);
+    formattedServices.forEach(({name, domain, host, type}) => {
+      resultTable.push([name, domain, host, type]);
     });
 
     // draw table

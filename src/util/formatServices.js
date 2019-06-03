@@ -17,7 +17,8 @@ module.exports = services =>
       const project = svc.Config.Labels['exoframe.project'];
       const host = aliases.shift() || 'Not set';
       const status = svc.State ? svc.State.Status : '';
-      return {name, domain, host, status, project};
+      const type = svc.Id ? 'container' : 'function';
+      return {name, domain, host, status, project, type};
     }
 
     // handle swarm deployments
