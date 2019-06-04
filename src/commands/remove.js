@@ -43,7 +43,10 @@ exports.handler = async ({id}) => {
 
     // if container was not found
     if (e.statusCode === 404) {
-      console.log(chalk.red('Error: container was not found!'), 'Please, check deployment ID and try again.');
+      console.log(
+        chalk.red('Error: container or function was not found!'),
+        'Please, check deployment ID and try again.'
+      );
       return;
     }
 
