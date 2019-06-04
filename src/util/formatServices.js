@@ -17,7 +17,7 @@ module.exports = services =>
       const project = svc.Config.Labels['exoframe.project'];
       const host = aliases.shift() || 'Not set';
       const status = svc.State ? svc.State.Status : '';
-      const type = svc.Id ? 'container' : 'function';
+      const type = svc.Config.Labels['exoframe.type'] ? svc.Config.Labels['exoframe.type'] : 'Container';
       return {name, domain, host, status, project, type};
     }
 
