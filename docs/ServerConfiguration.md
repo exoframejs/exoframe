@@ -52,6 +52,8 @@ plugins:
   # specific plugin config (see plugins docs to know what property they use)
   swarm:
     enabled: true
+    # Your custom swarm network, defaults to exoframe-swarm
+    network: exoframe-swarm
 ```
 
 _Warning:_ Most changes to config are applied immediately. With exception of Letsencrypt config and Plugins config.  
