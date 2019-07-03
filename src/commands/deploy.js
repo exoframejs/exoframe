@@ -6,7 +6,7 @@ const got = require('got');
 const path = require('path');
 const fs = require('fs');
 const ora = require('ora');
-const Table = require('cli-table');
+const Table = require('cli-table3');
 const open = require('open');
 const _ = require('highland');
 

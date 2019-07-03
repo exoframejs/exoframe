@@ -23,7 +23,7 @@ const replyWithStream = dataArr => {
   const replyStream = _();
   dataArr.forEach(data => replyStream.write(JSON.stringify(data)));
   replyStream.end('');
-  return new Readable().wrap(replyStream);
+  return [200, new Readable().wrap(replyStream)];
 };
 
 const folder = 'test_html_project';

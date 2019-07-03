@@ -1,7 +1,7 @@
 // npm packages
 const _ = require('lodash');
 const chalk = require('chalk');
-const Table = require('cli-table');
+const Table = require('cli-table3');
 
 // our packages
 const {tableBorder, tableStyle} = require('../config/table');
