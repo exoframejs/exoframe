@@ -135,6 +135,14 @@ Config file has the following structure:
     // max burst request rate over given time period
     "burst": 5,
   },
+  // function deployment config
+  // see "function deployments" for more info
+  "function": {
+    // type of function (http, worker, trigger or custom)
+    "type": "http",
+    // route for HTTP function, [optional] defaults to `/${config.name}`
+    "route": "/test"
+  },
   // template to be used for project deployment
   // undefined by default, detected by server based on file structure
   "template": "my-template",
@@ -205,7 +213,7 @@ Exoframe stores its config in `~/.exoframe/cli.config.yml`.
 Currently it contains list of endpoint URLs with associated usernames and authentication tokens:
 
 ```yaml
-endpoint: "http://localhost:8080" # your endpoint URL, defaults to localhost
+endpoint: 'http://localhost:8080' # your endpoint URL, defaults to localhost
 ```
 
 ## SSH Key-Based Authentication
@@ -224,4 +232,3 @@ For this cases you can use deployment tokens. Here's how it works:
 ## Updating Exoframe Server
 
 The server can simply be updated by invoking `exoframe update server`.
-
