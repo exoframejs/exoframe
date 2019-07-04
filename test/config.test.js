@@ -28,6 +28,9 @@ const configData = {
   ratelimitBurst: 30,
   volumes: 'test:/volume',
   basicAuth: true,
+  function: true,
+  functionType: 'worker',
+  functionRoute: '/test',
 };
 const users = [
   {
@@ -92,6 +95,10 @@ test('Should generate config file', done => {
       period: configData.ratelimitPeriod,
       average: configData.ratelimitAverage,
       burst: configData.ratelimitBurst,
+    });
+    expect(cfg.function).toEqual({
+      type: configData.functionType,
+      route: configData.functionRoute,
     });
     verifyBasicAuth(users, cfg.basicAuth);
     // restore inquirer
