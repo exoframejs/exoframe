@@ -72,7 +72,7 @@ You can find a list of all commands and options in the [docs](./docs/README.md).
 - [Server Installation](docs/ServerInstallation.md)
 - [Server Configuration](docs/ServerConfiguration.md)
 - [Advanced topics](docs/Advanced.md)
-- [Function deployments](Functions.md)
+- [Function deployments](docs/Functions.md)
 - [FAQ](docs/FAQ.md)
 - [Contribution Guidelines](docs/Contributing.md)
 - [Templates guide](docs/TemplatesGuide.md)
