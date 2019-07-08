@@ -44,6 +44,24 @@ Should have type that matches the name of the trigger.
 
 If your function uses provided by Exoframe logger - you can fetch function logs by using `exoframe logs` command in CLI.
 
+## Running functions locally
+
+Sometimes you might need to execute your functions locally before deploying them.  
+Exoframe provides `exoframe-faas` binary to do so.
+
+To run your function, simply execute:
+
+```sh
+$ npx exoframe-faas
+```
+
+If you are developing an HTTP function, you'll need to install Fastify locally for `exoframe-faas` to work, e.g.:
+
+```sh
+$ npm i -D fastify
+$ npx exoframe-faas
+```
+
 ## Caveats
 
 - All defined functions have to be `async` or return promise.
