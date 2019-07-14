@@ -123,7 +123,7 @@ exports.executeTemplate = async ({username, tempDockerDir, resultStream, util, d
         .some(it => it.includes('error') || (it.includes('failed') && !it.includes('optional')))
     ) {
       // if there are - add to server log
-      util.logger.debug('Build log conains error!');
+      util.logger.debug('Build log contains error!');
       // and report to user
       util.writeStatus(resultStream, {message: 'Build log contains errors!', level: 'error'});
       // and end the result stream immediately
