@@ -2,6 +2,9 @@
 // mock config for testing
 jest.mock('../src/config', () => require('./__mocks__/config'));
 
+// mock process.exit for testing
+jest.spyOn(process, 'exit').mockImplementation(() => {});
+
 // npm packages
 const fs = require('fs');
 const path = require('path');
