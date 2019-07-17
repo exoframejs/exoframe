@@ -46,9 +46,9 @@ Array [
 [32m[39m",
   ],
   Array [
-    "   Template            Version   
-   template            ^0.0.1    
-   otherTemplate       ^1.0.0    ",
+    "[31m   Template        [39m[90m [39m[31m   Version   [39m
+   template        [90m [39m   ^0.0.1    
+   otherTemplate   [90m [39m   ^1.0.0    ",
   ],
 ]
 `;
@@ -64,7 +64,7 @@ Array [
 [32m[39m",
   ],
   Array [
-    "   Template       Version   ",
+    "[31m   Template   [39m[90m [39m[31m   Version   [39m",
   ],
 ]
 `;

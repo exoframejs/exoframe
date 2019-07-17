@@ -6,7 +6,7 @@ const got = require('got');
 const path = require('path');
 const fs = require('fs');
 const ora = require('ora');
-const Table = require('cli-table');
+const Table = require('cli-table3');
 const open = require('open');
 const _ = require('highland');
 
@@ -119,6 +119,7 @@ exports.handler = async (args = {}) => {
   if (!fs.existsSync(workdir)) {
     console.log(chalk.red(`Error! Path ${chalk.bold(workdir)} do not exists`));
     console.log('Please, check your arguments and try again.');
+    process.exit(1);
     return;
   }
 
@@ -149,6 +150,7 @@ exports.handler = async (args = {}) => {
   } catch (e) {
     spinner && spinner.fail('Your exoframe.json is not valid');
     console.log(chalk.red('Please, check your config and try again:'), e.toString());
+    process.exit(1);
     return;
   }
 
@@ -210,15 +212,15 @@ exports.handler = async (args = {}) => {
     console.log('Your project is now deployed as:\n');
     // create table
     const resultTable = new Table({
-      head: ['ID', 'URL', 'Hostname'],
+      head: ['ID', 'URL', 'Hostname', 'Type'],
       chars: tableBorder,
       style: tableStyle,
     });
 
     // process deployments
     const formattedServices = formatServices(res.deployments);
-    formattedServices.forEach(({name, domain, host}) => {
-      resultTable.push([name, domain, host]);
+    formattedServices.forEach(({name, domain, host, type}) => {
+      resultTable.push([name, domain, host, type]);
     });
 
     // draw table
@@ -234,6 +236,7 @@ exports.handler = async (args = {}) => {
     if (e.statusCode === 401) {
       logout(userConfig);
       console.log(chalk.red('Error: authorization expired!'), 'Please, relogin and try again.');
+      process.exit(1);
       return;
     }
 
@@ -251,5 +254,6 @@ exports.handler = async (args = {}) => {
     verbose && console.log('');
     verbose && console.log('Original error:', e);
     verbose > 1 && console.log('Original response:', e.response);
+    process.exit(1);
   }
 };

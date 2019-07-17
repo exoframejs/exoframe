@@ -32,7 +32,7 @@ Array [
     "test-id",
   ],
   Array [
-    "[31mError: container was not found![39m",
+    "[31mError: container or function was not found![39m",
     "Please, check deployment ID and try again.",
   ],
 ]

@@ -42,7 +42,7 @@ updateChannel: 'stable'
 # path to folder with authorized_keys, default "~/.ssh"
 publicKeysPath: '/path/to/your/public/keys'
 
-# whether Exoframe server whould be running in swarm mode, default "false"
+# whether Exoframe server would be running in swarm mode, default "false"
 swarm: false
 
 # plugins config

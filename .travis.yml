@@ -4,6 +4,10 @@ node_js: lts/dubnium
 
 cache: yarn
 
+script:
+  - yarn test
+  - yarn lint
+
 after_success:
   - yarn coveralls
   - yarn package

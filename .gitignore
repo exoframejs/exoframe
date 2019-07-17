@@ -6,3 +6,5 @@ exoframe-linux
 exoframe-macos
 exoframe-win.exe
 .idea/
+.DS_Store
+

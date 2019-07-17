@@ -1,6 +1,6 @@
 {
   "name": "exoframe",
-  "version": "4.0.1",
+  "version": "4.0.2-dev",
   "description": "Exoframe is a self-hosted tool that allows simple one-command deployments using Docker",
   "main": "index.js",
   "repository": "git@github.com:exoframejs/exoframe.git",
@@ -10,33 +10,44 @@
     "exoframe": "bin/index.js"
   },
   "scripts": {
+    "lint": "eslint src/ test/",
     "test": "TZ=Greenland NODE_ENV=testing jest --coverage --silent --maxWorkers=2 --ci",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "package": "pkg --targets node10.4.1-linux-x64,node10.4.1-win-x64,node10.4.1-macos-x64 -o exoframe index.js"
+    "package": "pkg --targets node10.15.3-linux-x64,node10.15.3-win-x64,node10.15.3-macos-x64 -o exoframe index.js"
   },
   "dependencies": {
     "apache-md5": "^1.1.2",
-    "boxen": "^3.2.0",
+    "boxen": "^4.1.0",
     "chalk": "^2.4.2",
-    "cli-table": "^0.3.1",
+    "cli-table3": "^0.5.1",
     "got": "^9.6.0",
     "highland": "^2.13.4",
-    "inquirer": "^6.3.1",
+    "inquirer": "^6.5.0",
     "js-yaml": "^3.13.1",
     "jsonwebtoken": "^8.5.1",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.14",
     "multimatch": "^4.0.0",
-    "open": "^6.2.0",
+    "open": "^6.4.0",
     "ora": "^3.4.0",
     "tar-fs": "^2.0.0",
-    "update-notifier": "^2.5.0",
-    "yargs": "^13.2.2"
+    "update-notifier": "^3.0.1",
+    "yargs": "^13.3.0"
   },
   "devDependencies": {
-    "coveralls": "^3.0.3",
+    "babel-eslint": "^10.0.2",
+    "coveralls": "^3.0.5",
+    "eslint": "^6.0.1",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-config-standard": "^13.0.1",
+    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-node": "^9.1.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.0",
     "jest": "^24.8.0",
-    "nock": "^10.0.6",
-    "pkg": "^4.3.8",
+    "nock": "^11.0.0-beta.27",
+    "pkg": "^4.4.0",
+    "prettier": "^1.18.2",
     "sinon": "^7.3.2"
   },
   "jest": {

@@ -3,7 +3,7 @@ const got = require('got');
 const chalk = require('chalk');
 const inquirer = require('inquirer');
 const ora = require('ora');
-const Table = require('cli-table');
+const Table = require('cli-table3');
 
 // our packages
 const {userConfig, isLoggedIn, logout} = require('../config');

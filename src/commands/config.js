@@ -42,10 +42,89 @@ const volumeValidation = input => {
   return true;
 };
 
+const writeConfig = (configPath, newConfig) => {
+  // init config object
+  const config = {name: newConfig.name, restart: newConfig.restart};
+  if (newConfig.domain && newConfig.domain.length) {
+    config.domain = newConfig.domain;
+  }
+  if (newConfig.project && newConfig.project.length) {
+    config.project = newConfig.project;
+  }
+  if (newConfig.env && newConfig.env.length) {
+    config.env = newConfig.env
+      .split(',')
+      .map(kv => kv.split('='))
+      .map(pair => ({key: pair[0].trim(), value: pair[1].trim()}))
+      .reduce((prev, obj) => Object.assign(prev, {[obj.key]: obj.value}), {});
+  }
+  if (newConfig.labels && Object.keys(newConfig.labels).length) {
+    config.labels = newConfig.labels
+      .split(',')
+      .map(kv => kv.split('='))
+      .map(pair => ({key: pair[0].trim(), value: pair[1].trim()}))
+      .reduce((prev, obj) => Object.assign(prev, {[obj.key]: obj.value}), {});
+  }
+  if (newConfig.volumes && newConfig.volumes.length) {
+    config.volumes = newConfig.volumes.split(',').map(v => v.trim());
+  }
+  if (newConfig.enableRatelimit) {
+    config.rateLimit = {
+      period: newConfig.ratelimitPeriod,
+      average: newConfig.ratelimitAverage,
+      burst: newConfig.ratelimitBurst,
+    };
+  }
+  if (newConfig.hostname && newConfig.hostname.length) {
+    config.hostname = newConfig.hostname;
+  }
+  if (newConfig.template && newConfig.template.length) {
+    config.template = newConfig.template;
+  }
+  if (newConfig.image && newConfig.image.length) {
+    config.image = newConfig.image;
+  }
+  if (newConfig.imageFile && newConfig.imageFile.length) {
+    config.imageFile = newConfig.imageFile;
+  }
+  if (newConfig.users && newConfig.users.length !== 0) {
+    config.basicAuth = newConfig.users.reduce((acc, curr, index) => {
+      const delimeter = newConfig.users.length - 1 === index ? '' : ',';
+      const pair = `${curr.username}:${md5(curr.password)}`;
+      return `${acc}${pair}${delimeter}`;
+    }, '');
+  }
+  if (newConfig.function) {
+    if (
+      (newConfig.functionType && newConfig.functionType.length !== 0) ||
+      (newConfig.functionRoute && newConfig.functionRoute.length !== 0)
+    ) {
+      config.function = {};
+      if (newConfig.functionType && newConfig.functionType.length !== 0) {
+        config.function.type = newConfig.functionType;
+      }
+      if (newConfig.functionRoute && newConfig.functionRoute.length !== 0) {
+        config.function.route = newConfig.functionRoute;
+      }
+    } else {
+      config.function = newConfig.function;
+    }
+  }
+
+  // write config
+  fs.writeFileSync(configPath, JSON.stringify(config, null, 2), 'utf-8');
+  console.log(chalk.green('Config created!'));
+};
+
 exports.command = ['config', 'init'];
 exports.describe = 'generate new config file for current project';
-exports.builder = {};
-exports.handler = async () => {
+exports.builder = {
+  func: {
+    alias: 'f',
+    description: 'generate a new config for function deployment',
+  },
+};
+exports.handler = async ({func} = {}) => {
   const workdir = process.cwd();
   const folderName = path.basename(workdir);
   const configPath = path.join(workdir, 'exoframe.json');
@@ -63,7 +142,8 @@ exports.handler = async () => {
       average: 1,
       burst: 5,
     },
-    basicAuth: '',
+    basicAuth: false,
+    function: false,
   };
   try {
     fs.statSync(configPath);
@@ -78,6 +158,15 @@ exports.handler = async () => {
       console.log(chalk.red('Error parsing existing config! Please make sure it is valid and try again.'));
       return;
     }
+  }
+
+  if (func) {
+    console.log('Creating new config for function deployment..');
+    // set function flag to true
+    defaultConfig.function = true;
+    // write config to file
+    writeConfig(configPath, defaultConfig);
+    return;
   }
 
   // ask user for values
@@ -212,6 +301,30 @@ exports.handler = async () => {
     when: ({deployWithImage}) => deployWithImage,
   });
 
+  // function deployment part
+  prompts.push({
+    type: 'confirm',
+    name: 'function',
+    message: 'Deploy as function? [optional]:',
+    default: Boolean(defaultConfig.function),
+  });
+  prompts.push({
+    type: 'input',
+    name: 'functionType',
+    message: 'Function type [http, worker, trigger, custom]:',
+    default: defaultConfig.function && defaultConfig.function.type ? defaultConfig.function.type : 'http',
+    filter,
+    when: answers => answers.function,
+  });
+  prompts.push({
+    type: 'input',
+    name: 'functionRoute',
+    message: 'Function route [optional]:',
+    default: defaultConfig.function && defaultConfig.function.route ? defaultConfig.function.route : '',
+    filter,
+    when: answers => answers.function,
+  });
+
   // basic auth part
   prompts.push({
     type: 'confirm',
@@ -242,7 +355,7 @@ exports.handler = async () => {
     default: false,
   });
 
-  const askForUsers = async users => {
+  const askForUsers = async (users = []) => {
     const {username, password, askAgain} = await inquirer.prompt(recursivePrompts);
     users.push({username, password});
     if (askAgain) {
@@ -253,84 +366,12 @@ exports.handler = async () => {
   };
 
   // get values from user
-  const {
-    name,
-    domain,
-    project,
-    env,
-    labels,
-    volumes,
-    enableRatelimit,
-    ratelimitPeriod,
-    ratelimitAverage,
-    ratelimitBurst,
-    hostname,
-    restart,
-    template,
-    image,
-    imageFile,
-    basicAuth,
-  } = await inquirer.prompt(prompts);
+  const newConfig = await inquirer.prompt(prompts);
 
-  const users = [];
-
-  if (basicAuth) {
-    await askForUsers(users);
+  // update users for auth if needed
+  if (newConfig.basicAuth) {
+    newConfig.users = await askForUsers();
   }
 
-  // init config object
-  const config = {name, restart};
-  if (domain && domain.length) {
-    config.domain = domain;
-  }
-  if (project && project.length) {
-    config.project = project;
-  }
-  if (env && env.length) {
-    config.env = env
-      .split(',')
-      .map(kv => kv.split('='))
-      .map(pair => ({key: pair[0].trim(), value: pair[1].trim()}))
-      .reduce((prev, obj) => Object.assign(prev, {[obj.key]: obj.value}), {});
-  }
-  if (labels && Object.keys(labels).length) {
-    config.labels = labels
-      .split(',')
-      .map(kv => kv.split('='))
-      .map(pair => ({key: pair[0].trim(), value: pair[1].trim()}))
-      .reduce((prev, obj) => Object.assign(prev, {[obj.key]: obj.value}), {});
-  }
-  if (volumes && volumes.length) {
-    config.volumes = volumes.split(',').map(v => v.trim());
-  }
-  if (enableRatelimit) {
-    config.rateLimit = {
-      period: ratelimitPeriod,
-      average: ratelimitAverage,
-      burst: ratelimitBurst,
-    };
-  }
-  if (hostname && hostname.length) {
-    config.hostname = hostname;
-  }
-  if (template && template.length) {
-    config.template = template;
-  }
-  if (image && image.length) {
-    config.image = image;
-  }
-  if (imageFile && imageFile.length) {
-    config.imageFile = imageFile;
-  }
-  if (users.length !== 0) {
-    config.basicAuth = users.reduce((acc, curr, index) => {
-      const delimeter = users.length - 1 === index ? '' : ',';
-      const pair = `${curr.username}:${md5(curr.password)}`;
-      return `${acc}${pair}${delimeter}`;
-    }, '');
-  }
-
-  // write config
-  fs.writeFileSync(configPath, JSON.stringify(config, null, 2), 'utf-8');
-  console.log(chalk.green('Config created!'));
+  writeConfig(configPath, {...defaultConfig, ...newConfig});
 };

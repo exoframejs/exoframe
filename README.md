@@ -22,6 +22,7 @@ Exoframe is a self-hosted tool that allows simple one-command deployments using 
 - Basic HTTP Auth support \*
 - Simple access to the logs of deployments
 - Docker-compose support
+- Simple function deployments
 - Multiple deployment endpoints and multi-user support
 - Simple update procedure for client, server and Traefik
 - Optional automatic subdomain assignment (i.e. every deployment gets its own subdomain)
@@ -71,8 +72,9 @@ You can find a list of all commands and options in the [docs](./docs/README.md).
 - [Server Installation](docs/ServerInstallation.md)
 - [Server Configuration](docs/ServerConfiguration.md)
 - [Advanced topics](docs/Advanced.md)
+- [Function deployments](docs/Functions.md)
 - [FAQ](docs/FAQ.md)
-- [Contribution Guideline](docs/Contributing.md)
+- [Contribution Guidelines](docs/Contributing.md)
 - [Templates guide](docs/TemplatesGuide.md)
 - [Recipes guide](docs/RecipesGuide.md)
 - [Using nightly versions](docs/Nightly.md)

@@ -2,6 +2,9 @@
 // mock config for testing
 jest.mock('../src/config', () => require('./__mocks__/config'));
 
+// mock process.exit for testing
+jest.spyOn(process, 'exit').mockImplementation(() => {});
+
 // npm packages
 const fs = require('fs');
 const path = require('path');
@@ -23,7 +26,7 @@ const replyWithStream = dataArr => {
   const replyStream = _();
   dataArr.forEach(data => replyStream.write(JSON.stringify(data)));
   replyStream.end('');
-  return new Readable().wrap(replyStream);
+  return [200, new Readable().wrap(replyStream)];
 };
 
 const folder = 'test_html_project';

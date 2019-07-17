@@ -1,7 +1,7 @@
 // npm packages
 const _ = require('lodash');
 const chalk = require('chalk');
-const Table = require('cli-table');
+const Table = require('cli-table3');
 
 // our packages
 const {tableBorder, tableStyle} = require('../config/table');
@@ -13,7 +13,7 @@ module.exports = containers => {
 
   // create table
   const resultTable = new Table({
-    head: ['ID', 'URL', 'Hostname', 'Status'],
+    head: ['ID', 'URL', 'Hostname', 'Status', 'Type'],
     chars: tableBorder,
     style: tableStyle,
   });
@@ -28,8 +28,8 @@ module.exports = containers => {
     const svcList = groupedServices[svcKey];
     // if there's only one deployment in project - add it to global table
     if (svcList.length === 1) {
-      const {name, domain, host, status} = svcList.pop();
-      resultTable.push([name, domain, host, status]);
+      const {name, domain, host, status, type} = svcList.pop();
+      resultTable.push([name, domain, host, status, type]);
       return;
     }
 
@@ -40,8 +40,8 @@ module.exports = containers => {
       chars: tableBorder,
       style: tableStyle,
     });
-    svcList.forEach(({name, domain, host, status}) => {
-      projectTable.push([name, domain, host, status]);
+    svcList.forEach(({name, domain, host, status, type}) => {
+      projectTable.push([name, domain, host, status, type]);
     });
     hasGroupedDeployments = true;
     console.log(projectTable.toString());
