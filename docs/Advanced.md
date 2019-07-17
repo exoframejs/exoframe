@@ -39,7 +39,36 @@ Deploying using docker compose works almost the same as using a normal docker co
 
 Any of the [configuration options](https://docs.traefik.io/configuration/backends/docker/#on-containers) for the default Traefik docker setup can be used.
 
-If you have a docker-compose.yml file, __any domain set in exoframe.json will be ignored__.
+If you have a docker-compose.yml file, **any domain set in exoframe.json will be ignored**.
+
+For the most part, Exoframe doesn't pass anything from `exoframe.json` to the compose.
+However, one thing that is being passed is environmental variables.
+You can use any variables defined in `exoframe.json` in your compose file.
+First, define them in your `exoframe.json`:
+
+```json
+{
+  "name": "test-compose-deploy",
+  "env": {
+    "CUSTOM_LABEL": "custom-value",
+    "CUSTOM_SECRET": "@test-secret"
+  }
+}
+```
+
+Then use them inside your `docker-compose.yml`:
+
+    version: '2'
+    services:
+      web:
+        build: .
+        labels:
+          traefik.frontend.rule: 'Host:test.dev'
+          traefik.port: 8080 # default: 80
+          custom.envvar: "${CUSTOM_LABEL}"
+          custom.secret: "${CUSTOM_SECRET}"
+      redis:
+        image: "redis:alpine"
 
 ## Rate limiting
 
