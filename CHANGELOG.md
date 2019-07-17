@@ -1,3 +1,15 @@
+# 5.0.0 / 2019-07-17
+
+Additions:
+
+- Add function deployments
+
+Changes:
+
+- Document env vars usage in docker-compose
+- Exit with non-zero code when deployment fails
+- Add linting npm scripts and run it in travis
+
 # 4.0.1 / 2019-05-07
 
 - Use node 10.x for pkg and travis
