@@ -17,8 +17,6 @@ exports.handler = async (args = {}) => {
   const deployToken = args.token;
   const id = args.id;
 
-  console.log(args);
-
   if (!deployToken && !isLoggedIn()) {
     return;
   }
