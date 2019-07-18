@@ -25,6 +25,34 @@ Array [
 ]
 `;
 
+exports[`Should remove by token instead of default auth 1`] = `
+Array [
+  Array [
+    "[1mRemoving deployment:[22m",
+    "test-id",
+  ],
+  Array [
+    "
+Removing using given token..",
+  ],
+  Array [
+    "[32mDeployment removed![39m",
+  ],
+]
+`;
+
+exports[`Should remove by url 1`] = `
+Array [
+  Array [
+    "[1mRemoving deployment:[22m",
+    "test.example.com",
+  ],
+  Array [
+    "[32mDeployment removed![39m",
+  ],
+]
+`;
+
 exports[`Should show not found error 1`] = `
 Array [
   Array [
