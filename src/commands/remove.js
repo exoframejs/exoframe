@@ -29,7 +29,7 @@ exports.handler = async (args = {}) => {
 
   if (deployToken) {
     authToken = deployToken;
-    console.log('\nDeploying using given token..');
+    console.log('\nRemoving using given token..');
   }
   // construct shared request params
   const options = {
