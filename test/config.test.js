@@ -60,11 +60,7 @@ beforeAll(() => {
   } catch (e) {
     // no config, just exit
   }
-});
 
-// test config generation
-test('Should generate config file', done => {
-  // stup inquirer answers
   sinon
     .stub(inquirer, 'prompt')
     .onFirstCall()
@@ -73,6 +69,37 @@ test('Should generate config file', done => {
     .callsFake(() => Promise.resolve(users[0]))
     .onThirdCall()
     .callsFake(() => Promise.resolve(users[1]));
+});
+
+test('Should generate the config with parameters', done => {
+  // spy on console
+  const consoleSpy = sinon.spy(console, 'log');
+
+  config({
+    domain: 'test123.dev',
+    restart: 'unless-stopped',
+    project: 'give-project-name',
+    name: 'test name 123',
+    hostname: 'test123.dev',
+  }).then(() => {
+    expect(consoleSpy.args).toMatchSnapshot();
+    // then check config changes
+    const cfg = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
+    expect(cfg.name).toEqual('test name 123');
+    expect(cfg.restart).toEqual('unless-stopped');
+    expect(cfg.domain).toEqual('test123.dev');
+    expect(cfg.project).toEqual('give-project-name');
+    expect(cfg.hostname).toEqual('test123.dev');
+    // restore console
+    console.log.restore();
+    // remove corrupted config
+    fs.unlinkSync(configPath);
+    done();
+  });
+});
+
+// test config generation
+test('Should generate config file', done => {
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
   // execute login

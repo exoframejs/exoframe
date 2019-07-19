@@ -123,10 +123,31 @@ exports.builder = {
     alias: 'f',
     description: 'generate a new config for function deployment',
   },
+  domain: {
+    alias: ['d', 'domain'],
+    description: 'sets the domain (enables non-interactive mode)',
+  },
+  project: {
+    alias: ['p', 'project'],
+    description: 'sets the project name (enables non-interactive mode)',
+  },
+  name: {
+    alias: ['n', 'name'],
+    description: 'sets the name (enables non-interactive mode)',
+  },
+  restart: {
+    alias: ['r', 'restart'],
+    description: 'sets the restart option (enables non-interactive mode)',
+  },
+  hostname: {
+    alias: ['hostname'],
+    description: 'sets the hostname (enables non-interactive mode)',
+  },
 };
-exports.handler = async ({func} = {}) => {
+exports.handler = async ({func, ...args} = {}) => {
   const workdir = process.cwd();
   const folderName = path.basename(workdir);
+  const nonInteractive = Object.keys(args).some(key => args[key].length > 0);
   const configPath = path.join(workdir, 'exoframe.json');
   let defaultConfig = {
     name: folderName,
@@ -365,12 +386,32 @@ exports.handler = async ({func} = {}) => {
     }
   };
 
-  // get values from user
-  const newConfig = await inquirer.prompt(prompts);
+  let newConfig = defaultConfig;
 
-  // update users for auth if needed
-  if (newConfig.basicAuth) {
-    newConfig.users = await askForUsers();
+  if (nonInteractive) {
+    console.log(chalk.yellow('Mode changed to'), 'non-interactive');
+  }
+
+  const overrideFromArgument = (key, value) => {
+    if (!value) return;
+    console.log('Setting', chalk.red(key), 'to', chalk.yellow(value));
+    newConfig[key] = value;
+  };
+
+  overrideFromArgument('domain', args.domain);
+  overrideFromArgument('name', args.name);
+  overrideFromArgument('project', args.project);
+  overrideFromArgument('restart', args.restart);
+  overrideFromArgument('hostname', args.hostname);
+
+  if (!nonInteractive) {
+    // get values from user
+    newConfig = await inquirer.prompt(prompts);
+
+    // update users for auth if needed
+    if (newConfig.basicAuth) {
+      newConfig.users = await askForUsers();
+    }
   }
 
   writeConfig(configPath, {...defaultConfig, ...newConfig});

@@ -10,3 +10,48 @@ Array [
   ],
 ]
 `;
+
+exports[`Should generate the config with parameters 1`] = `
+Array [
+  Array [
+    "Creating new config..",
+  ],
+  Array [
+    "[33mMode changed to[39m",
+    "non-interactive",
+  ],
+  Array [
+    "Setting",
+    "[31mdomain[39m",
+    "to",
+    "[33mtest123.dev[39m",
+  ],
+  Array [
+    "Setting",
+    "[31mname[39m",
+    "to",
+    "[33mtest name 123[39m",
+  ],
+  Array [
+    "Setting",
+    "[31mproject[39m",
+    "to",
+    "[33mgive-project-name[39m",
+  ],
+  Array [
+    "Setting",
+    "[31mrestart[39m",
+    "to",
+    "[33munless-stopped[39m",
+  ],
+  Array [
+    "Setting",
+    "[31mhostname[39m",
+    "to",
+    "[33mtest123.dev[39m",
+  ],
+  Array [
+    "[32mConfig created![39m",
+  ],
+]
+`;
