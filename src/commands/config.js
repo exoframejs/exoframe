@@ -181,7 +181,7 @@ exports.handler = async ({func, ...args} = {}) => {
     }
   }
 
-  if (args.func) {
+  if (func) {
     console.log('Creating new config for function deployment..');
     // set function flag to true
     defaultConfig.function = true;
