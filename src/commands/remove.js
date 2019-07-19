@@ -18,6 +18,7 @@ exports.handler = async (args = {}) => {
   const id = args.id;
 
   if (!deployToken && !isLoggedIn()) {
+    console.log(chalk.red('Error!'), '\nYou need to sign in first or supply a authentication token.');
     return;
   }
 
