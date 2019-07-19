@@ -7,9 +7,18 @@ const {userConfig, isLoggedIn, logout} = require('../config');
 
 exports.command = ['remove <id>', 'rm <id>'];
 exports.describe = 'remove active deployment';
-exports.builder = {};
-exports.handler = async ({id}) => {
-  if (!isLoggedIn()) {
+exports.builder = {
+  token: {
+    alias: 't',
+    description: 'Deployment token to be used for authentication',
+  },
+};
+exports.handler = async (args = {}) => {
+  const deployToken = args.token;
+  const id = args.id;
+
+  if (!deployToken && !isLoggedIn()) {
+    console.log(chalk.red('Error!'), '\nYou need to sign in first or supply a authentication token.');
     return;
   }
 
@@ -17,10 +26,16 @@ exports.handler = async ({id}) => {
 
   // services request url
   const remoteUrl = `${userConfig.endpoint}/remove/${encodeURIComponent(id)}`;
+  let authToken = userConfig.token;
+
+  if (deployToken) {
+    authToken = deployToken;
+    console.log('\nRemoving using given token..');
+  }
   // construct shared request params
   const options = {
     headers: {
-      Authorization: `Bearer ${userConfig.token}`,
+      Authorization: `Bearer ${authToken}`,
     },
     body: {},
     json: true,
