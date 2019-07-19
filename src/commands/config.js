@@ -390,14 +390,19 @@ exports.handler = async ({func, ...args} = {}) => {
 
   if (nonInteractive) {
     console.log(chalk.yellow('Mode changed to'), 'non-interactive');
-
-    Object.keys(args)
-      .filter(key => args[key])
-      .some(key => {
-        console.log(chalk.green('Setting'), chalk.red(key), 'to', chalk.gray(args[key]));
-        newConfig[key] = args[key];
-      });
   }
+
+  const overrideFromArgument = (key, value) => {
+    if (!value) return;
+    console.log('Setting', chalk.red(key), 'to', chalk.yellow(value));
+    newConfig[key] = value;
+  };
+
+  overrideFromArgument('domain', args.domain);
+  overrideFromArgument('name', args.name);
+  overrideFromArgument('project', args.project);
+  overrideFromArgument('restart', args.restart);
+  overrideFromArgument('hostname', args.hostname);
 
   if (!nonInteractive) {
     // get values from user
