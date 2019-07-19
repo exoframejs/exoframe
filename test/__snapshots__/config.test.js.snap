@@ -28,9 +28,9 @@ Array [
   ],
   Array [
     "[32mSetting[39m",
-    "[31mname[39m",
+    "[31mrestart[39m",
     "to",
-    "[90mtest name 123[39m",
+    "[90munless-stopped[39m",
   ],
   Array [
     "[32mSetting[39m",
@@ -40,9 +40,9 @@ Array [
   ],
   Array [
     "[32mSetting[39m",
-    "[31mrestart[39m",
+    "[31mname[39m",
     "to",
-    "[90munless-stopped[39m",
+    "[90mtest name 123[39m",
   ],
   Array [
     "[32mSetting[39m",

@@ -144,9 +144,10 @@ exports.builder = {
     description: 'sets the hostname (enables non-interactive mode)',
   },
 };
-exports.handler = async (args = {}) => {
+exports.handler = async ({func, ...args} = {}) => {
   const workdir = process.cwd();
   const folderName = path.basename(workdir);
+  const nonInteractive = Object.keys(args).some(key => args[key].length > 0);
   const configPath = path.join(workdir, 'exoframe.json');
   let defaultConfig = {
     name: folderName,
@@ -386,26 +387,17 @@ exports.handler = async (args = {}) => {
   };
 
   let newConfig = defaultConfig;
-  let nonInteractive = false;
 
-  const overrideFromArgument = (key, value) => {
-    if (value) {
-      if (!nonInteractive) {
-        console.log(chalk.yellow('Mode changed to'), 'non-interactive');
-      }
+  if (nonInteractive) {
+    console.log(chalk.yellow('Mode changed to'), 'non-interactive');
 
-      nonInteractive = true;
-
-      newConfig[key] = value;
-      console.log(chalk.green('Setting'), chalk.red(key), 'to', chalk.gray(value));
-    }
-  };
-
-  overrideFromArgument('domain', args.domain);
-  overrideFromArgument('name', args.name);
-  overrideFromArgument('project', args.project);
-  overrideFromArgument('restart', args.restart);
-  overrideFromArgument('hostname', args.hostname);
+    Object.keys(args)
+      .filter(key => args[key])
+      .some(key => {
+        console.log(chalk.green('Setting'), chalk.red(key), 'to', chalk.gray(args[key]));
+        newConfig[key] = args[key];
+      });
+  }
 
   if (!nonInteractive) {
     // get values from user
