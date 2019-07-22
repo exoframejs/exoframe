@@ -1,3 +1,13 @@
+# 5.1.0 / 2019-07-22
+
+Additions:
+
+- Allow specifying alternate config file during deployment
+- Allow non-interactive secret manipulation
+- Allow non-interactive config manipulation
+- Allow using `exoframe rm` with deploy token
+- Allow removing deployments using URL
+
 # 5.0.0 / 2019-07-17
 
 Additions:
