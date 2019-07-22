@@ -86,6 +86,8 @@ All of the configuration for the deployed projects is done using `exoframe.json`
 It can either be generated/updated using `exoframe config` (or `exoframe init`) command or created manually.
 If it doesn't exist during deployment, Exoframe will generate simple config file that only contains name of the current project.
 
+You can also tell Exoframe to use alternative config file during deployment by supplying `--config` (or `-c`) flag, e.g.: `exoframe -c exoframe.dev.json`
+
 Config file has the following structure:
 
 ```js

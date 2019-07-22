@@ -75,6 +75,10 @@ const streamToResponse = ({tarStream, remoteUrl, options, verbose, spinner}) =>
 exports.command = ['*', 'deploy'];
 exports.describe = 'deploy current folder';
 exports.builder = {
+  config: {
+    alias: 'c',
+    description: 'Configuration file to be used for deployment',
+  },
   token: {
     alias: 't',
     description: 'Deployment token to be used for authentication',
@@ -124,7 +128,8 @@ exports.handler = async (args = {}) => {
   }
 
   // create config if doesn't exist
-  const configPath = path.join(workdir, 'exoframe.json');
+  const configFilename = args.config || 'exoframe.json';
+  const configPath = path.join(workdir, configFilename);
   try {
     fs.statSync(configPath);
   } catch (e) {
@@ -168,12 +173,30 @@ exports.handler = async (args = {}) => {
     verbose && console.log('\nNo .exoframeignore file found, using default ignores');
   }
 
+  // ignore exoframe.json if user supplied custom config
+  if (args.config) {
+    ignores.push('exoframe.json');
+  }
+
   // create tar stream from current folder
   const tarStream = tar.pack(workdir, {
+    // ignore files from ignore list
     ignore: name => {
       const relativePath = name.replace(`${workdir}/`, '');
       const result = multimatch([relativePath], ignores).length !== 0;
       return result;
+    },
+    // map custom config to exoframe.json when provided
+    map: headers => {
+      // if working with custom config - change its name before packing
+      if (args.config && headers.name === args.config) {
+        return {
+          ...headers,
+          name: 'exoframe.json',
+        };
+      }
+
+      return headers;
     },
   });
   // if in verbose mode - log ignores

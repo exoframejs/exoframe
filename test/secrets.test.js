@@ -43,6 +43,29 @@ test('Should create new secret', done => {
   });
 });
 
+// test non-interactive generation
+test('Should create new secret non-interactively', done => {
+  // handle correct request
+  const secretServer = nock('http://localhost:8080')
+    .post('/secrets')
+    .reply(200, {name: testSecret.secretName, value: testSecret.secretValue});
+  // spy on console
+  const consoleSpy = sinon.spy(console, 'log');
+  // execute login
+  secrets({cmd: 'new', name: testSecret.secretName, value: testSecret.secretValue}).then(() => {
+    // make sure log in was successful
+    // check that server was called
+    expect(secretServer.isDone()).toBeTruthy();
+    // first check console output
+    expect(consoleSpy.args).toMatchSnapshot();
+    // restore console
+    console.log.restore();
+    // tear down nock
+    secretServer.done();
+    done();
+  });
+});
+
 // test list
 test('Should list secrets', done => {
   const createDate = new Date(2017, 1, 1, 1, 1, 1, 1);

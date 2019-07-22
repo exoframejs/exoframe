@@ -12,6 +12,7 @@ const nock = require('nock');
 const sinon = require('sinon');
 const _ = require('highland');
 const {Readable} = require('stream');
+const tar = require('tar-fs');
 
 // our packages
 const cfg = require('../src/config');
@@ -36,6 +37,9 @@ const testFolder = path.join(__dirname, 'fixtures', folder);
 const ignoreFolder = 'test_ignore_project';
 const ignoreFolderPath = path.join('test', 'fixtures', ignoreFolder);
 const ignoreTestFolder = path.join(__dirname, 'fixtures', ignoreFolder);
+
+const customConfigFolder = 'test_custom_config_project';
+const customConfigFolderPath = path.join('test', 'fixtures', customConfigFolder);
 
 const deployments = [
   {
@@ -198,6 +202,54 @@ test('Should open webpage after deploy', done => {
 });
 
 // test
+test('Should deploy with custom config', done => {
+  // spy on console
+  const consoleSpy = sinon.spy(console, 'log');
+
+  // handle correct request
+  const deployServer = nock('http://localhost:8080')
+    .post('/deploy')
+    .reply((uri, requestBody, cb) => {
+      // console.log(uri, requestBody);
+      // create new data stream and write array into it
+      const s = new Readable();
+      s.push(requestBody);
+      s.push(null);
+
+      // pipe stream to extraction
+      const fileNames = [];
+      s.pipe(
+        tar.extract('./', {
+          ignore: (name, header) => {
+            fileNames.push(name);
+            return true;
+          },
+          finish: () => {
+            // validate that custom config was rename and is not packed
+            expect(fileNames).toContain('exoframe.json');
+            expect(fileNames).not.toContain('exoframe-custom.json');
+            cb(null, replyWithStream([{message: 'Deployment success!', deployments, level: 'info'}]));
+          },
+        })
+      );
+    });
+
+  // execute login
+  deploy({_: [customConfigFolderPath], config: 'exoframe-custom.json'}).then(() => {
+    // make sure log in was successful
+    // check that server was called
+    expect(deployServer.isDone()).toBeTruthy();
+    // first check console output
+    expect(consoleSpy.args).toMatchSnapshot();
+    // restore console
+    console.log.restore();
+    // tear down nock
+    deployServer.done();
+    done();
+  });
+});
+
+// test
 test('Should display error log', done => {
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
@@ -266,12 +318,10 @@ test('Should display verbose output', done => {
   // handle correct request
   const deployServer = nock('http://localhost:8080')
     .post('/deploy')
-    .reply((uri, requestBody, cb) => {
-      cb(null, [200, 'Bad Gateway']);
-    });
+    .reply(() => [200, 'Bad Gateway']);
 
   // execute
-  deploy({verbose: true}).then(() => {
+  deploy({_: [ignoreFolderPath], verbose: true}).then(() => {
     // make sure log in was successful
     // check that server was called
     expect(deployServer.isDone()).toBeTruthy();

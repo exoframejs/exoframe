@@ -8,3 +8,5 @@ exoframe-win.exe
 .idea/
 .DS_Store
 
+package-lock.json
+exoframe.json
