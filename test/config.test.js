@@ -44,7 +44,9 @@ const users = [
     askAgain: false,
   },
 ];
-const configPath = path.join(process.cwd(), 'exoframe.json');
+const cwd = process.cwd();
+const folderName = path.basename(cwd);
+const configPath = path.join(cwd, 'exoframe.json');
 
 const verifyBasicAuth = (input, actual) => {
   actual.split(',').forEach((element, index) => {
@@ -148,7 +150,7 @@ test('Should generate config file for functions', done => {
     expect(consoleSpy.args).toMatchSnapshot();
     // then check config changes
     const cfg = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
-    expect(cfg.name).toEqual('exoframe-cli');
+    expect(cfg.name).toEqual(folderName);
     expect(cfg.function).toEqual(true);
     // restore console
     console.log.restore();
