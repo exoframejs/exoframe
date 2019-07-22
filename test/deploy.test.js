@@ -40,7 +40,6 @@ const ignoreTestFolder = path.join(__dirname, 'fixtures', ignoreFolder);
 
 const customConfigFolder = 'test_custom_config_project';
 const customConfigFolderPath = path.join('test', 'fixtures', customConfigFolder);
-const customConfigTestFolder = path.join(__dirname, 'fixtures', customConfigFolder);
 
 const deployments = [
   {
