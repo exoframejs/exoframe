@@ -137,3 +137,23 @@ test('Should generate config file', done => {
     done();
   });
 });
+
+// test config generation
+test('Should generate config file for functions', done => {
+  // spy on console
+  const consoleSpy = sinon.spy(console, 'log');
+  // execute login
+  config({func: true}).then(() => {
+    // first check console output
+    expect(consoleSpy.args).toMatchSnapshot();
+    // then check config changes
+    const cfg = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
+    expect(cfg.name).toEqual('exoframe-cli');
+    expect(cfg.function).toEqual(true);
+    // restore console
+    console.log.restore();
+    // remove corrupted config
+    fs.unlinkSync(configPath);
+    done();
+  });
+});

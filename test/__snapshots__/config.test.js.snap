@@ -11,6 +11,20 @@ Array [
 ]
 `;
 
+exports[`Should generate config file for functions 1`] = `
+Array [
+  Array [
+    "Creating new config..",
+  ],
+  Array [
+    "Creating new config for function deployment..",
+  ],
+  Array [
+    "[32mConfig created![39m",
+  ],
+]
+`;
+
 exports[`Should generate the config with parameters 1`] = `
 Array [
   Array [

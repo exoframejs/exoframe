@@ -44,7 +44,10 @@ const volumeValidation = input => {
 
 const writeConfig = (configPath, newConfig) => {
   // init config object
-  const config = {name: newConfig.name, restart: newConfig.restart};
+  const config = {name: newConfig.name};
+  if (newConfig.restart && newConfig.restart.length) {
+    config.restart = newConfig.restart;
+  }
   if (newConfig.domain && newConfig.domain.length) {
     config.domain = newConfig.domain;
   }
@@ -116,80 +119,7 @@ const writeConfig = (configPath, newConfig) => {
   console.log(chalk.green('Config created!'));
 };
 
-exports.command = ['config', 'init'];
-exports.describe = 'generate new config file for current project';
-exports.builder = {
-  func: {
-    alias: 'f',
-    description: 'generate a new config for function deployment',
-  },
-  domain: {
-    alias: ['d', 'domain'],
-    description: 'sets the domain (enables non-interactive mode)',
-  },
-  project: {
-    alias: ['p', 'project'],
-    description: 'sets the project name (enables non-interactive mode)',
-  },
-  name: {
-    alias: ['n', 'name'],
-    description: 'sets the name (enables non-interactive mode)',
-  },
-  restart: {
-    alias: ['r', 'restart'],
-    description: 'sets the restart option (enables non-interactive mode)',
-  },
-  hostname: {
-    alias: ['hostname'],
-    description: 'sets the hostname (enables non-interactive mode)',
-  },
-};
-exports.handler = async ({func, ...args} = {}) => {
-  const workdir = process.cwd();
-  const folderName = path.basename(workdir);
-  const nonInteractive = Object.keys(args).some(key => args[key].length > 0);
-  const configPath = path.join(workdir, 'exoframe.json');
-  let defaultConfig = {
-    name: folderName,
-    domain: '',
-    project: '',
-    restart: 'on-failure:2',
-    env: undefined,
-    labels: undefined,
-    hostname: '',
-    template: '',
-    rateLimit: {
-      period: '1s',
-      average: 1,
-      burst: 5,
-    },
-    basicAuth: false,
-    function: false,
-  };
-  try {
-    fs.statSync(configPath);
-    console.log(chalk.green('Config already exists! Editing..'));
-    defaultConfig = JSON.parse(fs.readFileSync(configPath).toString());
-  } catch (e) {
-    // check if config didn't exist
-    if (e.message.includes('ENOENT')) {
-      console.log('Creating new config..');
-    } else {
-      // if there was any parsing error - show message and die
-      console.log(chalk.red('Error parsing existing config! Please make sure it is valid and try again.'));
-      return;
-    }
-  }
-
-  if (func) {
-    console.log('Creating new config for function deployment..');
-    // set function flag to true
-    defaultConfig.function = true;
-    // write config to file
-    writeConfig(configPath, defaultConfig);
-    return;
-  }
-
+const generatePrompts = defaultConfig => {
   // ask user for values
   // generate and show choices
   const prompts = [];
@@ -201,12 +131,39 @@ exports.handler = async ({func, ...args} = {}) => {
     validate,
     filter,
   });
+
+  // function deployment part
+  prompts.push({
+    type: 'confirm',
+    name: 'function',
+    message: 'Deploy as function? [optional]:',
+    default: Boolean(defaultConfig.function),
+  });
+  prompts.push({
+    type: 'input',
+    name: 'functionType',
+    message: 'Function type [http, worker, trigger, custom]:',
+    default: defaultConfig.function && defaultConfig.function.type ? defaultConfig.function.type : 'http',
+    filter,
+    when: answers => answers.function,
+  });
+  prompts.push({
+    type: 'input',
+    name: 'functionRoute',
+    message: 'Function route [optional]:',
+    default: defaultConfig.function && defaultConfig.function.route ? defaultConfig.function.route : '',
+    filter,
+    when: answers => answers.function,
+  });
+
+  // default stuff
   prompts.push({
     type: 'input',
     name: 'domain',
     message: 'Domain [optional]:',
     default: defaultConfig.domain,
     filter,
+    when: answers => !answers.function,
   });
   prompts.push({
     type: 'input',
@@ -214,6 +171,7 @@ exports.handler = async ({func, ...args} = {}) => {
     message: 'Project [optional]:',
     default: defaultConfig.project,
     filter,
+    when: answers => !answers.function,
   });
   prompts.push({
     type: 'input',
@@ -226,6 +184,7 @@ exports.handler = async ({func, ...args} = {}) => {
       : '',
     filter,
     validate: pairValidation,
+    when: answers => !answers.function,
   });
   prompts.push({
     type: 'input',
@@ -238,6 +197,7 @@ exports.handler = async ({func, ...args} = {}) => {
       : '',
     filter,
     validate: pairValidation,
+    when: answers => !answers.function,
   });
   prompts.push({
     type: 'input',
@@ -246,12 +206,14 @@ exports.handler = async ({func, ...args} = {}) => {
     default: defaultConfig.volumes ? defaultConfig.volumes.join(', ') : '',
     filter,
     validate: volumeValidation,
+    when: answers => !answers.function,
   });
   prompts.push({
     type: 'confirm',
     name: 'enableRatelimit',
     message: 'Enable rate-limit? [optional]',
-    default: !!defaultConfig.rateLimit,
+    default: defaultConfig.rateLimit && defaultConfig.rateLimit.enabled,
+    when: answers => !answers.function,
   });
   prompts.push({
     type: 'input',
@@ -283,13 +245,15 @@ exports.handler = async ({func, ...args} = {}) => {
     message: 'Hostname [optional]:',
     default: defaultConfig.hostname,
     filter,
+    when: answers => !answers.function,
   });
   prompts.push({
     type: 'list',
     name: 'restart',
     message: 'Restart policy [optional]:',
     default: defaultConfig.restart,
-    choices: ['no', 'on-failure:2', 'always'],
+    choices: ['', 'no', 'on-failure:2', 'always'],
+    when: answers => !answers.function,
   });
   prompts.push({
     type: 'input',
@@ -297,6 +261,7 @@ exports.handler = async ({func, ...args} = {}) => {
     message: 'Template [optional]:',
     default: defaultConfig.template,
     filter,
+    when: answers => !answers.function,
   });
   // docker image deployment part
   prompts.push({
@@ -304,6 +269,7 @@ exports.handler = async ({func, ...args} = {}) => {
     name: 'deployWithImage',
     message: 'Deploy using docker image? [optional]:',
     default: Boolean(defaultConfig.image),
+    when: answers => !answers.function,
   });
   prompts.push({
     type: 'input',
@@ -322,36 +288,13 @@ exports.handler = async ({func, ...args} = {}) => {
     when: ({deployWithImage}) => deployWithImage,
   });
 
-  // function deployment part
-  prompts.push({
-    type: 'confirm',
-    name: 'function',
-    message: 'Deploy as function? [optional]:',
-    default: Boolean(defaultConfig.function),
-  });
-  prompts.push({
-    type: 'input',
-    name: 'functionType',
-    message: 'Function type [http, worker, trigger, custom]:',
-    default: defaultConfig.function && defaultConfig.function.type ? defaultConfig.function.type : 'http',
-    filter,
-    when: answers => answers.function,
-  });
-  prompts.push({
-    type: 'input',
-    name: 'functionRoute',
-    message: 'Function route [optional]:',
-    default: defaultConfig.function && defaultConfig.function.route ? defaultConfig.function.route : '',
-    filter,
-    when: answers => answers.function,
-  });
-
   // basic auth part
   prompts.push({
     type: 'confirm',
     name: 'basicAuth',
     message: 'Add a basic auth user? [optional]:',
     default: Boolean(defaultConfig.basicAuth),
+    when: answers => !answers.function,
   });
   // prompts for recursive questions
   const recursivePrompts = [];
@@ -386,6 +329,83 @@ exports.handler = async ({func, ...args} = {}) => {
     }
   };
 
+  return {prompts, askForUsers};
+};
+
+exports.command = ['config', 'init'];
+exports.describe = 'generate new config file for current project';
+exports.builder = {
+  func: {
+    alias: 'f',
+    description: 'generate a new config for function deployment',
+  },
+  domain: {
+    alias: 'd',
+    description: 'sets the domain (enables non-interactive mode)',
+  },
+  project: {
+    alias: 'p',
+    description: 'sets the project name (enables non-interactive mode)',
+  },
+  name: {
+    alias: 'n',
+    description: 'sets the name (enables non-interactive mode)',
+  },
+  restart: {
+    alias: 'r',
+    description: 'sets the restart option (enables non-interactive mode)',
+  },
+  hostname: {
+    description: 'sets the hostname (enables non-interactive mode)',
+  },
+};
+exports.handler = async ({_, $0, func, ...args} = {}) => {
+  const workdir = process.cwd();
+  const folderName = path.basename(workdir);
+  const nonInteractive = Object.keys(args).some(key => args[key].length > 0);
+  const configPath = path.join(workdir, 'exoframe.json');
+  let defaultConfig = {
+    name: folderName,
+    domain: '',
+    project: '',
+    restart: '',
+    env: undefined,
+    labels: undefined,
+    hostname: '',
+    template: '',
+    rateLimit: {
+      enabled: false,
+      period: '1s',
+      average: 1,
+      burst: 5,
+    },
+    basicAuth: false,
+    function: false,
+  };
+  try {
+    fs.statSync(configPath);
+    console.log(chalk.green('Config already exists! Editing..'));
+    defaultConfig = JSON.parse(fs.readFileSync(configPath).toString());
+  } catch (e) {
+    // check if config didn't exist
+    if (e.message.includes('ENOENT')) {
+      console.log('Creating new config..');
+    } else {
+      // if there was any parsing error - show message and die
+      console.log(chalk.red('Error parsing existing config! Please make sure it is valid and try again.'));
+      return;
+    }
+  }
+
+  if (func) {
+    console.log('Creating new config for function deployment..');
+    // set function flag to true
+    defaultConfig.function = true;
+    // write config to file
+    writeConfig(configPath, defaultConfig);
+    return;
+  }
+
   let newConfig = defaultConfig;
 
   if (nonInteractive) {
@@ -405,6 +425,7 @@ exports.handler = async ({func, ...args} = {}) => {
   overrideFromArgument('hostname', args.hostname);
 
   if (!nonInteractive) {
+    const {prompts, askForUsers} = generatePrompts(defaultConfig);
     // get values from user
     newConfig = await inquirer.prompt(prompts);
 
