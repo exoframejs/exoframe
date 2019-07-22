@@ -6,12 +6,18 @@ const inquirer = require('inquirer');
 // our packages
 const {userConfig, isLoggedIn, logout} = require('../config');
 
-exports.command = ['secret [cmd]'];
+exports.command = ['secret [cmd] [name] [value]'];
 exports.describe = 'create, list or remove deployment secrets';
 exports.builder = {
   cmd: {
     default: 'new',
     description: 'command to execute [new | ls | get | rm]',
+  },
+  name: {
+    description: 'name of the secret',
+  },
+  value: {
+    description: 'new value of the secret',
   },
 };
 exports.handler = async args => {
@@ -70,14 +76,20 @@ exports.handler = async args => {
       return;
     }
 
-    const prompts = [];
-    prompts.push({
-      type: 'list',
-      name: 'selectedSecret',
-      message: 'Choose secret to remove:',
-      choices: secrets.map(t => t.name),
-    });
-    const {selectedSecret} = await inquirer.prompt(prompts);
+    // get selected secret from args
+    let selectedSecret = args.name;
+
+    // if it's not provided - present user with selection
+    if (!selectedSecret || !selectedSecret.length) {
+      const prompts = [];
+      prompts.push({
+        type: 'list',
+        name: 'selectedSecret',
+        message: `Choose secret to ${cmd === 'get' ? 'get' : 'remove'}:`,
+        choices: secrets.map(t => t.name),
+      });
+      ({selectedSecret} = await inquirer.prompt(prompts));
+    }
 
     // if getting secret - ask user once more if he's sure
     if (cmd === 'get') {
@@ -164,23 +176,29 @@ exports.handler = async args => {
 
   console.log(chalk.bold('Generating new deployment secret for:'), userConfig.endpoint);
 
-  // ask for secret name and value
-  const prompts = [];
-  prompts.push({
-    type: 'input',
-    name: 'secretName',
-    message: 'Secret name:',
-    validate: input => input && input.length > 0,
-    filter: input => input.trim(),
-  });
-  prompts.push({
-    type: 'input',
-    name: 'secretValue',
-    message: 'Secret value:',
-    validate: input => input && input.length > 0,
-    filter: input => input.trim(),
-  });
-  const {secretName, secretValue} = await inquirer.prompt(prompts);
+  let secretName = args.name;
+  let secretValue = args.value;
+
+  // if user haven't provided name and value - ask interactively
+  if (!secretName || !secretValue) {
+    // ask for secret name and value
+    const prompts = [];
+    prompts.push({
+      type: 'input',
+      name: 'secretName',
+      message: 'Secret name:',
+      validate: input => input && input.length > 0,
+      filter: input => input.trim(),
+    });
+    prompts.push({
+      type: 'input',
+      name: 'secretValue',
+      message: 'Secret value:',
+      validate: input => input && input.length > 0,
+      filter: input => input.trim(),
+    });
+    ({secretName, secretValue} = await inquirer.prompt(prompts));
+  }
 
   // construct shared request params
   const options = {
