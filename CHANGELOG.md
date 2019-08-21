@@ -1,3 +1,9 @@
+# 5.2.0 / 2019-08-21
+
+Additions:
+
+- Allow specifying endpoint as a deploy command flag
+
 # 5.1.0 / 2019-07-22
 
 Additions:
