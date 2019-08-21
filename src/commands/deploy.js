@@ -96,6 +96,10 @@ exports.builder = {
     description: 'Verbose mode; will output more information',
     count: true,
   },
+  endpoint: {
+    alias: 'e',
+    description: 'Exoframe server endpoint to use (will override config value)',
+  },
 };
 exports.handler = async (args = {}) => {
   const deployToken = args.token;
@@ -108,16 +112,14 @@ exports.handler = async (args = {}) => {
 
   const folder = args._ ? args._.filter(arg => arg !== 'deploy').shift() : undefined;
   const update = args.update;
+  const endpoint = args.endpoint || userConfig.endpoint;
 
-  console.log(
-    chalk.bold(`${update ? 'Updating' : 'Deploying'} ${folder || 'current project'} to endpoint:`),
-    userConfig.endpoint
-  );
+  console.log(chalk.bold(`${update ? 'Updating' : 'Deploying'} ${folder || 'current project'} to endpoint:`), endpoint);
 
   // create config vars
   const workdir = folder ? path.join(process.cwd(), folder) : process.cwd();
   const folderName = path.basename(workdir);
-  const remoteUrl = `${userConfig.endpoint}/${update ? 'update' : 'deploy'}`;
+  const remoteUrl = `${endpoint}/${update ? 'update' : 'deploy'}`;
 
   // make sure workdir exists
   if (!fs.existsSync(workdir)) {
