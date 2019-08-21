@@ -93,6 +93,38 @@ test('Should deploy', done => {
 });
 
 // test
+test('Should deploy with endpoint flag', done => {
+  // spy on console
+  const consoleSpy = sinon.spy(console, 'log');
+
+  // handle correct request
+  const deployServer = nock('http://localhost:3000')
+    .post('/deploy')
+    .reply((uri, requestBody) => {
+      const excgf = fs.readFileSync(path.join(testFolder, 'exoframe.json'));
+      const index = fs.readFileSync(path.join(testFolder, 'index.html'));
+      expect(requestBody).toContain(excgf);
+      expect(requestBody).toContain(index);
+
+      return replyWithStream([{message: 'Deployment success!', deployments, level: 'info'}]);
+    });
+
+  // execute login
+  deploy({_: [folderPath], endpoint: 'http://localhost:3000'}).then(() => {
+    // make sure log in was successful
+    // check that server was called
+    expect(deployServer.isDone()).toBeTruthy();
+    // first check console output
+    expect(consoleSpy.args).toMatchSnapshot();
+    // restore console
+    console.log.restore();
+    // tear down nock
+    deployServer.done();
+    done();
+  });
+});
+
+// test
 test('Should deploy without path', done => {
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
