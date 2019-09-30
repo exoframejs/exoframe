@@ -86,6 +86,7 @@ exports.builder = {
   update: {
     alias: 'u',
     description: 'Update current project instead of simple deployment',
+    type: 'boolean',
   },
   open: {
     alias: 'o',
