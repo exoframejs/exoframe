@@ -1,3 +1,9 @@
+# 5.2.1 / 2019-09-30
+
+Fixes:
+
+- Mark upgrade flag as boolean to prevent it from eating following args
+
 # 5.2.0 / 2019-08-21
 
 Additions:
