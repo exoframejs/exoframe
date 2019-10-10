@@ -193,8 +193,8 @@ $ docker service create \
   --mount type=bind,source=/home/ubuntu/.exoframe,target=/root/.exoframe \
   --mount type=bind,source=/home/ubuntu/.ssh/authorized_keys,target=/root/.ssh/authorized_keys,readonly \
   -e EXO_PRIVATE_KEY=your_private_key \
-  --label traefik.backend=exoframe-server \
-  --label traefik.frontend.rule=Host:exo.mydomain.com \
+  --label traefik.enable=true \
+  --label "traefik.http.routers.exoframe-server.rule=Host(\`exo.mydomain.com\`)"  \
   --label traefik.port=8080 \
   --constraint=node.role==manager \
   --name exoframe-server \
