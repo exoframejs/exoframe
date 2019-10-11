@@ -16,14 +16,16 @@ const {handler: config} = require('../src/commands/config');
 const configData = {
   name: 'test',
   domain: 'test.dev',
+  port: '8080',
   project: 'test-project',
   env: 'ENV=1, OTHER=2',
   labels: 'label=1, other=2',
   hostname: 'host',
   restart: 'no',
   template: 'static',
+  compess: true,
+  letsencrypt: true,
   enableRatelimit: true,
-  ratelimitPeriod: 10,
   ratelimitAverage: 20,
   ratelimitBurst: 30,
   volumes: 'test:/volume',
@@ -79,6 +81,7 @@ test('Should generate the config with parameters', done => {
 
   config({
     domain: 'test123.dev',
+    port: '1234',
     restart: 'unless-stopped',
     project: 'give-project-name',
     name: 'test name 123',
@@ -90,6 +93,7 @@ test('Should generate the config with parameters', done => {
     expect(cfg.name).toEqual('test name 123');
     expect(cfg.restart).toEqual('unless-stopped');
     expect(cfg.domain).toEqual('test123.dev');
+    expect(cfg.port).toEqual('1234');
     expect(cfg.project).toEqual('give-project-name');
     expect(cfg.hostname).toEqual('test123.dev');
     // restore console
@@ -113,6 +117,7 @@ test('Should generate config file', done => {
     expect(cfg.name).toEqual(configData.name);
     expect(cfg.restart).toEqual(configData.restart);
     expect(cfg.domain).toEqual(configData.domain);
+    expect(cfg.port).toEqual(configData.port);
     expect(cfg.project).toEqual(configData.project);
     expect(cfg.hostname).toEqual(configData.hostname);
     expect(cfg.env.ENV).toEqual('1');
@@ -120,8 +125,9 @@ test('Should generate config file', done => {
     expect(cfg.labels.label).toEqual('1');
     expect(cfg.labels.other).toEqual('2');
     expect(cfg.template).toEqual(configData.template);
+    expect(cfg.compress).toEqual(configData.compress);
+    expect(cfg.letsencrypt).toEqual(configData.letsencrypt);
     expect(cfg.rateLimit).toEqual({
-      period: configData.ratelimitPeriod,
       average: configData.ratelimitAverage,
       burst: configData.ratelimitBurst,
     });

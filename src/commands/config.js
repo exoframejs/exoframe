@@ -51,6 +51,9 @@ const writeConfig = (configPath, newConfig) => {
   if (newConfig.domain && newConfig.domain.length) {
     config.domain = newConfig.domain;
   }
+  if (newConfig.port && String(newConfig.port).length) {
+    config.port = String(newConfig.port);
+  }
   if (newConfig.project && newConfig.project.length) {
     config.project = newConfig.project;
   }
@@ -73,7 +76,6 @@ const writeConfig = (configPath, newConfig) => {
   }
   if (newConfig.enableRatelimit) {
     config.rateLimit = {
-      period: newConfig.ratelimitPeriod,
       average: newConfig.ratelimitAverage,
       burst: newConfig.ratelimitBurst,
     };
@@ -83,6 +85,12 @@ const writeConfig = (configPath, newConfig) => {
   }
   if (newConfig.template && newConfig.template.length) {
     config.template = newConfig.template;
+  }
+  if (newConfig.compress !== undefined) {
+    config.compress = newConfig.compress;
+  }
+  if (newConfig.letsencrypt !== undefined) {
+    config.letsencrypt = newConfig.letsencrypt;
   }
   if (newConfig.image && newConfig.image.length) {
     config.image = newConfig.image;
@@ -167,6 +175,14 @@ const generatePrompts = defaultConfig => {
   });
   prompts.push({
     type: 'input',
+    name: 'port',
+    message: 'Port [optional]:',
+    default: defaultConfig.port,
+    filter,
+    when: answers => !answers.function,
+  });
+  prompts.push({
+    type: 'input',
     name: 'project',
     message: 'Project [optional]:',
     default: defaultConfig.project,
@@ -217,14 +233,6 @@ const generatePrompts = defaultConfig => {
   });
   prompts.push({
     type: 'input',
-    name: 'ratelimitPeriod',
-    message: 'Rate-limit period (in seconds)',
-    default: defaultConfig.rateLimit ? defaultConfig.rateLimit.period.replace('s', '') : '1',
-    filter: val => `${val}s`,
-    when: ({enableRatelimit}) => enableRatelimit,
-  });
-  prompts.push({
-    type: 'input',
     name: 'ratelimitAverage',
     message: 'Rate-limit average request rate',
     default: defaultConfig.rateLimit ? defaultConfig.rateLimit.average : '1',
@@ -260,6 +268,22 @@ const generatePrompts = defaultConfig => {
     name: 'template',
     message: 'Template [optional]:',
     default: defaultConfig.template,
+    filter,
+    when: answers => !answers.function,
+  });
+  prompts.push({
+    type: 'confirm',
+    name: 'compress',
+    message: 'Compress [optional]:',
+    default: Boolean(defaultConfig.compress),
+    filter,
+    when: answers => !answers.function,
+  });
+  prompts.push({
+    type: 'confirm',
+    name: 'letsencrypt',
+    message: 'Enable letsencrypt [optional]:',
+    default: Boolean(defaultConfig.letsencrypt),
     filter,
     when: answers => !answers.function,
   });
@@ -343,6 +367,9 @@ exports.builder = {
     alias: 'd',
     description: 'sets the domain (enables non-interactive mode)',
   },
+  port: {
+    description: 'sets port (enables non-interactive mode)',
+  },
   project: {
     alias: 'p',
     description: 'sets the project name (enables non-interactive mode)',
@@ -362,20 +389,22 @@ exports.builder = {
 exports.handler = async ({_, $0, func, ...args} = {}) => {
   const workdir = process.cwd();
   const folderName = path.basename(workdir);
-  const nonInteractive = Object.keys(args).some(key => args[key].length > 0);
+  const nonInteractive = Object.keys(args).some(key => String(args[key]).length > 0);
   const configPath = path.join(workdir, 'exoframe.json');
   let defaultConfig = {
     name: folderName,
     domain: '',
+    port: '',
     project: '',
     restart: '',
     env: undefined,
     labels: undefined,
     hostname: '',
     template: '',
+    compress: undefined,
+    letsencrypt: undefined,
     rateLimit: {
       enabled: false,
-      period: '1s',
       average: 1,
       burst: 5,
     },
@@ -419,6 +448,7 @@ exports.handler = async ({_, $0, func, ...args} = {}) => {
   };
 
   overrideFromArgument('domain', args.domain);
+  overrideFromArgument('port', args.port);
   overrideFromArgument('name', args.name);
   overrideFromArgument('project', args.project);
   overrideFromArgument('restart', args.restart);
