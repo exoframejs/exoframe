@@ -30,6 +30,10 @@ traefikImage: 'traefik:latest'
 # Traefik container name, default "exoframe-traefik"
 traefikName: 'exoframe-traefik'
 
+# Traefik storage volume binding, where traefik acme certificates are stored
+# default `${os.homedir()}/.exoframe/traefik`
+traefikPath: '/path/to/your/traefik/storage/folder'
+
 # Additional Traefik start args, default []
 traefikArgs: []
 
