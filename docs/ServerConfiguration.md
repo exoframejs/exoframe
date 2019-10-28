@@ -40,6 +40,8 @@ exoframeNetwork: 'exoframe'
 updateChannel: 'stable'
 
 # path to folder with authorized_keys, default "~/.ssh"
+# NOTE: this must match the path to the public key directory **inside the exoframe container**
+#       i. e. the location where you copied the public keys when installing the server
 publicKeysPath: '/path/to/your/public/keys'
 
 # whether Exoframe server would be running in swarm mode, default "false"
