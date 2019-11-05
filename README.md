@@ -38,7 +38,7 @@ Exoframe is a self-hosted tool that allows simple one-command deployments using 
 ## Installation and Usage
 
 To run Exoframe you will need two parts - Exoframe CLI and [Exoframe server](https://github.com/exoframejs/exoframe-server).  
-For server install instructions see [Exoframe server repository](https://github.com/exoframejs/exoframe-server).
+For server install instructions see [server installation section](docs/ServerInstallation.md).
 
 To install Exoframe CLI you can either download one of the pre-packaged binaries from [releases page](https://github.com/exoframejs/exoframe/releases) or install it using npm (needs at least Node 8.x):
 
