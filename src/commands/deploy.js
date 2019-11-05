@@ -126,8 +126,7 @@ exports.handler = async (args = {}) => {
   if (!fs.existsSync(workdir)) {
     console.log(chalk.red(`Error! Path ${chalk.bold(workdir)} do not exists`));
     console.log('Please, check your arguments and try again.');
-    process.exit(1);
-    return;
+    return process.exit(1);
   }
 
   // create config if doesn't exist
@@ -158,8 +157,7 @@ exports.handler = async (args = {}) => {
   } catch (e) {
     spinner && spinner.fail('Your exoframe.json is not valid');
     console.log(chalk.red('Please, check your config and try again:'), e.toString());
-    process.exit(1);
-    return;
+    return process.exit(1);
   }
 
   // try read ingore file
@@ -262,8 +260,7 @@ exports.handler = async (args = {}) => {
     if (e.statusCode === 401) {
       logout(userConfig);
       console.log(chalk.red('Error: authorization expired!'), 'Please, relogin and try again.');
-      process.exit(1);
-      return;
+      return process.exit(1);
     }
 
     const response = e.response || {};

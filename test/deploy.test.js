@@ -47,7 +47,8 @@ const deployments = [
     Name: '/test',
     Config: {
       Labels: {
-        'traefik.frontend.rule': 'Host:localhost',
+        'exoframe.deployment': 'test',
+        'traefik.http.routers.test.rule': 'Host(`localhost`)',
       },
     },
     NetworkSettings: {

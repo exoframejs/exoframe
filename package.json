@@ -1,6 +1,6 @@
 {
   "name": "exoframe",
-  "version": "5.2.1",
+  "version": "5.2.2-dev",
   "description": "Exoframe is a self-hosted tool that allows simple one-command deployments using Docker",
   "main": "index.js",
   "repository": "git@github.com:exoframejs/exoframe.git",
@@ -13,7 +13,7 @@
     "lint": "eslint src/ test/",
     "test": "TZ=Greenland NODE_ENV=testing jest --coverage --silent --maxWorkers=2 --ci",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "package": "pkg --targets node10.15.3-linux-x64,node10.15.3-win-x64,node10.15.3-macos-x64 -o exoframe index.js"
+    "package": "pkg --targets node12.2.0-linux-x64,node12.2.0-win-x64,node12.2.0-macos-x64 -o exoframe index.js"
   },
   "dependencies": {
     "apache-md5": "^1.1.2",
@@ -21,34 +21,34 @@
     "chalk": "^2.4.2",
     "cli-table3": "^0.5.1",
     "got": "^9.6.0",
-    "highland": "^2.13.4",
-    "inquirer": "^6.5.0",
+    "highland": "^2.13.5",
+    "inquirer": "^7.0.0",
     "js-yaml": "^3.13.1",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.15",
     "multimatch": "^4.0.0",
-    "open": "^6.4.0",
-    "ora": "^3.4.0",
+    "open": "^7.0.0",
+    "ora": "^4.0.2",
     "tar-fs": "^2.0.0",
     "update-notifier": "^3.0.1",
-    "yargs": "^13.3.0"
+    "yargs": "^14.2.0"
   },
   "devDependencies": {
-    "babel-eslint": "^10.0.2",
-    "coveralls": "^3.0.5",
-    "eslint": "^6.1.0",
-    "eslint-config-prettier": "^6.0.0",
-    "eslint-config-standard": "^13.0.1",
+    "babel-eslint": "^10.0.3",
+    "coveralls": "^3.0.7",
+    "eslint": "^6.6.0",
+    "eslint-config-prettier": "^6.5.0",
+    "eslint-config-standard": "^14.1.0",
     "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-node": "^9.1.0",
-    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.0",
-    "jest": "^24.8.0",
-    "nock": "^11.0.0-beta.27",
+    "eslint-plugin-standard": "^4.0.1",
+    "jest": "^24.9.0",
+    "nock": "^11.7.0",
     "pkg": "^4.4.0",
     "prettier": "^1.18.2",
-    "sinon": "^7.3.2"
+    "sinon": "^7.5.0"
   },
   "jest": {
     "testEnvironment": "node"

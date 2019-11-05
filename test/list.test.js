@@ -14,7 +14,11 @@ const containers = [
     Id: '123',
     Name: '/test',
     Config: {
-      Labels: {'traefik.frontend.rule': 'Host:test.host', 'exoframe.project': 'test'},
+      Labels: {
+        'traefik.http.routers.test.rule': 'Host(`test.host`)',
+        'exoframe.deployment': 'test',
+        'exoframe.project': 'test',
+      },
     },
     State: {
       Status: 'Up 10 minutes',
@@ -104,7 +108,8 @@ const services = [
       Name: 'test-service-two',
       Labels: {
         'exoframe.project': 'test-service',
-        'traefik.frontend.rule': 'Host:test.host',
+        'exoframe.deployment': 'test-service-two',
+        'traefik.http.routers.test-service-two.rule': 'Host(`test.host`)',
       },
       Networks: [
         {
@@ -120,7 +125,8 @@ const services = [
       Name: 'test-service-three',
       Labels: {
         'exoframe.project': 'test-project',
-        'traefik.frontend.rule': 'Host:other.domain',
+        'exoframe.deployment': 'test-service-three',
+        'traefik.http.routers.test-service-three.rule': 'Host(`other.domain`)',
       },
       Networks: [
         {

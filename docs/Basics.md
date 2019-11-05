@@ -117,6 +117,18 @@ Config file has the following structure:
   // see docker docs for more info
   // no hostname is assigned by default
   "hostname": "hostname",
+  // which exposed port should be used [optional]
+  // will default to first exposed port
+  // if no ports are exposed - will use 80
+  "port": "80",
+  // whether to use gzip on given domain [optional]
+  // can also be set for all deployments using server config
+  // per-project option will override global setting
+  "compress": false,
+  // whether to use letsencrypt on given domain [optional]
+  // can also be set for all deployments using server config
+  // per-project option will override global setting
+  "letsencrypt": false,
   // Add additional docker labels to your container [optional]
   "labels": {
     "my.custom.label": "value"
@@ -130,8 +142,6 @@ Config file has the following structure:
   // rate-limit config
   // see "advanced topics" for more info
   "rateLimit": {
-    // rate-limit time period
-    "period": "1s",
     // request rate over given time period
     "average": 1,
     // max burst request rate over given time period

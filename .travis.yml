@@ -1,6 +1,6 @@
 language: node_js
 
-node_js: lts/dubnium
+node_js: lts/erbium
 
 cache: yarn
 

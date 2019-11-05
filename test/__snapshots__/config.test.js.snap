@@ -42,6 +42,12 @@ Array [
   ],
   Array [
     "Setting",
+    "[31mport[39m",
+    "to",
+    "[33m1234[39m",
+  ],
+  Array [
+    "Setting",
     "[31mname[39m",
     "to",
     "[33mtest name 123[39m",

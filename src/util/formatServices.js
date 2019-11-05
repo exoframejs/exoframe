@@ -1,3 +1,12 @@
+const ruleRegex = /^Host\(`(.+?)`\)$/;
+const formatTraefikRule = rule => {
+  const match = ruleRegex.exec(rule);
+  if (match) {
+    return match[1];
+  }
+  return rule;
+};
+
 module.exports = services =>
   services.map(svc => {
     const isSwarm = !!svc.Spec;
@@ -5,8 +14,9 @@ module.exports = services =>
     // handle non-swarm deployments
     if (!isSwarm) {
       const name = svc.Name.slice(1);
-      const domain = svc.Config.Labels['traefik.frontend.rule']
-        ? svc.Config.Labels['traefik.frontend.rule'].replace('Host:', '')
+      const deploymentName = svc.Config.Labels['exoframe.deployment'];
+      const domain = svc.Config.Labels[`traefik.http.routers.${deploymentName}.rule`]
+        ? formatTraefikRule(svc.Config.Labels[`traefik.http.routers.${deploymentName}.rule`])
         : 'Not set';
       const networks = svc.NetworkSettings.Networks;
       const aliases = Object.keys(networks)
@@ -23,8 +33,9 @@ module.exports = services =>
 
     // handle swarm deployments
     const name = svc.Spec.Name;
-    const domain = svc.Spec.Labels['traefik.frontend.rule']
-      ? svc.Spec.Labels['traefik.frontend.rule'].replace('Host:', '')
+    const deploymentName = svc.Spec.Labels['exoframe.deployment'];
+    const domain = svc.Spec.Labels[`traefik.http.routers.${deploymentName}.rule`]
+      ? formatTraefikRule(svc.Spec.Labels[`traefik.http.routers.${deploymentName}.rule`])
       : 'Not set';
     const networks = svc.Spec.Networks || svc.Spec.TaskTemplate.Networks;
     const aliases = networks

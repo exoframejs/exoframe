@@ -3,6 +3,7 @@ services:
   web:
     build: .
     labels:
-      traefik.frontend.rule: 'Host:test.dev'
+      exoframe.deployment: web
+      traefik.http.routers.web.rule: 'Host(`test.dev`)'
   redis:
-    image: "redis:alpine"
+    image: 'redis:alpine'

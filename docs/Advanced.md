@@ -6,22 +6,32 @@ Since Traefik supports routing requests to specific path, you can also do that w
 By default, Exoframe generates the following frontend string:
 
 ```js
-Labels['traefik.frontend.rule'] = `Host:${config.domain}`; // where config is project config json
+// where config is project config json
+Labels[`traefik.http.routers.${name}.rule`] = config.domain.includes('Host(')
+  ? // if string already contains Host() - use it as is
+    config.domain
+  : // otherwise - wrap it into Host()
+    `Host(\`${config.domain}\`)`;
 ```
 
-You can route requests to path instead by using Traefik [frontend matchers](https://docs.traefik.io/basics/#matchers) and appending them to `domain` field in config.
+You can route requests to path instead by using Traefik [router rules](https://docs.traefik.io/routing/routers/#rule) and using them inside of `domain` field in config.
 For example, you can route requests from `http://bots.domain.com/myhook` to your service.  
-To achieve this, you will need to simply set `domain` field in the config file to `bots.domain.com;Path:/myhook`.
+To achieve this, you will need to simply set `domain` field in the config file to `` Host(`bots.domain.com`) && Path(`/myhook`) ``.
 This will route all requests from `bots.domain.com/myhook` to `your.service.host/myhook`.
 
-Here's a few examples of basic use cases:
+If you need to strip or replace path, you have to provide additional label for Traefik.
+E.g. the following config will route `domain.com/myprefix` to `your.service.host`:
 
-| Domain string                     | Routed path         | Notes                                                                   |
-| --------------------------------- | ------------------- | ----------------------------------------------------------------------- |
-| `domain.com;Path:/products/`      | `service/products/` | Match exact path                                                        |
-| `domain.com;PathStrip:/products/` | `service/`          | Match exact path and strip off the path prior to forwarding the request |
+```json
+{
+  "domain": "Host(`domain.com`) && Path(`/myprefix`)",
+  "labels": {
+    "traefik.http.middlewares.test-stripprefix.stripprefix.prefixes": "/myprefix"
+  }
+}
+```
 
-For more info and options see the aforementioned [Traefik frontend matchers](https://docs.traefik.io/basics/#matchers) docs.
+For more info and options see the aforementioned Traefik [router rules](https://docs.traefik.io/routing/routers/#rule) as well as [middlewares](https://docs.traefik.io/middlewares/overview/) docs.
 
 ## Docker-compose based deployment
 
@@ -32,12 +42,11 @@ Deploying using docker compose works almost the same as using a normal docker co
       web:
         build: .
         labels:
-          traefik.frontend.rule: 'Host:test.dev'
-          traefik.port: 8080 # default: 80
+          traefik.http.routers.web.rule: 'Host(`test.dev`)'
       redis:
         image: "redis:alpine"
 
-Any of the [configuration options](https://docs.traefik.io/configuration/backends/docker/#on-containers) for the default Traefik docker setup can be used.
+Any of the [configuration options](https://docs.traefik.io/reference/dynamic-configuration/docker/) for the default Traefik docker setup can be used.
 
 If you have a docker-compose.yml file, **any domain set in exoframe.json will be ignored**.
 
@@ -63,8 +72,7 @@ Then use them inside your `docker-compose.yml`:
       web:
         build: .
         labels:
-          traefik.frontend.rule: 'Host:test.dev'
-          traefik.port: 8080 # default: 80
+          traefik.http.routers.web.rule: 'Host(`test.dev`)'
           custom.envvar: "${CUSTOM_LABEL}"
           custom.secret: "${CUSTOM_SECRET}"
       redis:
@@ -79,9 +87,6 @@ To do that, simply specify the following fields in the project config file:
 {
   // adding this object will enable IP-based rate-limiting
   "rate-limit": {
-    // time period to be considered for request limits
-    // defaults to "1s" if not specified
-    "period": "3s",
     // average request rate over given time period
     // defaults to 1 if not specified
     "average": 5,
@@ -93,9 +98,9 @@ To do that, simply specify the following fields in the project config file:
 ```
 
 This will define how many requests (`average`) over given time (`period`) can be performed from one IP address.
-For the example above - an average of 5 requests every 3 seconds is allowed with busts of up to 10 requests.
+For the example above - an average of 5 requests every second is allowed with busts of up to 10 requests.
 
-For more information, see [Traefik rate-limiting docs](https://docs.traefik.io/configuration/commons/#rate-limiting).
+For more information, see [Traefik rate-limiting docs](https://docs.traefik.io/middlewares/ratelimit/).
 
 ## Secrets
 
