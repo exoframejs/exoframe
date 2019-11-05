@@ -1,3 +1,37 @@
+# 6.0.0 / 2019-11-05
+
+Breaking changes:
+
+- Exoframe has been updated to work with Traefik v2.0
+
+Additions:
+
+- Config command now includes additional port, compess and letsencrypt settings
+
+## Migrating to v6.0
+
+In the majority of cases the migration path is pretty straightforward (albeit slightly painful):
+
+1. Stop and remove current version of Exoframe Server and Traefik
+2. Pull latest version of Exoframe Server and start it with new config
+3. Re-deploy all of your current deployments to update labels to fit Traefik v2.0 (this is the largest step, but there's no way around it)
+
+Things to keep in mind:
+
+- v6.0 is not backwards compatible with your current deployments, so once you update the server - **current deployments will stop working**
+- Exoframe Server now requires a additional labels to correctly work with letsencrypt
+- Hosts can no longer be specified as list, i.e. instead of this:
+
+  ```json
+  {"domain": "exynize.net, exynize.org, exynize.com"}
+  ```
+
+  you will now need to do this:
+
+  ```js
+  {"domain": "Host(`exynize.net`, `exynize.org`, `exynize.com`)"}
+  ```
+
 # 5.2.1 / 2019-09-30
 
 Fixes:
