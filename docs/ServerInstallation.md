@@ -13,6 +13,7 @@ docker run -d \
   -e EXO_PRIVATE_KEY=your_private_key \
   --label traefik.enable=true \
   --label "traefik.http.routers.exoframe-server.rule=Host(\`exoframe.your-host.com\`)"  \
+  --label traefik.http.routers.exoframe-server.tls.certresolver=exoframeChallenge \
   --restart always \
   --name exoframe-server \
   exoframe/server
@@ -41,6 +42,10 @@ docker run -d \
 #       so that exoframe has its own domain and does not interfere with your
 #       application's url config.
 --label "traefik.http.routers.exoframe-server.rule=Host(\`exoframe.your-host.com\`)"
+
+# this is used to tell traefik to enable letsencrypt on the exoframe server
+# you can safely remove this label if you are no using letsencrypt
+--label traefik.http.routers.exoframe-server.tls.certresolver=exoframeChallenge
 ```
 
 3.  Edit config file to fit your needs (see section below)
