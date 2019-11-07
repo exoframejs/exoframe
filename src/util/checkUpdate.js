@@ -8,7 +8,7 @@ const pkgPath = '/snapshot/exoframe-cli/src/util';
 
 // check function
 module.exports = async pkg => {
-  const current = '5.0.0'; // pkg.version;
+  const current = pkg.version;
   // Checks for available update and returns an instance
   const latest = await latestVersion('exoframe').then(r => r.trim());
   // show message if update is available
