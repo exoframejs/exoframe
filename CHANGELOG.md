@@ -1,3 +1,13 @@
+# 6.0.1 / 2019-11-07
+
+Fixes:
+
+- Fix completion target by using custom command
+
+Changes:
+
+- Use ncc to build smaller release bundle
+
 # 6.0.0 / 2019-11-05
 
 Breaking changes:
