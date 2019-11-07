@@ -25,11 +25,11 @@ const update = require('./commands/update');
 const template = require('./commands/template');
 const setup = require('./commands/setup');
 const secrets = require('./commands/secrets');
+const completion = require('./commands/completion');
 
 // init program
 yargs
   .version(pkg.version)
-  .completion('completion')
   .demand(1)
   .help()
   .command(deploy)
@@ -44,4 +44,5 @@ yargs
   .command(update)
   .command(template)
   .command(setup)
-  .command(secrets).argv;
+  .command(secrets)
+  .command(completion(yargs)).argv;

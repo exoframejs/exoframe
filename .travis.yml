@@ -10,6 +10,7 @@ script:
 
 after_success:
   - yarn coveralls
+  - yarn build
   - yarn package
 
 deploy:
@@ -26,6 +27,7 @@ deploy:
       repo: exoframejs/exoframe
   - provider: npm
     email: yamalight@gmail.com
+    skip_cleanup: true
     api_key:
       secure: qAIUnXMdpq7+rEch+hhWehdEpDMd1ZxjMwvlr3QuNkYH3SAgmB9aDeAgcjcOR/gZysH5dXU5s/7paMAur/CnHD7fqapkk01QWjusi4Z+xzznnX0srvysaYg2Eaev6SM666aWtrzxVSZw8aX1BH5k8wjzoNLQ5ARGSKpMRtjXsWkz9RczglgY6vSyz8vuJ+Bw5qlFfiIHt3tI7Ns5NgqkdSTSexX6YaKzZqdv0SNvZu8bCFhUPrE4VmgLVtKGno4ML7sodFEOEs65fPRrznjQW0M5mO9hYGmfU36W4VwXoDr8miBb/dXSjb9Hm/nX3vtf90HtuIb2noxCPLGWku7/NQj76JSzp9PS1X17w7glj/+b5tJsG5V2VRwO0Ta+MnO/0mH2Wbk9K57ZprTVnNirrRX4hYMfn1QPAJEpdSsNpOgTr/LyXbDf1sG84F6337tbJWr3bq1v9go3W3c87Ara32c006NzfXtqC+79+chJi9YqEG6kla6PLj2pdYR9yr2QsYRJo61DG5+xUeHQXQDCLy/f9kpaS24DRlziilqfIzgET+l+TeRtNN18aZAjKFNCKPdtAfPlIWA03LLwG+2KGAP4UfzRIrdIROPDZ9k6Y9/bFKNM3UNF7GBHP9p3rFAQ6yhuOL7BzA/U27E57sU+ZtJQP0iVT9EmjNzQyg/vkzU=
     on:
@@ -33,6 +35,7 @@ deploy:
       repo: exoframejs/exoframe
   - provider: npm
     email: yamalight@gmail.com
+    skip_cleanup: true
     tag: next
     api_key:
       secure: qAIUnXMdpq7+rEch+hhWehdEpDMd1ZxjMwvlr3QuNkYH3SAgmB9aDeAgcjcOR/gZysH5dXU5s/7paMAur/CnHD7fqapkk01QWjusi4Z+xzznnX0srvysaYg2Eaev6SM666aWtrzxVSZw8aX1BH5k8wjzoNLQ5ARGSKpMRtjXsWkz9RczglgY6vSyz8vuJ+Bw5qlFfiIHt3tI7Ns5NgqkdSTSexX6YaKzZqdv0SNvZu8bCFhUPrE4VmgLVtKGno4ML7sodFEOEs65fPRrznjQW0M5mO9hYGmfU36W4VwXoDr8miBb/dXSjb9Hm/nX3vtf90HtuIb2noxCPLGWku7/NQj76JSzp9PS1X17w7glj/+b5tJsG5V2VRwO0Ta+MnO/0mH2Wbk9K57ZprTVnNirrRX4hYMfn1QPAJEpdSsNpOgTr/LyXbDf1sG84F6337tbJWr3bq1v9go3W3c87Ara32c006NzfXtqC+79+chJi9YqEG6kla6PLj2pdYR9yr2QsYRJo61DG5+xUeHQXQDCLy/f9kpaS24DRlziilqfIzgET+l+TeRtNN18aZAjKFNCKPdtAfPlIWA03LLwG+2KGAP4UfzRIrdIROPDZ9k6Y9/bFKNM3UNF7GBHP9p3rFAQ6yhuOL7BzA/U27E57sU+ZtJQP0iVT9EmjNzQyg/vkzU=
