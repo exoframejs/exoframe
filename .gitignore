@@ -7,6 +7,7 @@ exoframe-macos
 exoframe-win.exe
 .idea/
 .DS_Store
+dist/
 
 package-lock.json
 exoframe.json
