@@ -15,8 +15,7 @@ const options = {
   headers: {
     Authorization: `Bearer ${userConfig.token}`,
   },
-  body: {},
-  json: true,
+  responseType: 'json',
 };
 
 const runUpdate = async target => {
@@ -26,7 +25,7 @@ const runUpdate = async target => {
   const remoteUrl = `${userConfig.endpoint}/update/${target}`;
   // try sending request
   try {
-    const {body, statusCode} = await got.post(remoteUrl, options);
+    const {body, statusCode} = await got.post(remoteUrl, {...options, json: {}});
     if (statusCode !== 200 || body.error) {
       throw new Error(body.error || 'Oops. Something went wrong! Try again please.');
     }
@@ -39,7 +38,7 @@ const runUpdate = async target => {
     console.log(chalk.green(`${_.capitalize(target)} is already up to date!`));
   } catch (e) {
     // if authorization is expired/broken/etc
-    if (e.statusCode === 401) {
+    if (e.response.statusCode === 401) {
       logout(userConfig);
       console.log(chalk.red('Error: authorization expired!'), 'Please, relogin and try again.');
       return;

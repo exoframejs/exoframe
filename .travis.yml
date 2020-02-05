@@ -2,16 +2,16 @@ language: node_js
 
 node_js: lts/erbium
 
-cache: yarn
+cache: npm
 
 script:
-  - yarn test
-  - yarn lint
+  - npm test
+  - npm run lint
 
 after_success:
-  - yarn coveralls
-  - yarn build
-  - yarn package
+  - npm run coveralls
+  - npm run build
+  - npm run package
 
 deploy:
   - provider: releases

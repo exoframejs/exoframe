@@ -21,7 +21,7 @@ exports.handler = async () => {
     headers: {
       Authorization: `Bearer ${userConfig.token}`,
     },
-    json: true,
+    responseType: 'json',
   };
   // try sending request
   let containers = [];

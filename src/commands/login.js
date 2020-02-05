@@ -89,7 +89,7 @@ exports.handler = async ({key, passphrase, url}) => {
   let phrase;
   let loginReqId;
   try {
-    const {body} = await got(remoteUrl, {json: true});
+    const {body} = await got(remoteUrl, {responseType: 'json'});
     phrase = body.phrase;
     loginReqId = body.uid;
     if (!phrase || !loginReqId) {
@@ -137,12 +137,13 @@ exports.handler = async ({key, passphrase, url}) => {
   try {
     const user = {username};
     const {body} = await got(remoteUrl, {
-      body: {
+      method: 'POST',
+      json: {
         user,
         token: reqToken,
         requestId: loginReqId,
       },
-      json: true,
+      responseType: 'json',
     });
     // check for errors
     if (!body || !body.token) {

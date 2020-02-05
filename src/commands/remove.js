@@ -37,8 +37,7 @@ exports.handler = async (args = {}) => {
     headers: {
       Authorization: `Bearer ${authToken}`,
     },
-    body: {},
-    json: true,
+    json: {},
   };
   // try sending request
   try {
@@ -50,14 +49,14 @@ exports.handler = async (args = {}) => {
     }
   } catch (e) {
     // if authorization is expired/broken/etc
-    if (e.statusCode === 401) {
+    if (e.response.statusCode === 401) {
       logout(userConfig);
       console.log(chalk.red('Error: authorization expired!'), 'Please, relogin and try again.');
       return;
     }
 
     // if container was not found
-    if (e.statusCode === 404) {
+    if (e.response.statusCode === 404) {
       console.log(
         chalk.red('Error: container or function was not found!'),
         'Please, check deployment ID and try again.'

@@ -35,7 +35,7 @@ exports.handler = async args => {
     headers: {
       Authorization: `Bearer ${userConfig.token}`,
     },
-    json: true,
+    responseType: 'json',
   };
 
   // if remove or ls - fetch tokens from remote, then do work
@@ -48,11 +48,11 @@ exports.handler = async args => {
     // try sending request
     let templates = [];
     try {
-      const {body} = await got(remoteUrl, baseOptions);
+      const {body} = await got(remoteUrl, {...baseOptions});
       templates = body;
     } catch (e) {
       // if authorization is expired/broken/etc
-      if (e.statusCode === 401) {
+      if (e.response.statusCode === 401) {
         logout(userConfig);
         console.log(chalk.red('Error: authorization expired!'), 'Please, relogin and try again.');
         return;
@@ -98,12 +98,14 @@ exports.handler = async args => {
     const {rmTemplate} = await inquirer.prompt(prompts);
 
     // construct shared request params
-    const rmOptions = Object.assign(baseOptions, {
+    const rmOptions = {
+      ...baseOptions,
       method: 'DELETE',
-      body: {
+      json: {
         templateName: rmTemplate,
       },
-    });
+      responseType: 'json',
+    };
     try {
       const {body} = await got(remoteUrl, rmOptions);
       if (!body.removed) {
@@ -119,7 +121,7 @@ exports.handler = async args => {
       console.log(chalk.green('Template successfully removed!'));
     } catch (e) {
       // if authorization is expired/broken/etc
-      if (e.statusCode === 401) {
+      if (e.response.statusCode === 401) {
         logout(userConfig);
         console.log(chalk.red('Error: authorization expired!'), 'Please, relogin and try again.');
         return;
@@ -146,12 +148,14 @@ exports.handler = async args => {
   const {templateName} = await inquirer.prompt(prompts);
 
   // construct shared request params
-  const options = Object.assign(baseOptions, {
+  const options = {
+    ...baseOptions,
     method: 'POST',
-    body: {
+    json: {
       templateName,
     },
-  });
+    responseType: 'json',
+  };
 
   // show loader
   const spinner = ora('Installing new template...').start();
@@ -176,7 +180,7 @@ exports.handler = async args => {
   } catch (e) {
     spinner.fail('Template install failed!');
     // if authorization is expired/broken/etc
-    if (e.statusCode === 401) {
+    if (e.response.statusCode === 401) {
       logout(userConfig);
       console.log(chalk.red('Error: authorization expired!'), 'Please, relogin and try again.');
       return;
