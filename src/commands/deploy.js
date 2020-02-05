@@ -257,7 +257,7 @@ exports.handler = async (args = {}) => {
   } catch (e) {
     spinner && spinner.fail('Deployment failed!');
     // if authorization is expired/broken/etc
-    if (e.statusCode === 401) {
+    if (e.response.statusCode === 401) {
       logout(userConfig);
       console.log(chalk.red('Error: authorization expired!'), 'Please, relogin and try again.');
       return process.exit(1);

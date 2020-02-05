@@ -45,7 +45,7 @@ exports.handler = async args => {
       headers: {
         Authorization: `Bearer ${userConfig.token}`,
       },
-      json: true,
+      responseType: 'json',
     };
     // try sending request
     let secrets = [];
@@ -54,7 +54,7 @@ exports.handler = async args => {
       secrets = body.secrets;
     } catch (e) {
       // if authorization is expired/broken/etc
-      if (e.statusCode === 401) {
+      if (e.response.statusCode === 401) {
         logout(userConfig);
         console.log(chalk.red('Error: authorization expired!'), 'Please, relogin and try again.');
         return;
@@ -114,7 +114,7 @@ exports.handler = async args => {
         headers: {
           Authorization: `Bearer ${userConfig.token}`,
         },
-        json: true,
+        responseType: 'json',
       };
       let secret;
       try {
@@ -122,7 +122,7 @@ exports.handler = async args => {
         secret = body.secret;
       } catch (e) {
         // if authorization is expired/broken/etc
-        if (e.statusCode === 401) {
+        if (e.response.statusCode === 401) {
           logout(userConfig);
           console.log(chalk.red('Error: authorization expired!'), 'Please, relogin and try again.');
           return;
@@ -147,8 +147,8 @@ exports.handler = async args => {
       headers: {
         Authorization: `Bearer ${userConfig.token}`,
       },
-      json: true,
-      body: {
+      responseType: 'json',
+      json: {
         secretName: selectedSecret,
       },
     };
@@ -161,7 +161,7 @@ exports.handler = async args => {
       console.log(chalk.green('Deployment secret successfully removed!'));
     } catch (e) {
       // if authorization is expired/broken/etc
-      if (e.statusCode === 401) {
+      if (e.response.statusCode === 401) {
         logout(userConfig);
         console.log(chalk.red('Error: authorization expired!'), 'Please, relogin and try again.');
         return;
@@ -206,8 +206,8 @@ exports.handler = async args => {
     headers: {
       Authorization: `Bearer ${userConfig.token}`,
     },
-    json: true,
-    body: {
+    responseType: 'json',
+    json: {
       secretName,
       secretValue,
     },
@@ -223,7 +223,7 @@ exports.handler = async args => {
     console.log(chalk.green('DONE!'));
   } catch (e) {
     // if authorization is expired/broken/etc
-    if (e.statusCode === 401) {
+    if (e.response.statusCode === 401) {
       logout(userConfig);
       console.log(chalk.red('Error: authorization expired!'), 'Please, relogin and try again.');
       return;

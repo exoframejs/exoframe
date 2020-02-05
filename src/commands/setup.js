@@ -32,7 +32,7 @@ exports.handler = async args => {
     headers: {
       Authorization: `Bearer ${userConfig.token}`,
     },
-    json: true,
+    responseType: 'json',
   };
 
   console.log(chalk.bold('Setting new deployment using recipe at:'), userConfig.endpoint);
@@ -55,9 +55,10 @@ exports.handler = async args => {
   // ask for questions for this recipe
   const options = Object.assign({}, baseOptions, {
     method: 'GET',
-    query: {
+    searchParams: {
       recipeName,
     },
+    responseType: 'json',
   });
 
   // show loader
@@ -93,10 +94,11 @@ exports.handler = async args => {
     // send answers and execute recipe
     const answerOptions = Object.assign({}, baseOptions, {
       method: 'POST',
-      body: {
+      json: {
         recipeName,
         answers,
       },
+      responseType: 'json',
     });
 
     const {body: finalBody} = await got(remoteUrl, answerOptions);
@@ -119,7 +121,7 @@ exports.handler = async args => {
   } catch (e) {
     spinner.fail('Recipe execution failed!');
     // if authorization is expired/broken/etc
-    if (e.statusCode === 401) {
+    if (e.response.statusCode === 401) {
       logout(userConfig);
       console.log(chalk.red('Error: authorization expired!'), 'Please, relogin and try again.');
       return;

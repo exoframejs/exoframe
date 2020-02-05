@@ -2,20 +2,20 @@ language: node_js
 
 node_js: lts/erbium
 
-cache: yarn
+cache: npm
 
 script:
-  - yarn test
-  - yarn lint
+  - npm test
+  - npm run lint
 
 after_success:
-  - yarn coveralls
-  - yarn build
-  - yarn package
+  - npm run coveralls
+  - npm run build
+  - npm run package
 
 deploy:
   - provider: releases
-    skip_cleanup: true
+    edge: true
     api_key:
       secure: cX62q8fanA+1BXidpVobsx6vkmD7mI7STJN2b/zD9TxLKa7EY4MpSI8t3JFnW0EaUxbiIwTJEjeftfDJhxey0kPvPgUxEAf3h5V7IoO6KSmCZ0I8xYdnNbMtKNBJqNj5USHupWyK5geZbIQ+GtjCr0k07G7Sm1zz9SaV3pmB/FZpPFsev8TukUPrGMyfa6AThS32EJXrNSTDEcewaxrCQN+5PylWlACKZ72v1MUBa9Lzxs7Rfd9god0jFqw29EBuCkpqmvgpThdG2sT0wFgAlodBFnW/DeVRyyfciAbLiMUKPTErNCbH51Hcndh3Wi7lGpjqhk+UeU9rMuF7br+BnmHy0eqr+vBAFSaVxnornrsebX0qO+Vgd/accM0VgI6UzIbrEZeRtKYpkZAf1y+gYFOA3ThafEp3PBBSJz1RI6hP03VuPx4GS2qCDfLm9nWBHR/pKMc9MAUuGiaEmeSXWwUGxLpM+B/9vzJGHrywSUXM/9NLb0Tqd35HElPKp2Vv39dYSASC/XQIhW696Gt2Ewkrg4Cqx5RTn7WlJBWXAvryVMDtOiZzgdaqk5aOUMie3Qe5bH5M6lwEGp/Rbo9rCFtSXDPQMbxiQrUuBVt3u0lX4BTynKVWagpDDfuOTm1Fl4CY50dwvmuZZmmtK0GLLQ/POL7LiOhX1XUoL4WL1sU=
     file:
@@ -27,7 +27,7 @@ deploy:
       repo: exoframejs/exoframe
   - provider: npm
     email: yamalight@gmail.com
-    skip_cleanup: true
+    edge: true
     api_key:
       secure: qAIUnXMdpq7+rEch+hhWehdEpDMd1ZxjMwvlr3QuNkYH3SAgmB9aDeAgcjcOR/gZysH5dXU5s/7paMAur/CnHD7fqapkk01QWjusi4Z+xzznnX0srvysaYg2Eaev6SM666aWtrzxVSZw8aX1BH5k8wjzoNLQ5ARGSKpMRtjXsWkz9RczglgY6vSyz8vuJ+Bw5qlFfiIHt3tI7Ns5NgqkdSTSexX6YaKzZqdv0SNvZu8bCFhUPrE4VmgLVtKGno4ML7sodFEOEs65fPRrznjQW0M5mO9hYGmfU36W4VwXoDr8miBb/dXSjb9Hm/nX3vtf90HtuIb2noxCPLGWku7/NQj76JSzp9PS1X17w7glj/+b5tJsG5V2VRwO0Ta+MnO/0mH2Wbk9K57ZprTVnNirrRX4hYMfn1QPAJEpdSsNpOgTr/LyXbDf1sG84F6337tbJWr3bq1v9go3W3c87Ara32c006NzfXtqC+79+chJi9YqEG6kla6PLj2pdYR9yr2QsYRJo61DG5+xUeHQXQDCLy/f9kpaS24DRlziilqfIzgET+l+TeRtNN18aZAjKFNCKPdtAfPlIWA03LLwG+2KGAP4UfzRIrdIROPDZ9k6Y9/bFKNM3UNF7GBHP9p3rFAQ6yhuOL7BzA/U27E57sU+ZtJQP0iVT9EmjNzQyg/vkzU=
     on:
@@ -35,7 +35,7 @@ deploy:
       repo: exoframejs/exoframe
   - provider: npm
     email: yamalight@gmail.com
-    skip_cleanup: true
+    edge: true
     tag: next
     api_key:
       secure: qAIUnXMdpq7+rEch+hhWehdEpDMd1ZxjMwvlr3QuNkYH3SAgmB9aDeAgcjcOR/gZysH5dXU5s/7paMAur/CnHD7fqapkk01QWjusi4Z+xzznnX0srvysaYg2Eaev6SM666aWtrzxVSZw8aX1BH5k8wjzoNLQ5ARGSKpMRtjXsWkz9RczglgY6vSyz8vuJ+Bw5qlFfiIHt3tI7Ns5NgqkdSTSexX6YaKzZqdv0SNvZu8bCFhUPrE4VmgLVtKGno4ML7sodFEOEs65fPRrznjQW0M5mO9hYGmfU36W4VwXoDr8miBb/dXSjb9Hm/nX3vtf90HtuIb2noxCPLGWku7/NQj76JSzp9PS1X17w7glj/+b5tJsG5V2VRwO0Ta+MnO/0mH2Wbk9K57ZprTVnNirrRX4hYMfn1QPAJEpdSsNpOgTr/LyXbDf1sG84F6337tbJWr3bq1v9go3W3c87Ara32c006NzfXtqC+79+chJi9YqEG6kla6PLj2pdYR9yr2QsYRJo61DG5+xUeHQXQDCLy/f9kpaS24DRlziilqfIzgET+l+TeRtNN18aZAjKFNCKPdtAfPlIWA03LLwG+2KGAP4UfzRIrdIROPDZ9k6Y9/bFKNM3UNF7GBHP9p3rFAQ6yhuOL7BzA/U27E57sU+ZtJQP0iVT9EmjNzQyg/vkzU=

@@ -36,7 +36,11 @@ test('Should execute new setup', done => {
     .post('/setup')
     .reply(200, {
       success: 'true',
-      log: [{message: '1', level: 'info'}, {message: '2', level: 'info'}, {message: '3', level: 'debug'}],
+      log: [
+        {message: '1', level: 'info'},
+        {message: '2', level: 'info'},
+        {message: '3', level: 'debug'},
+      ],
     });
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');

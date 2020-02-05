@@ -37,7 +37,7 @@ exports.handler = async args => {
       headers: {
         Authorization: `Bearer ${userConfig.token}`,
       },
-      json: true,
+      responseType: 'json',
     };
     // try sending request
     let tokens = [];
@@ -46,7 +46,7 @@ exports.handler = async args => {
       tokens = body.tokens;
     } catch (e) {
       // if authorization is expired/broken/etc
-      if (e.statusCode === 401) {
+      if (e.response.statusCode === 401) {
         logout(userConfig);
         console.log(chalk.red('Error: authorization expired!'), 'Please, relogin and try again.');
         return;
@@ -83,8 +83,8 @@ exports.handler = async args => {
       headers: {
         Authorization: `Bearer ${userConfig.token}`,
       },
-      json: true,
-      body: {
+      responseType: 'json',
+      json: {
         tokenName: rmToken,
       },
     };
@@ -97,7 +97,7 @@ exports.handler = async args => {
       console.log(chalk.green('Deployment token successfully removed!'));
     } catch (e) {
       // if authorization is expired/broken/etc
-      if (e.statusCode === 401) {
+      if (e.response.statusCode === 401) {
         logout(userConfig);
         console.log(chalk.red('Error: authorization expired!'), 'Please, relogin and try again.');
         return;
@@ -129,8 +129,8 @@ exports.handler = async args => {
     headers: {
       Authorization: `Bearer ${userConfig.token}`,
     },
-    json: true,
-    body: {
+    responseType: 'json',
+    json: {
       tokenName,
     },
   };
@@ -145,7 +145,7 @@ exports.handler = async args => {
     console.log(chalk.yellow('WARNING!'), 'Make sure to write it down, you will not be able to get it again!');
   } catch (e) {
     // if authorization is expired/broken/etc
-    if (e.statusCode === 401) {
+    if (e.response.statusCode === 401) {
       logout(userConfig);
       console.log(chalk.red('Error: authorization expired!'), 'Please, relogin and try again.');
       return;
