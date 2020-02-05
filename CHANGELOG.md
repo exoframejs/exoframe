@@ -1,3 +1,7 @@
+# 6.0.2 / 2020-02-05
+
+- Maintenance release with updated dependencies
+
 # 6.0.1 / 2019-11-07
 
 Fixes:
