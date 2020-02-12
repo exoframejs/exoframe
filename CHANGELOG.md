@@ -1,3 +1,8 @@
+# 6.1.0 / 2020-02-12
+
+- Add custom traefik middleware usage via labels and config
+- Better docs for HTTPS server setup
+
 # 6.0.2 / 2020-02-05
 
 - Maintenance release with updated dependencies
