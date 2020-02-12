@@ -13,7 +13,6 @@ docker run -d \
   -e EXO_PRIVATE_KEY=your_private_key \
   --label traefik.enable=true \
   --label "traefik.http.routers.exoframe-server.rule=Host(\`exoframe.your-host.com\`)"  \
-  --label traefik.http.routers.exoframe-server.tls.certresolver=exoframeChallenge \
   --restart always \
   --name exoframe-server \
   exoframe/server
@@ -48,9 +47,61 @@ docker run -d \
 --label traefik.http.routers.exoframe-server.tls.certresolver=exoframeChallenge
 ```
 
-3.  Edit config file to fit your needs (see section below)
+3.  Edit config file to fit your needs (see [Server Configuration](ServerConfiguration.md) section)
 
 Then install [Exoframe CLI](https://github.com/exoframejs/exoframe), point it to your new Exoframe server and use it.
+
+## Installation and usage with Letsencrypt
+
+1.  Make sure you have Docker [installed and running](https://docs.docker.com/engine/installation/) on your host.
+2.  Create exoframe config file and enable `letsencrypt` in it (see [Server Configuration](ServerConfiguration.md) section)
+3.  Pull and run Exoframe server using docker:
+
+```sh
+docker run -d \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v /path/to/exoframe-folder:/root/.exoframe \
+  -v /home/user/.ssh/authorized_keys:/root/.ssh/authorized_keys:ro \
+  -e EXO_PRIVATE_KEY=your_private_key \
+  --label traefik.enable=true \
+  --label "traefik.http.routers.exoframe-server.rule=Host(\`exoframe.your-host.com\`)" \
+  --label "traefik.http.routers.exoframe-server-web.rule=Host(\`exoframe.your-host.com\`)" \
+  --label traefik.http.routers.exoframe-server.tls.certresolver=exoframeChallenge \
+  --label traefik.http.middlewares.exoframe-server-redirect.redirectscheme.scheme=https \
+  --label traefik.http.routers.exoframe-server-web.entrypoints=web \
+  --label traefik.http.routers.exoframe-server-web.middlewares=exoframe-server-redirect@docker \
+  --label traefik.http.routers.exoframe-server.entrypoints=websecure \
+  --label entryPoints.web.address=:80 \
+  --label entryPoints.websecure.address=:443 \
+  --restart always \
+  --name exoframe-server \
+  exoframe/server
+
+# Explanation for new arguments:
+# this is used to tell traefik on which domain should Exoframe server be listening
+# first line is for http, second one - for https
+--label "traefik.http.routers.exoframe-server.rule=Host(\`exoframe.your-host.com\`)"
+--label "traefik.http.routers.exoframe-server-web.rule=Host(\`exoframe.your-host.com\`)" \
+
+# this is used to tell traefik to enable letsencrypt on the exoframe server
+# you can safely remove this label if you are no using letsencrypt
+--label traefik.http.routers.exoframe-server.tls.certresolver=exoframeChallenge
+
+# this labels below set up automatic http -> https redirect
+# by defining two entrypoints - web on port 80 and websecure on port 443
+# and creating redirect middleware for web endpoint
+# for more details see traefik docs
+--label traefik.http.middlewares.exoframe-server-redirect.redirectscheme.scheme=https \
+--label traefik.http.routers.exoframe-server-web.entrypoints=web \
+--label traefik.http.routers.exoframe-server-web.middlewares=exoframe-server-redirect@docker \
+--label traefik.http.routers.exoframe-server.entrypoints=websecure \
+--label entryPoints.web.address=:80 \
+--label entryPoints.websecure.address=:443 \
+```
+
+**Note**:
+It is important to enable `letsencrypt` in Exoframe config _before_ starting Exoframe server.  
+If that's not done - Exoframe will not create `exoframeChallenge` resolver for TLS and Traefik will error out.
 
 ## Installation and usage in Swarm mode
 
