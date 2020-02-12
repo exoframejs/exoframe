@@ -131,8 +131,16 @@ Config file has the following structure:
   "letsencrypt": false,
   // Add additional docker labels to your container [optional]
   "labels": {
-    "my.custom.label": "value"
+    "my.custom.label": "value",
+    // you can also use any available traefik middlewares
+    // they will be automatically added to current deployment using name
+    // below is an example showing basic redirect middleware usage
+    "traefik.http.middlewares.my-redirectregex.redirectregex.regex": "^https://domain.redirect/(.*)",
+    "traefik.http.middlewares.my-redirectregex.redirectregex.replacement": "https://domain.new/$${1}"
   },
+  // any additional traefik middlewares you might have defined
+  // either in docker or any other middleware collection
+  "middlewares": ["my-middleware@docker"],
   // Add additional docker volumes to your container [optional]
   // while you can use server paths in sourceVolume place
   // it is recommended to use named volumes
