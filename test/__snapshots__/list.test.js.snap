@@ -3,21 +3,21 @@
 exports[`Should get list of deployments 1`] = `
 Array [
   Array [
-    "4 deployments found on http://localhost:8080:
+    "[32m4 deployments found on http://localhost:8080:[39m
+[32m[39m",
+  ],
+  Array [
+    "> [34m[1m[4mNormal[24m[22m[39m deployments:
 ",
   ],
   Array [
-    "> Normal deployments:
-",
-  ],
-  Array [
-    "Deployments for test:",
+    "Deployments for [1mtest[22m:",
   ],
   Array [],
   Array [
-    "   ID          URL             Hostname       Status                          
-   test        test.host       Not set        Up 10 minutes       Container   
-   test2       Not set         Not set        Up 12 minutes       Container   ",
+    "[31m   ID      [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m[90m [39m[31m   Status          [39m[90m [39m[31m               [39m
+   test    [90m [39m   test.host   [90m [39m   Not set    [90m [39m   Up 10 minutes   [90m [39m   Container   
+   test2   [90m [39m   Not set     [90m [39m   Not set    [90m [39m   Up 12 minutes   [90m [39m   Container   ",
   ],
   Array [],
   Array [
@@ -25,9 +25,9 @@ Array [
   ],
   Array [],
   Array [
-    "   ID          URL           Hostname       Status              Type        
-   test3       Not set       Not set        Up 13 minutes       Container   
-   test4       Not set       alias4         Up 10 minutes       Container   ",
+    "[31m   ID      [39m[90m [39m[31m   URL       [39m[90m [39m[31m   Hostname   [39m[90m [39m[31m   Status          [39m[90m [39m[31m   Type        [39m
+   test3   [90m [39m   Not set   [90m [39m   Not set    [90m [39m   Up 13 minutes   [90m [39m   Container   
+   test4   [90m [39m   Not set   [90m [39m   alias4     [90m [39m   Up 10 minutes   [90m [39m   Container   ",
   ],
 ]
 `;
@@ -35,21 +35,21 @@ Array [
 exports[`Should get list of swarm deployments 1`] = `
 Array [
   Array [
-    "3 deployments found on http://localhost:8080:
+    "[32m3 deployments found on http://localhost:8080:[39m
+[32m[39m",
+  ],
+  Array [
+    "> [34m[1m[4mSwarm mode[24m[22m[39m deployments:
 ",
   ],
   Array [
-    "> Swarm mode deployments:
-",
-  ],
-  Array [
-    "Deployments for test-service:",
+    "Deployments for [1mtest-service[22m:",
   ],
   Array [],
   Array [
-    "   ID                     URL             Hostname        Status          
-   test-service-one       Not set         Not set                         
-   test-service-two       test.host       test.host                       ",
+    "[31m   ID                 [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname    [39m[90m [39m[31m   Status   [39m[90m [39m[31m      [39m
+   test-service-one   [90m [39m   Not set     [90m [39m   Not set     [90m [39m            [90m [39m      
+   test-service-two   [90m [39m   test.host   [90m [39m   test.host   [90m [39m            [90m [39m      ",
   ],
   Array [],
   Array [
@@ -57,8 +57,8 @@ Array [
   ],
   Array [],
   Array [
-    "   ID                       URL                Hostname       Status       Type   
-   test-service-three       other.domain       Not set                            ",
+    "[31m   ID                   [39m[90m [39m[31m   URL            [39m[90m [39m[31m   Hostname   [39m[90m [39m[31m   Status   [39m[90m [39m[31m   Type   [39m
+   test-service-three   [90m [39m   other.domain   [90m [39m   Not set    [90m [39m            [90m [39m          ",
   ],
 ]
 `;

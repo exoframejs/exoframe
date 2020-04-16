@@ -3,11 +3,11 @@
 exports[`Should fail to login with broken private key 1`] = `
 Array [
   Array [
-    "Logging in to:",
+    "[1mLogging in to:[22m",
     "http://localhost:8080",
   ],
   Array [
-    "Error logging in!",
+    "[31mError logging in![39m",
     "Error generating login token! Make sure your private key password is correct",
     "Error: ENOENT: no such file or directory, open 'asd'",
   ],
@@ -17,11 +17,11 @@ Array [
 exports[`Should login 1`] = `
 Array [
   Array [
-    "Logging in to:",
+    "[1mLogging in to:[22m",
     "http://localhost:8080",
   ],
   Array [
-    "Successfully logged in!",
+    "[32mSuccessfully logged in![39m",
   ],
 ]
 `;
@@ -29,18 +29,18 @@ Array [
 exports[`Should login and update endpoint when endpoint was provided 1`] = `
 Array [
   Array [
-    "Updating endpoint URL to:",
+    "[1mUpdating endpoint URL to:[22m",
     "http://my-awesome-endpoint",
   ],
   Array [
-    "Endpoint URL updated!",
+    "[32mEndpoint URL updated![39m",
   ],
   Array [
-    "Logging in to:",
+    "[1mLogging in to:[22m",
     "http://my-awesome-endpoint",
   ],
   Array [
-    "Successfully logged in!",
+    "[32mSuccessfully logged in![39m",
   ],
 ]
 `;
@@ -48,11 +48,11 @@ Array [
 exports[`Should login using key with passphrase 1`] = `
 Array [
   Array [
-    "Logging in to:",
+    "[1mLogging in to:[22m",
     "http://localhost:8080",
   ],
   Array [
-    "Successfully logged in!",
+    "[32mSuccessfully logged in![39m",
   ],
 ]
 `;
@@ -60,11 +60,11 @@ Array [
 exports[`Should not login with wrong certificate 1`] = `
 Array [
   Array [
-    "Logging in to:",
+    "[1mLogging in to:[22m",
     "http://localhost:8080",
   ],
   Array [
-    "Error logging in!",
+    "[31mError logging in![39m",
     "Check your username and password and try again.",
     "HTTPError: Response code 401 (Unauthorized)",
   ],
