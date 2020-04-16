@@ -1,3 +1,7 @@
+# 6.1.3 / 2020-04-16
+
+- Figuring out github action releases :)
+
 # 6.1.2 / 2020-04-16
 
 - Replace travis with github actions
