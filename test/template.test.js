@@ -63,9 +63,7 @@ test('Should list templates', done => {
 
 test('Should list zero templates', done => {
   // handle correct request
-  const templateServer = nock('http://localhost:8080')
-    .get('/templates')
-    .reply(200, {});
+  const templateServer = nock('http://localhost:8080').get('/templates').reply(200, {});
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
   // execute login
@@ -86,9 +84,7 @@ test('Should list zero templates', done => {
 // test removal
 test('Should remove template', done => {
   // handle correct request
-  const templateGetServer = nock('http://localhost:8080')
-    .get('/templates')
-    .reply(200, {testTemplate: '0.0.1'});
+  const templateGetServer = nock('http://localhost:8080').get('/templates').reply(200, {testTemplate: '0.0.1'});
   // handle correct request
   const templateServer = nock('http://localhost:8080')
     .delete('/templates')
@@ -121,9 +117,7 @@ test('Should deauth on 401 on creation', done => {
   // save config for restoration
   cfg.__save('template');
   // handle correct request
-  const templateServer = nock('http://localhost:8080')
-    .post('/templates')
-    .reply(401);
+  const templateServer = nock('http://localhost:8080').post('/templates').reply(401);
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
   // stup inquirer answers
@@ -149,9 +143,7 @@ test('Should deauth on 401 on list', done => {
   // restore original config
   cfg.__restore('template');
   // handle correct request
-  const templateServer = nock('http://localhost:8080')
-    .get('/templates')
-    .reply(401);
+  const templateServer = nock('http://localhost:8080').get('/templates').reply(401);
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
   // stup inquirer answers

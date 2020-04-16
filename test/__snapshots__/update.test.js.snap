@@ -3,11 +3,11 @@
 exports[`Should deauth on 401 1`] = `
 Array [
   Array [
-    "[1mUpdating traefik on:[22m",
+    "Updating traefik on:",
     "http://localhost:8080",
   ],
   Array [
-    "[31mError: authorization expired![39m",
+    "Error: authorization expired!",
     "Please, relogin and try again.",
   ],
 ]
@@ -16,11 +16,11 @@ Array [
 exports[`Should display update error 1`] = `
 Array [
   Array [
-    "[1mUpdating traefik on:[22m",
+    "Updating traefik on:",
     "http://localhost:8080",
   ],
   Array [
-    "[31mError updating traefik:[39m",
+    "Error updating traefik:",
     "Test error",
   ],
   Array [
@@ -37,7 +37,7 @@ exports[`Should display versions 1`] = `
 Array [
   Array [],
   Array [
-    "[1mExoframe Server:[22m",
+    "Exoframe Server:",
   ],
   Array [
     "  current: 0.18.0",
@@ -47,7 +47,7 @@ Array [
   ],
   Array [],
   Array [
-    "[1mTraefik:[22m",
+    "Traefik:",
   ],
   Array [
     "  current: v1.3.0",
@@ -63,7 +63,7 @@ exports[`Should update all on user prompt 1`] = `
 Array [
   Array [],
   Array [
-    "[1mExoframe Server:[22m",
+    "Exoframe Server:",
   ],
   Array [
     "  current: 0.18.0",
@@ -73,7 +73,7 @@ Array [
   ],
   Array [],
   Array [
-    "[1mTraefik:[22m",
+    "Traefik:",
   ],
   Array [
     "  current: v1.3.0",
@@ -83,18 +83,18 @@ Array [
   ],
   Array [],
   Array [
-    "[1mUpdating traefik on:[22m",
+    "Updating traefik on:",
     "http://localhost:8080",
   ],
   Array [
-    "[32mSuccessfully updated traefik![39m",
+    "Successfully updated traefik!",
   ],
   Array [
-    "[1mUpdating server on:[22m",
+    "Updating server on:",
     "http://localhost:8080",
   ],
   Array [
-    "[32mSuccessfully updated server![39m",
+    "Successfully updated server!",
   ],
 ]
 `;
@@ -102,11 +102,11 @@ Array [
 exports[`Should update server 1`] = `
 Array [
   Array [
-    "[1mUpdating server on:[22m",
+    "Updating server on:",
     "http://localhost:8080",
   ],
   Array [
-    "[32mSuccessfully updated server![39m",
+    "Successfully updated server!",
   ],
 ]
 `;
@@ -114,11 +114,11 @@ Array [
 exports[`Should update traefik 1`] = `
 Array [
   Array [
-    "[1mUpdating traefik on:[22m",
+    "Updating traefik on:",
     "http://localhost:8080",
   ],
   Array [
-    "[32mSuccessfully updated traefik![39m",
+    "Successfully updated traefik!",
   ],
 ]
 `;

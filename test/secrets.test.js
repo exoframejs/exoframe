@@ -131,9 +131,7 @@ test('Should get secret value', done => {
 
 test('Should list zero secrets', done => {
   // handle correct request
-  const secretsServer = nock('http://localhost:8080')
-    .get('/secrets')
-    .reply(200, {secrets: []});
+  const secretsServer = nock('http://localhost:8080').get('/secrets').reply(200, {secrets: []});
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
   // execute login
@@ -159,9 +157,7 @@ test('Should remove secret', done => {
     .get('/secrets')
     .reply(200, {secrets: [{name: testSecret.secretName, meta: {created: createDate}}]});
   // handle correct request
-  const secretServer = nock('http://localhost:8080')
-    .delete('/secrets')
-    .reply(204, '');
+  const secretServer = nock('http://localhost:8080').delete('/secrets').reply(204, '');
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
   // stup inquirer answers
@@ -190,9 +186,7 @@ test('Should deauth on 401 on creation', done => {
   // save current config state
   cfg.__save('token');
   // handle correct request
-  const secretServer = nock('http://localhost:8080')
-    .post('/secrets')
-    .reply(401);
+  const secretServer = nock('http://localhost:8080').post('/secrets').reply(401);
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
   // stup inquirer answers
@@ -218,9 +212,7 @@ test('Should deauth on 401 on list', done => {
   // restore config with auth
   cfg.__restore('token');
   // handle correct request
-  const secretServer = nock('http://localhost:8080')
-    .get('/secrets')
-    .reply(401);
+  const secretServer = nock('http://localhost:8080').get('/secrets').reply(401);
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
   // stup inquirer answers

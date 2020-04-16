@@ -3,11 +3,11 @@
 exports[`Should deauth on 401 on creation 1`] = `
 Array [
   Array [
-    "[1mGenerating new deployment token for:[22m",
+    "Generating new deployment token for:",
     "http://localhost:8080",
   ],
   Array [
-    "[31mError: authorization expired![39m",
+    "Error: authorization expired!",
     "Please, relogin and try again.",
   ],
 ]
@@ -16,11 +16,11 @@ Array [
 exports[`Should deauth on 401 on list 1`] = `
 Array [
   Array [
-    "[1mListing deployment tokens for:[22m",
+    "Listing deployment tokens for:",
     "http://localhost:8080",
   ],
   Array [
-    "[31mError: authorization expired![39m",
+    "Error: authorization expired!",
     "Please, relogin and try again.",
   ],
 ]
@@ -29,11 +29,11 @@ Array [
 exports[`Should generate token 1`] = `
 Array [
   Array [
-    "[1mGenerating new deployment token for:[22m",
+    "Generating new deployment token for:",
     "http://localhost:8080",
   ],
   Array [
-    "[1mNew token generated:[22m",
+    "New token generated:",
   ],
   Array [
     "",
@@ -45,7 +45,7 @@ Array [
     "",
   ],
   Array [
-    "[33mWARNING![39m",
+    "WARNING!",
     "Make sure to write it down, you will not be able to get it again!",
   ],
 ]
@@ -54,17 +54,17 @@ Array [
 exports[`Should list tokens 1`] = `
 Array [
   Array [
-    "[1mListing deployment tokens for:[22m",
+    "Listing deployment tokens for:",
     "http://localhost:8080",
   ],
   Array [
-    "[1mGot generated tokens:[22m",
+    "Got generated tokens:",
   ],
   Array [
     "",
   ],
   Array [
-    "  > [32mtest[39m [90m[][39m",
+    "  > test []",
   ],
 ]
 `;
@@ -72,11 +72,11 @@ Array [
 exports[`Should list zero tokens 1`] = `
 Array [
   Array [
-    "[1mListing deployment tokens for:[22m",
+    "Listing deployment tokens for:",
     "http://localhost:8080",
   ],
   Array [
-    "[1mGot generated tokens:[22m",
+    "Got generated tokens:",
   ],
   Array [
     "",
@@ -90,11 +90,11 @@ Array [
 exports[`Should remove token 1`] = `
 Array [
   Array [
-    "[1mRemoving deployment token for:[22m",
+    "Removing deployment token for:",
     "http://localhost:8080",
   ],
   Array [
-    "[32mDeployment token successfully removed![39m",
+    "Deployment token successfully removed!",
   ],
 ]
 `;

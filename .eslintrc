@@ -14,7 +14,8 @@
         "trailingComma": "es5",
         "singleQuote": true,
         "bracketSpacing": false,
-        "printWidth": 120
+        "printWidth": 120,
+        "arrowParens": "avoid"
       }
     ]
   }

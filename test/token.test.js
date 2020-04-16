@@ -14,9 +14,7 @@ const cfg = require('../src/config');
 // test generation
 test('Should generate token', done => {
   // handle correct request
-  const tokenServer = nock('http://localhost:8080')
-    .post('/deployToken')
-    .reply(200, {token: 'test'});
+  const tokenServer = nock('http://localhost:8080').post('/deployToken').reply(200, {token: 'test'});
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
   // stup inquirer answers
@@ -64,9 +62,7 @@ test('Should list tokens', done => {
 
 test('Should list zero tokens', done => {
   // handle correct request
-  const tokenServer = nock('http://localhost:8080')
-    .get('/deployToken')
-    .reply(200, {tokens: []});
+  const tokenServer = nock('http://localhost:8080').get('/deployToken').reply(200, {tokens: []});
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
   // execute login
@@ -92,9 +88,7 @@ test('Should remove token', done => {
     .get('/deployToken')
     .reply(200, {tokens: [{tokenName: 'test', meta: {created: createDate}}]});
   // handle correct request
-  const tokenServer = nock('http://localhost:8080')
-    .delete('/deployToken')
-    .reply(204, '');
+  const tokenServer = nock('http://localhost:8080').delete('/deployToken').reply(204, '');
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
   // stup inquirer answers
@@ -123,9 +117,7 @@ test('Should deauth on 401 on creation', done => {
   // save current config state
   cfg.__save('token');
   // handle correct request
-  const tokenServer = nock('http://localhost:8080')
-    .post('/deployToken')
-    .reply(401);
+  const tokenServer = nock('http://localhost:8080').post('/deployToken').reply(401);
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
   // stup inquirer answers
@@ -151,9 +143,7 @@ test('Should deauth on 401 on list', done => {
   // restore config with auth
   cfg.__restore('token');
   // handle correct request
-  const tokenServer = nock('http://localhost:8080')
-    .get('/deployToken')
-    .reply(401);
+  const tokenServer = nock('http://localhost:8080').get('/deployToken').reply(401);
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
   // stup inquirer answers
