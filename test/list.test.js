@@ -140,9 +140,7 @@ const services = [
 // test list
 test('Should get list of deployments', done => {
   // handle correct request
-  const listServer = nock('http://localhost:8080')
-    .get(`/list`)
-    .reply(200, {containers});
+  const listServer = nock('http://localhost:8080').get(`/list`).reply(200, {containers});
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
   // execute login
@@ -162,9 +160,7 @@ test('Should get list of deployments', done => {
 // test swarm list
 test('Should get list of swarm deployments', done => {
   // handle correct request
-  const listServer = nock('http://localhost:8080')
-    .get(`/list`)
-    .reply(200, {services});
+  const listServer = nock('http://localhost:8080').get(`/list`).reply(200, {services});
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
   // execute login

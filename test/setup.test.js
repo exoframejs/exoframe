@@ -75,10 +75,7 @@ test('Should deauth on 401 on questions list', done => {
   // save config for restoration
   cfg.__save('template');
   // handle correct request
-  const setupServer = nock('http://localhost:8080')
-    .get('/setup')
-    .query(true)
-    .reply(401);
+  const setupServer = nock('http://localhost:8080').get('/setup').query(true).reply(401);
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
   // stup inquirer answers
@@ -108,9 +105,7 @@ test('Should deauth on 401 on list', done => {
     .get('/setup')
     .query(true)
     .reply(200, {success: 'true', questions, log: ['1', '2', '3']});
-  const recipeServerPost = nock('http://localhost:8080')
-    .post('/setup')
-    .reply(401);
+  const recipeServerPost = nock('http://localhost:8080').post('/setup').reply(401);
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
   // stup inquirer answers

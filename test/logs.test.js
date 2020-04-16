@@ -49,12 +49,7 @@ test.only('Should get logs', done => {
     expect(logServer.isDone()).toBeTruthy();
     // first check console output
     const logsWithoutDates = consoleSpy.args.map(lines =>
-      lines.map(l =>
-        l
-          .replace(localeDate1, '')
-          .replace(localeDate2, '')
-          .replace(localeDate3, '')
-      )
+      lines.map(l => l.replace(localeDate1, '').replace(localeDate2, '').replace(localeDate3, ''))
     );
     expect(logsWithoutDates).toMatchSnapshot();
     // restore console

@@ -36,27 +36,16 @@ const wrongUser = {username: 'wrong', privateKeyName: 'i am broken', password: '
 const testEndpointUrl = 'http://my-awesome-endpoint';
 
 // handle correct request
-nock('http://localhost:8080')
-  .get('/login')
-  .times(4)
-  .reply(200, loginRequest);
-const correctLoginSrv = nock('http://localhost:8080')
-  .post('/login', correctLogin)
-  .reply(200, {token});
+nock('http://localhost:8080').get('/login').times(4).reply(200, loginRequest);
+const correctLoginSrv = nock('http://localhost:8080').post('/login', correctLogin).reply(200, {token});
 const correctLoginPassSrv = nock('http://localhost:8080')
   .post('/login', correctLoginWithPassphrase)
   .reply(200, {token});
-const failedLoginSrv = nock('http://localhost:8080')
-  .post('/login', failedLogin)
-  .reply(401);
+const failedLoginSrv = nock('http://localhost:8080').post('/login', failedLogin).reply(401);
 
 // handle login request to second test endpoint
-nock(testEndpointUrl)
-  .get('/login')
-  .reply(200, loginRequest);
-const correctEndpointLoginSrv = nock(testEndpointUrl)
-  .post('/login', correctLogin)
-  .reply(200, {token});
+nock(testEndpointUrl).get('/login').reply(200, loginRequest);
+const correctEndpointLoginSrv = nock(testEndpointUrl).post('/login', correctLogin).reply(200, {token});
 
 // test login
 test('Should login', done => {

@@ -14,9 +14,7 @@ const {userConfig} = require('../src/config');
 // test update
 test('Should update traefik', done => {
   // handle correct request
-  const updateServer = nock('http://localhost:8080')
-    .post('/update/traefik')
-    .reply(200, {updated: true});
+  const updateServer = nock('http://localhost:8080').post('/update/traefik').reply(200, {updated: true});
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
   // execute login
@@ -36,9 +34,7 @@ test('Should update traefik', done => {
 // test update
 test('Should update server', done => {
   // handle correct request
-  const updateServer = nock('http://localhost:8080')
-    .post('/update/server')
-    .reply(200, {updated: true});
+  const updateServer = nock('http://localhost:8080').post('/update/server').reply(200, {updated: true});
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
   // execute login
@@ -59,9 +55,7 @@ test('Should update server', done => {
 test('Should display update error', done => {
   // handle correct request
   const response = {updated: false, error: 'Test error', log: 'log'};
-  const updateServer = nock('http://localhost:8080')
-    .post('/update/traefik')
-    .reply(500, response);
+  const updateServer = nock('http://localhost:8080').post('/update/traefik').reply(500, response);
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
   // execute login
@@ -89,9 +83,7 @@ test('Should display versions', done => {
     latestTraefik: 'v1.3.2',
     traefikUpdate: true,
   };
-  const updateServer = nock('http://localhost:8080')
-    .get('/version')
-    .reply(200, response);
+  const updateServer = nock('http://localhost:8080').get('/version').reply(200, response);
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
   // stup inquirer answers
@@ -124,15 +116,9 @@ test('Should update all on user prompt', done => {
     latestTraefik: 'v1.3.2',
     traefikUpdate: true,
   };
-  const updateInfoServer = nock('http://localhost:8080')
-    .get('/version')
-    .reply(200, response);
-  const updateServerRun = nock('http://localhost:8080')
-    .post('/update/server')
-    .reply(200, {updated: true});
-  const updateTraefikRun = nock('http://localhost:8080')
-    .post('/update/traefik')
-    .reply(200, {updated: true});
+  const updateInfoServer = nock('http://localhost:8080').get('/version').reply(200, response);
+  const updateServerRun = nock('http://localhost:8080').post('/update/server').reply(200, {updated: true});
+  const updateTraefikRun = nock('http://localhost:8080').post('/update/traefik').reply(200, {updated: true});
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
   // stup inquirer answers
@@ -161,9 +147,7 @@ test('Should update all on user prompt', done => {
 // test deauth
 test('Should deauth on 401', done => {
   // handle correct request
-  const updateServer = nock('http://localhost:8080')
-    .post(`/update/traefik`)
-    .reply(401);
+  const updateServer = nock('http://localhost:8080').post(`/update/traefik`).reply(401);
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
   // execute login
