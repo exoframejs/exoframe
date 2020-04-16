@@ -3,11 +3,11 @@
 exports[`Should deauth on 401 1`] = `
 Array [
   Array [
-    "[1mDeploying test/fixtures/test_html_project to endpoint:[22m",
+    "Deploying test/fixtures/test_html_project to endpoint:",
     "http://localhost:8080",
   ],
   Array [
-    "[31mError: authorization expired![39m",
+    "Error: authorization expired!",
     "Please, relogin and try again.",
   ],
 ]
@@ -16,7 +16,7 @@ Array [
 exports[`Should deploy 1`] = `
 Array [
   Array [
-    "[1mDeploying test/fixtures/test_html_project to endpoint:[22m",
+    "Deploying test/fixtures/test_html_project to endpoint:",
     "http://localhost:8080",
   ],
   Array [
@@ -24,8 +24,8 @@ Array [
 ",
   ],
   Array [
-    "[31m   ID     [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m[90m [39m[31m   Type        [39m
-   test   [90m [39m   localhost   [90m [39m   test       [90m [39m   Container   ",
+    "   ID         URL             Hostname       Type        
+   test       localhost       test           Container   ",
   ],
 ]
 `;
@@ -33,7 +33,7 @@ Array [
 exports[`Should deploy with custom config 1`] = `
 Array [
   Array [
-    "[1mDeploying test/fixtures/test_custom_config_project to endpoint:[22m",
+    "Deploying test/fixtures/test_custom_config_project to endpoint:",
     "http://localhost:8080",
   ],
   Array [
@@ -41,8 +41,8 @@ Array [
 ",
   ],
   Array [
-    "[31m   ID     [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m[90m [39m[31m   Type        [39m
-   test   [90m [39m   localhost   [90m [39m   test       [90m [39m   Container   ",
+    "   ID         URL             Hostname       Type        
+   test       localhost       test           Container   ",
   ],
 ]
 `;
@@ -50,7 +50,7 @@ Array [
 exports[`Should deploy with endpoint flag 1`] = `
 Array [
   Array [
-    "[1mDeploying test/fixtures/test_html_project to endpoint:[22m",
+    "Deploying test/fixtures/test_html_project to endpoint:",
     "http://localhost:3000",
   ],
   Array [
@@ -58,8 +58,8 @@ Array [
 ",
   ],
   Array [
-    "[31m   ID     [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m[90m [39m[31m   Type        [39m
-   test   [90m [39m   localhost   [90m [39m   test       [90m [39m   Container   ",
+    "   ID         URL             Hostname       Type        
+   test       localhost       test           Container   ",
   ],
 ]
 `;
@@ -67,7 +67,7 @@ Array [
 exports[`Should deploy without auth but with token 1`] = `
 Array [
   Array [
-    "[1mDeploying current project to endpoint:[22m",
+    "Deploying current project to endpoint:",
     "http://localhost:8080",
   ],
   Array [
@@ -79,8 +79,8 @@ Deploying using given token..",
 ",
   ],
   Array [
-    "[31m   ID     [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m[90m [39m[31m   Type        [39m
-   test   [90m [39m   localhost   [90m [39m   test       [90m [39m   Container   ",
+    "   ID         URL             Hostname       Type        
+   test       localhost       test           Container   ",
   ],
 ]
 `;
@@ -88,7 +88,7 @@ Deploying using given token..",
 exports[`Should deploy without path 1`] = `
 Array [
   Array [
-    "[1mDeploying current project to endpoint:[22m",
+    "Deploying current project to endpoint:",
     "http://localhost:8080",
   ],
   Array [
@@ -96,8 +96,8 @@ Array [
 ",
   ],
   Array [
-    "[31m   ID     [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m[90m [39m[31m   Type        [39m
-   test   [90m [39m   localhost   [90m [39m   test       [90m [39m   Container   ",
+    "   ID         URL             Hostname       Type        
+   test       localhost       test           Container   ",
   ],
 ]
 `;
@@ -105,11 +105,11 @@ Array [
 exports[`Should display error log 1`] = `
 Array [
   Array [
-    "[1mDeploying current project to endpoint:[22m",
+    "Deploying current project to endpoint:",
     "http://localhost:8080",
   ],
   Array [
-    "[31mError deploying project:[39m",
+    "Error deploying project:",
     "Build failed! See build log for details.",
   ],
   Array [
@@ -128,11 +128,11 @@ Array [
 exports[`Should display error on malformed JSON 1`] = `
 Array [
   Array [
-    "[1mDeploying current project to endpoint:[22m",
+    "Deploying current project to endpoint:",
     "http://localhost:8080",
   ],
   Array [
-    "[31mError deploying project:[39m",
+    "Error deploying project:",
     "Bad Gateway",
   ],
   Array [
@@ -148,11 +148,11 @@ Array [
 exports[`Should display error on zero deployments 1`] = `
 Array [
   Array [
-    "[1mDeploying current project to endpoint:[22m",
+    "Deploying current project to endpoint:",
     "http://localhost:8080",
   ],
   Array [
-    "[31mError deploying project:[39m",
+    "Error deploying project:",
     "Error: Something went wrong!",
   ],
   Array [
@@ -168,7 +168,7 @@ Array [
 exports[`Should display verbose output 1`] = `
 Array [
   Array [
-    "[1mDeploying test/fixtures/test_ignore_project to endpoint:[22m",
+    "Deploying test/fixtures/test_ignore_project to endpoint:",
     "http://localhost:8080",
   ],
   Array [
@@ -181,12 +181,12 @@ Ignoring following paths:",
     ],
   ],
   Array [
-    "[31m[error][39m",
+    "[error]",
     "Error parsing line:",
     "Bad Gateway",
   ],
   Array [
-    "[31mError deploying project:[39m",
+    "Error deploying project:",
     "Bad Gateway",
   ],
   Array [
@@ -205,7 +205,7 @@ Ignoring following paths:",
 exports[`Should execute update 1`] = `
 Array [
   Array [
-    "[1mUpdating current project to endpoint:[22m",
+    "Updating current project to endpoint:",
     "http://localhost:8080",
   ],
   Array [
@@ -213,8 +213,8 @@ Array [
 ",
   ],
   Array [
-    "[31m   ID     [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m[90m [39m[31m   Type        [39m
-   test   [90m [39m   localhost   [90m [39m   test       [90m [39m   Container   ",
+    "   ID         URL             Hostname       Type        
+   test       localhost       test           Container   ",
   ],
 ]
 `;
@@ -222,7 +222,7 @@ Array [
 exports[`Should ignore specified files 1`] = `
 Array [
   Array [
-    "[1mDeploying test/fixtures/test_ignore_project to endpoint:[22m",
+    "Deploying test/fixtures/test_ignore_project to endpoint:",
     "http://localhost:8080",
   ],
   Array [
@@ -230,8 +230,8 @@ Array [
 ",
   ],
   Array [
-    "[31m   ID     [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m[90m [39m[31m   Type        [39m
-   test   [90m [39m   localhost   [90m [39m   test       [90m [39m   Container   ",
+    "   ID         URL             Hostname       Type        
+   test       localhost       test           Container   ",
   ],
 ]
 `;
@@ -239,11 +239,11 @@ Array [
 exports[`Should not deploy with broken config 1`] = `
 Array [
   Array [
-    "[1mDeploying current project to endpoint:[22m",
+    "Deploying current project to endpoint:",
     "http://localhost:8080",
   ],
   Array [
-    "[31mPlease, check your config and try again:[39m",
+    "Please, check your config and try again:",
     "SyntaxError: Unexpected token I in JSON at position 0",
   ],
 ]
@@ -252,11 +252,11 @@ Array [
 exports[`Should not deploy with config without project name 1`] = `
 Array [
   Array [
-    "[1mDeploying current project to endpoint:[22m",
+    "Deploying current project to endpoint:",
     "http://localhost:8080",
   ],
   Array [
-    "[31mPlease, check your config and try again:[39m",
+    "Please, check your config and try again:",
     "Error: Project should have a valid name in config!",
   ],
 ]
@@ -265,7 +265,7 @@ Array [
 exports[`Should not deploy with non-existent path 1`] = `
 Array [
   Array [
-    "[1mDeploying i-do-not-exist to endpoint:[22m",
+    "Deploying i-do-not-exist to endpoint:",
     "http://localhost:8080",
   ],
   Array [
@@ -277,7 +277,7 @@ Array [
 exports[`Should open webpage after deploy 1`] = `
 Array [
   Array [
-    "[1mDeploying current project to endpoint:[22m",
+    "Deploying current project to endpoint:",
     "http://localhost:8080",
   ],
   Array [
@@ -285,8 +285,8 @@ Array [
 ",
   ],
   Array [
-    "[31m   ID     [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m[90m [39m[31m   Type        [39m
-   test   [90m [39m   localhost   [90m [39m   test       [90m [39m   Container   ",
+    "   ID         URL             Hostname       Type        
+   test       localhost       test           Container   ",
   ],
 ]
 `;

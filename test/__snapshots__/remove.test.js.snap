@@ -3,11 +3,11 @@
 exports[`Should deauth on 401 1`] = `
 Array [
   Array [
-    "[1mRemoving deployment:[22m",
+    "Removing deployment:",
     "test-id",
   ],
   Array [
-    "[31mError: authorization expired![39m",
+    "Error: authorization expired!",
     "Please, relogin and try again.",
   ],
 ]
@@ -16,11 +16,11 @@ Array [
 exports[`Should remove 1`] = `
 Array [
   Array [
-    "[1mRemoving deployment:[22m",
+    "Removing deployment:",
     "test-id",
   ],
   Array [
-    "[32mDeployment removed![39m",
+    "Deployment removed!",
   ],
 ]
 `;
@@ -28,7 +28,7 @@ Array [
 exports[`Should remove by token instead of default auth 1`] = `
 Array [
   Array [
-    "[1mRemoving deployment:[22m",
+    "Removing deployment:",
     "test-id",
   ],
   Array [
@@ -36,7 +36,7 @@ Array [
 Removing using given token..",
   ],
   Array [
-    "[32mDeployment removed![39m",
+    "Deployment removed!",
   ],
 ]
 `;
@@ -44,11 +44,11 @@ Removing using given token..",
 exports[`Should remove by url 1`] = `
 Array [
   Array [
-    "[1mRemoving deployment:[22m",
+    "Removing deployment:",
     "test.example.com",
   ],
   Array [
-    "[32mDeployment removed![39m",
+    "Deployment removed!",
   ],
 ]
 `;
@@ -56,11 +56,11 @@ Array [
 exports[`Should show not found error 1`] = `
 Array [
   Array [
-    "[1mRemoving deployment:[22m",
+    "Removing deployment:",
     "test-id",
   ],
   Array [
-    "[31mError: container or function was not found![39m",
+    "Error: container or function was not found!",
     "Please, check deployment ID and try again.",
   ],
 ]
@@ -69,11 +69,11 @@ Array [
 exports[`Should show not found error 2`] = `
 Array [
   Array [
-    "[1mRemoving deployment:[22m",
+    "Removing deployment:",
     "test-id",
   ],
   Array [
-    "[31mError![39m",
+    "Error!",
     "Could not remove the deployment.",
   ],
 ]
@@ -82,11 +82,11 @@ Array [
 exports[`Should show remove error 1`] = `
 Array [
   Array [
-    "[1mRemoving deployment:[22m",
+    "Removing deployment:",
     "test-id",
   ],
   Array [
-    "[31mError removing project:[39m",
+    "Error removing project:",
     "HTTPError: Response code 500 (Internal Server Error)",
   ],
 ]
