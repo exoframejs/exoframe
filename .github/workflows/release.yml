@@ -79,7 +79,7 @@ jobs:
           draft: false
           prerelease: false
       - name: Publish linux binaries as release assets
-        id: upload-release-asset
+        id: upload-linux-release-asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -89,7 +89,7 @@ jobs:
           asset_name: exoframe-linux
           asset_content_type: application/binary
       - name: Publish macos binaries as release assets
-        id: upload-release-asset
+        id: upload-mac-release-asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -99,7 +99,7 @@ jobs:
           asset_name: exoframe-macos
           asset_content_type: application/binary
       - name: Publish windows binaries as release assets
-        id: upload-release-asset
+        id: upload-win-release-asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
