@@ -256,14 +256,15 @@ exports.handler = async (args = {}) => {
     }
   } catch (e) {
     spinner && spinner.fail('Deployment failed!');
+
+    const response = e.response || {};
     // if authorization is expired/broken/etc
-    if (e.response.statusCode === 401) {
+    if (response.statusCode === 401) {
       logout(userConfig);
       console.log(chalk.red('Error: authorization expired!'), 'Please, relogin and try again.');
       return process.exit(1);
     }
 
-    const response = e.response || {};
     const reason = response.error || e.toString();
     console.log(chalk.red('Error deploying project:'), reason || 'Unknown reason');
     console.log('Build log:\n');
