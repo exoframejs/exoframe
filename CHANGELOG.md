@@ -1,3 +1,7 @@
+# 6.1.1 / 2020-04-16
+
+- Fix error handling during deployment when no response is returned
+
 # 6.1.0 / 2020-02-12
 
 - Add custom traefik middleware usage via labels and config
