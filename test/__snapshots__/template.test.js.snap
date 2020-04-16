@@ -3,11 +3,11 @@
 exports[`Should deauth on 401 on creation 1`] = `
 Array [
   Array [
-    "Adding new deployment template for:",
+    "[1mAdding new deployment template for:[22m",
     "http://localhost:8080",
   ],
   Array [
-    "Error: authorization expired!",
+    "[31mError: authorization expired![39m",
     "Please, relogin and try again.",
   ],
 ]
@@ -16,11 +16,11 @@ Array [
 exports[`Should deauth on 401 on list 1`] = `
 Array [
   Array [
-    "Listing deployment templates for:",
+    "[1mListing deployment templates for:[22m",
     "http://localhost:8080",
   ],
   Array [
-    "Error: authorization expired!",
+    "[31mError: authorization expired![39m",
     "Please, relogin and try again.",
   ],
 ]
@@ -29,7 +29,7 @@ Array [
 exports[`Should install new template 1`] = `
 Array [
   Array [
-    "Adding new deployment template for:",
+    "[1mAdding new deployment template for:[22m",
     "http://localhost:8080",
   ],
 ]
@@ -38,17 +38,17 @@ Array [
 exports[`Should list templates 1`] = `
 Array [
   Array [
-    "Listing deployment templates for:",
+    "[1mListing deployment templates for:[22m",
     "http://localhost:8080",
   ],
   Array [
-    "2 templates found on http://localhost:8080:
-",
+    "[32m2 templates found on http://localhost:8080:[39m
+[32m[39m",
   ],
   Array [
-    "   Template            Version   
-   template            ^0.0.1    
-   otherTemplate       ^1.0.0    ",
+    "[31m   Template        [39m[90m [39m[31m   Version   [39m
+   template        [90m [39m   ^0.0.1    
+   otherTemplate   [90m [39m   ^1.0.0    ",
   ],
 ]
 `;
@@ -56,15 +56,15 @@ Array [
 exports[`Should list zero templates 1`] = `
 Array [
   Array [
-    "Listing deployment templates for:",
+    "[1mListing deployment templates for:[22m",
     "http://localhost:8080",
   ],
   Array [
-    "0 templates found on http://localhost:8080:
-",
+    "[32m0 templates found on http://localhost:8080:[39m
+[32m[39m",
   ],
   Array [
-    "   Template       Version   ",
+    "[31m   Template   [39m[90m [39m[31m   Version   [39m",
   ],
 ]
 `;
@@ -72,11 +72,11 @@ Array [
 exports[`Should remove template 1`] = `
 Array [
   Array [
-    "Removing deployment template for:",
+    "[1mRemoving deployment template for:[22m",
     "http://localhost:8080",
   ],
   Array [
-    "Template successfully removed!",
+    "[32mTemplate successfully removed![39m",
   ],
 ]
 `;
