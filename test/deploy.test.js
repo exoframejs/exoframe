@@ -23,9 +23,9 @@ const openMock = require('open');
 const {handler: deploy} = require('../src/commands/deploy');
 
 // reply with stream helper
-const replyWithStream = dataArr => {
+const replyWithStream = (dataArr) => {
   const replyStream = _();
-  dataArr.forEach(data => replyStream.write(JSON.stringify(data)));
+  dataArr.forEach((data) => replyStream.write(JSON.stringify(data)));
   replyStream.end('');
   return [200, new Readable().wrap(replyStream)];
 };
@@ -62,7 +62,7 @@ const deployments = [
 ];
 
 // test
-test('Should deploy', done => {
+test('Should deploy', (done) => {
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
 
@@ -94,7 +94,7 @@ test('Should deploy', done => {
 });
 
 // test
-test('Should deploy with endpoint flag', done => {
+test('Should deploy with endpoint flag', (done) => {
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
 
@@ -126,7 +126,7 @@ test('Should deploy with endpoint flag', done => {
 });
 
 // test
-test('Should deploy without path', done => {
+test('Should deploy without path', (done) => {
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
 
@@ -151,7 +151,7 @@ test('Should deploy without path', done => {
 });
 
 // test
-test('Should deploy without auth but with token', done => {
+test('Should deploy without auth but with token', (done) => {
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
   // copy original config for restoration
@@ -183,7 +183,7 @@ test('Should deploy without auth but with token', done => {
 });
 
 // test
-test('Should execute update', done => {
+test('Should execute update', (done) => {
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
 
@@ -208,7 +208,7 @@ test('Should execute update', done => {
 });
 
 // test
-test('Should open webpage after deploy', done => {
+test('Should open webpage after deploy', (done) => {
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
 
@@ -235,7 +235,7 @@ test('Should open webpage after deploy', done => {
 });
 
 // test
-test('Should deploy with custom config', done => {
+test('Should deploy with custom config', (done) => {
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
 
@@ -283,7 +283,7 @@ test('Should deploy with custom config', done => {
 });
 
 // test
-test('Should display error log', done => {
+test('Should display error log', (done) => {
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
 
@@ -317,7 +317,7 @@ test('Should display error log', done => {
 });
 
 // test
-test('Should display error on malformed JSON', done => {
+test('Should display error on malformed JSON', (done) => {
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
 
@@ -344,7 +344,7 @@ test('Should display error on malformed JSON', done => {
 });
 
 // test
-test('Should display verbose output', done => {
+test('Should display verbose output', (done) => {
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
 
@@ -375,7 +375,7 @@ test('Should display verbose output', done => {
 });
 
 // test ignore config
-test('Should ignore specified files', done => {
+test('Should ignore specified files', (done) => {
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
 
@@ -415,7 +415,7 @@ test('Should ignore specified files', done => {
 });
 
 // test
-test('Should display error on zero deployments', done => {
+test('Should display error on zero deployments', (done) => {
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
 
@@ -442,7 +442,7 @@ test('Should display error on zero deployments', done => {
 });
 
 // test
-test('Should not deploy with config without project name', done => {
+test('Should not deploy with config without project name', (done) => {
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
 
@@ -462,7 +462,7 @@ test('Should not deploy with config without project name', done => {
 });
 
 // test
-test('Should not deploy with broken config', done => {
+test('Should not deploy with broken config', (done) => {
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
 
@@ -480,7 +480,7 @@ test('Should not deploy with broken config', done => {
 });
 
 // test
-test('Should not deploy with non-existent path', done => {
+test('Should not deploy with non-existent path', (done) => {
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
 
@@ -489,13 +489,7 @@ test('Should not deploy with non-existent path', done => {
     // check console output
     const pathLine = consoleSpy.args.splice(1, 1).pop();
     expect(consoleSpy.args).toMatchSnapshot();
-    expect(pathLine).toEqual([
-      `\u001b[31mError! Path \u001b[1m${path.join(
-        __dirname,
-        '..',
-        'i-do-not-exist'
-      )}\u001b[22m do not exists\u001b[39m`,
-    ]);
+    expect(pathLine).toEqual([`Error! Path ${path.join(__dirname, '..', 'i-do-not-exist')} do not exists`]);
     // restore console
     console.log.restore();
     done();
@@ -503,11 +497,9 @@ test('Should not deploy with non-existent path', done => {
 });
 
 // test
-test('Should deauth on 401', done => {
+test('Should deauth on 401', (done) => {
   // handle correct request
-  const deployServer = nock('http://localhost:8080')
-    .post('/deploy')
-    .reply(401, {error: 'Deauth test'});
+  const deployServer = nock('http://localhost:8080').post('/deploy').reply(401, {error: 'Deauth test'});
   // spy on console
   const consoleSpy = sinon.spy(console, 'log');
   // execute login

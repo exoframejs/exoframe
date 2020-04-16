@@ -3,11 +3,11 @@
 exports[`Should add new endpoint 1`] = `
 Array [
   Array [
-    "[1mUpdating endpoint URL to:[22m",
+    "Updating endpoint URL to:",
     "http://test.endpoint",
   ],
   Array [
-    "[32mEndpoint URL updated![39m",
+    "Endpoint URL updated!",
   ],
 ]
 `;
@@ -15,11 +15,11 @@ Array [
 exports[`Should add second new endpoint 1`] = `
 Array [
   Array [
-    "[1mUpdating endpoint URL to:[22m",
+    "Updating endpoint URL to:",
     "http://test",
   ],
   Array [
-    "[32mEndpoint URL updated![39m",
+    "Endpoint URL updated!",
   ],
 ]
 `;
@@ -27,8 +27,8 @@ Array [
 exports[`Should not remove only endpoint 1`] = `
 Array [
   Array [
-    "[31mError![39m",
-    "[1mCannot remove the only endpoint URL:[22m",
+    "Error!",
+    "Cannot remove the only endpoint URL:",
     "http://localhost:8080",
   ],
 ]
@@ -37,11 +37,11 @@ Array [
 exports[`Should remove current endpoint using inquirer 1`] = `
 Array [
   Array [
-    "[1mRemoving endpoint:[22m",
+    "Removing endpoint:",
     "http://test.endpoint",
   ],
   Array [
-    "[32mEndpoint removed![39m",
+    "Endpoint removed!",
   ],
 ]
 `;
@@ -49,11 +49,11 @@ Array [
 exports[`Should remove existing endpoint using param 1`] = `
 Array [
   Array [
-    "[1mRemoving endpoint:[22m",
+    "Removing endpoint:",
     "http://test",
   ],
   Array [
-    "[32mEndpoint removed![39m",
+    "Endpoint removed!",
   ],
 ]
 `;
@@ -61,11 +61,11 @@ Array [
 exports[`Should select old endpoint 1`] = `
 Array [
   Array [
-    "[1mUpdating endpoint URL to:[22m",
+    "Updating endpoint URL to:",
     "http://localhost:8080",
   ],
   Array [
-    "[32mEndpoint URL updated![39m",
+    "Endpoint URL updated!",
   ],
 ]
 `;
@@ -73,11 +73,11 @@ Array [
 exports[`Should select old endpoint using URL param 1`] = `
 Array [
   Array [
-    "[1mUpdating endpoint URL to:[22m",
+    "Updating endpoint URL to:",
     "http://test.endpoint",
   ],
   Array [
-    "[32mEndpoint URL updated![39m",
+    "Endpoint URL updated!",
   ],
 ]
 `;
@@ -85,7 +85,7 @@ Array [
 exports[`Should show error on remove of non-existent endpoint 1`] = `
 Array [
   Array [
-    "[31mError![39m",
+    "Error!",
     "Couldn't find endpoint with URL:",
     "do-not-exist",
   ],
