@@ -1,3 +1,8 @@
+# 6.1.2 / 2020-04-16
+
+- Replace travis with github actions
+- Update dependencies to latest versions
+
 # 6.1.1 / 2020-04-16
 
 - Fix error handling during deployment when no response is returned
