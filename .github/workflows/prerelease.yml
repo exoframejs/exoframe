@@ -1,0 +1,68 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - develop
+
+env:
+  YARN_CACHE_FOLDER: ~/.yarn
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v1
+        with:
+          path: ${{ env.YARN_CACHE_FOLDER }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+          registry-url: https://registry.npmjs.org
+      - name: install
+        run: yarn --frozen-lockfile
+
+      # lint, test, report coverage
+      - name: lint
+        run: yarn lint
+      - name: test
+        run: yarn test
+
+      # upload coverage
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  publish:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v1
+        with:
+          path: ${{ env.YARN_CACHE_FOLDER }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+          registry-url: https://registry.npmjs.org
+
+      # build
+      - name: install
+        run: yarn --frozen-lockfile
+      - name: build
+        run: yarn build
+      - name: package
+        run: yarn package
+
+      # deploy to npm
+      - run: npm publish --access public --tag next
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
