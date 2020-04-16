@@ -3,11 +3,11 @@
 exports[`Should deauth on 401 on list 1`] = `
 Array [
   Array [
-    "[1mSetting new deployment using recipe at:[22m",
+    "Setting new deployment using recipe at:",
     "http://localhost:8080",
   ],
   Array [
-    "[31mError: authorization expired![39m",
+    "Error: authorization expired!",
     "Please, relogin and try again.",
   ],
 ]
@@ -16,11 +16,11 @@ Array [
 exports[`Should deauth on 401 on questions list 1`] = `
 Array [
   Array [
-    "[1mSetting new deployment using recipe at:[22m",
+    "Setting new deployment using recipe at:",
     "http://localhost:8080",
   ],
   Array [
-    "[31mError: authorization expired![39m",
+    "Error: authorization expired!",
     "Please, relogin and try again.",
   ],
 ]
@@ -29,7 +29,7 @@ Array [
 exports[`Should execute new setup 1`] = `
 Array [
   Array [
-    "[1mSetting new deployment using recipe at:[22m",
+    "Setting new deployment using recipe at:",
     "http://localhost:8080",
   ],
   Array [

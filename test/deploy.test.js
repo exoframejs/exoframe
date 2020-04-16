@@ -489,13 +489,7 @@ test('Should not deploy with non-existent path', done => {
     // check console output
     const pathLine = consoleSpy.args.splice(1, 1).pop();
     expect(consoleSpy.args).toMatchSnapshot();
-    expect(pathLine).toEqual([
-      `\u001b[31mError! Path \u001b[1m${path.join(
-        __dirname,
-        '..',
-        'i-do-not-exist'
-      )}\u001b[22m do not exists\u001b[39m`,
-    ]);
+    expect(pathLine).toEqual([`Error! Path ${path.join(__dirname, '..', 'i-do-not-exist')} do not exists`]);
     // restore console
     console.log.restore();
     done();

@@ -6,7 +6,7 @@ Array [
     "Creating new config..",
   ],
   Array [
-    "[32mConfig created![39m",
+    "Config created!",
   ],
 ]
 `;
@@ -20,7 +20,7 @@ Array [
     "Creating new config for function deployment..",
   ],
   Array [
-    "[32mConfig created![39m",
+    "Config created!",
   ],
 ]
 `;
@@ -31,47 +31,47 @@ Array [
     "Creating new config..",
   ],
   Array [
-    "[33mMode changed to[39m",
+    "Mode changed to",
     "non-interactive",
   ],
   Array [
     "Setting",
-    "[31mdomain[39m",
+    "domain",
     "to",
-    "[33mtest123.dev[39m",
+    "test123.dev",
   ],
   Array [
     "Setting",
-    "[31mport[39m",
+    "port",
     "to",
-    "[33m1234[39m",
+    "1234",
   ],
   Array [
     "Setting",
-    "[31mname[39m",
+    "name",
     "to",
-    "[33mtest name 123[39m",
+    "test name 123",
   ],
   Array [
     "Setting",
-    "[31mproject[39m",
+    "project",
     "to",
-    "[33mgive-project-name[39m",
+    "give-project-name",
   ],
   Array [
     "Setting",
-    "[31mrestart[39m",
+    "restart",
     "to",
-    "[33munless-stopped[39m",
+    "unless-stopped",
   ],
   Array [
     "Setting",
-    "[31mhostname[39m",
+    "hostname",
     "to",
-    "[33mtest123.dev[39m",
+    "test123.dev",
   ],
   Array [
-    "[32mConfig created![39m",
+    "Config created!",
   ],
 ]
 `;
