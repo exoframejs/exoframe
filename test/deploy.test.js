@@ -85,12 +85,12 @@ test('Should deploy', done => {
     expect(deployServer.isDone()).toBeTruthy();
     // first check console output
     expect(consoleSpy.args).toMatchSnapshot();
-    // restore console
-    console.log.restore();
     // tear down nock
     deployServer.done();
     done();
   });
+  // restore console
+  console.log.restore();
 });
 
 // test
@@ -117,12 +117,12 @@ test('Should deploy with endpoint flag', done => {
     expect(deployServer.isDone()).toBeTruthy();
     // first check console output
     expect(consoleSpy.args).toMatchSnapshot();
-    // restore console
-    console.log.restore();
     // tear down nock
     deployServer.done();
     done();
   });
+  // restore console
+  console.log.restore();
 });
 
 // test
@@ -142,12 +142,12 @@ test('Should deploy without path', done => {
     expect(deployServer.isDone()).toBeTruthy();
     // first check console output
     expect(consoleSpy.args).toMatchSnapshot();
-    // restore console
-    console.log.restore();
     // tear down nock
     deployServer.done();
     done();
   });
+  // restore console
+  console.log.restore();
 });
 
 // test
@@ -172,14 +172,14 @@ test('Should deploy without auth but with token', done => {
     expect(deployServer.isDone()).toBeTruthy();
     // first check console output
     expect(consoleSpy.args).toMatchSnapshot();
-    // restore console
-    console.log.restore();
     // tear down nock
     deployServer.done();
     // restore original config
     cfg.updateConfig(originalConfig);
     done();
   });
+  // restore console
+  console.log.restore();
 });
 
 // test
@@ -199,12 +199,12 @@ test('Should execute update', done => {
     expect(updateServer.isDone()).toBeTruthy();
     // first check console output
     expect(consoleSpy.args).toMatchSnapshot();
-    // restore console
-    console.log.restore();
     // tear down nock
     updateServer.done();
     done();
   });
+  // restore console
+  console.log.restore();
 });
 
 // test
@@ -226,12 +226,12 @@ test('Should open webpage after deploy', done => {
     expect(openMock).toHaveBeenCalled();
     // first check console output
     expect(consoleSpy.args).toMatchSnapshot();
-    // restore console
-    console.log.restore();
     // tear down nock
     deployServer.done();
     done();
   });
+  // restore console
+  console.log.restore();
 });
 
 // test
@@ -274,12 +274,12 @@ test('Should deploy with custom config', done => {
     expect(deployServer.isDone()).toBeTruthy();
     // first check console output
     expect(consoleSpy.args).toMatchSnapshot();
-    // restore console
-    console.log.restore();
     // tear down nock
     deployServer.done();
     done();
   });
+  // restore console
+  console.log.restore();
 });
 
 // test
@@ -308,12 +308,12 @@ test('Should display error log', done => {
     expect(deployServer.isDone()).toBeTruthy();
     // first check console output
     expect(consoleSpy.args).toMatchSnapshot();
-    // restore console
-    console.log.restore();
     // tear down nock
     deployServer.done();
     done();
   });
+  // restore console
+  console.log.restore();
 });
 
 // test
@@ -335,12 +335,12 @@ test('Should display error on malformed JSON', done => {
     expect(deployServer.isDone()).toBeTruthy();
     // first check console output
     expect(consoleSpy.args).toMatchSnapshot();
-    // restore console
-    console.log.restore();
     // tear down nock
     deployServer.done();
     done();
   });
+  // restore console
+  console.log.restore();
 });
 
 // test
@@ -366,12 +366,12 @@ test('Should display verbose output', done => {
     expect(err.message).toEqual('Error parsing output!');
     expect(err.response).toBeDefined();
     expect(err.response.error).toEqual('Bad Gateway');
-    // restore console
-    console.log.restore();
     // tear down nock
     deployServer.done();
     done();
   });
+  // restore console
+  console.log.restore();
 });
 
 // test ignore config
@@ -406,12 +406,12 @@ test('Should ignore specified files', done => {
     expect(deployServer.isDone()).toBeTruthy();
     // first check console output
     expect(consoleSpy.args).toMatchSnapshot();
-    // restore console
-    console.log.restore();
     // tear down nock
     deployServer.done();
     done();
   });
+  // restore console
+  console.log.restore();
 });
 
 // test
@@ -433,12 +433,12 @@ test('Should display error on zero deployments', done => {
     expect(deployServer.isDone()).toBeTruthy();
     // first check console output
     expect(consoleSpy.args).toMatchSnapshot();
-    // restore console
-    console.log.restore();
     // tear down nock
     deployServer.done();
     done();
   });
+  // restore console
+  console.log.restore();
 });
 
 // test
@@ -455,10 +455,10 @@ test('Should not deploy with config without project name', done => {
   deploy().then(() => {
     // check console output
     expect(consoleSpy.args).toMatchSnapshot();
-    // restore console
-    console.log.restore();
     done();
   });
+  // restore console
+  console.log.restore();
 });
 
 // test
@@ -473,10 +473,10 @@ test('Should not deploy with broken config', done => {
   deploy().then(() => {
     // check console output
     expect(consoleSpy.args).toMatchSnapshot();
-    // restore console
-    console.log.restore();
     done();
   });
+  // restore console
+  console.log.restore();
 });
 
 // test
@@ -492,10 +492,10 @@ test('Should not deploy with non-existent path', done => {
     expect(pathLine[0].includes('Error! Path')).toBeTruthy();
     expect(pathLine[0].includes(path.join(__dirname, '..', 'i-do-not-exist'))).toBeTruthy();
     expect(pathLine[0].includes('do not exists')).toBeTruthy();
-    // restore console
-    console.log.restore();
     done();
   });
+  // restore console
+  console.log.restore();
 });
 
 // test
@@ -514,10 +514,10 @@ test('Should deauth on 401', done => {
     // check config
     expect(cfg.userConfig.user).toBeUndefined();
     expect(cfg.userConfig.token).toBeUndefined();
-    // restore console
-    console.log.restore();
     // tear down nock
     deployServer.done();
     done();
   });
+  // restore console
+  console.log.restore();
 });
