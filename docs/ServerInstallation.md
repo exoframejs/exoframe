@@ -1,7 +1,12 @@
 # Exoframe Server
 
 ## Installation and Usage
+### Automatic installation
+```
+sh -c "$(curl -fsSL https://raw.github.com/exoframejs/exoframe-server/master/tools/install.sh)"
+```
 
+### Manual installation
 1.  Make sure you have Docker [installed and running](https://docs.docker.com/engine/installation/) on your host.
 2.  Pull and run Exoframe server using docker:
 
