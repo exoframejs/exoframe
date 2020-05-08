@@ -183,7 +183,7 @@ exports.handler = async (args = {}) => {
   const tarStream = tar.pack(workdir, {
     // ignore files from ignore list
     ignore: name => {
-      const relativePath = name.replace(`${workdir}/`, '');
+      const relativePath = path.relative(workdir, name)
       const result = multimatch([relativePath], ignores).length !== 0;
       return result;
     },
