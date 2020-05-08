@@ -1,3 +1,7 @@
+# 6.1.4 / 2020-05-08
+
+- Fix for .exoframeignore handling on Windows
+
 # 6.1.3 / 2020-04-16
 
 - Figuring out github action releases :)
