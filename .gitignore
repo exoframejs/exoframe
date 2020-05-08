@@ -11,3 +11,4 @@ dist/
 
 package-lock.json
 exoframe.json
+yarn.lock
