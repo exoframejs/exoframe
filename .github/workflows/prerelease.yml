@@ -63,6 +63,8 @@ jobs:
         run: yarn package
 
       # deploy to npm
-      - run: npm publish --access public --tag next
+      - run: |
+          npm version prerelease --preid=dev --no-git-tag-version
+          npm publish --access public --tag next
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
