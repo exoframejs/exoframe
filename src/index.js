@@ -26,6 +26,7 @@ const template = require('./commands/template');
 const setup = require('./commands/setup');
 const secrets = require('./commands/secrets');
 const completion = require('./commands/completion');
+const system = require('./commands/system');
 
 // init program
 yargs
@@ -45,4 +46,5 @@ yargs
   .command(template)
   .command(setup)
   .command(secrets)
+  .command(system)
   .command(completion(yargs)).argv;

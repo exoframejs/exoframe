@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Should execute prune 1`] = `
+Array [
+  Array [
+    "Data prune successful!",
+  ],
+  Array [
+    "",
+  ],
+  Array [
+    "Reclaimed:",
+    "1.02 kB",
+  ],
+]
+`;
