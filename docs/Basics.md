@@ -219,6 +219,7 @@ You can find the list of available recipes [on npm](https://www.npmjs.com/search
 | endpoint [url]       | Selects or adds the endpoint of Exoframe server                      |
 | rm-endpoint [url]    | Removes an existing endpoint of Exoframe server                      |
 | update [target]      | Gets current versions or updates given target (server, traefik, all) |
+| system [command]     | Executes given system command (prune)                                |
 | completion           | Generates bash completion script                                     |
 
 ## Exoframe CLI - Special Commands

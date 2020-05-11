@@ -1,3 +1,7 @@
+# 6.2.0 / 2020-05-11
+
+- Add "exoframe system prune" command that cleans up images and volumes on server
+
 # 6.1.4 / 2020-05-08
 
 - Fix for .exoframeignore handling on Windows

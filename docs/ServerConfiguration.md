@@ -16,6 +16,9 @@ letsencryptEmail: your@email.com
 # whether to apply gzip compression, default "true"
 compress: true
 
+# whether to execute docker prune for images and volumes, default "false"
+autoprune: false
+
 # base top-level domain to use for deployments without domains specified, default "false"
 # used as postfix, e.g. if you specify ".example.com" (dot is auto-prepended if not present)
 # all your deployments will be autodeployed as "deployment-id.example.com"
