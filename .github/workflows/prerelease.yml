@@ -62,9 +62,20 @@ jobs:
       - name: package
         run: yarn package
 
+      # bump version & commit it
+      - run: npm version prerelease --preid=dev --no-git-tag-version
+      - name: setup git
+        run: |
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+          git config user.name "$GITHUB_ACTOR"
+      - name: commit new version to develop
+        run: |
+          git add -A
+          git commit -m "Bump version for @next release"
+          git push "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # deploy to npm
-      - run: |
-          npm version prerelease --preid=dev --no-git-tag-version
-          npm publish --access public --tag next
+      - run: npm publish --access public --tag next
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
