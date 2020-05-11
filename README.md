@@ -2,7 +2,7 @@
 
 > Simple Docker deployment tool
 
-[![Build Status](https://travis-ci.org/exoframejs/exoframe.svg?branch=master)](https://travis-ci.org/exoframejs/exoframe)
+[![Test Status](https://github.com/exoframejs/exoframe/workflows/Test/badge.svg)](https://github.com/exoframejs/exoframe/actions?query=workflow%3ATest)
 [![Coverage Status](https://coveralls.io/repos/github/exoframejs/exoframe/badge.svg?branch=master)](https://coveralls.io/github/exoframejs/exoframe?branch=master)
 [![npm](https://img.shields.io/npm/v/exoframe.svg)](https://www.npmjs.com/package/exoframe)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://opensource.org/licenses/MIT)
