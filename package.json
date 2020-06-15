@@ -1,63 +1,6 @@
 {
-  "name": "exoframe",
-  "version": "6.2.0",
-  "description": "Exoframe is a self-hosted tool that allows simple one-command deployments using Docker",
-  "main": "dist/index.js",
-  "repository": "git@github.com:exoframejs/exoframe.git",
-  "author": "Tim Ermilov <yamalight@gmail.com>",
-  "license": "MIT",
-  "bin": {
-    "exoframe": "dist/index.js"
-  },
-  "files": [
-    "dist/locales/*",
-    "dist/index.js",
-    "dist/xdg-open"
-  ],
-  "scripts": {
-    "lint": "eslint src/ test/",
-    "test": "TZ=Greenland NODE_ENV=testing jest --coverage --silent --maxWorkers=2 --ci",
-    "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "build": "ncc build bin/index.js -o dist",
-    "package": "pkg --targets node12.2.0-linux-x64,node12.2.0-win-x64,node12.2.0-macos-x64 -o exoframe dist/index.js"
-  },
-  "dependencies": {},
-  "devDependencies": {
-    "@zeit/ncc": "^0.21.0",
-    "apache-md5": "^1.1.2",
-    "babel-eslint": "^10.0.3",
-    "chalk": "^4.0.0",
-    "cli-table3": "^0.5.1",
-    "coveralls": "^3.0.7",
-    "eslint": "^6.6.0",
-    "eslint-config-prettier": "^6.5.0",
-    "eslint-config-standard": "^14.1.0",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-node": "^11.0.0",
-    "eslint-plugin-prettier": "^3.1.1",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.1",
-    "got": "^10.4.0",
-    "highland": "^2.13.5",
-    "inquirer": "^7.0.0",
-    "jest": "^25.1.0",
-    "js-yaml": "^3.13.1",
-    "jsonwebtoken": "^8.5.1",
-    "latest-version": "^5.1.0",
-    "lodash": "^4.17.15",
-    "multimatch": "^4.0.0",
-    "nock": "^12.0.3",
-    "open": "^7.0.0",
-    "ora": "^4.0.2",
-    "pkg": "^4.4.0",
-    "prettier": "^2.0.4",
-    "pretty-bytes": "^5.3.0",
-    "semver-diff": "^3.1.1",
-    "sinon": "^9.0.2",
-    "tar-fs": "^2.0.0",
-    "yargs": "^15.1.0"
-  },
-  "jest": {
-    "testEnvironment": "node"
-  }
+  "private": true,
+  "workspaces": [
+    "packages/exoframe-client"
+  ]
 }

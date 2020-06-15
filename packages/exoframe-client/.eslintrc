@@ -1,0 +1,34 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module",
+    "project": ["tsconfig.json"],
+    "tsconfigRootDir": "."
+  },
+  "extends": ["standard-with-typescript", "prettier", "prettier/@typescript-eslint"],
+  "plugins": ["@typescript-eslint", "prettier"],
+  "rules": {
+    "semi": "off",
+    "@typescript-eslint/semi": ["error", "always"],
+    "@typescript-eslint/strict-boolean-expressions": [
+      "error",
+      {"allowNullableString": true, "allowNullableBoolean": true}
+    ],
+    "max-len": ["error", 120, 4],
+    "camelcase": "off",
+    "promise/param-names": "off",
+    "prefer-promise-reject-errors": "off",
+    "no-control-regex": "off",
+    "prettier/prettier": [
+      "error",
+      {
+        "trailingComma": "es5",
+        "singleQuote": true,
+        "bracketSpacing": false,
+        "printWidth": 120,
+        "arrowParens": "avoid"
+      }
+    ]
+  }
+}

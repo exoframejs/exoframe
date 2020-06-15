@@ -1,0 +1,42 @@
+{
+  "name": "exoframe-client",
+  "version": "6.3.0",
+  "description": "Exoframe is a self-hosted tool that allows simple one-command deployments using Docker",
+  "main": "dist/index.js",
+  "repository": "git@github.com:exoframejs/exoframe.git",
+  "author": "Tim Ermilov <yamalight@gmail.com>",
+  "license": "MIT",
+  "files": [
+    "dist/index.js"
+  ],
+  "scripts": {
+    "lint": "eslint src/",
+    "test": "TZ=Greenland NODE_ENV=testing jest",
+    "coveralls": "cat ./coverage/lcov.info | coveralls",
+    "build": "ncc build bin/index.js -o dist"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/preset-env": "^7.10.2",
+    "@babel/preset-typescript": "^7.10.1",
+    "@types/jest": "^26.0.0",
+    "@types/node": "^14.0.13",
+    "@typescript-eslint/eslint-plugin": "^3.2.0",
+    "@typescript-eslint/parser": "^3.2.0",
+    "apache-md5": "^1.1.5",
+    "eslint": "^7.2.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-config-standard-with-typescript": "^18.0.2",
+    "eslint-plugin-import": "^2.21.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "jest": "^26.0.1",
+    "prettier": "^2.0.5",
+    "typescript": "^3.9.5"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
+}

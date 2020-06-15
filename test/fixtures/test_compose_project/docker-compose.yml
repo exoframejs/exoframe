@@ -1,9 +1,0 @@
-version: '2'
-services:
-  web:
-    build: .
-    labels:
-      exoframe.deployment: web
-      traefik.http.routers.web.rule: 'Host(`test.dev`)'
-  redis:
-    image: 'redis:alpine'
