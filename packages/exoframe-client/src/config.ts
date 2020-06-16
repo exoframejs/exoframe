@@ -20,20 +20,69 @@ export interface User {
 }
 
 export interface Config {
+  // deployment name
+  // defaults to folder name
   name: string;
-  domain: string;
-  port: string;
-  project: string;
-  restart: string;
-  env: KeyValueObject | null;
-  labels: KeyValueObject | null;
-  hostname: string;
-  template: string;
+  // restart policy [optional]
+  // see docker docs for more info
+  // defaults to "on-failure:2"
+  restart?: string;
+  // domain to be assigned to project [optional]
+  // no domain is assigned by default
+  // can be set to "false" to disable auto-assignment of domain
+  domain?: string | boolean;
+  // which exposed port should be used [optional]
+  // will default to first exposed port
+  // if no ports are exposed - will use 80
+  port?: string;
+  // project name [optional]
+  // by default assembled using deployment name and username
+  project?: string;
+  // object of key-values for env vars [optional]
+  // no env vars are assigned by default
+  env?: KeyValueObject;
+  // Add additional docker labels to your container [optional]
+  labels?: KeyValueObject;
+  // any additional traefik middlewares you might have defined
+  // either in docker or any other middleware collection
+  middlewares?: string[];
+  // Add additional docker volumes to your container [optional]
+  // while you can use server paths in sourceVolume place
+  // it is recommended to use named volumes
+  volumes?: string[];
+  // internal hostname for container [optional]
+  // see docker docs for more info
+  // no hostname is assigned by default
+  hostname?: string;
+  // template to be used for project deployment
+  // undefined by default, detected by server based on file structure
+  template?: string;
+  // image to be used to deploy current project
+  // this option overrides any other type of deployment and makes
+  // exoframe deploy project using given image name
+  image?: string;
+  // image file to load image from
+  // exoframe will load given tar file into docker daemon before
+  // executing image deployment
+  imageFile?: string;
+  // whether to use gzip on given domain [optional]
+  // can also be set for all deployments using server config
+  // per-project option will override global setting
   compress?: boolean;
+  // whether to use letsencrypt on given domain [optional]
+  // can also be set for all deployments using server config
+  // per-project option will override global setting
   letsencrypt?: boolean;
+  // rate-limit config
+  // see "advanced topics" for more info
   rateLimit: RateLimitConfig;
-  basicAuth: string | boolean;
-  function: FunctionalDeploymentType;
+  // basic auth, [optional]
+  // this field allows you to have basic auth to access your deployed service
+  // format is in user:pwhash
+  basicAuth?: string | boolean;
+  // function deployment config
+  // see "function deployments" for more info
+  function?: FunctionalDeploymentType;
 }
 
 const defaultConfig: Config = {

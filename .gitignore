@@ -1,14 +1,8 @@
 node_modules/
-test_project/
 coverage/
 .nyc_output/
 exoframe-linux
 exoframe-macos
 exoframe-win.exe
-.idea/
 .DS_Store
 dist/
-
-package-lock.json
-exoframe.json
-yarn.lock

@@ -1,3 +1,3 @@
 declare module 'apache-md5' {
-  export default function (arg: string): string;
+  export default function (arg: string, hash?: string): string;
 }

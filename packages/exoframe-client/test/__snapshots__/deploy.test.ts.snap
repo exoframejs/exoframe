@@ -1,0 +1,62 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Should deploy 1`] = `
+Object {
+  "formattedServices": Array [
+    Object {
+      "domain": "localhost",
+      "host": "test",
+      "name": "test",
+      "project": undefined,
+      "status": "",
+      "type": "Container",
+    },
+  ],
+  "log": Array [
+    Array [
+      "
+No .exoframeignore file found, using default ignores",
+    ],
+    Array [
+      "
+Ignoring following paths:",
+      Array [
+        ".git",
+        "node_modules",
+        ".exoframeignore",
+      ],
+    ],
+    Array [
+      "Server response:",
+      "{
+  \\"message\\": \\"Deployment success!\\",
+  \\"deployments\\": [
+    {
+      \\"Id\\": \\"123\\",
+      \\"Name\\": \\"/test\\",
+      \\"Config\\": {
+        \\"Labels\\": {
+          \\"exoframe.deployment\\": \\"test\\",
+          \\"traefik.http.routers.test.rule\\": \\"Host(\`localhost\`)\\"
+        }
+      },
+      \\"NetworkSettings\\": {
+        \\"Networks\\": {
+          \\"exoframe\\": {
+            \\"Aliases\\": [
+              \\"123\\",
+              \\"test\\"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  \\"level\\": \\"info\\"
+}",
+      "
+",
+    ],
+  ],
+}
+`;
