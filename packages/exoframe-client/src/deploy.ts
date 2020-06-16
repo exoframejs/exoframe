@@ -54,7 +54,7 @@ const streamToResponse = ({
     let error: ErrorWithRepsonse;
     let result: ResponseData;
     // pipe stream to remote
-    const stream: Highland.Stream<string> = _(tarStream.pipe(got.stream.post(remoteUrl, options)))
+    const stream = _<string>(tarStream.pipe(got.stream.post(remoteUrl, options)))
       .split()
       .filter(l => l?.length > 0);
     // store output
