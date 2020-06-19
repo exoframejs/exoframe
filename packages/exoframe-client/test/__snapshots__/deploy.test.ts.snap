@@ -60,3 +60,278 @@ Ignoring following paths:",
   ],
 }
 `;
+
+exports[`Should deploy with custom config 1`] = `
+Object {
+  "formattedServices": Array [
+    Object {
+      "domain": "localhost",
+      "host": "test",
+      "name": "test",
+      "project": undefined,
+      "status": "",
+      "type": "Container",
+    },
+  ],
+  "log": Array [
+    Array [
+      "
+No .exoframeignore file found, using default ignores",
+    ],
+    Array [
+      "
+Ignoring following paths:",
+      Array [
+        ".git",
+        "node_modules",
+        ".exoframeignore",
+        "exoframe.json",
+      ],
+    ],
+    Array [
+      "Server response:",
+      "{
+  \\"message\\": \\"Deployment success!\\",
+  \\"deployments\\": [
+    {
+      \\"Id\\": \\"123\\",
+      \\"Name\\": \\"/test\\",
+      \\"Config\\": {
+        \\"Labels\\": {
+          \\"exoframe.deployment\\": \\"test\\",
+          \\"traefik.http.routers.test.rule\\": \\"Host(\`localhost\`)\\"
+        }
+      },
+      \\"NetworkSettings\\": {
+        \\"Networks\\": {
+          \\"exoframe\\": {
+            \\"Aliases\\": [
+              \\"123\\",
+              \\"test\\"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  \\"level\\": \\"info\\"
+}",
+      "
+",
+    ],
+  ],
+}
+`;
+
+exports[`Should deploy with endpoint flag 1`] = `
+Object {
+  "formattedServices": Array [
+    Object {
+      "domain": "localhost",
+      "host": "test",
+      "name": "test",
+      "project": undefined,
+      "status": "",
+      "type": "Container",
+    },
+  ],
+  "log": Array [
+    Array [
+      "
+No .exoframeignore file found, using default ignores",
+    ],
+    Array [
+      "
+Ignoring following paths:",
+      Array [
+        ".git",
+        "node_modules",
+        ".exoframeignore",
+      ],
+    ],
+    Array [
+      "Server response:",
+      "{
+  \\"message\\": \\"Deployment success!\\",
+  \\"deployments\\": [
+    {
+      \\"Id\\": \\"123\\",
+      \\"Name\\": \\"/test\\",
+      \\"Config\\": {
+        \\"Labels\\": {
+          \\"exoframe.deployment\\": \\"test\\",
+          \\"traefik.http.routers.test.rule\\": \\"Host(\`localhost\`)\\"
+        }
+      },
+      \\"NetworkSettings\\": {
+        \\"Networks\\": {
+          \\"exoframe\\": {
+            \\"Aliases\\": [
+              \\"123\\",
+              \\"test\\"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  \\"level\\": \\"info\\"
+}",
+      "
+",
+    ],
+  ],
+}
+`;
+
+exports[`Should execute update 1`] = `
+Object {
+  "formattedServices": Array [
+    Object {
+      "domain": "localhost",
+      "host": "test",
+      "name": "test",
+      "project": undefined,
+      "status": "",
+      "type": "Container",
+    },
+  ],
+  "log": Array [
+    Array [
+      "
+No .exoframeignore file found, using default ignores",
+    ],
+    Array [
+      "
+Ignoring following paths:",
+      Array [
+        ".git",
+        "node_modules",
+        ".exoframeignore",
+      ],
+    ],
+    Array [
+      "Server response:",
+      "{
+  \\"message\\": \\"Deployment success!\\",
+  \\"deployments\\": [
+    {
+      \\"Id\\": \\"123\\",
+      \\"Name\\": \\"/test\\",
+      \\"Config\\": {
+        \\"Labels\\": {
+          \\"exoframe.deployment\\": \\"test\\",
+          \\"traefik.http.routers.test.rule\\": \\"Host(\`localhost\`)\\"
+        }
+      },
+      \\"NetworkSettings\\": {
+        \\"Networks\\": {
+          \\"exoframe\\": {
+            \\"Aliases\\": [
+              \\"123\\",
+              \\"test\\"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  \\"level\\": \\"info\\"
+}",
+      "
+",
+    ],
+  ],
+}
+`;
+
+exports[`Should ignore specified files 1`] = `
+Object {
+  "formattedServices": Array [
+    Object {
+      "domain": "localhost",
+      "host": "test",
+      "name": "test",
+      "project": undefined,
+      "status": "",
+      "type": "Container",
+    },
+  ],
+  "log": Array [
+    Array [
+      "
+Ignoring following paths:",
+      Array [
+        "yarn.lock",
+        "ignore.me",
+        ".exoframeignore",
+      ],
+    ],
+    Array [
+      "Server response:",
+      "{
+  \\"message\\": \\"Deployment success!\\",
+  \\"deployments\\": [
+    {
+      \\"Id\\": \\"123\\",
+      \\"Name\\": \\"/test\\",
+      \\"Config\\": {
+        \\"Labels\\": {
+          \\"exoframe.deployment\\": \\"test\\",
+          \\"traefik.http.routers.test.rule\\": \\"Host(\`localhost\`)\\"
+        }
+      },
+      \\"NetworkSettings\\": {
+        \\"Networks\\": {
+          \\"exoframe\\": {
+            \\"Aliases\\": [
+              \\"123\\",
+              \\"test\\"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  \\"level\\": \\"info\\"
+}",
+      "
+",
+    ],
+  ],
+}
+`;
+
+exports[`Should not deploy with broken config 1`] = `
+[Error: Your exoframe.json is not valid: {
+  "name": "SyntaxError",
+  "message": "Unexpected token I in JSON at position 0",
+  "stack": "SyntaxError: Unexpected token I in JSON at position 0\\n    at JSON.parse (<anonymous>)\\n    at deploy (/home/yamalight/projects/exoframe/exoframe/packages/exoframe-client/src/deploy.ts:147:19)\\n    at Object.<anonymous> (/home/yamalight/projects/exoframe/exoframe/packages/exoframe-client/test/deploy.test.ts:305:11)\\n    at Object.asyncJestTest (/home/yamalight/projects/exoframe/exoframe/node_modules/jest-jasmine2/build/jasmineAsyncInstall.js:100:37)\\n    at /home/yamalight/projects/exoframe/exoframe/node_modules/jest-jasmine2/build/queueRunner.js:47:12\\n    at new Promise (<anonymous>)\\n    at mapper (/home/yamalight/projects/exoframe/exoframe/node_modules/jest-jasmine2/build/queueRunner.js:30:19)\\n    at /home/yamalight/projects/exoframe/exoframe/node_modules/jest-jasmine2/build/queueRunner.js:77:41\\n    at processTicksAndRejections (internal/process/task_queues.js:97:5)"
+}]
+`;
+
+exports[`Should not deploy with config without project name 1`] = `[Error: Project should have a valid name in config!]`;
+
+exports[`Should not deploy with non-existent path 1`] = `[Error: Path do not exists]`;
+
+exports[`Should return error log 1`] = `
+Object {
+  "error": "Build failed! See build log for details.",
+  "level": "error",
+  "log": Array [
+    "Error log",
+    "here",
+  ],
+  "message": "Build failed! See build log for details.",
+}
+`;
+
+exports[`Should throw an error on 401 1`] = `[HTTPError: Response code 401 (Unauthorized)]`;
+
+exports[`Should throw error on malformed JSON 1`] = `
+Object {
+  "error": "Bad Gateway",
+}
+`;
+
+exports[`Should throw error on zero deployments 1`] = `[Error: Something went wrong!]`;

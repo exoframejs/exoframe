@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import nock from 'nock';
 import _ from 'highland';
-import {Stream} from 'stream';
+import {Stream, Readable} from 'stream';
 import tar from 'tar-fs';
 import {deploy, ResponseData} from '../src/deploy';
 import {ServiceSpec} from '../src/utils/formatServices';
@@ -20,12 +20,18 @@ const folder = 'test_html_project';
 const folderPath = path.join('test', 'fixtures', folder);
 const testFolder = path.join(__dirname, 'fixtures', folder);
 
-/* const ignoreFolder = 'test_ignore_project';
+const ignoreFolder = 'test_ignore_project';
 const ignoreFolderPath = path.join('test', 'fixtures', ignoreFolder);
 const ignoreTestFolder = path.join(__dirname, 'fixtures', ignoreFolder);
 
 const customConfigFolder = 'test_custom_config_project';
-const customConfigFolderPath = path.join('test', 'fixtures', customConfigFolder); */
+const customConfigFolderPath = path.join('test', 'fixtures', customConfigFolder);
+
+const nonameConfigFolder = 'test_noname';
+const nonameConfigFolderPath = path.join('test', 'fixtures', nonameConfigFolder);
+
+const brokenConfigFolder = 'test_broken_json';
+const brokenConfigFolderPath = path.join('test', 'fixtures', brokenConfigFolder);
 
 const deployments: ServiceSpec[] = [
   {
@@ -47,9 +53,10 @@ const deployments: ServiceSpec[] = [
   },
 ];
 
+const endpoint = 'http://localhost:8080';
+
 // test
 test('Should deploy', async () => {
-  const endpoint = 'http://localhost:8080';
   // handle correct request
   const deployServer = nock(endpoint)
     .post('/deploy')
@@ -62,7 +69,7 @@ test('Should deploy', async () => {
       return replyWithStream([{message: 'Deployment success!', deployments, level: 'info'}]);
     });
 
-  // execute login
+  // execute deploy
   const result = await deploy({folder: folderPath, endpoint, token: 'test-token', verbose: 3});
   // make sure log in was successful
   // check that server was called
@@ -72,12 +79,9 @@ test('Should deploy', async () => {
   // tear down nock
   deployServer.done();
 });
-/*
-// test
-test('Should deploy with endpoint flag', done => {
-  // spy on console
-  const consoleSpy = sinon.spy(console, 'log');
 
+// test
+test('Should deploy with endpoint flag', async () => {
   // handle correct request
   const deployServer = nock('http://localhost:3000')
     .post('/deploy')
@@ -90,135 +94,44 @@ test('Should deploy with endpoint flag', done => {
       return replyWithStream([{message: 'Deployment success!', deployments, level: 'info'}]);
     });
 
-  // execute login
-  deploy({_: [folderPath], endpoint: 'http://localhost:3000'}).then(() => {
-    // make sure log in was successful
-    // check that server was called
-    expect(deployServer.isDone()).toBeTruthy();
-    // first check console output
-    expect(consoleSpy.args).toMatchSnapshot();
-    // restore console
-    console.log.restore();
-    // tear down nock
-    deployServer.done();
-    done();
-  });
+  // execute deploy
+  const result = await deploy({folder: folderPath, endpoint: 'http://localhost:3000', token: 'test-token', verbose: 3});
+  // make sure log in was successful
+  // check that server was called
+  expect(deployServer.isDone()).toBeTruthy();
+  // first check console output
+  expect(result).toMatchSnapshot();
+  // tear down nock
+  deployServer.done();
 });
 
 // test
-test('Should deploy without path', done => {
-  // spy on console
-  const consoleSpy = sinon.spy(console, 'log');
-
-  // handle correct request
-  const deployServer = nock('http://localhost:8080')
-    .post('/deploy')
-    .reply(() => replyWithStream([{message: 'Deployment success!', deployments, level: 'info'}]));
-
-  // execute login
-  deploy().then(() => {
-    // make sure log in was successful
-    // check that server was called
-    expect(deployServer.isDone()).toBeTruthy();
-    // first check console output
-    expect(consoleSpy.args).toMatchSnapshot();
-    // restore console
-    console.log.restore();
-    // tear down nock
-    deployServer.done();
-    done();
-  });
-});
-
-// test
-test('Should deploy without auth but with token', done => {
-  // spy on console
-  const consoleSpy = sinon.spy(console, 'log');
-  // copy original config for restoration
-  const originalConfig = Object.assign({}, cfg.userConfig);
-
-  // handle correct request
-  const deployServer = nock('http://localhost:8080')
-    .post('/deploy')
-    .reply(() => replyWithStream([{message: 'Deployment success!', deployments, level: 'info'}]));
-
-  // remove auth from config
-  cfg.updateConfig({endpoint: 'http://localhost:8080'});
-
-  // execute login
-  deploy({token: 'test-token'}).then(() => {
-    // make sure log in was successful
-    // check that server was called
-    expect(deployServer.isDone()).toBeTruthy();
-    // first check console output
-    expect(consoleSpy.args).toMatchSnapshot();
-    // restore console
-    console.log.restore();
-    // tear down nock
-    deployServer.done();
-    // restore original config
-    cfg.updateConfig(originalConfig);
-    done();
-  });
-});
-
-// test
-test('Should execute update', done => {
-  // spy on console
-  const consoleSpy = sinon.spy(console, 'log');
-
+test('Should execute update', async () => {
   // handle correct request
   const updateServer = nock('http://localhost:8080')
     .post('/update')
     .reply(() => replyWithStream([{message: 'Deployment success!', deployments, level: 'info'}]));
 
   // execute login
-  deploy({update: true}).then(() => {
-    // make sure log in was successful
-    // check that server was called
-    expect(updateServer.isDone()).toBeTruthy();
-    // first check console output
-    expect(consoleSpy.args).toMatchSnapshot();
-    // restore console
-    console.log.restore();
-    // tear down nock
-    updateServer.done();
-    done();
+  const result = await deploy({
+    folder: folderPath,
+    endpoint,
+    token: 'test-token',
+    verbose: 3,
+    update: true,
   });
+
+  // make sure log in was successful
+  // check that server was called
+  expect(updateServer.isDone()).toBeTruthy();
+  // first check console output
+  expect(result).toMatchSnapshot();
+  // tear down nock
+  updateServer.done();
 });
 
 // test
-test('Should open webpage after deploy', done => {
-  // spy on console
-  const consoleSpy = sinon.spy(console, 'log');
-
-  // handle correct request
-  const deployServer = nock('http://localhost:8080')
-    .post('/deploy')
-    .reply(() => replyWithStream([{message: 'Deployment success!', deployments, level: 'info'}]));
-
-  // execute
-  deploy({open: true}).then(() => {
-    // make sure log in was successful
-    // check that server was called
-    expect(deployServer.isDone()).toBeTruthy();
-    // make sure opn was called once
-    expect(openMock).toHaveBeenCalled();
-    // first check console output
-    expect(consoleSpy.args).toMatchSnapshot();
-    // restore console
-    console.log.restore();
-    // tear down nock
-    deployServer.done();
-    done();
-  });
-});
-
-// test
-test('Should deploy with custom config', done => {
-  // spy on console
-  const consoleSpy = sinon.spy(console, 'log');
-
+test('Should deploy with custom config', async () => {
   // handle correct request
   const deployServer = nock('http://localhost:8080')
     .post('/deploy')
@@ -230,13 +143,14 @@ test('Should deploy with custom config', done => {
       s.push(null);
 
       // pipe stream to extraction
-      const fileNames = [];
+      const fileNames: string[] = [];
       s.pipe(
         tar.extract('./', {
           ignore: (name, header) => {
             fileNames.push(name);
             return true;
           },
+          // @ts-ignore
           finish: () => {
             // validate that custom config was rename and is not packed
             expect(fileNames).toContain('exoframe.json');
@@ -248,25 +162,24 @@ test('Should deploy with custom config', done => {
     });
 
   // execute login
-  deploy({_: [customConfigFolderPath], config: 'exoframe-custom.json'}).then(() => {
-    // make sure log in was successful
-    // check that server was called
-    expect(deployServer.isDone()).toBeTruthy();
-    // first check console output
-    expect(consoleSpy.args).toMatchSnapshot();
-    // restore console
-    console.log.restore();
-    // tear down nock
-    deployServer.done();
-    done();
+  const result = await deploy({
+    folder: customConfigFolderPath,
+    configFile: 'exoframe-custom.json',
+    endpoint,
+    token: 'test-token',
+    verbose: 3,
   });
+  // make sure log in was successful
+  // check that server was called
+  expect(deployServer.isDone()).toBeTruthy();
+  // first check console output
+  expect(result).toMatchSnapshot();
+  // tear down nock
+  deployServer.done();
 });
 
 // test
-test('Should display error log', done => {
-  // spy on console
-  const consoleSpy = sinon.spy(console, 'log');
-
+test('Should return error log', async () => {
   // handle correct request
   const deployServer = nock('http://localhost:8080')
     .post('/deploy')
@@ -282,25 +195,21 @@ test('Should display error log', done => {
     );
 
   // execute
-  deploy().then(() => {
+  try {
+    await deploy({folder: folderPath, endpoint, token: 'test-token', verbose: 3});
+  } catch (err) {
     // make sure log in was successful
     // check that server was called
     expect(deployServer.isDone()).toBeTruthy();
     // first check console output
-    expect(consoleSpy.args).toMatchSnapshot();
-    // restore console
-    console.log.restore();
+    expect(err.response).toMatchSnapshot();
     // tear down nock
     deployServer.done();
-    done();
-  });
+  }
 });
 
 // test
-test('Should display error on malformed JSON', done => {
-  // spy on console
-  const consoleSpy = sinon.spy(console, 'log');
-
+test('Should throw error on malformed JSON', async () => {
   // handle correct request
   const deployServer = nock('http://localhost:8080')
     .post('/deploy')
@@ -309,56 +218,21 @@ test('Should display error on malformed JSON', done => {
     });
 
   // execute
-  deploy().then(() => {
+  try {
+    await deploy({folder: folderPath, endpoint, token: 'test-token', verbose: 3});
+  } catch (err) {
     // make sure log in was successful
     // check that server was called
     expect(deployServer.isDone()).toBeTruthy();
     // first check console output
-    expect(consoleSpy.args).toMatchSnapshot();
-    // restore console
-    console.log.restore();
+    expect(err.response).toMatchSnapshot();
     // tear down nock
     deployServer.done();
-    done();
-  });
-});
-
-// test
-test('Should display verbose output', done => {
-  // spy on console
-  const consoleSpy = sinon.spy(console, 'log');
-
-  // handle correct request
-  const deployServer = nock('http://localhost:8080')
-    .post('/deploy')
-    .reply(() => [200, 'Bad Gateway']);
-
-  // execute
-  deploy({_: [ignoreFolderPath], verbose: true}).then(() => {
-    // make sure log in was successful
-    // check that server was called
-    expect(deployServer.isDone()).toBeTruthy();
-    // first check console output
-    // check beginning of log
-    expect(consoleSpy.args.slice(0, consoleSpy.args.length - 1)).toMatchSnapshot();
-    // check error correctness
-    const err = consoleSpy.args[consoleSpy.args.length - 1][1];
-    expect(err.message).toEqual('Error parsing output!');
-    expect(err.response).toBeDefined();
-    expect(err.response.error).toEqual('Bad Gateway');
-    // restore console
-    console.log.restore();
-    // tear down nock
-    deployServer.done();
-    done();
-  });
+  }
 });
 
 // test ignore config
-test('Should ignore specified files', done => {
-  // spy on console
-  const consoleSpy = sinon.spy(console, 'log');
-
+test('Should ignore specified files', async () => {
   // handle correct request
   const deployServer = nock('http://localhost:8080')
     .post('/deploy')
@@ -380,25 +254,18 @@ test('Should ignore specified files', done => {
     });
 
   // execute login
-  deploy({_: [ignoreFolderPath]}).then(() => {
-    // make sure log in was successful
-    // check that server was called
-    expect(deployServer.isDone()).toBeTruthy();
-    // first check console output
-    expect(consoleSpy.args).toMatchSnapshot();
-    // restore console
-    console.log.restore();
-    // tear down nock
-    deployServer.done();
-    done();
-  });
+  const result = await deploy({folder: ignoreFolderPath, endpoint, token: 'test-token', verbose: 3});
+  // make sure log in was successful
+  // check that server was called
+  expect(deployServer.isDone()).toBeTruthy();
+  // first check console output
+  expect(result).toMatchSnapshot();
+  // tear down nock
+  deployServer.done();
 });
 
 // test
-test('Should display error on zero deployments', done => {
-  // spy on console
-  const consoleSpy = sinon.spy(console, 'log');
-
+test('Should throw error on zero deployments', async () => {
   // handle correct request
   const deployServer = nock('http://localhost:8080')
     .post('/deploy')
@@ -407,98 +274,66 @@ test('Should display error on zero deployments', done => {
     });
 
   // execute
-  deploy().then(() => {
+  try {
+    await deploy({folder: folderPath, endpoint, token: 'test-token', verbose: 3});
+  } catch (err) {
     // make sure log in was successful
     // check that server was called
     expect(deployServer.isDone()).toBeTruthy();
     // first check console output
-    expect(consoleSpy.args).toMatchSnapshot();
-    // restore console
-    console.log.restore();
+    expect(err).toMatchSnapshot();
     // tear down nock
     deployServer.done();
-    done();
-  });
+  }
 });
 
 // test
-test('Should not deploy with config without project name', done => {
-  // spy on console
-  const consoleSpy = sinon.spy(console, 'log');
-
-  // corrupt config with string
-  const exoConfig = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'exoframe.json')));
-  exoConfig.name = '';
-  fs.writeFileSync(path.join(__dirname, '..', 'exoframe.json'), JSON.stringify(exoConfig));
-
+test('Should not deploy with config without project name', async () => {
   // execute deploy
-  deploy().then(() => {
+  try {
+    await deploy({folder: nonameConfigFolderPath, endpoint, token: 'test-token', verbose: 3});
+  } catch (err) {
     // check console output
-    expect(consoleSpy.args).toMatchSnapshot();
-    // restore console
-    console.log.restore();
-    done();
-  });
+    expect(err).toMatchSnapshot();
+  }
 });
 
 // test
-test('Should not deploy with broken config', done => {
-  // spy on console
-  const consoleSpy = sinon.spy(console, 'log');
-
-  // corrupt config with string
-  fs.writeFileSync(path.join(__dirname, '..', 'exoframe.json'), 'I am broken json now');
-
+test('Should not deploy with broken config', async () => {
   // execute deploy
-  deploy().then(() => {
+  try {
+    await deploy({folder: brokenConfigFolderPath, endpoint, token: 'test-token', verbose: 3});
+  } catch (err) {
     // check console output
-    expect(consoleSpy.args).toMatchSnapshot();
-    // restore console
-    console.log.restore();
-    done();
-  });
+    expect(err).toMatchSnapshot();
+  }
 });
 
 // test
-test('Should not deploy with non-existent path', done => {
-  // spy on console
-  const consoleSpy = sinon.spy(console, 'log');
-
-  // execute deploy
-  deploy({_: ['i-do-not-exist']}).then(() => {
+test('Should not deploy with non-existent path', async () => {
+  try {
+    await deploy({folder: 'i-do-not-exist-at-all', endpoint, token: 'test-token', verbose: 3});
+  } catch (err) {
     // check console output
-    const pathLine = consoleSpy.args.splice(1, 1).pop();
-    expect(consoleSpy.args).toMatchSnapshot();
-    expect(pathLine[0].includes('Error! Path')).toBeTruthy();
-    expect(pathLine[0].includes(path.join(__dirname, '..', 'i-do-not-exist'))).toBeTruthy();
-    expect(pathLine[0].includes('do not exists')).toBeTruthy();
-    // restore console
-    console.log.restore();
-    done();
-  });
+    expect(err).toMatchSnapshot();
+  }
 });
 
 // test
-test('Should deauth on 401', done => {
+test('Should throw an error on 401', async () => {
   // handle correct request
   const deployServer = nock('http://localhost:8080').post('/deploy').reply(401, {error: 'Deauth test'});
-  // spy on console
-  const consoleSpy = sinon.spy(console, 'log');
   // execute login
-  deploy({_: [folderPath]}).then(() => {
+  try {
+    await deploy({folder: folderPath, endpoint, token: 'test-token', verbose: 3});
+  } catch (err) {
     // make sure log in was successful
     // check that server was called
     expect(deployServer.isDone()).toBeTruthy();
     // first check console output
-    expect(consoleSpy.args).toMatchSnapshot();
-    // check config
-    expect(cfg.userConfig.user).toBeUndefined();
-    expect(cfg.userConfig.token).toBeUndefined();
-    // restore console
-    console.log.restore();
+    expect(err).toMatchSnapshot();
+    expect(err.response.statusCode).toEqual(401);
     // tear down nock
     deployServer.done();
-    done();
-  });
+  }
 });
-*/

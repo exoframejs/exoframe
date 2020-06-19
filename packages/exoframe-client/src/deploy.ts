@@ -29,6 +29,8 @@ export interface ResponseData {
   level: string;
   deployments?: ServiceSpec[];
   message: string;
+  error?: string;
+  log?: string[];
 }
 
 interface ErrorWithRepsonse extends Error {
@@ -74,8 +76,8 @@ const streamToResponse = ({
         data.level === 'verbose' && verbose > 1 && log('[verbose]', data.message);
         // if error - store as error and log
         if (data.level === 'error') {
-          verbose && console.log('[error]', data.message);
-          verbose > 1 && console.log(JSON.stringify(data, null, 2));
+          verbose && log('[error]', data.message);
+          verbose > 1 && log(JSON.stringify(data, null, 2));
           error = new Error(data.message) as ErrorWithRepsonse;
           error.response = data;
         }
@@ -140,14 +142,16 @@ export const deploy = async ({
   }
 
   // syntax-check & validate config
+  let config: Config;
   try {
-    const config: Config = JSON.parse(fs.readFileSync(configPath).toString());
-    // validate project name
-    if (!config.name || !config.name.length) {
-      throw new Error('Project should have a valid name in config!');
-    }
+    config = JSON.parse(fs.readFileSync(configPath).toString());
   } catch (e) {
     throw new Error(`Your exoframe.json is not valid: ${JSON.stringify(serializeError(e), null, 2)}`);
+  }
+
+  // validate project name
+  if (!config.name || !config.name.length) {
+    throw new Error('Project should have a valid name in config!');
   }
 
   // try read ingore file
@@ -207,7 +211,7 @@ export const deploy = async ({
   // }
   const res = await streamToResponse({tarStream, remoteUrl, options, verbose});
   // check deployments
-  if (!res.deployments || !res.deployments.length) {
+  if (!res?.deployments || !res?.deployments.length) {
     const err = new Error('Something went wrong!') as ErrorWithRepsonse;
     err.response = res;
     throw err;
