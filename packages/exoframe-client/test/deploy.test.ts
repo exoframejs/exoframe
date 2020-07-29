@@ -1,9 +1,9 @@
 /* eslint-env jest */
 import fs from 'fs';
-import path from 'path';
-import nock from 'nock';
 import _ from 'highland';
-import {Stream, Readable} from 'stream';
+import nock from 'nock';
+import path from 'path';
+import {Readable, Stream} from 'stream';
 import tar from 'tar-fs';
 import {deploy, ResponseData} from '../src/deploy';
 import {ServiceSpec} from '../src/utils/formatServices';
@@ -305,7 +305,9 @@ test('Should not deploy with broken config', async () => {
     await deploy({folder: brokenConfigFolderPath, endpoint, token: 'test-token', verbose: 3});
   } catch (err) {
     // check console output
-    expect(err).toMatchSnapshot();
+    const pathRegex = new RegExp(process.cwd(), 'g');
+    const cleanError = err.toString().replace(pathRegex, '');
+    expect(cleanError).toMatchSnapshot();
   }
 });
 

@@ -6,7 +6,7 @@
     "lib": ["ESNext"],
 
     /* Strict Type-Checking Options */
-    "strict": true,
+    "strict": false,
 
     /* Module Resolution Options */
     "moduleResolution": "node",
