@@ -48,6 +48,13 @@ publicKeysPath: '/path/to/your/public/keys'
 # whether Exoframe server would be running in swarm mode, default "false"
 swarm: false
 
+# Additional Traefik ports, default: null
+traefikPorts:
+  - '7788/tcp': 
+    - HostPort: '7788'
+  - '7788/udp':
+    - HostPort: '7788'
+
 # plugins config
 plugins:
   # list of plugins that has to be installed and loaded by exoframe-server on startup
@@ -57,6 +64,6 @@ plugins:
     enabled: true
 ```
 
-_Warning:_ Most changes to config are applied immediately. With exception of Letsencrypt config and Plugins config.  
+_Warning:_ Most changes to config are applied immediately. With exception of Letsencrypt config, Additional ports and Plugins config.  
 If you are enabling letsencrypt after Traefik instance has been started, you'll need to remove Traefik and then restart Exoframe server for changes to take effect.  
 If you are adding plugins after server has been started, you'll need to restart the server so that it can install and load newly added plugins.
