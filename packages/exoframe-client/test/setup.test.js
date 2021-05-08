@@ -1,7 +1,6 @@
 import { expect, test } from '@jest/globals';
 import nock from 'nock';
-import { executeRecipe } from '../index.js';
-import { getRecipeQuestions } from '../src/setup.js';
+import { executeRecipe, getRecipeQuestions } from '../index.js';
 
 // questions mock
 const questions = [
