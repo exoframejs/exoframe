@@ -28,7 +28,3 @@ jobs:
         run: npm run lint -w exoframe-client
       - name: test
         run: npm run test:ci -w exoframe-client
-      - name: coveralls
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
