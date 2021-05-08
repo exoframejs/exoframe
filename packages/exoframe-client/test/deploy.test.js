@@ -312,10 +312,13 @@ test('Should not deploy with broken config', async () => {
     await deploy({ folder: brokenConfigFolderPath, endpoint, token: 'test-token', verbose: 3 });
   } catch (err) {
     // check error output
-    // first - delete stack as it might vary based on node version
-    delete err.stack;
     // next clear out paths
-    const cleanError = err.toString().replaceAll(baseFolder, '');
+    const cleanError = err
+      .toString()
+      // replace all folder ref
+      .replaceAll(baseFolder, '')
+      // remove stack as it might vary
+      .replace(/"stack": "(.+?)"/gi, '');
     expect(cleanError).toMatchSnapshot();
   }
 });
