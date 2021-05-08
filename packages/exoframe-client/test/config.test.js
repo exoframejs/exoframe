@@ -1,6 +1,6 @@
 import { expect, test } from '@jest/globals';
 import md5 from 'apache-md5';
-import { createConfig } from '../src/config.js';
+import { createConfig } from '../index.js';
 
 const configData = {
   name: 'test',

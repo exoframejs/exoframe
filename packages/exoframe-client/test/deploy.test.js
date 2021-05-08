@@ -6,7 +6,7 @@ import path from 'path';
 import { Readable } from 'stream';
 import tar from 'tar-fs';
 import { fileURLToPath } from 'url';
-import { deploy } from '../src/deploy';
+import { deploy } from '../index.js';
 
 // reply with stream helper
 const replyWithStream = (dataArr) => {
