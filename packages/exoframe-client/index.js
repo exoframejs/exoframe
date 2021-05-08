@@ -7,3 +7,4 @@ export * from './src/secrets.js';
 export * from './src/setup.js';
 export * from './src/system.js';
 export * from './src/template.js';
+export * from './src/token.js';
