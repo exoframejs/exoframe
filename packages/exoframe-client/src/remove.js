@@ -1,5 +1,13 @@
 import got from 'got';
 
+/**
+ * Remove deployment by ID
+ * @param {object} params
+ * @param {string} params.id - deployment ID or URL
+ * @param {string} params.endpoint - exoframe server endpoint
+ * @param {string} params.token - exoframe auth token
+ * @returns {boolean}
+ */
 export const removeDeployment = async ({ id, endpoint, token }) => {
   // services request url
   const remoteUrl = `${endpoint}/remove/${encodeURIComponent(id)}`;

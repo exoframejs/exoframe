@@ -1,5 +1,26 @@
 import got from 'got';
 
+/**
+ * @typedef {object} Question
+ * @property {string} message - question message text
+ * @property {string} name - question name (id)
+ * @property {string} type - question type
+ */
+
+/**
+ * @typedef {object} Log
+ * @property {string} message - log message text
+ * @property {string} level - log level
+ */
+
+/**
+ * Get questions for given recipe from exoframe endpoint
+ * @param {object} params
+ * @param {string} params.recipe - existing recipe name
+ * @param {string} params.endpoint - exoframe server endpoint
+ * @param {string} params.token - exoframe auth token
+ * @returns {Question[]}
+ */
 export const getRecipeQuestions = async ({ recipe, endpoint, token }) => {
   // services request url
   const remoteUrl = `${endpoint}/setup`;
@@ -36,6 +57,15 @@ export const getRecipeQuestions = async ({ recipe, endpoint, token }) => {
   }
 };
 
+/**
+ * Execute given recipe on exoframe endpoint
+ * @param {object} params
+ * @param {string} params.name - recipe name
+ * @param {object} params.answers - answers to questions
+ * @param {string} params.endpoint - exoframe server endpoint
+ * @param {string} params.token - exoframe auth token
+ * @returns {{log: Log[]}}
+ */
 export const executeRecipe = async ({ name, answers, endpoint, token }) => {
   // services request url
   const remoteUrl = `${endpoint}/setup`;

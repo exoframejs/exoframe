@@ -1,6 +1,13 @@
 // npm packages
 import got from 'got';
 
+/**
+ * Lists installed templates for given exoframe endpoint
+ * @param {object} params
+ * @param {string} params.endpoint - exoframe server endpoint
+ * @param {string} params.token - exoframe auth token
+ * @returns {Object.<string, string>} - map of template names to versions (e.g. `{"templateName": "v1.0"}`)
+ */
 export const listTemplates = async ({ endpoint, token }) => {
   // services request url
   const remoteUrl = `${endpoint}/templates`;
@@ -26,6 +33,14 @@ export const listTemplates = async ({ endpoint, token }) => {
   }
 };
 
+/**
+ * Removes specified template for given exoframe endpoint
+ * @param {object} params
+ * @param {string} params.template - template to remove
+ * @param {string} params.endpoint - exoframe server endpoint
+ * @param {string} params.token - exoframe auth token
+ * @returns {{ removed: boolean, log: string[] }}
+ */
 export const removeTemplate = async ({ template, endpoint, token }) => {
   // services request url
   const remoteUrl = `${endpoint}/templates`;
@@ -55,6 +70,14 @@ export const removeTemplate = async ({ template, endpoint, token }) => {
   }
 };
 
+/**
+ * Adds new specified template to given exoframe endpoint
+ * @param {object} params
+ * @param {string} params.template - template to remove
+ * @param {string} params.endpoint - exoframe server endpoint
+ * @param {string} params.token - exoframe auth token
+ * @returns {{ success: boolean, log: string[] }}
+ */
 export const addTemplate = async ({ template, endpoint, token }) => {
   // services request url
   const remoteUrl = `${endpoint}/templates`;

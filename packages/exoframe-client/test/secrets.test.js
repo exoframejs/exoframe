@@ -3,21 +3,20 @@ import { createSecret, getSecret, listSecrets, removeSecret } from 'exoframe-cli
 import nock from 'nock';
 
 const testSecret = {
-  secretName: 'test',
-  secretValue: '12345',
+  name: 'test',
+  value: '12345',
 };
 const endpoint = 'http://localhost:8080';
 const token = 'test-123';
 
 test('Should create new secret', async () => {
   // handle correct request
-  const secretServer = nock(endpoint)
-    .post('/secrets')
-    .reply(200, { name: testSecret.secretName, value: testSecret.secretValue });
+  const response = { name: testSecret.name, value: testSecret.value };
+  const secretServer = nock(endpoint).post('/secrets').reply(200, response);
   // execute secret creation
-  const result = await createSecret({ name: testSecret.secretName, value: testSecret.secretValue, endpoint, token });
+  const result = await createSecret({ name: testSecret.name, value: testSecret.value, endpoint, token });
   // make sure creation was successful
-  expect(result).toEqual({ name: testSecret.secretName, value: testSecret.secretValue });
+  expect(result).toEqual(response);
   // check that server was called
   expect(secretServer.isDone()).toBeTruthy();
   // tear down nock
@@ -29,7 +28,7 @@ test('Should list secrets', async () => {
   // handle correct request
   const secretsServer = nock(endpoint)
     .get('/secrets')
-    .reply(200, { secrets: [{ name: testSecret.secretName, meta: { created: createDate } }] });
+    .reply(200, { secrets: [{ name: testSecret.name, meta: { created: createDate } }] });
   // execute secret listing
   const result = await listSecrets({ endpoint, token });
   // make sure it was successful
@@ -53,18 +52,18 @@ test('Should get secret value', async () => {
   const createDate = new Date(2018, 1, 1, 1, 1, 1, 1);
   // handle correct request
   const secretServer = nock(endpoint)
-    .get(`/secrets/${testSecret.secretName}`)
+    .get(`/secrets/${testSecret.name}`)
     .reply(200, { secret: { ...testSecret, meta: { created: createDate } } });
   // execute secret fetching
-  const result = await getSecret({ name: testSecret.secretName, endpoint, token });
+  const result = await getSecret({ name: testSecret.name, endpoint, token });
   // make sure log in was successful
   expect(result).toMatchInlineSnapshot(`
     Object {
       "meta": Object {
         "created": "2018-02-01T01:01:01.001Z",
       },
-      "secretName": "test",
-      "secretValue": "12345",
+      "name": "test",
+      "value": "12345",
     }
   `);
   // check that server was called
@@ -77,7 +76,7 @@ test('Should remove secret', async () => {
   // handle correct request
   const secretServer = nock(endpoint).delete('/secrets').reply(204, '');
   // execute secret removal
-  const result = await removeSecret({ name: testSecret.secretName, endpoint, token });
+  const result = await removeSecret({ name: testSecret.name, endpoint, token });
   // make sure it was successful
   expect(result).toBeTruthy();
   // check that server was called

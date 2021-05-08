@@ -1,5 +1,20 @@
 import got from 'got';
 
+/**
+ * @typedef {object} Token
+ * @property {string} name - token name
+ * @property {string} [value] - token value
+ * @property {object} [meta] - token metadata
+ * @property {Date} meta.created - token creation date
+ */
+
+/**
+ * Lists auth tokens for given exoframe endpoint
+ * @param {object} params
+ * @param {string} params.endpoint - exoframe server endpoint
+ * @param {string} params.token - exoframe auth token
+ * @returns {Token[]}
+ */
 export const listTokens = async ({ endpoint, token }) => {
   // services request url
   const remoteUrl = `${endpoint}/deployToken`;
@@ -27,6 +42,14 @@ export const listTokens = async ({ endpoint, token }) => {
   }
 };
 
+/**
+ * Creates new auth token with given name on given exoframe endpoint
+ * @param {object} params
+ * @param {string} params.name - new token name
+ * @param {string} params.endpoint - exoframe server endpoint
+ * @param {string} params.token - exoframe auth token
+ * @returns {Token}
+ */
 export const createToken = async ({ name, endpoint, token }) => {
   // services request url
   const remoteUrl = `${endpoint}/deployToken`;
@@ -55,6 +78,14 @@ export const createToken = async ({ name, endpoint, token }) => {
   }
 };
 
+/**
+ * Removes auth token with given name from given exoframe endpoint
+ * @param {object} params
+ * @param {string} params.name - existing token name
+ * @param {string} params.endpoint - exoframe server endpoint
+ * @param {string} params.token - exoframe auth token
+ * @returns {boolean}
+ */
 export const removeToken = async ({ name, endpoint, token }) => {
   // services request url
   const remoteUrl = `${endpoint}/deployToken`;

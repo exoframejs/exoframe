@@ -1,6 +1,13 @@
 // npm packages
 import got from 'got';
 
+/**
+ * Executes `docker system prune` on given exoframe endpoint
+ * @param {object} params
+ * @param {string} params.endpoint - exoframe server endpoint
+ * @param {string} params.token - exoframe auth token
+ * @returns {{prunedBytes: number}}
+ */
 export const pruneSystem = async ({ endpoint, token }) => {
   // services request url
   const remoteUrl = `${endpoint}/system/prune`;

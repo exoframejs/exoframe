@@ -1,5 +1,20 @@
 import got from 'got';
 
+/**
+ * @typedef {object} Secret
+ * @property {string} name - secret name
+ * @property {string} [value] - secret value
+ * @property {object} [metadata] - secret metadata
+ * @property {string} metadata.created - secret creation date string
+ */
+
+/**
+ * List secrets for given exoframe endpoint
+ * @param {object} params
+ * @param {string} params.endpoint - exoframe server endpoint
+ * @param {string} params.token - exoframe auth token
+ * @returns {Secret[]}
+ */
 export const listSecrets = async ({ endpoint, token }) => {
   const remoteUrl = `${endpoint}/secrets`;
 
@@ -28,6 +43,15 @@ export const listSecrets = async ({ endpoint, token }) => {
   }
 };
 
+/**
+ * Create new secrets on given exoframe endpoint
+ * @param {object} params
+ * @param {string} params.name - new secret name
+ * @param {string} params.value - new secret value
+ * @param {string} params.endpoint - exoframe server endpoint
+ * @param {string} params.token - exoframe auth token
+ * @returns {Secret}
+ */
 export const createSecret = async ({ name, value, endpoint, token }) => {
   const remoteUrl = `${endpoint}/secrets`;
 
@@ -57,6 +81,14 @@ export const createSecret = async ({ name, value, endpoint, token }) => {
   }
 };
 
+/**
+ * Get existing secret value for given exoframe endpoint
+ * @param {object} params
+ * @param {string} params.name - existing secret name
+ * @param {string} params.endpoint - exoframe server endpoint
+ * @param {string} params.token - exoframe auth token
+ * @returns {Secret}
+ */
 export const getSecret = async ({ name, endpoint, token }) => {
   const remoteUrl = `${endpoint}/secrets`;
 
@@ -85,6 +117,14 @@ export const getSecret = async ({ name, endpoint, token }) => {
   }
 };
 
+/**
+ * Remove existing secret from given exoframe endpoint
+ * @param {object} params
+ * @param {string} params.name - existing secret name
+ * @param {string} params.endpoint - exoframe server endpoint
+ * @param {string} params.token - exoframe auth token
+ * @returns {boolean}
+ */
 export const removeSecret = async ({ name, endpoint, token }) => {
   const remoteUrl = `${endpoint}/secrets`;
 
