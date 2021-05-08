@@ -1,28 +1,30 @@
-/* eslint-env jest */
+import { expect, test } from '@jest/globals';
 import fs from 'fs';
 import _ from 'highland';
 import nock from 'nock';
 import path from 'path';
-import {Readable, Stream} from 'stream';
+import { Readable } from 'stream';
 import tar from 'tar-fs';
-import {deploy, ResponseData} from '../src/deploy';
-import {ServiceSpec} from '../src/utils/formatServices';
+import { fileURLToPath } from 'url';
+import { deploy } from '../src/deploy';
 
 // reply with stream helper
-const replyWithStream = (dataArr: ResponseData[]): [number, Stream] => {
-  const replyStream: Highland.Stream<string> = _();
-  dataArr.forEach(data => replyStream.write(JSON.stringify(data)));
+const replyWithStream = (dataArr) => {
+  const replyStream = _();
+  dataArr.forEach((data) => replyStream.write(JSON.stringify(data)));
   replyStream.end();
   return [200, replyStream.toNodeStream()];
 };
 
+const baseFolder = path.dirname(fileURLToPath(import.meta.url));
+
 const folder = 'test_html_project';
 const folderPath = path.join('test', 'fixtures', folder);
-const testFolder = path.join(__dirname, 'fixtures', folder);
+const testFolder = path.join(baseFolder, 'fixtures', folder);
 
 const ignoreFolder = 'test_ignore_project';
 const ignoreFolderPath = path.join('test', 'fixtures', ignoreFolder);
-const ignoreTestFolder = path.join(__dirname, 'fixtures', ignoreFolder);
+const ignoreTestFolder = path.join(baseFolder, 'fixtures', ignoreFolder);
 
 const customConfigFolder = 'test_custom_config_project';
 const customConfigFolderPath = path.join('test', 'fixtures', customConfigFolder);
@@ -33,7 +35,7 @@ const nonameConfigFolderPath = path.join('test', 'fixtures', nonameConfigFolder)
 const brokenConfigFolder = 'test_broken_json';
 const brokenConfigFolderPath = path.join('test', 'fixtures', brokenConfigFolder);
 
-const deployments: ServiceSpec[] = [
+const deployments = [
   {
     Id: '123',
     Name: '/test',
@@ -66,11 +68,11 @@ test('Should deploy', async () => {
       expect(requestBody).toContain(excgf);
       expect(requestBody).toContain(index);
 
-      return replyWithStream([{message: 'Deployment success!', deployments, level: 'info'}]);
+      return replyWithStream([{ message: 'Deployment success!', deployments, level: 'info' }]);
     });
 
   // execute deploy
-  const result = await deploy({folder: folderPath, endpoint, token: 'test-token', verbose: 3});
+  const result = await deploy({ folder: folderPath, endpoint, token: 'test-token', verbose: 3 });
   // make sure log in was successful
   // check that server was called
   expect(deployServer.isDone()).toBeTruthy();
@@ -91,11 +93,16 @@ test('Should deploy with endpoint flag', async () => {
       expect(requestBody).toContain(excgf);
       expect(requestBody).toContain(index);
 
-      return replyWithStream([{message: 'Deployment success!', deployments, level: 'info'}]);
+      return replyWithStream([{ message: 'Deployment success!', deployments, level: 'info' }]);
     });
 
   // execute deploy
-  const result = await deploy({folder: folderPath, endpoint: 'http://localhost:3000', token: 'test-token', verbose: 3});
+  const result = await deploy({
+    folder: folderPath,
+    endpoint: 'http://localhost:3000',
+    token: 'test-token',
+    verbose: 3,
+  });
   // make sure log in was successful
   // check that server was called
   expect(deployServer.isDone()).toBeTruthy();
@@ -110,7 +117,7 @@ test('Should execute update', async () => {
   // handle correct request
   const updateServer = nock('http://localhost:8080')
     .post('/update')
-    .reply(() => replyWithStream([{message: 'Deployment success!', deployments, level: 'info'}]));
+    .reply(() => replyWithStream([{ message: 'Deployment success!', deployments, level: 'info' }]));
 
   // execute login
   const result = await deploy({
@@ -143,7 +150,7 @@ test('Should deploy with custom config', async () => {
       s.push(null);
 
       // pipe stream to extraction
-      const fileNames: string[] = [];
+      const fileNames = [];
       s.pipe(
         tar.extract('./', {
           ignore: (name, header) => {
@@ -155,7 +162,7 @@ test('Should deploy with custom config', async () => {
             // validate that custom config was rename and is not packed
             expect(fileNames).toContain('exoframe.json');
             expect(fileNames).not.toContain('exoframe-custom.json');
-            cb(null, replyWithStream([{message: 'Deployment success!', deployments, level: 'info'}]));
+            cb(null, replyWithStream([{ message: 'Deployment success!', deployments, level: 'info' }]));
           },
         })
       );
@@ -196,7 +203,7 @@ test('Should return error log', async () => {
 
   // execute
   try {
-    await deploy({folder: folderPath, endpoint, token: 'test-token', verbose: 3});
+    await deploy({ folder: folderPath, endpoint, token: 'test-token', verbose: 3 });
   } catch (err) {
     // make sure log in was successful
     // check that server was called
@@ -219,7 +226,7 @@ test('Should throw error on malformed JSON', async () => {
 
   // execute
   try {
-    await deploy({folder: folderPath, endpoint, token: 'test-token', verbose: 3});
+    await deploy({ folder: folderPath, endpoint, token: 'test-token', verbose: 3 });
   } catch (err) {
     // make sure log in was successful
     // check that server was called
@@ -250,11 +257,11 @@ test('Should ignore specified files', async () => {
       expect(requestBody).not.toContain(ignoreme);
       expect(requestBody).not.toContain(yarnLock);
 
-      return replyWithStream([{message: 'Deployment success!', deployments, level: 'info'}]);
+      return replyWithStream([{ message: 'Deployment success!', deployments, level: 'info' }]);
     });
 
   // execute login
-  const result = await deploy({folder: ignoreFolderPath, endpoint, token: 'test-token', verbose: 3});
+  const result = await deploy({ folder: ignoreFolderPath, endpoint, token: 'test-token', verbose: 3 });
   // make sure log in was successful
   // check that server was called
   expect(deployServer.isDone()).toBeTruthy();
@@ -275,7 +282,7 @@ test('Should throw error on zero deployments', async () => {
 
   // execute
   try {
-    await deploy({folder: folderPath, endpoint, token: 'test-token', verbose: 3});
+    await deploy({ folder: folderPath, endpoint, token: 'test-token', verbose: 3 });
   } catch (err) {
     // make sure log in was successful
     // check that server was called
@@ -291,7 +298,7 @@ test('Should throw error on zero deployments', async () => {
 test('Should not deploy with config without project name', async () => {
   // execute deploy
   try {
-    await deploy({folder: nonameConfigFolderPath, endpoint, token: 'test-token', verbose: 3});
+    await deploy({ folder: nonameConfigFolderPath, endpoint, token: 'test-token', verbose: 3 });
   } catch (err) {
     // check console output
     expect(err).toMatchSnapshot();
@@ -302,11 +309,10 @@ test('Should not deploy with config without project name', async () => {
 test('Should not deploy with broken config', async () => {
   // execute deploy
   try {
-    await deploy({folder: brokenConfigFolderPath, endpoint, token: 'test-token', verbose: 3});
+    await deploy({ folder: brokenConfigFolderPath, endpoint, token: 'test-token', verbose: 3 });
   } catch (err) {
     // check console output
-    const pathRegex = new RegExp(process.cwd(), 'g');
-    const cleanError = err.toString().replace(pathRegex, '');
+    const cleanError = err.toString().replaceAll(baseFolder, '');
     expect(cleanError).toMatchSnapshot();
   }
 });
@@ -314,7 +320,7 @@ test('Should not deploy with broken config', async () => {
 // test
 test('Should not deploy with non-existent path', async () => {
   try {
-    await deploy({folder: 'i-do-not-exist-at-all', endpoint, token: 'test-token', verbose: 3});
+    await deploy({ folder: 'i-do-not-exist-at-all', endpoint, token: 'test-token', verbose: 3 });
   } catch (err) {
     // check console output
     expect(err).toMatchSnapshot();
@@ -324,10 +330,10 @@ test('Should not deploy with non-existent path', async () => {
 // test
 test('Should throw an error on 401', async () => {
   // handle correct request
-  const deployServer = nock('http://localhost:8080').post('/deploy').reply(401, {error: 'Deauth test'});
+  const deployServer = nock('http://localhost:8080').post('/deploy').reply(401, { error: 'Deauth test' });
   // execute login
   try {
-    await deploy({folder: folderPath, endpoint, token: 'test-token', verbose: 3});
+    await deploy({ folder: folderPath, endpoint, token: 'test-token', verbose: 3 });
   } catch (err) {
     // make sure log in was successful
     // check that server was called

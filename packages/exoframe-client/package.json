@@ -1,52 +1,37 @@
 {
   "name": "exoframe-client",
-  "version": "6.3.0",
+  "version": "7.0.0",
   "description": "Exoframe is a self-hosted tool that allows simple one-command deployments using Docker",
-  "main": "dist/index.js",
+  "main": "index.js",
   "repository": "git@github.com:exoframejs/exoframe.git",
   "author": "Tim Ermilov <yamalight@gmail.com>",
   "license": "MIT",
-  "files": [
-    "dist/index.js"
-  ],
+  "type": "module",
   "scripts": {
     "lint": "eslint src/",
-    "test": "TZ=Greenland NODE_ENV=testing jest",
-    "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "build": "ncc build bin/index.js -o dist"
+    "test": "TZ=Greenland NODE_ENV=testing NODE_OPTIONS=--experimental-vm-modules jest --watch",
+    "test:ci": "TZ=Greenland NODE_ENV=testing NODE_OPTIONS=--experimental-vm-modules jest",
+    "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "dependencies": {
-    "@types/tar-fs": "^2.0.0",
     "got": "^11.3.0",
     "highland": "^2.13.5",
-    "multimatch": "^4.0.0",
-    "serialize-error": "^7.0.1",
+    "multimatch": "^5.0.0",
+    "serialize-error": "^8.1.0",
     "tar-fs": "^2.1.0"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.10.2",
-    "@babel/preset-typescript": "^7.10.1",
-    "@types/highland": "^2.12.10",
-    "@types/jest": "^26.0.0",
-    "@types/node": "^14.0.13",
-    "@types/tar-fs": "^2.0.0",
-    "@typescript-eslint/eslint-plugin": "^3.2.0",
-    "@typescript-eslint/parser": "^3.2.0",
     "apache-md5": "^1.1.5",
     "eslint": "^7.2.0",
     "eslint-config-prettier": "^6.11.0",
-    "eslint-config-standard-with-typescript": "^18.0.2",
-    "eslint-plugin-import": "^2.21.2",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-prettier": "^3.1.4",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.1",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-prettier": "^3.4.0",
     "jest": "^26.0.1",
     "nock": "^12.0.3",
-    "prettier": "^2.0.5",
-    "typescript": "^3.9.5"
+    "prettier": "^2.0.5"
   },
   "jest": {
-    "testEnvironment": "node"
+    "transform": {},
+    "testEnvironment": "jest-environment-node"
   }
 }

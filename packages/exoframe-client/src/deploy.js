@@ -1,69 +1,67 @@
 import fs from 'fs';
-import path from 'path';
-import tar, {Pack} from 'tar-fs';
 import got from 'got';
 import _ from 'highland';
 import multimatch from 'multimatch';
-import {serializeError} from 'serialize-error';
-import {Config} from './config';
-import {ServiceSpec, formatServices, FormattedService} from './utils/formatServices';
+import path from 'path';
+import { serializeError } from 'serialize-error';
+import tar from 'tar-fs';
+import { formatServices } from './utils/formatServices';
 
-interface DeployParams {
-  folder: string;
-  endpoint: string;
-  token?: string;
-  update?: boolean;
-  configFile?: string;
-  verbose?: number;
-}
+/**
+ * @typedef {object} DeployParams
+ * @property {string} folder - folder to deploy
+ * @property {string} endpoint - exoframe endpoint to use for deployment
+ * @property {string} [token] - auth token to use for deployment
+ * @property {boolean} [update] - whether to execute deployment as update
+ * @property {string} [configFile] - override for deployment config file
+ * @property {number} [verbose] - level of verbosity
+ */
 
-interface StreamToResponseParams {
-  tarStream: Pack;
-  remoteUrl: string;
-  options?: object;
-  verbose?: number;
-  log?: (...args: any) => void;
-}
+/**
+ * @typedef {object} StreamToResponseParams
+ * @property {object} tarStream - tar stream for current deployment
+ * @property {string} remoteUrl - remote URL
+ * @property {object} [options] - options
+ * @property {number} [verbose] - verbosity level
+ * @property {function} [log] - log function
+ */
 
-export interface ResponseData {
-  level: string;
-  deployments?: ServiceSpec[];
-  message: string;
-  error?: string;
-  log?: string[];
-}
+/**
+ * @typedef {object} ResponseData
+ * @property {string} level - level
+ * @property {ServiceSpec[]} deployments - list of deployments
+ * @property {string} message - message
+ * @property {string} [error] - error
+ * @property {any[]} log - log array
+ */
 
-interface ErrorWithRepsonse extends Error {
-  response: object;
-}
-
-interface DeployResult {
-  formattedServices: FormattedService[];
-  log: any[];
-}
+/**
+ * @typedef {object} DeployResult
+ * @property {FormattedService[]} formattedServices - formatted services
+ * @property {any[]} log - log array
+ */
 
 const defaultIgnores = ['.git', 'node_modules', '.exoframeignore'];
 
-const streamToResponse = ({
-  tarStream,
-  remoteUrl,
-  options,
-  verbose = 0,
-  log = (...args: any) => {},
-}: StreamToResponseParams): Promise<ResponseData> =>
+/**
+ * Converts stream to response
+ * @param {StreamToResponseParams} streamParams
+ * @returns {Promise<ResponseData>}
+ */
+const streamToResponse = ({ tarStream, remoteUrl, options, verbose = 0, log = () => {} }) =>
   new Promise((resolve, reject) => {
     // store error and result
-    let error: ErrorWithRepsonse;
-    let result: ResponseData;
+    let error;
+    let result;
     // pipe stream to remote
-    const stream = _<string>(tarStream.pipe(got.stream.post(remoteUrl, options)))
+    const stream = _(tarStream.pipe(got.stream.post(remoteUrl, options)))
       .split()
-      .filter(l => l?.length > 0);
+      .filter((l) => l?.length > 0);
     // store output
-    stream.on('data', (str: string) => {
+    stream.on('data', (str) => {
       const s = str.toString();
       try {
-        const data: ResponseData = JSON.parse(s);
+        const data = JSON.parse(s);
         // always log info
         if (data.level === 'info') {
           verbose && log('[info]', data.message);
@@ -78,11 +76,11 @@ const streamToResponse = ({
         if (data.level === 'error') {
           verbose && log('[error]', data.message);
           verbose > 1 && log(JSON.stringify(data, null, 2));
-          error = new Error(data.message) as ErrorWithRepsonse;
+          error = new Error(data.message);
           error.response = data;
         }
       } catch (e) {
-        error = new Error('Error parsing output!') as ErrorWithRepsonse;
+        error = new Error('Error parsing output!');
         error.response = {
           error: s,
         };
@@ -99,19 +97,17 @@ const streamToResponse = ({
       // otherwise resolve
       resolve(result);
     });
-    stream.on('error', (e: ErrorWithRepsonse) => (error = e));
+    stream.on('error', (e) => (error = e));
   });
 
-export const deploy = async ({
-  folder,
-  endpoint,
-  token,
-  update,
-  configFile = 'exoframe.json',
-  verbose = 0,
-}: DeployParams): Promise<DeployResult> => {
-  const loglist: any[] = [];
-  const log = (...args: any): void => {
+/**
+ * Deploys given project
+ * @param {DeployParams} params
+ * @returns {Promise<DeployResult>}
+ */
+export const deploy = async ({ folder, endpoint, token, update, configFile = 'exoframe.json', verbose = 0 }) => {
+  const loglist = [];
+  const log = (...args) => {
     loglist.push(args);
   };
 
@@ -135,14 +131,14 @@ export const deploy = async ({
   try {
     fs.statSync(configPath);
   } catch (e) {
-    const defaultConfig = JSON.stringify({name: folderName});
+    const defaultConfig = JSON.stringify({ name: folderName });
     fs.writeFileSync(configPath, defaultConfig, 'utf-8');
     // if in verbose mode - log config creation
     verbose && log('Create new default config:', defaultConfig);
   }
 
   // syntax-check & validate config
-  let config: Config;
+  let config;
   try {
     config = JSON.parse(fs.readFileSync(configPath).toString());
   } catch (e) {
@@ -162,7 +158,7 @@ export const deploy = async ({
       .readFileSync(ignorePath)
       .toString()
       .split('\n')
-      .filter(line => line && line.length > 0)
+      .filter((line) => line && line.length > 0)
       .concat(['.exoframeignore']);
   } catch (e) {
     verbose && log('\nNo .exoframeignore file found, using default ignores');
@@ -176,13 +172,13 @@ export const deploy = async ({
   // create tar stream from current folder
   const tarStream = tar.pack(workdir, {
     // ignore files from ignore list
-    ignore: name => {
+    ignore: (name) => {
       const relativePath = path.relative(workdir, name);
       const result = multimatch([relativePath], ignores).length !== 0;
       return result;
     },
     // map custom config to exoframe.json when provided
-    map: headers => {
+    map: (headers) => {
       // if working with custom config - change its name before packing
       if (configFile && headers.name === configFile) {
         return {
@@ -206,22 +202,18 @@ export const deploy = async ({
   };
 
   // pipe stream to remote
-  // if (spinner) {
-  //   spinner.text = `Uploading project..`;
-  // }
-  const res = await streamToResponse({tarStream, remoteUrl, options, verbose});
+  const res = await streamToResponse({ tarStream, remoteUrl, options, verbose });
   // check deployments
   if (!res?.deployments || !res?.deployments.length) {
-    const err = new Error('Something went wrong!') as ErrorWithRepsonse;
+    const err = new Error('Something went wrong!');
     err.response = res;
     throw err;
   }
-  // spinner && spinner.succeed('Deployment finished!');
 
   // log response in verbose-verbose mode
   verbose > 2 && log('Server response:', JSON.stringify(res, null, 2), '\n');
 
   // process deployments
   const formattedServices = formatServices(res.deployments);
-  return {formattedServices, log: loglist};
+  return { formattedServices, log: loglist };
 };

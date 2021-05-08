@@ -1,5 +1,5 @@
 {
-  "private": true,
+  "name": "exoframe-project",
   "workspaces": [
     "packages/exoframe-client"
   ]

@@ -1,23 +1,10 @@
 {
-  "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "ecmaVersion": 2020,
-    "sourceType": "module",
-    "project": ["tsconfig.json"],
-    "tsconfigRootDir": "."
+  "extends": ["eslint:recommended", "standard", "prettier"],
+  "plugins": ["prettier"],
+  "env": {
+    "node": true
   },
-  "extends": ["standard-with-typescript", "prettier", "prettier/@typescript-eslint"],
-  "plugins": ["@typescript-eslint", "prettier"],
   "rules": {
-    "semi": "off",
-    "@typescript-eslint/semi": ["error", "always"],
-    "@typescript-eslint/strict-boolean-expressions": [
-      "error",
-      {"allowNullableString": true, "allowNullableBoolean": true}
-    ],
-    "@typescript-eslint/no-non-null-assertion": ["off"],
-    "@typescript-eslint/promise-function-async": ["off"],
-    "max-len": ["error", 120, 4],
     "camelcase": "off",
     "promise/param-names": "off",
     "prefer-promise-reject-errors": "off",
@@ -25,11 +12,11 @@
     "prettier/prettier": [
       "error",
       {
+        "endOfLine": "lf",
         "trailingComma": "es5",
         "singleQuote": true,
-        "bracketSpacing": false,
         "printWidth": 120,
-        "arrowParens": "avoid"
+        "semi": true
       }
     ]
   }

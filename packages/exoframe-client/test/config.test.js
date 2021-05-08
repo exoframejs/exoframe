@@ -1,6 +1,6 @@
-/* eslint-env jest */
+import { expect, test } from '@jest/globals';
 import md5 from 'apache-md5';
-import {createConfig, KeyValueObject, FunctionalDeploymentType, User} from '../src';
+import { createConfig } from '../src/config.js';
 
 const configData = {
   name: 'test',
@@ -18,7 +18,7 @@ const configData = {
   volumes: 'test:/volume',
 };
 
-const users: User[] = [
+const users = [
   {
     username: 'user1',
     password: 'pass',
@@ -29,7 +29,7 @@ const users: User[] = [
   },
 ];
 
-const verifyBasicAuth = (input: User[], actual: string): void => {
+const verifyBasicAuth = (input, actual) => {
   actual.split(',').forEach((element, index) => {
     const hash = element.split(':')[1];
     expect(hash).toEqual(md5(input[index].password, hash));
@@ -57,8 +57,8 @@ test('Should generate the config with parameters', () => {
 // test config generation
 test('Should generate config with extended data', () => {
   // execute login
-  const env: KeyValueObject = {ENV: '1', OTHER: '2'};
-  const labels: KeyValueObject = {label: '1', other: '2'};
+  const env = { ENV: '1', OTHER: '2' };
+  const labels = { label: '1', other: '2' };
   const cfg = createConfig({
     ...configData,
     env,
@@ -83,13 +83,13 @@ test('Should generate config with extended data', () => {
     average: configData.ratelimitAverage,
     burst: configData.ratelimitBurst,
   });
-  verifyBasicAuth(users, cfg.basicAuth as string);
+  verifyBasicAuth(users, cfg.basicAuth);
 });
 
 // test function config generation
 test('Should generate functional deployment config', () => {
   // execute login
-  const functionalDeployment: FunctionalDeploymentType = {
+  const functionalDeployment = {
     type: 'worker',
     route: '/test',
   };
