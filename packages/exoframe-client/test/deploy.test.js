@@ -1,4 +1,5 @@
 import { expect, test } from '@jest/globals';
+import { deploy } from 'exoframe-client';
 import fs from 'fs';
 import _ from 'highland';
 import nock from 'nock';
@@ -6,7 +7,6 @@ import path from 'path';
 import { Readable } from 'stream';
 import tar from 'tar-fs';
 import { fileURLToPath } from 'url';
-import { deploy } from '../index.js';
 
 // reply with stream helper
 const replyWithStream = (dataArr) => {
@@ -77,7 +77,66 @@ test('Should deploy', async () => {
   // check that server was called
   expect(deployServer.isDone()).toBeTruthy();
   // make sure resulting snapshot is correct
-  expect(result).toMatchSnapshot();
+  expect(result).toMatchInlineSnapshot(`
+    Object {
+      "formattedServices": Array [
+        Object {
+          "domain": "localhost",
+          "host": "test",
+          "name": "test",
+          "project": undefined,
+          "status": "",
+          "type": "Container",
+        },
+      ],
+      "log": Array [
+        Array [
+          "
+    No .exoframeignore file found, using default ignores",
+        ],
+        Array [
+          "
+    Ignoring following paths:",
+          Array [
+            ".git",
+            "node_modules",
+            ".exoframeignore",
+          ],
+        ],
+        Array [
+          "Server response:",
+          "{
+      \\"message\\": \\"Deployment success!\\",
+      \\"deployments\\": [
+        {
+          \\"Id\\": \\"123\\",
+          \\"Name\\": \\"/test\\",
+          \\"Config\\": {
+            \\"Labels\\": {
+              \\"exoframe.deployment\\": \\"test\\",
+              \\"traefik.http.routers.test.rule\\": \\"Host(\`localhost\`)\\"
+            }
+          },
+          \\"NetworkSettings\\": {
+            \\"Networks\\": {
+              \\"exoframe\\": {
+                \\"Aliases\\": [
+                  \\"123\\",
+                  \\"test\\"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      \\"level\\": \\"info\\"
+    }",
+          "
+    ",
+        ],
+      ],
+    }
+  `);
   // tear down nock
   deployServer.done();
 });
@@ -107,7 +166,66 @@ test('Should deploy with endpoint flag', async () => {
   // check that server was called
   expect(deployServer.isDone()).toBeTruthy();
   // first check console output
-  expect(result).toMatchSnapshot();
+  expect(result).toMatchInlineSnapshot(`
+    Object {
+      "formattedServices": Array [
+        Object {
+          "domain": "localhost",
+          "host": "test",
+          "name": "test",
+          "project": undefined,
+          "status": "",
+          "type": "Container",
+        },
+      ],
+      "log": Array [
+        Array [
+          "
+    No .exoframeignore file found, using default ignores",
+        ],
+        Array [
+          "
+    Ignoring following paths:",
+          Array [
+            ".git",
+            "node_modules",
+            ".exoframeignore",
+          ],
+        ],
+        Array [
+          "Server response:",
+          "{
+      \\"message\\": \\"Deployment success!\\",
+      \\"deployments\\": [
+        {
+          \\"Id\\": \\"123\\",
+          \\"Name\\": \\"/test\\",
+          \\"Config\\": {
+            \\"Labels\\": {
+              \\"exoframe.deployment\\": \\"test\\",
+              \\"traefik.http.routers.test.rule\\": \\"Host(\`localhost\`)\\"
+            }
+          },
+          \\"NetworkSettings\\": {
+            \\"Networks\\": {
+              \\"exoframe\\": {
+                \\"Aliases\\": [
+                  \\"123\\",
+                  \\"test\\"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      \\"level\\": \\"info\\"
+    }",
+          "
+    ",
+        ],
+      ],
+    }
+  `);
   // tear down nock
   deployServer.done();
 });
@@ -132,7 +250,66 @@ test('Should execute update', async () => {
   // check that server was called
   expect(updateServer.isDone()).toBeTruthy();
   // first check console output
-  expect(result).toMatchSnapshot();
+  expect(result).toMatchInlineSnapshot(`
+    Object {
+      "formattedServices": Array [
+        Object {
+          "domain": "localhost",
+          "host": "test",
+          "name": "test",
+          "project": undefined,
+          "status": "",
+          "type": "Container",
+        },
+      ],
+      "log": Array [
+        Array [
+          "
+    No .exoframeignore file found, using default ignores",
+        ],
+        Array [
+          "
+    Ignoring following paths:",
+          Array [
+            ".git",
+            "node_modules",
+            ".exoframeignore",
+          ],
+        ],
+        Array [
+          "Server response:",
+          "{
+      \\"message\\": \\"Deployment success!\\",
+      \\"deployments\\": [
+        {
+          \\"Id\\": \\"123\\",
+          \\"Name\\": \\"/test\\",
+          \\"Config\\": {
+            \\"Labels\\": {
+              \\"exoframe.deployment\\": \\"test\\",
+              \\"traefik.http.routers.test.rule\\": \\"Host(\`localhost\`)\\"
+            }
+          },
+          \\"NetworkSettings\\": {
+            \\"Networks\\": {
+              \\"exoframe\\": {
+                \\"Aliases\\": [
+                  \\"123\\",
+                  \\"test\\"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      \\"level\\": \\"info\\"
+    }",
+          "
+    ",
+        ],
+      ],
+    }
+  `);
   // tear down nock
   updateServer.done();
 });
@@ -180,7 +357,67 @@ test('Should deploy with custom config', async () => {
   // check that server was called
   expect(deployServer.isDone()).toBeTruthy();
   // first check console output
-  expect(result).toMatchSnapshot();
+  expect(result).toMatchInlineSnapshot(`
+    Object {
+      "formattedServices": Array [
+        Object {
+          "domain": "localhost",
+          "host": "test",
+          "name": "test",
+          "project": undefined,
+          "status": "",
+          "type": "Container",
+        },
+      ],
+      "log": Array [
+        Array [
+          "
+    No .exoframeignore file found, using default ignores",
+        ],
+        Array [
+          "
+    Ignoring following paths:",
+          Array [
+            ".git",
+            "node_modules",
+            ".exoframeignore",
+            "exoframe.json",
+          ],
+        ],
+        Array [
+          "Server response:",
+          "{
+      \\"message\\": \\"Deployment success!\\",
+      \\"deployments\\": [
+        {
+          \\"Id\\": \\"123\\",
+          \\"Name\\": \\"/test\\",
+          \\"Config\\": {
+            \\"Labels\\": {
+              \\"exoframe.deployment\\": \\"test\\",
+              \\"traefik.http.routers.test.rule\\": \\"Host(\`localhost\`)\\"
+            }
+          },
+          \\"NetworkSettings\\": {
+            \\"Networks\\": {
+              \\"exoframe\\": {
+                \\"Aliases\\": [
+                  \\"123\\",
+                  \\"test\\"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      \\"level\\": \\"info\\"
+    }",
+          "
+    ",
+        ],
+      ],
+    }
+  `);
   // tear down nock
   deployServer.done();
 });
@@ -209,7 +446,17 @@ test('Should return error log', async () => {
     // check that server was called
     expect(deployServer.isDone()).toBeTruthy();
     // first check console output
-    expect(err.response).toMatchSnapshot();
+    expect(err.response).toMatchInlineSnapshot(`
+      Object {
+        "error": "Build failed! See build log for details.",
+        "level": "error",
+        "log": Array [
+          "Error log",
+          "here",
+        ],
+        "message": "Build failed! See build log for details.",
+      }
+    `);
     // tear down nock
     deployServer.done();
   }
@@ -232,7 +479,11 @@ test('Should throw error on malformed JSON', async () => {
     // check that server was called
     expect(deployServer.isDone()).toBeTruthy();
     // first check console output
-    expect(err.response).toMatchSnapshot();
+    expect(err.response).toMatchInlineSnapshot(`
+      Object {
+        "error": "Bad Gateway",
+      }
+    `);
     // tear down nock
     deployServer.done();
   }
@@ -266,7 +517,62 @@ test('Should ignore specified files', async () => {
   // check that server was called
   expect(deployServer.isDone()).toBeTruthy();
   // first check console output
-  expect(result).toMatchSnapshot();
+  expect(result).toMatchInlineSnapshot(`
+    Object {
+      "formattedServices": Array [
+        Object {
+          "domain": "localhost",
+          "host": "test",
+          "name": "test",
+          "project": undefined,
+          "status": "",
+          "type": "Container",
+        },
+      ],
+      "log": Array [
+        Array [
+          "
+    Ignoring following paths:",
+          Array [
+            "yarn.lock",
+            "ignore.me",
+            ".exoframeignore",
+          ],
+        ],
+        Array [
+          "Server response:",
+          "{
+      \\"message\\": \\"Deployment success!\\",
+      \\"deployments\\": [
+        {
+          \\"Id\\": \\"123\\",
+          \\"Name\\": \\"/test\\",
+          \\"Config\\": {
+            \\"Labels\\": {
+              \\"exoframe.deployment\\": \\"test\\",
+              \\"traefik.http.routers.test.rule\\": \\"Host(\`localhost\`)\\"
+            }
+          },
+          \\"NetworkSettings\\": {
+            \\"Networks\\": {
+              \\"exoframe\\": {
+                \\"Aliases\\": [
+                  \\"123\\",
+                  \\"test\\"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      \\"level\\": \\"info\\"
+    }",
+          "
+    ",
+        ],
+      ],
+    }
+  `);
   // tear down nock
   deployServer.done();
 });
@@ -288,7 +594,7 @@ test('Should throw error on zero deployments', async () => {
     // check that server was called
     expect(deployServer.isDone()).toBeTruthy();
     // first check console output
-    expect(err).toMatchSnapshot();
+    expect(err).toMatchInlineSnapshot(`[Error: Something went wrong!]`);
     // tear down nock
     deployServer.done();
   }
@@ -301,7 +607,7 @@ test('Should not deploy with config without project name', async () => {
     await deploy({ folder: nonameConfigFolderPath, endpoint, token: 'test-token', verbose: 3 });
   } catch (err) {
     // check console output
-    expect(err).toMatchSnapshot();
+    expect(err).toMatchInlineSnapshot(`[Error: Project should have a valid name in config!]`);
   }
 });
 
@@ -319,7 +625,13 @@ test('Should not deploy with broken config', async () => {
       .replaceAll(baseFolder, '')
       // remove stack as it might vary
       .replace(/"stack": "(.+?)"/gi, '');
-    expect(cleanError).toMatchSnapshot();
+    expect(cleanError).toMatchInlineSnapshot(`
+      "Error: Your exoframe.json is not valid: {
+        \\"name\\": \\"SyntaxError\\",
+        \\"message\\": \\"Unexpected token I in JSON at position 0\\",
+        
+      }"
+    `);
   }
 });
 
@@ -329,7 +641,7 @@ test('Should not deploy with non-existent path', async () => {
     await deploy({ folder: 'i-do-not-exist-at-all', endpoint, token: 'test-token', verbose: 3 });
   } catch (err) {
     // check console output
-    expect(err).toMatchSnapshot();
+    expect(err).toMatchInlineSnapshot(`[Error: Path do not exists]`);
   }
 });
 
@@ -345,7 +657,7 @@ test('Should throw an error on 401', async () => {
     // check that server was called
     expect(deployServer.isDone()).toBeTruthy();
     // first check console output
-    expect(err).toMatchSnapshot();
+    expect(err).toMatchInlineSnapshot(`[HTTPError: Response code 401 (Unauthorized)]`);
     expect(err.response.statusCode).toEqual(401);
     // tear down nock
     deployServer.done();

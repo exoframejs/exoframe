@@ -1,6 +1,6 @@
 import { expect, test } from '@jest/globals';
+import { listDeployments } from 'exoframe-client';
 import nock from 'nock';
-import { listDeployments } from '../index.js';
 
 const containers = [
   {
@@ -142,7 +142,42 @@ test('Should get list of deployments', async () => {
   // check that server was called
   expect(listServer.isDone()).toBeTruthy();
   // first check console output
-  expect(resultContainer).toMatchSnapshot();
+  expect(resultContainer).toMatchInlineSnapshot(`
+    Array [
+      Object {
+        "domain": "test.host",
+        "host": "Not set",
+        "name": "test",
+        "project": "test",
+        "status": "Up 10 minutes",
+        "type": "Container",
+      },
+      Object {
+        "domain": "Not set",
+        "host": "Not set",
+        "name": "test2",
+        "project": "test",
+        "status": "Up 12 minutes",
+        "type": "Container",
+      },
+      Object {
+        "domain": "Not set",
+        "host": "Not set",
+        "name": "test3",
+        "project": "other",
+        "status": "Up 13 minutes",
+        "type": "Container",
+      },
+      Object {
+        "domain": "Not set",
+        "host": "alias4",
+        "name": "test4",
+        "project": "somethingelse",
+        "status": "Up 10 minutes",
+        "type": "Container",
+      },
+    ]
+  `);
   // close server
   listServer.done();
 });
@@ -157,7 +192,31 @@ test('Should get list of swarm deployments', async () => {
   // check that server was called
   expect(listServer.isDone()).toBeTruthy();
   // first check console output
-  expect(resultServices).toMatchSnapshot();
+  expect(resultServices).toMatchInlineSnapshot(`
+    Array [
+      Object {
+        "domain": "Not set",
+        "host": "Not set",
+        "name": "test-service-one",
+        "project": "test-service",
+        "status": "",
+      },
+      Object {
+        "domain": "test.host",
+        "host": "test.host",
+        "name": "test-service-two",
+        "project": "test-service",
+        "status": "",
+      },
+      Object {
+        "domain": "other.domain",
+        "host": "Not set",
+        "name": "test-service-three",
+        "project": "test-project",
+        "status": "",
+      },
+    ]
+  `);
   // close server
   listServer.done();
 });

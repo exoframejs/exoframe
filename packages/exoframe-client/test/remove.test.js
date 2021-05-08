@@ -1,6 +1,6 @@
 import { expect, test } from '@jest/globals';
+import { removeDeployment } from 'exoframe-client';
 import nock from 'nock';
-import { removeDeployment } from '../index.js';
 
 const id = 'test-id';
 const url = 'test.example.com';

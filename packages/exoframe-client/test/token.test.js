@@ -1,7 +1,6 @@
 import { expect, test } from '@jest/globals';
+import { createToken, listTokens, removeToken } from 'exoframe-client';
 import nock from 'nock';
-import { createToken } from '../index.js';
-import { listTokens, removeToken } from '../src/token.js';
 
 const endpoint = 'http://localhost:8080';
 const token = 'test-123';

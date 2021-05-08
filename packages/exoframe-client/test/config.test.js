@@ -1,6 +1,6 @@
 import { expect, test } from '@jest/globals';
 import md5 from 'apache-md5';
-import { createConfig } from '../index.js';
+import { createConfig } from 'exoframe-client';
 
 const configData = {
   name: 'test',

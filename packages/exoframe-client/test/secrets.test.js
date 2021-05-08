@@ -1,6 +1,6 @@
 import { expect, test } from '@jest/globals';
+import { createSecret, getSecret, listSecrets, removeSecret } from 'exoframe-client';
 import nock from 'nock';
-import { createSecret, getSecret, listSecrets, removeSecret } from '../index.js';
 
 const testSecret = {
   secretName: 'test',
@@ -33,7 +33,16 @@ test('Should list secrets', async () => {
   // execute secret listing
   const result = await listSecrets({ endpoint, token });
   // make sure it was successful
-  expect(result).toMatchSnapshot();
+  expect(result).toMatchInlineSnapshot(`
+    Array [
+      Object {
+        "meta": Object {
+          "created": "2017-02-01T01:01:01.001Z",
+        },
+        "name": "test",
+      },
+    ]
+  `);
   // check that server was called
   expect(secretsServer.isDone()).toBeTruthy();
   // tear down nock
@@ -49,7 +58,15 @@ test('Should get secret value', async () => {
   // execute secret fetching
   const result = await getSecret({ name: testSecret.secretName, endpoint, token });
   // make sure log in was successful
-  expect(result).toMatchSnapshot();
+  expect(result).toMatchInlineSnapshot(`
+    Object {
+      "meta": Object {
+        "created": "2018-02-01T01:01:01.001Z",
+      },
+      "secretName": "test",
+      "secretValue": "12345",
+    }
+  `);
   // check that server was called
   expect(secretServer.isDone()).toBeTruthy();
   // tear down nock

@@ -1,6 +1,6 @@
 import { expect, test } from '@jest/globals';
+import { checkUpdates, executeUpdate } from 'exoframe-client';
 import nock from 'nock';
-import { checkUpdates, executeUpdate } from '../index.js';
 
 const endpoint = 'http://localhost:8080';
 const token = 'test-123';

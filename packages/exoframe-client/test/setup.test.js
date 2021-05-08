@@ -1,6 +1,6 @@
 import { expect, test } from '@jest/globals';
+import { executeRecipe, getRecipeQuestions } from 'exoframe-client';
 import nock from 'nock';
-import { executeRecipe, getRecipeQuestions } from '../index.js';
 
 // questions mock
 const questions = [
@@ -28,7 +28,27 @@ test('Should get questions for recipe', async () => {
   // stup inquirer answers
   const result = await getRecipeQuestions({ recipe: name, endpoint, token });
   // make sure log in was successful
-  expect(result).toMatchSnapshot();
+  expect(result).toMatchInlineSnapshot(`
+    Object {
+      "log": Array [
+        "1",
+        "2",
+        "3",
+      ],
+      "questions": Array [
+        Object {
+          "message": "Test q1:",
+          "name": "test1",
+          "type": "input",
+        },
+        Object {
+          "message": "Test q2:",
+          "name": "test2",
+          "type": "input",
+        },
+      ],
+    }
+  `);
   // check that server was called
   expect(setupServerGet.isDone()).toBeTruthy();
   // tear down nock
@@ -52,7 +72,24 @@ test('Should execute recipe', async () => {
   const answers = { test1: 'answer1', test2: 'answer2' };
   const result = await executeRecipe({ name, answers, endpoint, token });
   // make sure log in was successful
-  expect(result).toMatchSnapshot();
+  expect(result).toMatchInlineSnapshot(`
+    Object {
+      "log": Array [
+        Object {
+          "level": "info",
+          "message": "1",
+        },
+        Object {
+          "level": "info",
+          "message": "2",
+        },
+        Object {
+          "level": "debug",
+          "message": "3",
+        },
+      ],
+    }
+  `);
   // check that server was called
   expect(setupServerPost.isDone()).toBeTruthy();
   // tear down nock

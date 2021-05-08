@@ -1,6 +1,6 @@
 import { expect, test } from '@jest/globals';
+import { pruneSystem } from 'exoframe-client';
 import nock from 'nock';
-import { pruneSystem } from '../index.js';
 
 const endpoint = 'http://localhost:8080';
 const token = 'test-123';
