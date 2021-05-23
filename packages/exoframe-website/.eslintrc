@@ -12,6 +12,7 @@
   },
   "rules": {
     "react/react-in-jsx-scope": "off",
+    "react/prop-types": "off",
     "camelcase": "off",
     "promise/param-names": "off",
     "prefer-promise-reject-errors": "off",
