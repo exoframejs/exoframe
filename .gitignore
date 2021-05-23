@@ -6,3 +6,4 @@ exoframe-macos
 exoframe-win.exe
 .DS_Store
 dist/
+.next

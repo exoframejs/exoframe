@@ -1,6 +1,7 @@
 {
   "name": "exoframe-project",
   "workspaces": [
-    "packages/exoframe-client"
+    "packages/exoframe-client",
+    "packages/exoframe-website"
   ]
 }

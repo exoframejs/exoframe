@@ -1,0 +1,30 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "standard",
+    "prettier"
+  ],
+  "plugins": ["prettier"],
+  "env": {
+    "node": true
+  },
+  "rules": {
+    "react/react-in-jsx-scope": "off",
+    "camelcase": "off",
+    "promise/param-names": "off",
+    "prefer-promise-reject-errors": "off",
+    "no-control-regex": "off",
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "lf",
+        "trailingComma": "es5",
+        "singleQuote": true,
+        "printWidth": 120,
+        "semi": true
+      }
+    ]
+  }
+}

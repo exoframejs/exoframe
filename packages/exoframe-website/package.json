@@ -1,0 +1,28 @@
+{
+  "name": "exoframe-website",
+  "version": "7.0.0",
+  "description": "Exoframe is a self-hosted tool that allows simple one-command deployments using Docker",
+  "main": "index.js",
+  "repository": "git@github.com:exoframejs/exoframe.git",
+  "author": "Tim Ermilov <yamalight@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint pages/",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "^10.2.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^7.2.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-react": "^7.23.2",
+    "eslint-plugin-react-hooks": "^4.2.0"
+  }
+}
