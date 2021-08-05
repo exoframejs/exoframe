@@ -3,5 +3,9 @@
   "workspaces": [
     "packages/exoframe-client",
     "packages/exoframe-website"
-  ]
+  ],
+  "engines": {
+    "node": ">=15.0.0",
+    "npm": ">=7.0.0"
+  }
 }

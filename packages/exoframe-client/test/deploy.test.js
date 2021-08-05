@@ -534,8 +534,10 @@ test('Should ignore specified files', async () => {
           "
     Ignoring following paths:",
           Array [
-            "yarn.lock",
-            "ignore.me",
+            "yarn.lock
+    ",
+            "ignore.me
+    ",
             ".exoframeignore",
           ],
         ],
