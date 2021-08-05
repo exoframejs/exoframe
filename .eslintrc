@@ -9,15 +9,6 @@
     "promise/param-names": "off",
     "prefer-promise-reject-errors": "off",
     "no-control-regex": "off",
-    "prettier/prettier": [
-      "error",
-      {
-        "endOfLine": "lf",
-        "trailingComma": "es5",
-        "singleQuote": true,
-        "printWidth": 120,
-        "semi": true
-      }
-    ]
+    "prettier/prettier": "error"
   }
 }
