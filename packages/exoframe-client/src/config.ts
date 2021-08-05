@@ -93,7 +93,7 @@ export const createConfig = ({
   ratelimitBurst,
   basicAuth,
   functionalDeployment,
-}) => {
+}: typeof defaultConfig) => {
   const baseConfig = {
     ...defaultConfig,
     ...(project ? { project } : {}),

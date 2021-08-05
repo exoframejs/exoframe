@@ -9,6 +9,7 @@
   "type": "module",
   "scripts": {
     "lint": "eslint src/",
+    "pretest": "tsc --noEmit",
     "test": "TZ=Greenland NODE_ENV=testing NODE_OPTIONS=--experimental-vm-modules jest --watch",
     "test:ci": "TZ=Greenland NODE_ENV=testing NODE_OPTIONS=--experimental-vm-modules jest",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
@@ -21,14 +22,17 @@
     "tar-fs": "^2.1.0"
   },
   "devDependencies": {
-    "apache-md5": "^1.1.5",
+    "@types/highland": "^2.12.13",
+    "@types/tar-fs": "^2.0.1",
+    "apache-md5": "^1.1.7",
     "eslint": "^7.2.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-prettier": "^3.4.0",
     "jest": "^26.0.1",
     "nock": "^12.0.3",
-    "prettier": "^2.0.5"
+    "prettier": "^2.0.5",
+    "typescript": "^4.3.5"
   },
   "jest": {
     "transform": {},

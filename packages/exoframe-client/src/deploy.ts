@@ -48,10 +48,10 @@ const defaultIgnores = ['.git', 'node_modules', '.exoframeignore'];
  * @param {StreamToResponseParams} streamParams
  * @returns {Promise<ResponseData>}
  */
-const streamToResponse = ({ tarStream, remoteUrl, options, verbose = 0, log = () => {} }) =>
+const streamToResponse = ({ tarStream, remoteUrl, options, verbose = 0, log = (..._args: any) => {} }) =>
   new Promise((resolve, reject) => {
     // store error and result
-    let error;
+    let error: Error | null;
     let result;
     // pipe stream to remote
     const stream = _(tarStream.pipe(got.stream.post(remoteUrl, options)))
