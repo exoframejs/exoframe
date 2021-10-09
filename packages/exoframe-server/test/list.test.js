@@ -1,4 +1,3 @@
-// npm packages
 import { afterAll, beforeAll, expect, jest, test } from '@jest/globals';
 import getPort from 'get-port';
 import docker from '../src/docker/docker.js';
@@ -71,7 +70,7 @@ beforeAll(async () => {
 
 afterAll(() => fastify.close());
 
-test('Should list deployed projects', async (done) => {
+test('Should list deployed projects', async () => {
   const response = await fastify.inject(options);
   const result = JSON.parse(response.payload);
 
@@ -99,6 +98,4 @@ test('Should list deployed projects', async (done) => {
 
   await container1.remove({ force: true });
   await container2.remove({ force: true });
-
-  done();
 });

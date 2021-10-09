@@ -1,8 +1,4 @@
-/* eslint-env jest */
-// mock config for testing
-jest.mock('../src/config', () => require('./__mocks__/config'));
-
-// npm packages
+import { afterAll, beforeAll, expect, jest, test } from '@jest/globals';
 import getPort from 'get-port';
 import docker from '../src/docker/docker.js';
 import { initDocker } from '../src/docker/init.js';
@@ -10,6 +6,9 @@ import { pullImage } from '../src/docker/util.js';
 import { startServer } from '../src/index.js';
 import { sleep } from '../src/util/index.js';
 import authToken from './fixtures/authToken.js';
+
+// mock config
+jest.unstable_mockModule('../src/config', () => import('./__mocks__/config.js'));
 
 // old traefik and server images
 const traefikTag = 'traefik:1.3-alpine';
@@ -86,7 +85,7 @@ beforeAll(async () => {
 
 afterAll(() => fastify.close());
 
-test('Should deploy traefik', async (done) => {
+test('Should deploy traefik', async () => {
   // remove any existing containers first
   const initialContainers = await docker.listContainers({ all: true });
   // try to find traefik instance
@@ -112,7 +111,7 @@ test('Should deploy traefik', async (done) => {
   expect(container.Labels['exoframe.deployment']).toEqual('exo-traefik');
   expect(container.Labels['exoframe.user']).toEqual('admin');
   expect(container.NetworkSettings.Networks.exoframe).toBeDefined();
-  expect(container.Ports.length).toEqual(2);
+  expect(container.Ports.length).toEqual(4);
   expect(container.Ports.find((p) => p.PrivatePort === 443)).toBeTruthy();
   expect(container.Ports.find((p) => p.PublicPort === 443)).toBeTruthy();
   expect(container.Ports.find((p) => p.PrivatePort === 80)).toBeTruthy();
@@ -124,12 +123,10 @@ test('Should deploy traefik', async (done) => {
   const instance = docker.getContainer(container.Id);
   await instance.stop();
   await instance.remove();
-
-  done();
 });
 
 // run update test
-test('Should update traefik', async (done) => {
+test('Should update traefik', async () => {
   const options = Object.assign({}, baseOptions, {
     url: '/update/traefik',
   });
@@ -142,12 +139,10 @@ test('Should update traefik', async (done) => {
   const allImages = await docker.listImages();
   const newTraefik = allImages.find((it) => it.RepoTags && it.RepoTags.includes(traefikNewTag));
   expect(newTraefik.Id).not.toBe(oldTraefik.Id);
-
-  done();
 });
 
 // run update test
-test('Should update server', async (done) => {
+test('Should update server', async () => {
   // options base
   const options = Object.assign({}, baseOptions, {
     url: '/update/server',
@@ -185,6 +180,4 @@ test('Should update server', async (done) => {
     const trInst = docker.getContainer(containerTraefik.Id);
     await trInst.remove({ force: true });
   }
-
-  done();
 });
