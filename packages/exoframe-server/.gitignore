@@ -1,0 +1,11 @@
+node_modules
+.nyc_output
+coverage
+test/fixtures/auth.db
+test/fixtures/deploying/
+test/fixtures/secrets.db
+dist/
+bin/server-core.js
+bin/runner.js
+bin/home.html
+.idea/

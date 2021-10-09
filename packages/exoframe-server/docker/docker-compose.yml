@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  server:
+    image: node:lts-alpine
+    container_name: exoframe-server
+    working_dir: /app
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ~/.ssh/authorized_keys:/root/.ssh/authorized_keys:ro
+      - ./data:/root/.exoframe # exoframe data folder
+      - ../:/app # server code
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.exoframe-server.rule=Host("exoframe.rzab.de")
+      - traefik.http.routers.exoframe-server-web.rule=Host("exoframe.rzab.de")
+      - traefik.http.routers.exoframe-server.tls.certresolver=exoframeChallenge
+      - traefik.http.middlewares.exoframe-server-redirect.redirectscheme.scheme=https
+      - traefik.http.routers.exoframe-server-web.entrypoints=web
+      - traefik.http.routers.exoframe-server-web.middlewares=exoframe-server-redirect@docker
+      - traefik.http.routers.exoframe-server.entrypoints=websecure
+      - entryPoints.web.address=:80
+      - entryPoints.websecure.address=:443
+      - traefik.http.services.exoframe-server.loadbalancer.server.port=8080
+    command: "/bin/sh -c 'yarn; yarn watch'"

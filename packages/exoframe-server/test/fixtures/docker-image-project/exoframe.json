@@ -1,0 +1,8 @@
+{
+  "name": "test-docker-image-deploy",
+  "hostname": "testimage",
+  "project": "test-image-project",
+  "restart": "no",
+  "image": "exo-test-image",
+  "imageFile": "image.tar"
+}

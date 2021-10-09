@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Should init plugins 1`] = `
+Object {
+  "compose": [MockFunction],
+  "config": Object {
+    "exclusive": true,
+    "name": "test",
+  },
+  "init": [MockFunction],
+  "list": [MockFunction],
+  "logs": [MockFunction],
+  "remove": [MockFunction],
+  "start": [MockFunction],
+  "startFromParams": [MockFunction],
+}
+`;

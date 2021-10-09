@@ -1,0 +1,7 @@
+{
+  "name": "test-docker-extimage-deploy",
+  "hostname": "testextimage",
+  "project": "test-extimage-project",
+  "restart": "no",
+  "image": "busybox"
+}

@@ -1,0 +1,14 @@
+{
+  "name": "broken-node-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Tim Ermilov <yamalight@gmail.com> (http://codezen.net)",
+  "license": "ISC",
+  "dependencies": {
+    "brokenpackagehere": "^0.20.1"
+  }
+}

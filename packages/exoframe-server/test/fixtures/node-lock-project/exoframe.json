@@ -1,0 +1,5 @@
+{
+  "name": "test-node-lock-deploy",
+  "domain": "localhost",
+  "restart": "no"
+}

@@ -1,0 +1,5 @@
+{
+  "name": "broken-docker-project",
+  "restart": "no",
+  "template": "do-not-exist"
+}

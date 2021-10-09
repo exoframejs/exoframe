@@ -2,10 +2,11 @@
   "name": "exoframe-project",
   "workspaces": [
     "packages/exoframe-client",
-    "packages/exoframe-website"
+    "packages/exoframe-website",
+    "packages/exoframe-server"
   ],
   "engines": {
-    "node": ">=15.0.0",
-    "npm": ">=7.0.0"
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
   }
 }

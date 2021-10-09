@@ -1,0 +1,11 @@
+{
+  "name": "test-html-deploy",
+  "domain": false,
+  "project": "simple-html",
+  "restart": "no",
+  "rateLimit": {
+    "average": 1,
+    "burst": 5
+  },
+  "basicAuth": "user:$apr1$$9Cv/OMGj$$ZomWQzuQbL.3TRCS81A1g/"
+}

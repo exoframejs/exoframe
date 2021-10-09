@@ -1,0 +1,9 @@
+{
+  "name": "test-secrets-deploy",
+  "restart": "no",
+  "project": "secrets-project",
+  "env": {
+    "test": "@test-secret"
+  },
+  "hostname": "secrets"
+}

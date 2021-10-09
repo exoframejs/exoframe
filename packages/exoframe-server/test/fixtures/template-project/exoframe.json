@@ -1,0 +1,6 @@
+{
+  "name": "test-static-deploy",
+  "domain": "localhost",
+  "restart": "no",
+  "template": "static"
+}

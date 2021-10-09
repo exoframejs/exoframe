@@ -1,0 +1,12 @@
+{
+  "name": "test-additional-labels",
+  "domain": false,
+  "project": "simple-html",
+  "restart": "no",
+  "labels": {
+    "custom.label": "additional-label",
+    "traefik.http.middlewares.my-redirectregex.redirectregex.regex": "^https://domain.redirect/(.*)",
+    "traefik.http.middlewares.my-redirectregex.redirectregex.replacement": "https://domain.new/$${1}"
+  },
+  "middlewares": ["my-test@docker"]
+}

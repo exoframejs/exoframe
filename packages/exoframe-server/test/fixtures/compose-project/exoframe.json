@@ -1,0 +1,8 @@
+{
+  "name": "test-compose-deploy",
+  "restart": "no",
+  "env": {
+    "CUSTOM_LABEL": "custom-value",
+    "CUSTOM_SECRET": "@test-secret"
+  }
+}

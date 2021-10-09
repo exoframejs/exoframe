@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Should execute recipe 1`] = `
+Array [
+  Object {
+    "data": Object {
+      "other": "2",
+      "test": "1",
+    },
+    "level": "info",
+    "message": "works!",
+  },
+]
+`;
+
+exports[`Should install new recipe and return list of questions 1`] = `
+Array [
+  Object {
+    "message": "Wordpress project name:",
+    "name": "projectName",
+    "type": "input",
+  },
+  Object {
+    "message": "MySQL root password:",
+    "name": "mysqlPassword",
+    "type": "input",
+  },
+  Object {
+    "message": "Domain for Wordpress:",
+    "name": "wordpressDomain",
+    "type": "input",
+  },
+  Object {
+    "message": "Also start PHPMyAdmin?",
+    "name": "phpmyadminStart",
+    "type": "confirm",
+  },
+  Object {
+    "message": "Domain for PHPMyAdmin:",
+    "name": "phpmyadminDomain",
+    "type": "input",
+  },
+]
+`;
