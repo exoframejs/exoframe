@@ -194,7 +194,7 @@ export async function executeTemplate({
       resultStream,
       tempDockerDir,
       folder,
-      yaml,
+      yaml: jsyaml,
     });
     util.logger.debug('Running compose with plugin:', plugin.config.name, result);
     if (result && plugin.config.exclusive) {

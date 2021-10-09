@@ -1,5 +1,5 @@
 import { getConfig } from '../config/index.js';
-import { sleep } from '../util/index.js';
+import { compareNames, sleep } from '../util/index.js';
 import docker from './docker.js';
 import { pruneDocker, removeContainer } from './util.js';
 
@@ -31,7 +31,7 @@ export const scheduleCleanup = ({ username, project, existing }) => {
     // that are already up and running
     const toRemove = existing.filter((container) => {
       const newInstance = running.find((runningContainer) =>
-        util.compareNames(container.Labels['exoframe.name'], runningContainer.Labels['exoframe.name'])
+        compareNames(container.Labels['exoframe.name'], runningContainer.Labels['exoframe.name'])
       );
       return newInstance && newInstance.State === 'running' && newInstance.Status.toLowerCase().includes('up');
     });

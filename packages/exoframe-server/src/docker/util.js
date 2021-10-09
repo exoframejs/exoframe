@@ -1,3 +1,4 @@
+/* eslint no-async-promise-executor: off */
 import logger from '../logger/index.js';
 import docker from './docker.js';
 
