@@ -1,15 +1,21 @@
-/* eslint-env jest */
-// mock config for testing
-jest.mock('../src/config', () => require('./__mocks__/config'));
-
-// npm packages
+import { afterAll, beforeAll, expect, jest, test } from '@jest/globals';
 import { readFileSync } from 'fs';
 import getPort from 'get-port';
-import { sign, verify } from 'jsonwebtoken';
-import { join } from 'path';
+import jwt from 'jsonwebtoken';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 import { auth as authConfig } from '../config.js';
 import { getTokenCollection } from '../src/db/index.js';
-import { startServer } from '../src/index.js';
+// import { startServer } from '../src/index.js';
+
+// mock config
+jest.unstable_mockModule('../src/config/index.js', () => import('./__mocks__/config.js'));
+
+// import server after mocking config
+const { startServer } = await import('../src/index.js');
+
+// current folder
+const currentDir = dirname(fileURLToPath(import.meta.url));
 
 let server;
 let authToken = '';
@@ -28,7 +34,7 @@ beforeAll(async () => {
 
 afterAll(() => server.close());
 
-test('Should get login id and login phrase', async (done) => {
+test('Should get login id and login phrase', async () => {
   const options = {
     method: 'GET',
     url: '/login',
@@ -36,6 +42,8 @@ test('Should get login id and login phrase', async (done) => {
 
   const response = await server.inject(options);
   const result = JSON.parse(response.payload);
+
+  console.log(response.headers);
 
   expect(response.statusCode).toBe(200);
   expect(response.headers['access-control-allow-origin']).toEqual('http://test.com');
@@ -45,12 +53,11 @@ test('Should get login id and login phrase', async (done) => {
   // save phrase for login request
   loginPhrase = result.phrase;
   loginReqId = result.uid;
-  done();
 });
 
-test('Should login with admin username and correct token', async (done) => {
-  const privateKeyPath = join(__dirname, 'fixtures', 'id_rsa');
-  const reqToken = sign(loginPhrase, readFileSync(privateKeyPath), { algorithm: 'RS256' });
+test('Should login with admin username and correct token', async () => {
+  const privateKeyPath = join(currentDir, 'fixtures', 'id_rsa');
+  const reqToken = jwt.sign(loginPhrase, readFileSync(privateKeyPath), { algorithm: 'RS256' });
 
   const options = {
     method: 'POST',
@@ -68,7 +75,7 @@ test('Should login with admin username and correct token', async (done) => {
   expect(response.statusCode).toBe(200);
   expect(result.token).toBeTruthy();
 
-  const decodedUser = verify(result.token, authConfig.privateKey);
+  const decodedUser = jwt.verify(result.token, authConfig.privateKey);
 
   expect(decodedUser.user.username).toBe('admin');
   expect(decodedUser.loggedIn).toBeTruthy();
@@ -76,10 +83,9 @@ test('Should login with admin username and correct token', async (done) => {
   // save token for return
   const { token } = result;
   authToken = token;
-  done();
 });
 
-test('Should generate valid deploy token', async (done) => {
+test('Should generate valid deploy token', async () => {
   const options = {
     method: 'POST',
     url: '/deployToken',
@@ -97,7 +103,7 @@ test('Should generate valid deploy token', async (done) => {
   expect(response.statusCode).toBe(200);
   expect(result.token).toBeTruthy();
 
-  const decodedUser = verify(result.token, authConfig.privateKey);
+  const decodedUser = jwt.verify(result.token, authConfig.privateKey);
 
   expect(decodedUser.user.username).toBe('admin');
   expect(decodedUser.tokenName).toBe('test');
@@ -106,11 +112,9 @@ test('Should generate valid deploy token', async (done) => {
 
   // store for further tests
   deployToken = result.token;
-
-  done();
 });
 
-test('Should allow request with valid deploy token', async (done) => {
+test('Should allow request with valid deploy token', async () => {
   const options = {
     method: 'GET',
     url: '/checkToken',
@@ -127,11 +131,9 @@ test('Should allow request with valid deploy token', async (done) => {
 
   expect(result.message).toBe('Token is valid');
   expect(result.credentials.username).toBe('admin');
-
-  done();
 });
 
-test('Should list generated deploy tokens', async (done) => {
+test('Should list generated deploy tokens', async () => {
   const options = {
     method: 'GET',
     url: '/deployToken',
@@ -148,11 +150,9 @@ test('Should list generated deploy tokens', async (done) => {
 
   expect(result.tokens.length).toBe(1);
   expect(result.tokens[0].tokenName).toBe('test');
-
-  done();
 });
 
-test('Should remove generated deploy tokens', async (done) => {
+test('Should remove generated deploy tokens', async () => {
   const options = {
     method: 'DELETE',
     url: '/deployToken',
@@ -170,11 +170,9 @@ test('Should remove generated deploy tokens', async (done) => {
   // read tokens from DB and make sure there are none
   const tokens = getTokenCollection().find();
   expect(tokens.length).toBe(0);
-
-  done();
 });
 
-test('Should not allow request with removed deploy token', async (done) => {
+test('Should not allow request with removed deploy token', async () => {
   const options = {
     method: 'GET',
     url: '/checkToken',
@@ -188,11 +186,9 @@ test('Should not allow request with removed deploy token', async (done) => {
 
   expect(response.statusCode).toBe(401);
   expect(result.error).toBe('Unauthorized');
-
-  done();
 });
 
-test('Should not login without a token', async (done) => {
+test('Should not login without a token', async () => {
   const options = {
     method: 'POST',
     url: '/login',
@@ -206,11 +202,9 @@ test('Should not login without a token', async (done) => {
 
   expect(response.statusCode).toBe(401);
   expect(result.error).toBe('No token given!');
-
-  done();
 });
 
-test('Should not login with a broken token', async (done) => {
+test('Should not login with a broken token', async () => {
   const options = {
     method: 'POST',
     url: '/login',
@@ -226,6 +220,4 @@ test('Should not login with a broken token', async (done) => {
 
   expect(response.statusCode).toBe(401);
   expect(result.error).toBe('Login request not found!');
-
-  done();
 });

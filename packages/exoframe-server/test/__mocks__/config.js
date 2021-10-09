@@ -3,15 +3,15 @@ import { fileURLToPath } from 'url';
 
 // build test paths
 const currentDir = path.dirname(fileURLToPath(import.meta.url));
-const baseFolder = path.join(currentDir, '..', '..', 'test', 'fixtures');
+export const baseFolder = path.join(currentDir, '..', '..', 'test', 'fixtures');
 // const configPath = path.join(baseFolder, 'server.config.yml');
 const publicKeysPath = path.join(currentDir, '..', '..', 'test', 'fixtures');
-const extensionsFolder = path.join(baseFolder, 'extensions');
-const recipesFolder = path.join(baseFolder, 'recipes');
+export const extensionsFolder = path.join(baseFolder, 'extensions');
+export const recipesFolder = path.join(baseFolder, 'recipes');
 const tempDirNormal = path.join(baseFolder, 'deploying');
-const pluginsFolder = path.join(baseFolder, 'plugins');
-
-const cfg = {}; // jest.createMockFromModule('../src/config/index.js');
+export const pluginsFolder = path.join(baseFolder, 'plugins');
+export const faasFolder = path.join(baseFolder, 'faas');
+export let tempDockerDir = tempDirNormal;
 
 // test config
 const testConfig = {
@@ -51,17 +51,10 @@ const savedDirs = {
 let mockConfig = Object.assign({}, testConfig);
 
 // method to load defined config
-cfg.__load = (key) => {
+export const __load = (key) => {
   mockConfig = Object.assign({}, savedConfigs[key]);
-  cfg.tempDockerDir = savedDirs[key];
+  tempDockerDir = savedDirs[key];
 };
 // default get config method that returns mock config
-cfg.getConfig = () => mockConfig;
-// export paths for others
-cfg.baseFolder = baseFolder;
-cfg.extensionsFolder = extensionsFolder;
-cfg.recipesFolder = recipesFolder;
-cfg.tempDockerDir = tempDirNormal;
-cfg.pluginsFolder = pluginsFolder;
-
-export default cfg;
+export const getConfig = () => mockConfig;
+export const waitForConfig = async () => true;

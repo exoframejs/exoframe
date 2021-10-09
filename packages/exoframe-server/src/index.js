@@ -1,8 +1,8 @@
 // npm packages
-import cors from 'cors';
 import { setup as faas } from 'exoframe-faas';
 import initFastify from 'fastify';
 import fastifyAuth from 'fastify-auth';
+import cors from 'fastify-cors';
 import setupAuth from './auth/index.js';
 import { faasFolder, getConfig, waitForConfig } from './config/index.js';
 import { initDocker } from './docker/init.js';
@@ -21,10 +21,10 @@ export async function startServer(port = 8080) {
     logger.warn('cors is enabled with config:', config.cors);
     // if it's just true - simply enable it
     if (typeof config.cors === 'boolean') {
-      fastify.use(cors());
+      fastify.register(cors);
     } else {
       // otherwise pass config object to cors
-      fastify.use(cors(config.cors));
+      fastify.register(cors, config.cors);
     }
   }
 
