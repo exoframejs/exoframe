@@ -13,7 +13,7 @@ jest.unstable_mockModule('../src/config/index.js', () => import('./__mocks__/con
 const config = await import('../src/config/index.js');
 
 // switch config to normal
-config.default.__load('normal');
+config.__load('normal');
 
 // create tar streams
 const currentDir = dirname(fileURLToPath(import.meta.url));

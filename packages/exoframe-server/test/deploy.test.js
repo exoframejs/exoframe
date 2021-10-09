@@ -1,36 +1,42 @@
-/* eslint-env jest */
-// mock config for testing
-jest.mock('../src/config', () => require('./__mocks__/config'));
+import { afterAll, beforeAll, expect, jest, test } from '@jest/globals';
 import getPort from 'get-port';
-// npm packages
-import { join } from 'path';
+import { dirname, join } from 'path';
 import { pack } from 'tar-fs';
-import { __load } from '../src/config/index.js';
+import { fileURLToPath } from 'url';
 import { getSecretsCollection, secretsInited } from '../src/db/secrets.js';
 import docker from '../src/docker/docker.js';
 import { initNetwork } from '../src/docker/network.js';
-import { startServer } from '../src/index.js';
 import authToken from './fixtures/authToken.js';
-// switch config to normal
-__load('normal');
 
+// switch config to normal
+// mock config
+jest.unstable_mockModule('../src/config/index.js', () => import('./__mocks__/config.js'));
+const config = await import('../src/config/index.js');
+
+// switch config to normal
+config.__load('normal');
+
+const { startServer } = await import('../src/index.js');
+
+// current folder
+const currentDir = dirname(fileURLToPath(import.meta.url));
 // create tar streams
-const streamDockerImage = pack(join(__dirname, 'fixtures', 'docker-image-project'));
-const streamDockerImageExternal = pack(join(__dirname, 'fixtures', 'docker-image-external'));
-const streamDocker = pack(join(__dirname, 'fixtures', 'docker-project'));
-const streamNode = pack(join(__dirname, 'fixtures', 'node-project'));
-const streamNodeLock = pack(join(__dirname, 'fixtures', 'node-lock-project'));
-const streamHtml = pack(join(__dirname, 'fixtures', 'html-project'));
-const streamHtmlUpdate = pack(join(__dirname, 'fixtures', 'html-project'));
-const streamCompose = pack(join(__dirname, 'fixtures', 'compose-project'));
-const streamComposeUpdate = pack(join(__dirname, 'fixtures', 'compose-project'));
-const streamBrokenDocker = pack(join(__dirname, 'fixtures', 'broken-docker-project'));
-const streamBrokenNode = pack(join(__dirname, 'fixtures', 'broken-node-project'));
-const streamBrokenTemplate = pack(join(__dirname, 'fixtures', 'broken-template-project'));
-const streamBrokenCompose = pack(join(__dirname, 'fixtures', 'broken-compose-project'));
-const streamBrokenComposeStart = pack(join(__dirname, 'fixtures', 'broken-compose-project-start'));
-const streamAdditionalLabels = pack(join(__dirname, 'fixtures', 'additional-labels'));
-const streamTemplate = pack(join(__dirname, 'fixtures', 'template-project'));
+const streamDockerImage = pack(join(currentDir, 'fixtures', 'docker-image-project'));
+const streamDockerImageExternal = pack(join(currentDir, 'fixtures', 'docker-image-external'));
+const streamDocker = pack(join(currentDir, 'fixtures', 'docker-project'));
+const streamNode = pack(join(currentDir, 'fixtures', 'node-project'));
+const streamNodeLock = pack(join(currentDir, 'fixtures', 'node-lock-project'));
+const streamHtml = pack(join(currentDir, 'fixtures', 'html-project'));
+const streamHtmlUpdate = pack(join(currentDir, 'fixtures', 'html-project'));
+const streamCompose = pack(join(currentDir, 'fixtures', 'compose-project'));
+const streamComposeUpdate = pack(join(currentDir, 'fixtures', 'compose-project'));
+const streamBrokenDocker = pack(join(currentDir, 'fixtures', 'broken-docker-project'));
+const streamBrokenNode = pack(join(currentDir, 'fixtures', 'broken-node-project'));
+const streamBrokenTemplate = pack(join(currentDir, 'fixtures', 'broken-template-project'));
+const streamBrokenCompose = pack(join(currentDir, 'fixtures', 'broken-compose-project'));
+const streamBrokenComposeStart = pack(join(currentDir, 'fixtures', 'broken-compose-project-start'));
+const streamAdditionalLabels = pack(join(currentDir, 'fixtures', 'additional-labels'));
+const streamTemplate = pack(join(currentDir, 'fixtures', 'template-project'));
 
 // options base
 const optionsBase = {
@@ -51,19 +57,17 @@ let composeDeployTwo = '';
 // set timeout to 120s
 jest.setTimeout(120000);
 
-beforeAll(async (done) => {
+beforeAll(async () => {
   // start new instance of fastify
   const port = await getPort();
   fastify = await startServer(port);
   // init docker network
   await initNetwork();
-
-  done();
 });
 
 afterAll(() => fastify.close());
 
-test('Should deploy simple docker project', async (done) => {
+test('Should deploy simple docker project', async () => {
   const options = Object.assign(optionsBase, {
     payload: streamDocker,
   });
@@ -116,11 +120,9 @@ test('Should deploy simple docker project', async (done) => {
   // cleanup
   const instance = docker.getContainer(containerInfo.Id);
   await instance.remove({ force: true });
-
-  done();
 });
 
-test('Should deploy simple project from image and image tar', async (done) => {
+test('Should deploy simple project from image and image tar', async () => {
   const options = Object.assign(optionsBase, {
     payload: streamDockerImage,
   });
@@ -161,11 +163,9 @@ test('Should deploy simple project from image and image tar', async (done) => {
   // cleanup
   const instance = docker.getContainer(containerInfo.Id);
   await instance.remove({ force: true });
-
-  done();
 });
 
-test('Should deploy simple project from external image', async (done) => {
+test('Should deploy simple project from external image', async () => {
   const options = Object.assign(optionsBase, {
     payload: streamDockerImageExternal,
   });
@@ -186,7 +186,7 @@ test('Should deploy simple project from external image', async (done) => {
   expect(completeDeployments[0].Name.startsWith('/busybox')).toBeTruthy();
 
   // check docker services
-  const allContainers = await docker.listContainers();
+  const allContainers = await docker.listContainers({ all: true });
   const containerInfo = allContainers.find((c) => c.Names.includes(completeDeployments[0].Name));
   const name = completeDeployments[0].Name.slice(1);
 
@@ -206,11 +206,9 @@ test('Should deploy simple project from external image', async (done) => {
   // cleanup
   const instance = docker.getContainer(containerInfo.Id);
   await instance.remove({ force: true });
-
-  done();
 });
 
-test('Should deploy simple node project', async (done) => {
+test('Should deploy simple node project', async () => {
   const options = Object.assign(optionsBase, {
     payload: streamNode,
   });
@@ -248,11 +246,9 @@ test('Should deploy simple node project', async (done) => {
   // cleanup
   const instance = docker.getContainer(container.Id);
   await instance.remove({ force: true });
-
-  done();
 });
 
-test('Should deploy simple node project with package-lock', async (done) => {
+test('Should deploy simple node project with package-lock', async () => {
   const options = Object.assign(optionsBase, {
     payload: streamNodeLock,
   });
@@ -290,11 +286,9 @@ test('Should deploy simple node project with package-lock', async (done) => {
   // cleanup
   const instance = docker.getContainer(container.Id);
   await instance.remove({ force: true });
-
-  done();
 });
 
-test('Should deploy simple HTML project', async (done) => {
+test('Should deploy simple HTML project', async () => {
   const options = Object.assign(optionsBase, {
     payload: streamHtml,
   });
@@ -335,11 +329,9 @@ test('Should deploy simple HTML project', async (done) => {
 
   // store initial deploy id
   simpleHtmlInitialDeploy = container.Id;
-
-  done();
 });
 
-test('Should update simple HTML project', async (done) => {
+test('Should update simple HTML project', async () => {
   const options = Object.assign(optionsBase, {
     url: '/update',
     payload: streamHtmlUpdate,
@@ -385,13 +377,11 @@ test('Should update simple HTML project', async (done) => {
   // cleanup
   const instance = docker.getContainer(container.Id);
   await instance.remove({ force: true });
-
-  done();
 });
 
 const testSecret = { user: 'admin', name: 'test-secret', value: 'custom-secret-value' };
 
-test('Should deploy simple compose project', async (done) => {
+test('Should deploy simple compose project', async () => {
   await secretsInited;
   getSecretsCollection().insert(testSecret);
 
@@ -447,11 +437,9 @@ test('Should deploy simple compose project', async (done) => {
   // store ids for update test
   composeDeployOne = containerOne.Id;
   composeDeployTwo = containerTwo.Id;
-
-  done();
 });
 
-test('Should update simple compose project', async (done) => {
+test('Should update simple compose project', async () => {
   const options = Object.assign(optionsBase, {
     url: '/update',
     payload: streamComposeUpdate,
@@ -522,11 +510,9 @@ test('Should update simple compose project', async (done) => {
   const instanceTwo = docker.getContainer(containerTwo.Id);
   await instanceTwo.remove({ force: true });
   getSecretsCollection().remove(testSecret);
-
-  done();
 });
 
-test('Should display error log for broken docker project', async (done) => {
+test('Should display error log for broken docker project', async () => {
   const options = Object.assign(optionsBase, {
     payload: streamBrokenDocker,
   });
@@ -552,11 +538,9 @@ test('Should display error log for broken docker project', async (done) => {
   const allContainers = await docker.listContainers({ all: true });
   const exitedWithError = allContainers.filter((c) => c.Status.includes('Exited (1)'));
   await Promise.all(exitedWithError.map((c) => docker.getContainer(c.Id)).map((c) => c.remove()));
-
-  done();
 });
 
-test('Should display error log for broken Node.js project', async (done) => {
+test('Should display error log for broken Node.js project', async () => {
   const options = Object.assign(optionsBase, {
     payload: streamBrokenNode,
   });
@@ -584,11 +568,9 @@ test('Should display error log for broken Node.js project', async (done) => {
   const allContainers = await docker.listContainers({ all: true });
   const exitedWithError = allContainers.filter((c) => c.Status.includes('Exited (1)'));
   await Promise.all(exitedWithError.map((c) => docker.getContainer(c.Id)).map((c) => c.remove()));
-
-  done();
 });
 
-test('Should display error log for project with broken template', async (done) => {
+test('Should display error log for project with broken template', async () => {
   const options = Object.assign(optionsBase, {
     payload: streamBrokenTemplate,
   });
@@ -612,11 +594,9 @@ test('Should display error log for project with broken template', async (done) =
   const allContainers = await docker.listContainers({ all: true });
   const exitedWithError = allContainers.filter((c) => c.Status.includes('Exited (1)'));
   await Promise.all(exitedWithError.map((c) => docker.getContainer(c.Id)).map((c) => c.remove()));
-
-  done();
 });
 
-test('Should display error log for broken compose project build', async (done) => {
+test('Should display error log for broken compose project build', async () => {
   const options = Object.assign(optionsBase, {
     payload: streamBrokenCompose,
   });
@@ -634,11 +614,9 @@ test('Should display error log for broken compose project build', async (done) =
   // check response
   expect(response.statusCode).toEqual(200);
   expect(error.message).toEqual(`Deployment failed! Docker-compose build exited with code: 1.`);
-
-  done();
 });
 
-test('Should display error log for broken compose project start', async (done) => {
+test('Should display error log for broken compose project start', async () => {
   const options = Object.assign(optionsBase, {
     payload: streamBrokenComposeStart,
   });
@@ -656,11 +634,9 @@ test('Should display error log for broken compose project start', async (done) =
   // check response
   expect(response.statusCode).toEqual(200);
   expect(error.message).toEqual(`Deployment failed! Docker-compose up exited with code: 1.`);
-
-  done();
 });
 
-test('Should have additional labels', async (done) => {
+test('Should have additional labels', async () => {
   const options = Object.assign(optionsBase, {
     payload: streamAdditionalLabels,
   });
@@ -693,11 +669,9 @@ test('Should have additional labels', async (done) => {
   // cleanup
   const instance = docker.getContainer(containerInfo.Id);
   await instance.remove({ force: true });
-
-  done();
 });
 
-test('Should deploy project with configured template', async (done) => {
+test('Should deploy project with configured template', async () => {
   const options = Object.assign(optionsBase, {
     payload: streamTemplate,
   });
@@ -736,6 +710,4 @@ test('Should deploy project with configured template', async (done) => {
   // cleanup
   const instance = docker.getContainer(container.Id);
   await instance.remove({ force: true });
-
-  done();
 });

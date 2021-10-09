@@ -1,15 +1,15 @@
-/* eslint-env jest */
-// mock config for testing
-jest.mock('../../src/config', () => require('../__mocks__/config'));
-
-// npm packages
+import { afterAll, beforeAll, describe, expect, jest, test } from '@jest/globals';
 import getPort from 'get-port';
-import { getConfig, waitForConfig } from '../../src/config/index.js';
-import { listContainers } from '../../src/docker/docker.js';
+import docker from '../../src/docker/docker.js';
 import { initNetwork } from '../../src/docker/network.js';
 import { initTraefik } from '../../src/docker/traefik.js';
+
+// mock config
+jest.unstable_mockModule('../../src/config/index.js', () => import('../__mocks__/config.js'));
+const cfg = await import('../../src/config/index.js');
+
 // our packages
-import { startServer } from '../../src/index.js';
+const { startServer } = await import('../../src/index.js');
 
 // container vars
 let fastify;
@@ -21,8 +21,8 @@ beforeAll(async () => {
   fastify = await startServer(port);
 
   // get config
-  await waitForConfig();
-  config = getConfig();
+  await cfg.waitForConfig();
+  config = cfg.getConfig();
 
   return fastify;
 });
@@ -41,7 +41,7 @@ describe('Traefik', () => {
     await initTraefik(exoNet);
 
     // get traefik container
-    const allContainers = await listContainers();
+    const allContainers = await docker.listContainers();
     container = allContainers.find((c) => c.Names.find((n) => n === `/${config.traefikName}`));
   });
 
@@ -55,7 +55,7 @@ describe('Traefik', () => {
   });
 
   test('Should open traefik ports', () => {
-    expect(container.Ports.length).toEqual(2);
+    expect(container.Ports.length).toEqual(4);
     expect(container.Ports.find((p) => p.PrivatePort === 443)).toBeTruthy();
     expect(container.Ports.find((p) => p.PublicPort === 443)).toBeTruthy();
     expect(container.Ports.find((p) => p.PrivatePort === 80)).toBeTruthy();
