@@ -14,7 +14,7 @@
     "cleanup": "npm run docker:cleanup",
     "lint": "eslint src/ test/ bin/exoframe-server.js",
     "test": "NODE_ENV=testing NODE_OPTIONS='--experimental-vm-modules --experimental-json-modules' jest --runInBand",
-    "test:ci": "NODE_ENV=testing NODE_OPTIONS='--experimental-vm-modules --experimental-json-modules' jest --ci --runInBand --forceExit --coverage --silent",
+    "test:ci": "NODE_ENV=testing NODE_OPTIONS='--experimental-vm-modules --experimental-json-modules' jest --ci --runInBand --coverage --silent",
     "build-bundle": "ncc build src/index.js -o dist",
     "prepare-build": "cp dist/index.js bin/server-core.js && cp dist/runner.js bin/runner.js && cp dist/home.html bin/home.html",
     "build": "npm run build-bundle && npm run prepare-build"

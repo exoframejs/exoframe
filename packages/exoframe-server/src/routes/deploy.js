@@ -5,19 +5,17 @@ import { Readable } from 'stream';
 import { v1 as uuidv1 } from 'uuid';
 import { faasFolder, getConfig, tempDockerDir } from '../config/index.js';
 import { build } from '../docker/build.js';
+import { scheduleCleanup, schedulePrune } from '../docker/cleanup.js';
 import docker from '../docker/docker.js';
 import { start } from '../docker/start.js';
 import getTemplates from '../docker/templates/index.js';
-import { pruneDocker, pullImage, removeContainer } from '../docker/util.js';
+import { pullImage } from '../docker/util.js';
 import logger from '../logger/index.js';
 import { getPlugins } from '../plugins/index.js';
 import * as util from '../util/index.js';
 
 // destruct locally used functions
-const { sleep, cleanTemp, unpack, getProjectConfig, projectFromConfig } = util;
-
-// time to wait before removing old projects on update
-const WAIT_TIME = 5000;
+const { cleanTemp, unpack, getProjectConfig, projectFromConfig } = util;
 
 // deployment from unpacked files
 const deploy = async ({ username, folder, existing, resultStream }) => {
@@ -84,50 +82,6 @@ const deploy = async ({ username, folder, existing, resultStream }) => {
   logger.debug('Using template:', template);
   // execute fitting template
   await template.executeTemplate(templateProps);
-};
-
-// schedule docker prune for next tick (if enabled in config)
-const schedulePrune = () => {
-  // get server config
-  const serverConfig = getConfig();
-  if (serverConfig.autoprune) {
-    process.nextTick(pruneDocker);
-  }
-};
-
-const scheduleCleanup = ({ username, project, existing }) => {
-  process.nextTick(async () => {
-    // wait a bit for it to start
-    await sleep(WAIT_TIME);
-
-    // get all current containers
-    const containers = await docker.listContainers();
-    // find containers for current user and project
-    const running = containers.filter(
-      (c) => c.Labels['exoframe.user'] === username && c.Labels['exoframe.project'] === project
-    );
-
-    // filter out old container that don't have new containers
-    // that are already up and running
-    const toRemove = existing.filter((container) => {
-      const newInstance = running.find((runningContainer) =>
-        util.compareNames(container.Labels['exoframe.name'], runningContainer.Labels['exoframe.name'])
-      );
-      return newInstance && newInstance.State === 'running' && newInstance.Status.toLowerCase().includes('up');
-    });
-
-    // remove old containers
-    await Promise.all(toRemove.map(removeContainer));
-
-    // if not done - schedule with remaining containers
-    if (toRemove.length !== existing.length) {
-      const notRemoved = existing.filter((c) => !toRemove.find((rc) => rc.Id === c.Id));
-      scheduleCleanup({ username, project, existing: notRemoved });
-    }
-
-    // run prune on next tick if enabled in config
-    schedulePrune();
-  });
 };
 
 export default (fastify) => {

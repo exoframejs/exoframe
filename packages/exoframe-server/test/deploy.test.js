@@ -3,12 +3,14 @@ import getPort from 'get-port';
 import { dirname, join } from 'path';
 import { pack } from 'tar-fs';
 import { fileURLToPath } from 'url';
-import { getSecretsCollection, secretsInited } from '../src/db/secrets.js';
+import { getSecretsCollection, secretDb, secretsInited } from '../src/db/secrets.js';
 import docker from '../src/docker/docker.js';
 import { initNetwork } from '../src/docker/network.js';
 import authToken from './fixtures/authToken.js';
 
-// switch config to normal
+// mock cleanup functions
+jest.unstable_mockModule('../src/docker/cleanup.js', () => import('./__mocks__/cleanup.js'));
+
 // mock config
 jest.unstable_mockModule('../src/config/index.js', () => import('./__mocks__/config.js'));
 const config = await import('../src/config/index.js');
@@ -65,7 +67,10 @@ beforeAll(async () => {
   await initNetwork();
 });
 
-afterAll(() => fastify.close());
+afterAll(() => {
+  secretDb.close();
+  fastify.close();
+});
 
 test('Should deploy simple docker project', async () => {
   const options = Object.assign(optionsBase, {
