@@ -14,12 +14,6 @@ export const pluginsFolder = path.join(baseFolder, 'plugins');
 export const faasFolder = path.join(baseFolder, 'faas');
 export let tempDockerDir = tempDirNormal;
 
-try {
-  mkdir(faasFolder);
-} catch {
-  // do nothing
-}
-
 // test config
 const testConfig = {
   debug: true,
@@ -65,3 +59,9 @@ export const __load = (key) => {
 // default get config method that returns mock config
 export const getConfig = () => mockConfig;
 export const waitForConfig = async () => true;
+
+try {
+  await mkdir(faasFolder);
+} catch {
+  // do nothing
+}

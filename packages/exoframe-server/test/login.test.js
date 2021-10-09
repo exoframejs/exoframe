@@ -6,7 +6,6 @@ import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { auth as authConfig } from '../config.js';
 import { getTokenCollection } from '../src/db/index.js';
-// import { startServer } from '../src/index.js';
 
 // mock config
 jest.unstable_mockModule('../src/config/index.js', () => import('./__mocks__/config.js'));
@@ -42,8 +41,6 @@ test('Should get login id and login phrase', async () => {
 
   const response = await server.inject(options);
   const result = JSON.parse(response.payload);
-
-  console.log(response.headers);
 
   expect(response.statusCode).toBe(200);
   expect(response.headers['access-control-allow-origin']).toEqual('http://test.com');
