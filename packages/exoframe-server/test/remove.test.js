@@ -1,13 +1,12 @@
-/* eslint-env jest */
-// mock config for testing
-jest.mock('../src/config', () => require('./__mocks__/config'));
-
-// npm packages
+import { afterAll, beforeAll, expect, jest, test } from '@jest/globals';
 import getPort from 'get-port';
 import docker from '../src/docker/docker.js';
 import { pullImage } from '../src/docker/util.js';
 import { startServer } from '../src/index.js';
 import authToken from './fixtures/authToken.js';
+
+// mock config
+jest.unstable_mockModule('../src/config/index.js', () => import('./__mocks__/config.js'));
 
 // options base
 const baseOptions = {
@@ -85,7 +84,7 @@ beforeAll(async () => {
 
 afterAll(() => fastify.close());
 
-test('Should remove current deployment', async (done) => {
+test('Should remove current deployment', async () => {
   const options = Object.assign({}, baseOptions, {
     url: `/remove/${containerName}`,
   });
@@ -98,11 +97,9 @@ test('Should remove current deployment', async (done) => {
   const allContainers = await docker.listContainers();
   const exContainer = allContainers.find((c) => c.Names.includes(`/${containerName}`));
   expect(exContainer).toBeUndefined();
-
-  done();
 });
 
-test('Should remove current project', async (done) => {
+test('Should remove current project', async () => {
   // options base
   const options = Object.assign({}, baseOptions, {
     url: `/remove/${projectName}`,
@@ -116,11 +113,9 @@ test('Should remove current project', async (done) => {
   const allContainers = await docker.listContainers();
   const prjContainers = allContainers.filter((c) => c.Labels['exoframe.project'] === projectName);
   expect(prjContainers.length).toEqual(0);
-
-  done();
 });
 
-test('Should return error when removing nonexistent project', async (done) => {
+test('Should return error when removing nonexistent project', async () => {
   // options base
   const options = Object.assign({}, baseOptions, {
     url: `/remove/do-not-exist`,
@@ -131,10 +126,9 @@ test('Should return error when removing nonexistent project', async (done) => {
   // check response
   expect(response.statusCode).toEqual(404);
   expect(result).toMatchObject({ error: 'Container or function not found!' });
-  done();
 });
 
-test('Should remove by url', async (done) => {
+test('Should remove by url', async () => {
   const options = Object.assign({}, baseOptions, {
     url: `/remove/test.example.com`,
   });
@@ -142,5 +136,4 @@ test('Should remove by url', async (done) => {
   const response = await fastify.inject(options);
 
   expect(response.statusCode).toEqual(204);
-  done();
 });
