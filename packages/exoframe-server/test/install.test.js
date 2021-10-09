@@ -1,6 +1,8 @@
-/* eslint-env jest */
+import { describe, expect, jest, test } from '@jest/globals';
+import { exec as execCb } from 'child_process';
 import { promisify } from 'util';
-const exec = promisify(require('child_process').exec);
+
+const exec = promisify(execCb);
 
 // set timeout to 0.5s
 jest.setTimeout(500);
