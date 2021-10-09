@@ -1,18 +1,17 @@
-/* eslint-env jest */
-// mock config module
-const cfg = jest.genMockFromModule('../../src/config/index.js');
-
-// npm modules
-const path = require('path');
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 // build test paths
-const baseFolder = path.join(__dirname, '..', '..', 'test', 'fixtures');
+const currentDir = path.dirname(fileURLToPath(import.meta.url));
+const baseFolder = path.join(currentDir, '..', '..', 'test', 'fixtures');
 // const configPath = path.join(baseFolder, 'server.config.yml');
-const publicKeysPath = path.join(__dirname, '..', '..', 'test', 'fixtures');
+const publicKeysPath = path.join(currentDir, '..', '..', 'test', 'fixtures');
 const extensionsFolder = path.join(baseFolder, 'extensions');
 const recipesFolder = path.join(baseFolder, 'recipes');
 const tempDirNormal = path.join(baseFolder, 'deploying');
 const pluginsFolder = path.join(baseFolder, 'plugins');
+
+const cfg = {}; // jest.createMockFromModule('../src/config/index.js');
 
 // test config
 const testConfig = {

@@ -7,7 +7,7 @@ import serverReleasesJSON from './fixtures/version/server-releases.json';
 import traefikReleasesJSON from './fixtures/version/traefik-releases.json';
 
 // mock config
-jest.unstable_mockModule('../src/config', () => import('./__mocks__/config.js'));
+jest.unstable_mockModule('../src/config/index.js', () => import('./__mocks__/config.js'));
 
 // setup github API mocking to evade rate limits in CI
 nock('https://api.github.com/repos')

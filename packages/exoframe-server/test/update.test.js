@@ -8,7 +8,7 @@ import { sleep } from '../src/util/index.js';
 import authToken from './fixtures/authToken.js';
 
 // mock config
-jest.unstable_mockModule('../src/config', () => import('./__mocks__/config.js'));
+jest.unstable_mockModule('../src/config/index.js', () => import('./__mocks__/config.js'));
 
 // old traefik and server images
 const traefikTag = 'traefik:1.3-alpine';

@@ -1,20 +1,23 @@
-/* eslint-env jest */
-// mock config for testing
-jest.mock('../src/config', () => require('./__mocks__/config'));
-// npm packages
+import { afterAll, beforeAll, expect, jest, test } from '@jest/globals';
 import getPort from 'get-port';
-import { join } from 'path';
+import { dirname, join } from 'path';
 import { pack } from 'tar-fs';
-import { __load } from '../src/config/index.js';
+import { fileURLToPath } from 'url';
 import { getSecretsCollection } from '../src/db/secrets.js';
 import docker from '../src/docker/docker.js';
 import { startServer } from '../src/index.js';
 import authToken from './fixtures/authToken.js';
+
+// mock config
+jest.unstable_mockModule('../src/config/index.js', () => import('./__mocks__/config.js'));
+const config = await import('../src/config/index.js');
+
 // switch config to normal
-__load('normal');
+config.default.__load('normal');
 
 // create tar streams
-const streamDocker = pack(join(__dirname, 'fixtures', 'secrets-project'));
+const currentDir = dirname(fileURLToPath(import.meta.url));
+const streamDocker = pack(join(currentDir, 'fixtures', 'secrets-project'));
 
 // test secret
 const testSecret = {
@@ -37,7 +40,7 @@ beforeAll(async () => {
 
 afterAll(() => fastify.close());
 
-test('Should create new secret', async (done) => {
+test('Should create new secret', async () => {
   // options base
   const options = {
     method: 'POST',
@@ -56,11 +59,9 @@ test('Should create new secret', async (done) => {
   expect(result.name).toEqual(testSecret.secretName);
   expect(result.value).toEqual(testSecret.secretValue);
   expect(result.user).toEqual('admin');
-
-  done();
 });
 
-test('Should get list with new secret', async (done) => {
+test('Should get list with new secret', async () => {
   // options base
   const options = {
     method: 'GET',
@@ -80,11 +81,9 @@ test('Should get list with new secret', async (done) => {
   expect(result.secrets[0].user).toEqual('admin');
   expect(result.secrets[0].name).toEqual(testSecret.secretName);
   expect(result.secrets[0].value).toBeUndefined();
-
-  done();
 });
 
-test('Should get value for the secret', async (done) => {
+test('Should get value for the secret', async () => {
   // options base
   const options = {
     method: 'GET',
@@ -103,11 +102,9 @@ test('Should get value for the secret', async (done) => {
   expect(result.secret.user).toEqual('admin');
   expect(result.secret.name).toEqual(testSecret.secretName);
   expect(result.secret.value).toEqual(testSecret.secretValue);
-
-  done();
 });
 
-test('Should deploy simple docker project with secret', async (done) => {
+test('Should deploy simple docker project with secret', async () => {
   const options = {
     method: 'POST',
     url: '/deploy',
@@ -149,11 +146,9 @@ test('Should deploy simple docker project with secret', async (done) => {
   // cleanup
   const instance = docker.getContainer(containerInfo.Id);
   await instance.remove({ force: true });
-
-  done();
 });
 
-test('Should delete new secret', async (done) => {
+test('Should delete new secret', async () => {
   // options base
   const options = {
     method: 'DELETE',
@@ -172,6 +167,4 @@ test('Should delete new secret', async (done) => {
 
   // make sure it's no longer in db
   expect(getSecretsCollection().find()).toEqual([]);
-
-  done();
 });

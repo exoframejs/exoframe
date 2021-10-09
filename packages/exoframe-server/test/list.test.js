@@ -6,7 +6,7 @@ import { startServer } from '../src/index.js';
 import authToken from './fixtures/authToken.js';
 
 // mock config
-jest.unstable_mockModule('../src/config', () => import('./__mocks__/config.js'));
+jest.unstable_mockModule('../src/config/index.js', () => import('./__mocks__/config.js'));
 
 // options base
 const options = {
