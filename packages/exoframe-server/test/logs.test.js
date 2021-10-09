@@ -1,13 +1,12 @@
-/* eslint-env jest */
-// mock config for testing
-jest.mock('../src/config', () => require('./__mocks__/config'));
-
-// npm packages
+import { afterAll, beforeAll, expect, jest, test } from '@jest/globals';
 import getPort from 'get-port';
 import docker from '../src/docker/docker.js';
 import { pullImage } from '../src/docker/util.js';
 import { startServer } from '../src/index.js';
 import authToken from './fixtures/authToken.js';
+
+// mock config
+jest.unstable_mockModule('../src/config/index.js', () => import('./__mocks__/config.js'));
 
 // options base
 const baseOptions = {
@@ -87,7 +86,7 @@ beforeAll(async () => {
 
 afterAll(() => fastify.close());
 
-test('Should get logs for current deployment', async (done) => {
+test('Should get logs for current deployment', async () => {
   const options = Object.assign({}, baseOptions, {
     url: `/logs/${containerName}`,
   });
@@ -113,11 +112,9 @@ test('Should get logs for current deployment', async (done) => {
 
   // cleanup
   await container.remove({ force: true });
-
-  done();
 });
 
-test('Should get logs for current project', async (done) => {
+test('Should get logs for current project', async () => {
   // options base
   const options = Object.assign({}, baseOptions, {
     url: `/logs/${projectName}`,
@@ -147,11 +144,9 @@ test('Should get logs for current project', async (done) => {
   // cleanup
   await projectContainer1.remove({ force: true });
   await projectContainer2.remove({ force: true });
-
-  done();
 });
 
-test('Should get logs for exoframe-server', async (done) => {
+test('Should get logs for exoframe-server', async () => {
   const options = Object.assign({}, baseOptions, {
     url: '/logs/exoframe-server',
   });
@@ -174,11 +169,9 @@ test('Should get logs for exoframe-server', async (done) => {
       return parts[1].replace(/\sv\d.+/, ''); // strip any versions
     });
   expect(lines).toMatchObject(['Exoframe server not running in container!']);
-
-  done();
 });
 
-test('Should not get logs for nonexistent project', async (done) => {
+test('Should not get logs for nonexistent project', async () => {
   // options base
   const options = Object.assign({}, baseOptions, {
     url: `/logs/do-not-exist`,
@@ -189,5 +182,4 @@ test('Should not get logs for nonexistent project', async (done) => {
   // check response
   expect(response.statusCode).toEqual(404);
   expect(result).toMatchObject({ error: 'Container not found!' });
-  done();
 });
