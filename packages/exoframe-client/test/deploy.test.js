@@ -13,7 +13,7 @@ const replyWithStream = (dataArr) => {
   const replyStream = _();
   dataArr.forEach((data) => replyStream.write(JSON.stringify(data)));
   replyStream.end();
-  return [200, replyStream.toNodeStream()];
+  return replyStream.toNodeStream();
 };
 
 const baseFolder = path.dirname(fileURLToPath(import.meta.url));
@@ -62,7 +62,7 @@ test('Should deploy', async () => {
   // handle correct request
   const deployServer = nock(endpoint)
     .post('/deploy')
-    .reply((_uri, requestBody) => {
+    .reply(200, (_uri, requestBody) => {
       const excgf = fs.readFileSync(path.join(testFolder, 'exoframe.json')).toString();
       const index = fs.readFileSync(path.join(testFolder, 'index.html')).toString();
       expect(requestBody).toContain(excgf);
@@ -146,9 +146,9 @@ test('Should deploy with endpoint flag', async () => {
   // handle correct request
   const deployServer = nock('http://localhost:3000')
     .post('/deploy')
-    .reply((uri, requestBody) => {
-      const excgf = fs.readFileSync(path.join(testFolder, 'exoframe.json'));
-      const index = fs.readFileSync(path.join(testFolder, 'index.html'));
+    .reply(200, (_uri, requestBody) => {
+      const excgf = fs.readFileSync(path.join(testFolder, 'exoframe.json')).toString();
+      const index = fs.readFileSync(path.join(testFolder, 'index.html')).toString();
       expect(requestBody).toContain(excgf);
       expect(requestBody).toContain(index);
 
@@ -235,7 +235,7 @@ test('Should execute update', async () => {
   // handle correct request
   const updateServer = nock('http://localhost:8080')
     .post('/update')
-    .reply(() => replyWithStream([{ message: 'Deployment success!', deployments, level: 'info' }]));
+    .reply(200, () => replyWithStream([{ message: 'Deployment success!', deployments, level: 'info' }]));
 
   // execute login
   const result = await deploy({
@@ -319,7 +319,7 @@ test('Should deploy with custom config', async () => {
   // handle correct request
   const deployServer = nock('http://localhost:8080')
     .post('/deploy')
-    .reply((uri, requestBody, cb) => {
+    .reply(200, (_uri, requestBody, cb) => {
       // console.log(uri, requestBody);
       // create new data stream and write array into it
       const s = new Readable();
@@ -427,7 +427,7 @@ test('Should return error log', async () => {
   // handle correct request
   const deployServer = nock('http://localhost:8080')
     .post('/deploy')
-    .reply(() =>
+    .reply(200, () =>
       replyWithStream([
         {
           message: 'Build failed! See build log for details.',
@@ -467,9 +467,7 @@ test('Should throw error on malformed JSON', async () => {
   // handle correct request
   const deployServer = nock('http://localhost:8080')
     .post('/deploy')
-    .reply((uri, requestBody, cb) => {
-      cb(null, [200, 'Bad Gateway']);
-    });
+    .reply(200, () => 'Bad Gateway');
 
   // execute
   try {
@@ -494,13 +492,13 @@ test('Should ignore specified files', async () => {
   // handle correct request
   const deployServer = nock('http://localhost:8080')
     .post('/deploy')
-    .reply((uri, requestBody) => {
-      const exoignore = fs.readFileSync(path.join(ignoreTestFolder, '.exoframeignore'));
-      const ignoreme = fs.readFileSync(path.join(ignoreTestFolder, 'ignore.me'));
-      const index = fs.readFileSync(path.join(ignoreTestFolder, 'index.js'));
-      const packageJson = fs.readFileSync(path.join(ignoreTestFolder, 'package.json'));
-      const exocfg = fs.readFileSync(path.join(ignoreTestFolder, 'exoframe.json'));
-      const yarnLock = fs.readFileSync(path.join(ignoreTestFolder, 'yarn.lock'));
+    .reply(200, (_uri, requestBody) => {
+      const exoignore = fs.readFileSync(path.join(ignoreTestFolder, '.exoframeignore')).toString();
+      const ignoreme = fs.readFileSync(path.join(ignoreTestFolder, 'ignore.me')).toString();
+      const index = fs.readFileSync(path.join(ignoreTestFolder, 'index.js')).toString();
+      const packageJson = fs.readFileSync(path.join(ignoreTestFolder, 'package.json')).toString();
+      const exocfg = fs.readFileSync(path.join(ignoreTestFolder, 'exoframe.json')).toString();
+      const yarnLock = fs.readFileSync(path.join(ignoreTestFolder, 'yarn.lock')).toString();
       expect(requestBody).toContain(index);
       expect(requestBody).toContain(packageJson);
       expect(requestBody).toContain(exocfg);
@@ -582,9 +580,7 @@ test('Should throw error on zero deployments', async () => {
   // handle correct request
   const deployServer = nock('http://localhost:8080')
     .post('/deploy')
-    .reply((uri, requestBody, cb) => {
-      cb(null, [200, {}]);
-    });
+    .reply(200, () => ({}));
 
   // execute
   try {
