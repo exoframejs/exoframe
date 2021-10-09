@@ -2,11 +2,13 @@ import { afterAll, beforeAll, expect, jest, test } from '@jest/globals';
 import getPort from 'get-port';
 import docker from '../src/docker/docker.js';
 import { pullImage } from '../src/docker/util.js';
-import { startServer } from '../src/index.js';
 import authToken from './fixtures/authToken.js';
 
 // mock config
 jest.unstable_mockModule('../src/config/index.js', () => import('./__mocks__/config.js'));
+
+// import server after mocking config
+const { startServer } = await import('../src/index.js');
 
 // options base
 const baseOptions = {

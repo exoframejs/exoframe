@@ -2,12 +2,16 @@ import { afterAll, beforeAll, expect, jest, test } from '@jest/globals';
 import { readdirSync } from 'fs';
 import getPort from 'get-port';
 import { join } from 'path';
-import { extensionsFolder } from '../src/config/index.js';
-import { startServer } from '../src/index.js';
 import authToken from './fixtures/authToken.js';
 
 // mock config
 jest.unstable_mockModule('../src/config/index.js', () => import('./__mocks__/config.js'));
+
+// import server after mocking config
+const { startServer } = await import('../src/index.js');
+
+// get extensions folder from config
+const { extensionsFolder } = await import('../src/config/index.js');
 
 // container vars
 let fastify;

@@ -3,6 +3,8 @@ node_modules
 coverage
 test/fixtures/auth.db
 test/fixtures/deploying/
+test/fixtures/extensions/package-lock.json
+test/fixtures/recipes/package-lock.json
 test/fixtures/secrets.db
 dist/
 bin/server-core.js

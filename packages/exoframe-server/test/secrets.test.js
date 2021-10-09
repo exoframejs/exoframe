@@ -5,7 +5,6 @@ import { pack } from 'tar-fs';
 import { fileURLToPath } from 'url';
 import { getSecretsCollection } from '../src/db/secrets.js';
 import docker from '../src/docker/docker.js';
-import { startServer } from '../src/index.js';
 import authToken from './fixtures/authToken.js';
 
 // mock config
@@ -14,6 +13,9 @@ const config = await import('../src/config/index.js');
 
 // switch config to normal
 config.__load('normal');
+
+// import server after mocking config
+const { startServer } = await import('../src/index.js');
 
 // create tar streams
 const currentDir = dirname(fileURLToPath(import.meta.url));

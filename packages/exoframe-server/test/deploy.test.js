@@ -18,6 +18,7 @@ const config = await import('../src/config/index.js');
 // switch config to normal
 config.__load('normal');
 
+// import server after mocking config
 const { startServer } = await import('../src/index.js');
 
 // current folder

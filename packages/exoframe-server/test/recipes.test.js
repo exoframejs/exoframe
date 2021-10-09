@@ -3,13 +3,17 @@ import { readdirSync, writeFileSync } from 'fs';
 import getPort from 'get-port';
 import mkdirp from 'mkdirp';
 import { join } from 'path';
-import { recipesFolder } from '../src/config/index.js';
-import { startServer } from '../src/index.js';
 import { runNPM } from '../src/util/index.js';
 import authToken from './fixtures/authToken.js';
 
 // mock config
 jest.unstable_mockModule('../src/config/index.js', () => import('./__mocks__/config.js'));
+
+// import server after mocking config
+const { startServer } = await import('../src/index.js');
+
+// get recipes dir from config
+const { recipesFolder } = await import('../src/config/index.js');
 
 // container vars
 let fastify;

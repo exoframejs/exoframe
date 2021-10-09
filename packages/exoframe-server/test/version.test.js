@@ -1,13 +1,15 @@
 import { afterAll, beforeAll, expect, jest, test } from '@jest/globals';
 import getPort from 'get-port';
 import nock from 'nock';
-import { startServer } from '../src/index.js';
 import authToken from './fixtures/authToken.js';
 import serverReleasesJSON from './fixtures/version/server-releases.json';
 import traefikReleasesJSON from './fixtures/version/traefik-releases.json';
 
 // mock config
 jest.unstable_mockModule('../src/config/index.js', () => import('./__mocks__/config.js'));
+
+// import server after mocking config
+const { startServer } = await import('../src/index.js');
 
 // setup github API mocking to evade rate limits in CI
 nock('https://api.github.com/repos')
