@@ -1,3 +1,4 @@
+import { mkdir } from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -12,6 +13,12 @@ const tempDirNormal = path.join(baseFolder, 'deploying');
 export const pluginsFolder = path.join(baseFolder, 'plugins');
 export const faasFolder = path.join(baseFolder, 'faas');
 export let tempDockerDir = tempDirNormal;
+
+try {
+  mkdir(faasFolder);
+} catch {
+  // do nothing
+}
 
 // test config
 const testConfig = {
