@@ -12,15 +12,17 @@ import * as nodeTemplate from './node.js';
 import * as staticTemplate from './static.js';
 
 // load 3rd party templates
-export default () => {
+export default async () => {
   const packagePath = join(extensionsFolder, 'package.json');
   const packageString = readFileSync(packagePath).toString();
   const packageJSON = JSON.parse(packageString);
   const userTemplateNames = Object.keys(packageJSON.dependencies || {});
-  const userTemplates = userTemplateNames.map((templateName) => {
-    const templatePath = join(extensionsFolder, 'node_modules', templateName);
-    return require(templatePath);
-  });
+  const userTemplates = await Promise.all(
+    userTemplateNames.map((templateName) => {
+      const templatePath = join(extensionsFolder, 'node_modules', templateName);
+      return import(templatePath);
+    })
+  );
 
   return [faasTemplate, imageTemplate, composeTemplate, dockerfileTemplate, nodeTemplate, staticTemplate].concat(
     userTemplates

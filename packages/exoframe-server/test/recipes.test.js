@@ -1,8 +1,4 @@
-/* eslint-env jest */
-// mock config for testing
-jest.mock('../src/config', () => require('./__mocks__/config'));
-
-// npm packages
+import { afterAll, beforeAll, expect, jest, test } from '@jest/globals';
 import { readdirSync, writeFileSync } from 'fs';
 import getPort from 'get-port';
 import mkdirp from 'mkdirp';
@@ -11,6 +7,9 @@ import { recipesFolder } from '../src/config/index.js';
 import { startServer } from '../src/index.js';
 import { runNPM } from '../src/util/index.js';
 import authToken from './fixtures/authToken.js';
+
+// mock config
+jest.unstable_mockModule('../src/config/index.js', () => import('./__mocks__/config.js'));
 
 // container vars
 let fastify;
@@ -34,7 +33,7 @@ afterAll(() => {
   runNPM({ args: ['remove', '--verbose', testInstallRecipe], cwd: recipesFolder });
 });
 
-test('Should install new recipe and return list of questions', async (done) => {
+test('Should install new recipe and return list of questions', async () => {
   // options base
   const options = {
     method: 'GET',
@@ -56,11 +55,9 @@ test('Should install new recipe and return list of questions', async (done) => {
   // check folder
   const files = readdirSync(join(recipesFolder, 'node_modules'));
   expect(files).toContain(testInstallRecipe);
-
-  done();
 });
 
-test('Should execute recipe', async (done) => {
+test('Should execute recipe', async () => {
   // write test module to folder
   const folder = join(recipesFolder, 'node_modules', testRunRecipe);
   mkdirp.sync(folder);
@@ -97,6 +94,4 @@ test('Should execute recipe', async (done) => {
   expect(result.success).toBeTruthy();
   expect(result.log.length).toBeGreaterThan(0);
   expect(result.log).toMatchSnapshot();
-
-  done();
 });

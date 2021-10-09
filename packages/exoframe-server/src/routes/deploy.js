@@ -52,7 +52,7 @@ const deploy = async ({ username, folder, existing, resultStream }) => {
   };
 
   // get templates
-  const templates = getTemplates();
+  const templates = await getTemplates();
 
   // match via config if possible
   if (config.template && config.template.length > 0) {

@@ -30,7 +30,7 @@ export default (fastify) => {
       // get installed recipe path
       const recipePath = join(recipesFolder, 'node_modules', recipeName);
       // load recipe
-      const recipe = require(recipePath);
+      const recipe = await import(recipePath);
       // get questions
       const questions = recipe.getQuestions();
       reply.send({ success, log, questions });
@@ -53,10 +53,8 @@ export default (fastify) => {
       // create new deploy folder for user
       const folder = `${username}-${uuidv1()}`;
       mkdirSync(join(tempDockerDir, folder));
-      // clear require cache
-      delete require.cache[require.resolve(recipePath)];
-      // load recipe
-      const recipe = require(recipePath);
+      // load recipe with update parameter to force reload
+      const recipe = await import(`${recipePath}?update=${Date.now()}`);
       // generate recipe props
       const recipeProps = {
         // user answers

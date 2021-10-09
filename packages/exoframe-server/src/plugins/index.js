@@ -26,7 +26,7 @@ export async function initPlugins() {
     logger.debug('Installed plugin:', pluginName);
     logger.debug('Install log:', log);
     const pluginPath = join(pluginsFolder, 'node_modules', pluginName);
-    const plugin = require(pluginPath);
+    const plugin = await import(pluginPath);
     loadedPlugins.push(plugin);
   }
 
