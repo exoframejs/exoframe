@@ -15,6 +15,9 @@ const { startServer } = await import('../../src/index.js');
 let fastify;
 let config;
 
+// set timeout to 60s because we need to pull stuff
+jest.setTimeout(60000);
+
 beforeAll(async () => {
   // start server
   const port = await getPort();

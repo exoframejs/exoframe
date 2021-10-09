@@ -32,8 +32,8 @@ let fastify;
 let oldTraefik;
 let oldServer;
 
-// set timeout to 60s because we need to pull stuff
-jest.setTimeout(60000);
+// set timeout to 120s because we need to pull stuff
+jest.setTimeout(120000);
 
 beforeAll(async () => {
   // start server
