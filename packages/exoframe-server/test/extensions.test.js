@@ -1,14 +1,13 @@
-/* eslint-env jest */
-// mock config for testing
-jest.mock('../src/config', () => require('./__mocks__/config'));
-
-// npm packages
+import { afterAll, beforeAll, expect, jest, test } from '@jest/globals';
 import { readdirSync } from 'fs';
 import getPort from 'get-port';
 import { join } from 'path';
 import { extensionsFolder } from '../src/config/index.js';
 import { startServer } from '../src/index.js';
 import authToken from './fixtures/authToken.js';
+
+// mock config
+jest.unstable_mockModule('../src/config/index.js', () => import('./__mocks__/config.js'));
 
 // container vars
 let fastify;
@@ -28,7 +27,7 @@ beforeAll(async () => {
 
 afterAll(() => fastify.close());
 
-test('Should install new template', async (done) => {
+test('Should install new template', async () => {
   // options base
   const options = {
     method: 'POST',
@@ -52,11 +51,9 @@ test('Should install new template', async (done) => {
   // check folder
   const files = readdirSync(join(extensionsFolder, 'node_modules'));
   expect(files).toContain(testTemplate);
-
-  done();
 });
 
-test('Should get list of installed templates', async (done) => {
+test('Should get list of installed templates', async () => {
   // options base
   const options = {
     method: 'GET',
@@ -72,11 +69,9 @@ test('Should get list of installed templates', async (done) => {
   // check response
   expect(response.statusCode).toEqual(200);
   expect(Object.keys(result)).toEqual([testTemplate]);
-
-  done();
 });
 
-test('Should remove existing template', async (done) => {
+test('Should remove existing template', async () => {
   // options base
   const options = {
     method: 'DELETE',
@@ -100,6 +95,4 @@ test('Should remove existing template', async (done) => {
   // check folder
   const files = readdirSync(join(extensionsFolder, 'node_modules'));
   expect(files).not.toContain(testTemplate);
-
-  done();
 });
