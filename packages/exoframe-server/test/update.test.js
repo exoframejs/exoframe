@@ -1,7 +1,6 @@
 import { afterAll, beforeAll, expect, jest, test } from '@jest/globals';
 import getPort from 'get-port';
 import docker from '../src/docker/docker.js';
-import { initDocker } from '../src/docker/init.js';
 import { pullImage } from '../src/docker/util.js';
 import { sleep } from '../src/util/index.js';
 import authToken from './fixtures/authToken.js';
@@ -11,6 +10,7 @@ jest.unstable_mockModule('../src/config/index.js', () => import('./__mocks__/con
 
 // import server after mocking config
 const { startServer } = await import('../src/index.js');
+const { initDocker } = await import('../src/docker/init.js');
 
 // old traefik and server images
 const traefikTag = 'traefik:1.3-alpine';
