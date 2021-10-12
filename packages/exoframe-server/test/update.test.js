@@ -92,27 +92,21 @@ test('Should deploy traefik', async () => {
   const initialContainers = await docker.listContainers({ all: true });
   // try to find traefik instance
   const traefik = initialContainers.find((c) => c.Names.find((n) => n === '/exoframe-traefik'));
-  console.log('found traefik', traefik);
   // if found - stop/remove
   if (traefik) {
     const traefikContainer = docker.getContainer(traefik.Id);
     if (!traefik.Status.includes('Exited')) {
       await traefikContainer.stop();
-      console.log('stopped traefik');
     }
     await traefikContainer.remove();
-    console.log('removed traefik');
   }
 
   // call init
-  console.log('init docker');
   await initDocker();
-  console.log('init docker done');
 
   // check docker services
   const allContainers = await docker.listContainers();
   const container = allContainers.find((c) => c.Names.find((n) => n === '/exoframe-traefik'));
-  console.log('found container', container);
 
   expect(container).toBeDefined();
   expect(container.Names[0]).toEqual('/exoframe-traefik');
