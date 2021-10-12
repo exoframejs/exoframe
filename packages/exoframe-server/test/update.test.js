@@ -40,8 +40,6 @@ beforeAll(async () => {
   const port = await getPort();
   fastify = await startServer(port);
 
-  console.log('started server on', port);
-
   // pull older traefik image
   // remove current images
   // get all images
@@ -57,11 +55,9 @@ beforeAll(async () => {
     const lsimg = docker.getImage(latestServer.Id);
     await lsimg.remove({ force: true });
   }
-  console.log('pulling images');
   // pull older images
   await pullImage(traefikTag);
   await pullImage(serverTag);
-  console.log('pulled images');
   // get all images
   const images = await docker.listImages();
   // get old one and tag it as latest
@@ -71,7 +67,6 @@ beforeAll(async () => {
   oldServer = images.find((img) => img.RepoTags && img.RepoTags.includes(serverTag));
   const simg = docker.getImage(oldServer.Id);
   await simg.tag({ repo: 'exoframe/server', tag: 'latest' });
-  console.log('tagged images');
 
   // start old server instance
   const srvConfig = {
@@ -86,7 +81,6 @@ beforeAll(async () => {
   // start server
   const oldServerContainer = await docker.createContainer(srvConfig);
   await oldServerContainer.start();
-  console.log('started exoframe-server');
 
   return fastify;
 });
@@ -98,21 +92,27 @@ test('Should deploy traefik', async () => {
   const initialContainers = await docker.listContainers({ all: true });
   // try to find traefik instance
   const traefik = initialContainers.find((c) => c.Names.find((n) => n === '/exoframe-traefik'));
+  console.log('found traefik', traefik);
   // if found - stop/remove
   if (traefik) {
     const traefikContainer = docker.getContainer(traefik.Id);
     if (!traefik.Status.includes('Exited')) {
       await traefikContainer.stop();
+      console.log('stopped traefik');
     }
     await traefikContainer.remove();
+    console.log('removed traefik');
   }
 
   // call init
+  console.log('init docker');
   await initDocker();
+  console.log('init docker done');
 
   // check docker services
   const allContainers = await docker.listContainers();
   const container = allContainers.find((c) => c.Names.find((n) => n === '/exoframe-traefik'));
+  console.log('found container', container);
 
   expect(container).toBeDefined();
   expect(container.Names[0]).toEqual('/exoframe-traefik');
