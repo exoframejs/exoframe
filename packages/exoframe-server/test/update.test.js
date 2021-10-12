@@ -32,13 +32,15 @@ let fastify;
 let oldTraefik;
 let oldServer;
 
-// set timeout to 120s because we need to pull stuff
-jest.setTimeout(120000);
+// set timeout to 60s because we need to pull stuff
+jest.setTimeout(60000);
 
 beforeAll(async () => {
   // start server
   const port = await getPort();
   fastify = await startServer(port);
+
+  console.log('started server on', port);
 
   // pull older traefik image
   // remove current images
@@ -55,9 +57,11 @@ beforeAll(async () => {
     const lsimg = docker.getImage(latestServer.Id);
     await lsimg.remove({ force: true });
   }
+  console.log('pulling images');
   // pull older images
   await pullImage(traefikTag);
   await pullImage(serverTag);
+  console.log('pulled images');
   // get all images
   const images = await docker.listImages();
   // get old one and tag it as latest
@@ -67,6 +71,7 @@ beforeAll(async () => {
   oldServer = images.find((img) => img.RepoTags && img.RepoTags.includes(serverTag));
   const simg = docker.getImage(oldServer.Id);
   await simg.tag({ repo: 'exoframe/server', tag: 'latest' });
+  console.log('tagged images');
 
   // start old server instance
   const srvConfig = {
@@ -81,6 +86,7 @@ beforeAll(async () => {
   // start server
   const oldServerContainer = await docker.createContainer(srvConfig);
   await oldServerContainer.start();
+  console.log('started exoframe-server');
 
   return fastify;
 });

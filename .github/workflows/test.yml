@@ -52,4 +52,4 @@ jobs:
       # - name: lint
       #  run: npm run lint -w exoframe-server
       - name: test
-        run: npm run test:ci -w exoframe-server
+        run: npm run test:up -w exoframe-server
