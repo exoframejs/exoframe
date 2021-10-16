@@ -80,56 +80,6 @@ const containers = [
   },
 ];
 
-const services = [
-  {
-    ID: '12345',
-    Spec: {
-      Name: 'test-service-one',
-      Labels: {
-        'exoframe.project': 'test-service',
-      },
-      Networks: [
-        {
-          Target: 'netid',
-        },
-      ],
-    },
-  },
-  {
-    ID: '0987',
-    Spec: {
-      Name: 'test-service-two',
-      Labels: {
-        'exoframe.project': 'test-service',
-        'exoframe.deployment': 'test-service-two',
-        'traefik.http.routers.test-service-two.rule': 'Host(`test.host`)',
-      },
-      Networks: [
-        {
-          Target: 'netid',
-          Aliases: ['test.host'],
-        },
-      ],
-    },
-  },
-  {
-    ID: '321',
-    Spec: {
-      Name: 'test-service-three',
-      Labels: {
-        'exoframe.project': 'test-project',
-        'exoframe.deployment': 'test-service-three',
-        'traefik.http.routers.test-service-three.rule': 'Host(`other.domain`)',
-      },
-      Networks: [
-        {
-          Target: 'netid',
-        },
-      ],
-    },
-  },
-];
-
 const endpoint = 'http://localhost:8080';
 const token = 'test-token';
 
@@ -175,45 +125,6 @@ test('Should get list of deployments', async () => {
         "project": "somethingelse",
         "status": "Up 10 minutes",
         "type": "Container",
-      },
-    ]
-  `);
-  // close server
-  listServer.done();
-});
-
-// test swarm list
-test('Should get list of swarm deployments', async () => {
-  // handle correct request
-  const listServer = nock(endpoint).get(`/list`).reply(200, { services });
-  // execute login
-  const { services: resultServices } = await listDeployments({ endpoint, token });
-  // make sure log in was successful
-  // check that server was called
-  expect(listServer.isDone()).toBeTruthy();
-  // first check console output
-  expect(resultServices).toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "domain": "Not set",
-        "host": "Not set",
-        "name": "test-service-one",
-        "project": "test-service",
-        "status": "",
-      },
-      Object {
-        "domain": "test.host",
-        "host": "test.host",
-        "name": "test-service-two",
-        "project": "test-service",
-        "status": "",
-      },
-      Object {
-        "domain": "other.domain",
-        "host": "Not set",
-        "name": "test-service-three",
-        "project": "test-project",
-        "status": "",
       },
     ]
   `);
