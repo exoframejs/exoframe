@@ -1,10 +1,4 @@
-FROM node:12.15-alpine
-
-# install docker-compose
-RUN apk update \
-  && apk add --no-cache py-pip python-dev \
-  libffi-dev openssl-dev gcc libc-dev make \
-  && pip install docker-compose
+FROM node:16-alpine
 
 # create new workdir
 WORKDIR /app

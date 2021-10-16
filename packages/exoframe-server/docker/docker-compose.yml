@@ -2,7 +2,7 @@ version: '3'
 
 services:
   server:
-    image: node:lts-alpine
+    image: node:16-alpine
     container_name: exoframe-server
     working_dir: /app
     volumes:

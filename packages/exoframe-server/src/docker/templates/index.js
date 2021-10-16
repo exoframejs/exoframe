@@ -5,7 +5,6 @@ import { template as faasTemplate } from 'exoframe-faas';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { extensionsFolder } from '../../config/index.js';
-import * as composeTemplate from './compose.js';
 import * as dockerfileTemplate from './dockerfile.js';
 import * as imageTemplate from './image.js';
 import * as nodeTemplate from './node.js';
@@ -24,7 +23,5 @@ export default async () => {
     })
   );
 
-  return [faasTemplate, imageTemplate, composeTemplate, dockerfileTemplate, nodeTemplate, staticTemplate].concat(
-    userTemplates
-  );
+  return [faasTemplate, imageTemplate, dockerfileTemplate, nodeTemplate, staticTemplate].concat(userTemplates);
 };

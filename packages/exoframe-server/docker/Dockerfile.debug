@@ -1,7 +1,4 @@
-FROM node:12
-
-# install required libs and docker-compose
-RUN apt-get update && apt-get install python-pip -y && pip install docker-compose
+FROM node:16
 
 # create folder and set it as workdir
 RUN mkdir -p /usr/src/app
