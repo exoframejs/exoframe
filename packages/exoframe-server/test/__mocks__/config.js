@@ -10,7 +10,6 @@ const publicKeysPath = path.join(currentDir, '..', '..', 'test', 'fixtures');
 export const extensionsFolder = path.join(baseFolder, 'extensions');
 export const recipesFolder = path.join(baseFolder, 'recipes');
 const tempDirNormal = path.join(baseFolder, 'deploying');
-export const pluginsFolder = path.join(baseFolder, 'plugins');
 export const faasFolder = path.join(baseFolder, 'faas');
 export let tempDockerDir = tempDirNormal;
 
@@ -35,14 +34,6 @@ const testConfig = {
 // saved configs for re-use
 const savedConfigs = {
   normal: Object.assign({}, testConfig),
-  plugins: Object.assign({}, testConfig, {
-    plugins: {
-      install: ['testplugin'],
-      testplugin: {
-        test: 123,
-      },
-    },
-  }),
 };
 const savedDirs = {
   normal: tempDirNormal,

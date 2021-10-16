@@ -1,8 +1,6 @@
 import { removeFunction } from 'exoframe-faas';
 import docker from '../docker/docker.js';
 import { removeContainer } from '../docker/util.js';
-import logger from '../logger/index.js';
-import { getPlugins } from '../plugins/index.js';
 
 // removal of normal containers
 const removeUserContainer = async ({ username, id, reply }) => {
@@ -61,22 +59,6 @@ export default (fastify) => {
         // reply
         reply.code(204).send('removed');
         return;
-      }
-
-      // run remove via plugins if available
-      const plugins = getPlugins();
-      for (const plugin of plugins) {
-        // only run plugins that have remove function
-        if (!plugin.remove) {
-          continue;
-        }
-
-        const result = await plugin.remove({ docker, username, id, reply });
-        logger.debug('Running remove with plugin:', plugin.config.name, result);
-        if (plugin.config.exclusive) {
-          logger.debug('Remove finished via exclusive plugin:', plugin.config.name);
-          return;
-        }
       }
 
       removeUserContainer({ username, id, reply });

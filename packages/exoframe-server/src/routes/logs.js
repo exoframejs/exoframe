@@ -2,8 +2,6 @@ import { getLogsForFunction } from 'exoframe-faas';
 import _ from 'highland';
 import { Readable } from 'stream';
 import docker from '../docker/docker.js';
-import logger from '../logger/index.js';
-import { getPlugins } from '../plugins/index.js';
 
 const generateLogsConfig = (follow) => ({
   follow: Boolean(follow),
@@ -96,23 +94,6 @@ export default (fastify) => {
         // send wrapped highland stream as response
         reply.send(new Readable().wrap(logsStream));
         return;
-      }
-
-      // run logs via plugins if available
-      const plugins = getPlugins();
-      for (const plugin of plugins) {
-        // only run plugins that have logs function
-        if (!plugin.logs) {
-          continue;
-        }
-
-        const logsConfig = generateLogsConfig(follow);
-        const result = await plugin.logs({ docker, _, logsConfig, fixLogStream, username, id, reply, follow });
-        logger.debug('Running logs with plugin:', plugin.config.name, result);
-        if (plugin.config.exclusive) {
-          logger.debug('Logs finished via exclusive plugin:', plugin.config.name);
-          return;
-        }
       }
 
       // get container logs

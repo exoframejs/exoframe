@@ -22,4 +22,4 @@ services:
       - entryPoints.web.address=:80
       - entryPoints.websecure.address=:443
       - traefik.http.services.exoframe-server.loadbalancer.server.port=8080
-    command: "/bin/sh -c 'yarn; yarn watch'"
+    command: "/bin/sh -c 'npm ci; npm run watch'"

@@ -2,7 +2,6 @@
 import { getConfig } from '../config/index.js';
 import { createNetwork, initNetwork } from '../docker/network.js';
 import logger from '../logger/index.js';
-import { getPlugins } from '../plugins/index.js';
 import { getEnv, getHost, getProjectConfig, nameFromImage, projectFromConfig, writeStatus } from '../util/index.js';
 import docker from './docker.js';
 
@@ -109,40 +108,6 @@ export async function startFromParams({
   // remove or stringify all middlewares
   if (middlewares.length > 0) {
     Labels[`traefik.http.routers.${name}.middlewares`] = middlewares.join(',');
-  }
-
-  // run startFromParams via plugins if available
-  const plugins = getPlugins();
-  logger.debug('Got plugins, running startFromParams:', plugins);
-  for (const plugin of plugins) {
-    // only run plugins that have startFromParams function
-    if (!plugin.startFromParams) {
-      continue;
-    }
-
-    const result = await plugin.startFromParams({
-      docker,
-      serverConfig,
-      name,
-      image,
-      deploymentName,
-      projectName,
-      username,
-      backendName,
-      frontend,
-      port,
-      hostname,
-      restartPolicy,
-      serviceLabels: Labels,
-      Env,
-      Mounts,
-      additionalNetworks,
-    });
-    logger.debug('Executed startWithParams with plugin:', plugin.config.name, result);
-    if (result && plugin.config.exclusive) {
-      logger.debug('StartWithParams finished via exclusive plugin:', plugin.config.name);
-      return result;
-    }
   }
 
   // create config
@@ -301,35 +266,6 @@ export async function start({ image, username, folder, resultStream, existing = 
   // remove or stringify all middlewares
   if (middlewares.length > 0) {
     Labels[`traefik.http.routers.${name}.middlewares`] = [...new Set(middlewares)].join(',');
-  }
-
-  // run startFromParams via plugins if available
-  const plugins = getPlugins();
-  logger.debug('Got plugins, running start:', plugins);
-  for (const plugin of plugins) {
-    // only run plugins that have startFromParams function
-    if (!plugin.start) {
-      continue;
-    }
-
-    const result = await plugin.start({
-      config,
-      serverConfig,
-      project,
-      username,
-      name,
-      image,
-      Env,
-      serviceLabels: Labels,
-      writeStatus,
-      resultStream,
-      docker,
-    });
-    logger.debug('Executed start with plugin:', plugin.config.name, result);
-    if (result && plugin.config.exclusive) {
-      logger.debug('Start finished via exclusive plugin:', plugin.config.name);
-      return result;
-    }
   }
 
   // create config

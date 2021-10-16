@@ -19,14 +19,14 @@ For more details on how to get it up and running please follow the following lin
 
 ```bash
 # Start the development setup:
-yarn docker:start
+npm run docker:start
 
 # Run something inside of the exoframe container:
-yarn docker:exec [command]
+npm run docker:exec [command]
 
 # Test your code:
-yarn lint
-yarn test
+npm run lint
+npm test
 ```
 
 ## License

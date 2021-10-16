@@ -12,7 +12,6 @@ const configPath = join(baseFolder, 'server.config.yml');
 const publicKeysPath = join(homedir(), '.ssh');
 export const extensionsFolder = join(baseFolder, 'extensions');
 export const recipesFolder = join(baseFolder, 'recipes');
-export const pluginsFolder = join(baseFolder, 'plugins');
 export const faasFolder = join(baseFolder, 'faas');
 // dir for temporary files used to build docker images
 export const tempDockerDir = join(baseFolder, 'deploying');
@@ -57,19 +56,6 @@ try {
   spawn('npm', ['init', '-y', '--silent'], { cwd: recipesFolder });
 }
 
-// create plugins folder if doesn't exist
-try {
-  statSync(pluginsFolder);
-} catch (e) {
-  mkdirSync(pluginsFolder);
-}
-// init package.json if it doesn't exist
-try {
-  statSync(join(pluginsFolder, 'package.json'));
-} catch (e) {
-  spawn('npm', ['init', '-y', '--silent'], { cwd: pluginsFolder });
-}
-
 // default config
 const defaultConfig = {
   debug: false,
@@ -86,9 +72,6 @@ const defaultConfig = {
   traefikDisableGeneratedConfig: false,
   exoframeNetwork: 'exoframe',
   publicKeysPath,
-  plugins: {
-    install: [],
-  },
 };
 
 // default config

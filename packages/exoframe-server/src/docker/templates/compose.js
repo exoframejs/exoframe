@@ -174,35 +174,6 @@ export async function executeTemplate({
     return;
   }
 
-  // run compose via plugins if available
-  const plugins = util.getPlugins();
-  for (const plugin of plugins) {
-    // only run plugins that have compose function
-    if (!plugin.compose) {
-      continue;
-    }
-
-    const images = logToImages(buildLog);
-    const result = await plugin.compose({
-      images,
-      composeConfig,
-      composePath,
-      baseName,
-      docker,
-      util,
-      serverConfig,
-      resultStream,
-      tempDockerDir,
-      folder,
-      yaml: jsyaml,
-    });
-    util.logger.debug('Running compose with plugin:', plugin.config.name, result);
-    if (result && plugin.config.exclusive) {
-      util.logger.debug('Compose finished via exclusive plugin:', plugin.config.name);
-      return;
-    }
-  }
-
   // execute compose 'up -d'
   const { code: exitCode, log: execLog } = await executeCompose({
     cmd: ['--project-name', baseName, 'up', '-d'],

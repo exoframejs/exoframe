@@ -11,7 +11,6 @@ import { start } from '../docker/start.js';
 import getTemplates from '../docker/templates/index.js';
 import { pullImage } from '../docker/util.js';
 import logger from '../logger/index.js';
-import { getPlugins } from '../plugins/index.js';
 import * as util from '../util/index.js';
 
 // destruct locally used functions
@@ -45,7 +44,6 @@ const deploy = async ({ username, folder, existing, resultStream }) => {
     },
     util: Object.assign({}, util, {
       logger,
-      getPlugins,
     }),
   };
 

@@ -7,7 +7,6 @@ import setupAuth from './auth/index.js';
 import { faasFolder, getConfig, waitForConfig } from './config/index.js';
 import { initDocker } from './docker/init.js';
 import logger from './logger/index.js';
-import { initPlugins } from './plugins/index.js';
 import routes from './routes/index.js';
 
 export async function startServer(port = 8080) {
@@ -43,9 +42,6 @@ export async function startServer(port = 8080) {
 
 // export start function
 export async function start(port) {
-  // init plugins
-  await initPlugins();
-
   // init required docker service
   await initDocker();
 
