@@ -1,7 +1,5 @@
-import { listFunctions } from 'exoframe-faas';
 import { getConfig } from '../config/index.js';
 import docker from '../docker/docker.js';
-import { functionToContainerFormat } from '../util/index.js';
 
 export default (fastify) => {
   fastify.route({
@@ -14,9 +12,6 @@ export default (fastify) => {
       // get config
       const config = getConfig();
 
-      // get functions
-      const functions = listFunctions({ functionToContainerFormat });
-
       // get containers
       const allContainers = await docker.listContainers({ all: true });
       const userContainers = await Promise.all(
@@ -28,7 +23,7 @@ export default (fastify) => {
       );
 
       // return results
-      reply.send({ containers: userContainers.concat(functions), services: [] });
+      reply.send({ containers: userContainers, services: [] });
     },
   });
 };

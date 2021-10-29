@@ -1,4 +1,3 @@
-import { getLogsForFunction } from 'exoframe-faas';
 import _ from 'highland';
 import { Readable } from 'stream';
 import docker from '../docker/docker.js';
@@ -85,16 +84,6 @@ export default (fastify) => {
       const { username } = request.user;
       const { id } = request.params;
       const { follow } = request.query;
-
-      // try to get function logs first
-      const fnLogs = getLogsForFunction(id);
-      if (fnLogs) {
-        // wrap logs into stream
-        const logsStream = _(fnLogs).flatten();
-        // send wrapped highland stream as response
-        reply.send(new Readable().wrap(logsStream));
-        return;
-      }
 
       // get container logs
       getContainerLogs({ username, id, reply, follow });

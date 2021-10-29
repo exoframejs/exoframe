@@ -1,10 +1,9 @@
 // npm packages
-import { setup as faas } from 'exoframe-faas';
 import initFastify from 'fastify';
 import fastifyAuth from 'fastify-auth';
 import cors from 'fastify-cors';
 import setupAuth from './auth/index.js';
-import { faasFolder, getConfig, waitForConfig } from './config/index.js';
+import { getConfig, waitForConfig } from './config/index.js';
 import { initDocker } from './docker/init.js';
 import logger from './logger/index.js';
 import routes from './routes/index.js';
@@ -31,7 +30,7 @@ export async function startServer(port = 8080) {
   fastify.addContentTypeParser('*', (req, done) => done());
 
   // register plugins
-  await setupAuth(fastify).register(routes).register(faas({ faasFolder })).ready();
+  await setupAuth(fastify).register(routes).ready();
 
   // start server
   await fastify.listen(port, '0.0.0.0');

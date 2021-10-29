@@ -1,4 +1,3 @@
-import { removeFunction } from 'exoframe-faas';
 import docker from '../docker/docker.js';
 import { removeContainer } from '../docker/util.js';
 
@@ -53,13 +52,6 @@ export default (fastify) => {
       // get username
       const { username } = request.user;
       const { id } = request.params;
-
-      // try and remove function
-      if (await removeFunction({ id, username })) {
-        // reply
-        reply.code(204).send('removed');
-        return;
-      }
 
       removeUserContainer({ username, id, reply });
     },

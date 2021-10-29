@@ -1,9 +1,8 @@
 /* eslint no-await-in-loop: off */
-import { registerFunction } from 'exoframe-faas';
 import _ from 'highland';
 import { Readable } from 'stream';
 import { v1 as uuidv1 } from 'uuid';
-import { faasFolder, getConfig, tempDockerDir } from '../config/index.js';
+import { getConfig, tempDockerDir } from '../config/index.js';
 import { build } from '../docker/build.js';
 import { scheduleCleanup, schedulePrune } from '../docker/cleanup.js';
 import docker from '../docker/docker.js';
@@ -27,7 +26,7 @@ const deploy = async ({ username, folder, existing, resultStream }) => {
   // generate template props
   const templateProps = {
     config,
-    serverConfig: { ...serverConfig, faasFolder },
+    serverConfig: { ...serverConfig },
     existing,
     username,
     resultStream,
@@ -38,9 +37,6 @@ const deploy = async ({ username, folder, existing, resultStream }) => {
       build,
       start,
       pullImage,
-    },
-    faas: {
-      registerFunction,
     },
     util: Object.assign({}, util, {
       logger,

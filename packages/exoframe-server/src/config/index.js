@@ -12,7 +12,6 @@ const configPath = join(baseFolder, 'server.config.yml');
 const publicKeysPath = join(homedir(), '.ssh');
 export const extensionsFolder = join(baseFolder, 'extensions');
 export const recipesFolder = join(baseFolder, 'recipes');
-export const faasFolder = join(baseFolder, 'faas');
 // dir for temporary files used to build docker images
 export const tempDockerDir = join(baseFolder, 'deploying');
 
@@ -21,13 +20,6 @@ try {
   statSync(baseFolder);
 } catch (e) {
   mkdirSync(baseFolder);
-}
-
-// create faas folder if doesn't exist
-try {
-  statSync(faasFolder);
-} catch (e) {
-  mkdirSync(faasFolder);
 }
 
 // create extensions folder if doesn't exist

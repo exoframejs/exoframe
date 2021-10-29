@@ -1,7 +1,6 @@
 /* eslint global-require: off */
 /* eslint import/no-dynamic-require: off */
 // npm packages
-import { template as faasTemplate } from 'exoframe-faas';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { extensionsFolder } from '../../config/index.js';
@@ -23,5 +22,5 @@ export default async () => {
     })
   );
 
-  return [faasTemplate, imageTemplate, dockerfileTemplate, nodeTemplate, staticTemplate].concat(userTemplates);
+  return [imageTemplate, dockerfileTemplate, nodeTemplate, staticTemplate].concat(userTemplates);
 };
