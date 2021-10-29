@@ -86,7 +86,7 @@ export default (fastify) => {
       // get username
       const { username } = request.user;
       // get stream
-      const tarStream = request.req;
+      const tarStream = request.raw;
       // create new deploy folder for user
       const folder = `${username}-${uuidv1()}`;
       // unpack to user specific temp folder
@@ -110,7 +110,7 @@ export default (fastify) => {
       // get username
       const { username } = request.user;
       // get stream
-      const tarStream = request.req;
+      const tarStream = request.raw;
       // create new deploy folder for user
       const folder = `${username}-${uuidv1()}`;
       // unpack to temp user folder
