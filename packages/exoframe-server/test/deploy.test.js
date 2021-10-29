@@ -8,9 +8,6 @@ import docker from '../src/docker/docker.js';
 import { initNetwork } from '../src/docker/network.js';
 import authToken from './fixtures/authToken.js';
 
-// mock cleanup functions
-jest.unstable_mockModule('../src/docker/cleanup.js', () => import('./__mocks__/cleanup.js'));
-
 // mock config
 jest.unstable_mockModule('../src/config/index.js', () => import('./__mocks__/config.js'));
 const config = await import('../src/config/index.js');

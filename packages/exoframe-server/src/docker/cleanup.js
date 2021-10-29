@@ -4,7 +4,7 @@ import docker from './docker.js';
 import { pruneDocker, removeContainer } from './util.js';
 
 // time to wait before removing old projects on update
-const WAIT_TIME = 5000;
+const WAIT_TIME = process.env.NODE_ENV === 'testing' ? 0 : 5000;
 
 // schedule docker prune for next tick (if enabled in config)
 export const schedulePrune = () => {
