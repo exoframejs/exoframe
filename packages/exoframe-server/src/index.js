@@ -27,7 +27,7 @@ export async function startServer(port = 8080) {
   }
 
   // add custom parser that just passes stream on
-  fastify.addContentTypeParser('*', (req, done) => done());
+  fastify.addContentTypeParser('*', (_request, _payload, done) => done());
 
   // register plugins
   await setupAuth(fastify).register(routes).ready();
