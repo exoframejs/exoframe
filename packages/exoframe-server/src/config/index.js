@@ -7,7 +7,8 @@ import { join } from 'path';
 import logger from '../logger/index.js';
 
 // construct paths
-export const baseFolder = join(homedir(), '.exoframe');
+const xdgConfigHome = process.env.XDG_CONFIG_HOME || join(homedir(), '.config');
+export const baseFolder = join(xdgConfigHome, 'exoframe');
 const configPath = join(baseFolder, 'server.config.yml');
 const publicKeysPath = join(homedir(), '.ssh');
 export const extensionsFolder = join(baseFolder, 'extensions');

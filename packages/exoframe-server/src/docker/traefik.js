@@ -1,15 +1,11 @@
 import { existsSync, readFileSync, statSync, writeFileSync } from 'fs';
 import jsyaml from 'js-yaml';
 import mkdirp from 'mkdirp';
-import { homedir } from 'os';
 import { join } from 'path';
-import { getConfig, waitForConfig } from '../config/index.js';
+import { baseFolder, getConfig, waitForConfig } from '../config/index.js';
 import logger from '../logger/index.js';
 import docker from './docker.js';
 import { pullImage } from './util.js';
-
-// config vars
-const baseFolder = join(homedir(), '.exoframe');
 
 function getTraefikPath(volumePath) {
   return join(volumePath, 'traefik');
