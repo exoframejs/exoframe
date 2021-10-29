@@ -2,7 +2,7 @@ import { randomUUID } from 'crypto';
 import { readFile as _readFile, readFileSync } from 'fs';
 import jwt from 'jsonwebtoken';
 import { dirname, join } from 'path';
-import { parseKey } from 'sshpk';
+import sshpk from 'sshpk';
 import { fileURLToPath } from 'url';
 import { promisify } from 'util';
 import { auth } from '../../config.js';
@@ -19,11 +19,19 @@ const publicKeysPath = join(keysFolder, 'authorized_keys');
 
 const verifyWithKey = async ({ key, token, phrase }) => {
   try {
-    const pk = parseKey(key);
-    const pubKey = pk.toString('pem');
-    const decoded = await jwtVerify(token, pubKey, { algorithms: ['RS256'] });
-    return decoded === phrase;
+    // get public key
+    const pk = sshpk.parseKey(key);
+    // create verifier with current phrase
+    const verifier = pk.createVerify('sha512');
+    verifier.update(phrase);
+    // decode signature from jwt
+    const decoded = await jwtVerify(token, auth.publicKey, { algorithms: ['HS256'] });
+    // validate signature
+    const sig = typeof decoded.signature === 'string' ? decoded.signature : Buffer.from(decoded.signature);
+    const valid = verifier.verify(sig);
+    return valid;
   } catch (e) {
+    // console.error(e);
     return false;
   }
 };

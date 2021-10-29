@@ -3,8 +3,9 @@ import { readFileSync } from 'fs';
 import getPort from 'get-port';
 import jwt from 'jsonwebtoken';
 import { dirname, join } from 'path';
+import sshpk from 'sshpk';
 import { fileURLToPath } from 'url';
-import { auth as authConfig } from '../config.js';
+import { auth, auth as authConfig } from '../config.js';
 import { getTokenCollection } from '../src/db/index.js';
 
 // mock config
@@ -15,6 +16,17 @@ const { startServer } = await import('../src/index.js');
 
 // current folder
 const currentDir = dirname(fileURLToPath(import.meta.url));
+
+const signPhraseWithKey = (phrase, keyPath) => {
+  const pKey = sshpk.parsePrivateKey(readFileSync(keyPath));
+  const signer = pKey.createSign('sha512');
+  signer.update(phrase);
+  const signature = signer.sign();
+  if (pKey.type === 'ed25519') {
+    return signature.toString('asn1');
+  }
+  return signature.toBuffer();
+};
 
 let server;
 let authToken = '';
@@ -52,9 +64,10 @@ test('Should get login id and login phrase', async () => {
   loginReqId = result.uid;
 });
 
-test('Should login with admin username and correct token', async () => {
-  const privateKeyPath = join(currentDir, 'fixtures', 'id_rsa');
-  const reqToken = jwt.sign(loginPhrase, readFileSync(privateKeyPath), { algorithm: 'RS256' });
+test('Should login with admin username and correct token (RSA)', async () => {
+  const privateKeyPath = join(currentDir, 'fixtures', 'ssh-keys', 'id_rsa');
+  const signature = signPhraseWithKey(loginPhrase, privateKeyPath);
+  const reqToken = jwt.sign({ signature }, auth.publicKey, { algorithm: 'HS256' });
 
   const options = {
     method: 'POST',
@@ -80,6 +93,98 @@ test('Should login with admin username and correct token', async () => {
   // save token for return
   const { token } = result;
   authToken = token;
+});
+
+test('Should login with admin username and correct token (ECDSA)', async () => {
+  const options = {
+    method: 'GET',
+    url: '/login',
+  };
+
+  const response = await server.inject(options);
+  const result = JSON.parse(response.payload);
+
+  expect(response.statusCode).toBe(200);
+  expect(response.headers['access-control-allow-origin']).toEqual('http://test.com');
+  expect(result.phrase).toBeTruthy();
+  expect(result.uid).toBeTruthy();
+
+  // save phrase for login request
+  const loginPhrase = result.phrase;
+  const loginReqId = result.uid;
+
+  // get certificate and create jwt with signed phrase
+  const privateKeyPath = join(currentDir, 'fixtures', 'ssh-keys', 'id_ecdsa');
+  const signature = signPhraseWithKey(loginPhrase, privateKeyPath);
+  const reqToken = jwt.sign({ signature }, auth.publicKey, { algorithm: 'HS256' });
+
+  const loginOptions = {
+    method: 'POST',
+    url: '/login',
+    payload: {
+      user: { username: 'admin' },
+      token: reqToken,
+      requestId: loginReqId,
+    },
+  };
+
+  const loginResponse = await server.inject(loginOptions);
+  const loginResult = JSON.parse(loginResponse.payload);
+
+  expect(loginResponse.statusCode).toBe(200);
+  expect(loginResult.token).toBeTruthy();
+
+  const decodedUser = jwt.verify(loginResult.token, authConfig.privateKey);
+
+  expect(decodedUser.user.username).toBe('admin');
+  expect(decodedUser.loggedIn).toBeTruthy();
+});
+
+test('Should login with admin username and correct token (ED25519)', async () => {
+  const options = {
+    method: 'GET',
+    url: '/login',
+  };
+
+  const response = await server.inject(options);
+  const result = JSON.parse(response.payload);
+
+  expect(response.statusCode).toBe(200);
+  expect(response.headers['access-control-allow-origin']).toEqual('http://test.com');
+  expect(result.phrase).toBeTruthy();
+  expect(result.uid).toBeTruthy();
+
+  // save phrase for login request
+  const loginPhrase = result.phrase;
+  const loginReqId = result.uid;
+
+  // get certificate and create jwt with signed phrase
+  const privateKeyPath = join(currentDir, 'fixtures', 'ssh-keys', 'id_ed25519');
+  const signature = signPhraseWithKey(loginPhrase, privateKeyPath);
+  const reqToken = jwt.sign({ signature }, auth.publicKey, {
+    algorithm: 'HS256',
+  });
+
+  const loginOptions = {
+    method: 'POST',
+    url: '/login',
+    payload: {
+      user: { username: 'admin' },
+      token: reqToken,
+      requestId: loginReqId,
+    },
+  };
+
+  const loginResponse = await server.inject(loginOptions);
+  const loginResult = JSON.parse(loginResponse.payload);
+
+  expect(loginResponse.statusCode).toBe(200);
+  expect(loginResult.token).toBeTruthy();
+
+  const decodedUser = jwt.verify(loginResult.token, authConfig.privateKey);
+
+  expect(decodedUser.user.username).toBe('admin');
+  expect(decodedUser.loggedIn).toBeTruthy();
 });
 
 test('Should generate valid deploy token', async () => {
