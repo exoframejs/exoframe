@@ -1,10 +1,10 @@
+import { randomUUID } from 'crypto';
 import { readFile as _readFile, readFileSync } from 'fs';
 import jwt from 'jsonwebtoken';
 import { dirname, join } from 'path';
 import { parseKey } from 'sshpk';
 import { fileURLToPath } from 'url';
 import { promisify } from 'util';
-import { v1 as uuidv1 } from 'uuid';
 import { auth } from '../../config.js';
 import { getConfig } from '../config/index.js';
 import { getTokenCollection, reqCollection } from '../db/index.js';
@@ -45,7 +45,7 @@ const loginRoutes = (fastify, opts, next) => {
     path: '/login',
     async handler(request, reply) {
       // generate login request with phrase and uuid
-      const uid = uuidv1();
+      const uid = randomUUID();
       const doc = { phrase: `hello exoframe ${uid}`, uid };
       // store in request collection
       reqCollection.insert(doc);

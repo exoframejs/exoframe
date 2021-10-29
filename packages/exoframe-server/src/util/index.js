@@ -1,10 +1,10 @@
 import { spawn } from 'child_process';
+import { randomUUID } from 'crypto';
 import { readFileSync } from 'fs';
 import _ from 'lodash';
 import { join } from 'path';
 import rimraf from 'rimraf';
 import { extract } from 'tar-fs';
-import { v1 as uuidv1 } from 'uuid';
 import { tempDockerDir } from '../config/index.js';
 import { getSecretsCollection } from '../db/secrets.js';
 
@@ -52,7 +52,7 @@ export function baseNameFromImage(image) {
 
 export function nameFromImage(image) {
   const baseName = baseNameFromImage(image);
-  const uid = uuidv1();
+  const uid = randomUUID();
   return `${baseName}-${uid.split('-').shift()}`;
 }
 

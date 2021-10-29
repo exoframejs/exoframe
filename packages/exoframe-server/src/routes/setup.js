@@ -1,8 +1,8 @@
 /* eslint global-require: off */
 /* eslint import/no-dynamic-require: off */
+import { randomUUID } from 'crypto';
 import { mkdirSync } from 'fs';
 import { join } from 'path';
-import { v1 as uuidv1 } from 'uuid';
 import { getConfig, recipesFolder, tempDockerDir } from '../config/index.js';
 import { build, buildFromParams } from '../docker/build.js';
 import docker from '../docker/docker.js';
@@ -51,7 +51,7 @@ export default (fastify) => {
       // get installed recipe path
       const recipePath = join(recipesFolder, 'node_modules', recipeName);
       // create new deploy folder for user
-      const folder = `${username}-${uuidv1()}`;
+      const folder = `${username}-${randomUUID()}`;
       mkdirSync(join(tempDockerDir, folder));
       // load recipe with update parameter to force reload
       const recipe = await import(`${recipePath}?update=${Date.now()}`);

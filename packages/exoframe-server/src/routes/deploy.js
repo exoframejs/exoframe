@@ -1,7 +1,7 @@
 /* eslint no-await-in-loop: off */
+import { randomUUID } from 'crypto';
 import _ from 'highland';
 import { Readable } from 'stream';
-import { v1 as uuidv1 } from 'uuid';
 import { getConfig, tempDockerDir } from '../config/index.js';
 import { build } from '../docker/build.js';
 import { scheduleCleanup, schedulePrune } from '../docker/cleanup.js';
@@ -88,7 +88,7 @@ export default (fastify) => {
       // get stream
       const tarStream = request.raw;
       // create new deploy folder for user
-      const folder = `${username}-${uuidv1()}`;
+      const folder = `${username}-${randomUUID()}`;
       // unpack to user specific temp folder
       await unpack({ tarStream, folder });
       // create new highland stream for results
@@ -112,7 +112,7 @@ export default (fastify) => {
       // get stream
       const tarStream = request.raw;
       // create new deploy folder for user
-      const folder = `${username}-${uuidv1()}`;
+      const folder = `${username}-${randomUUID()}`;
       // unpack to temp user folder
       await unpack({ tarStream, folder });
       // get old project containers if present

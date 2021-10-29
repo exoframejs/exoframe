@@ -35,8 +35,7 @@
     "rimraf": "^3.0.0",
     "semver-compare": "^1.0.0",
     "sshpk": "^1.14.2",
-    "tar-fs": "^2.0.1",
-    "uuid": "^8.0.0"
+    "tar-fs": "^2.0.1"
   },
   "devDependencies": {
     "eslint": "^8.1.0",
