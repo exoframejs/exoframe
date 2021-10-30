@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 import { dirname, join } from 'path';
 import sshpk from 'sshpk';
 import { fileURLToPath } from 'url';
-import { auth, auth as authConfig } from '../config.js';
+import { auth as authConfig } from '../config.js';
 import { getTokenCollection } from '../src/db/index.js';
 
 // mock config
@@ -67,14 +67,13 @@ test('Should get login id and login phrase', async () => {
 test('Should login with admin username and correct token (RSA)', async () => {
   const privateKeyPath = join(currentDir, 'fixtures', 'ssh-keys', 'id_rsa');
   const signature = signPhraseWithKey(loginPhrase, privateKeyPath);
-  const reqToken = jwt.sign({ signature }, auth.publicKey, { algorithm: 'HS256' });
 
   const options = {
     method: 'POST',
     url: '/login',
     payload: {
       user: { username: 'admin' },
-      token: reqToken,
+      signature,
       requestId: loginReqId,
     },
   };
@@ -116,14 +115,13 @@ test('Should login with admin username and correct token (ECDSA)', async () => {
   // get certificate and create jwt with signed phrase
   const privateKeyPath = join(currentDir, 'fixtures', 'ssh-keys', 'id_ecdsa');
   const signature = signPhraseWithKey(loginPhrase, privateKeyPath);
-  const reqToken = jwt.sign({ signature }, auth.publicKey, { algorithm: 'HS256' });
 
   const loginOptions = {
     method: 'POST',
     url: '/login',
     payload: {
       user: { username: 'admin' },
-      token: reqToken,
+      signature,
       requestId: loginReqId,
     },
   };
@@ -161,16 +159,13 @@ test('Should login with admin username and correct token (ED25519)', async () =>
   // get certificate and create jwt with signed phrase
   const privateKeyPath = join(currentDir, 'fixtures', 'ssh-keys', 'id_ed25519');
   const signature = signPhraseWithKey(loginPhrase, privateKeyPath);
-  const reqToken = jwt.sign({ signature }, auth.publicKey, {
-    algorithm: 'HS256',
-  });
 
   const loginOptions = {
     method: 'POST',
     url: '/login',
     payload: {
       user: { username: 'admin' },
-      token: reqToken,
+      signature,
       requestId: loginReqId,
     },
   };
@@ -290,7 +285,7 @@ test('Should not allow request with removed deploy token', async () => {
   expect(result.error).toBe('Unauthorized');
 });
 
-test('Should not login without a token', async () => {
+test('Should not login without a signature', async () => {
   const options = {
     method: 'POST',
     url: '/login',
@@ -303,16 +298,16 @@ test('Should not login without a token', async () => {
   const result = JSON.parse(response.payload);
 
   expect(response.statusCode).toBe(401);
-  expect(result.error).toBe('No token given!');
+  expect(result.error).toBe('No signature given!');
 });
 
-test('Should not login with a broken token', async () => {
+test('Should not login with a broken signature', async () => {
   const options = {
     method: 'POST',
     url: '/login',
     payload: {
       user: { username: 'admin' },
-      token: 'not a token',
+      signature: 'not a signature',
       requestId: 'asd',
     },
   };

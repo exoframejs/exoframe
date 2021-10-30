@@ -17,17 +17,17 @@ const jwtVerify = promisify(jwt.verify);
 const keysFolder = getConfig().publicKeysPath;
 const publicKeysPath = join(keysFolder, 'authorized_keys');
 
-const verifyWithKey = async ({ key, token, phrase }) => {
+const verifyWithKey = async ({ key, signature, phrase }) => {
   try {
     // get public key
     const pk = sshpk.parseKey(key);
     // create verifier with current phrase
     const verifier = pk.createVerify('sha512');
     verifier.update(phrase);
-    // decode signature from jwt
-    const decoded = await jwtVerify(token, auth.publicKey, { algorithms: ['HS256'] });
+    // use signature as-is if string or convert to buffer if object
+    // this is a workaround for ed25519 signatures not working as buffer for some reason
+    const sig = typeof signature === 'string' ? signature : Buffer.from(signature);
     // validate signature
-    const sig = typeof decoded.signature === 'string' ? decoded.signature : Buffer.from(decoded.signature);
     const valid = verifier.verify(sig);
     return valid;
   } catch (e) {
@@ -67,12 +67,12 @@ const loginRoutes = (fastify, opts, next) => {
     path: '/login',
     async handler(request, reply) {
       const {
-        body: { user, token, requestId },
+        body: { user, signature, requestId },
       } = request;
       const loginReq = reqCollection.findOne({ uid: requestId });
 
-      if (!token || !user) {
-        reply.code(401).send({ error: 'No token given!' });
+      if (!signature || !user) {
+        reply.code(401).send({ error: 'No signature given!' });
         return;
       }
 
@@ -87,7 +87,9 @@ const loginRoutes = (fastify, opts, next) => {
           .toString()
           .split('\n')
           .filter((k) => k && k.length > 0);
-        const res = await Promise.all(publicKeys.map((key) => verifyWithKey({ key, token, phrase: loginReq.phrase })));
+        const res = await Promise.all(
+          publicKeys.map((key) => verifyWithKey({ key, signature, phrase: loginReq.phrase }))
+        );
         if (!res.some((r) => r === true)) {
           reply.code(401).send({ error: 'Not authorized!' });
           return;
