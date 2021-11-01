@@ -49,14 +49,14 @@ test('Should login with basic input', async () => {
     });
 
   const { lastFrame, stdin } = render(html`<${Login} url=${url} />`);
-  expect(lastFrame()).toMatchInlineSnapshot(`"[1mLogging into: http://test.url[22m"`);
+  expect(lastFrame()).toMatchInlineSnapshot(`"Logging into: http://test.url"`);
 
   // wait for keys
   await setTimeout(100);
   expect(lastFrame()).toMatchInlineSnapshot(`
-    "[1mLogging into: http://test.url[22m
-    [1mSelect a private key to use:[22m
-    [34m❯[39m [34mid_rsa[39m"
+    "Logging into: http://test.url
+    Select a private key to use:
+    ❯ id_rsa"
   `);
 
   // select key
@@ -66,9 +66,9 @@ test('Should login with basic input', async () => {
   // wait for passphrase input
   await setTimeout(100);
   expect(lastFrame()).toMatchInlineSnapshot(`
-    "[1mLogging into: http://test.url[22m
+    "Logging into: http://test.url
     Using key: id_rsa
-    Enter key passpharse (leave blank if not set): [7m [27m"
+    Enter key passpharse (leave blank if not set):"
   `);
 
   // use no passphrase
@@ -78,10 +78,10 @@ test('Should login with basic input', async () => {
   // wait for username input
   await setTimeout(100);
   expect(lastFrame()).toMatchInlineSnapshot(`
-    "[1mLogging into: http://test.url[22m
+    "Logging into: http://test.url
     Using key: id_rsa
-    Enter key passpharse (leave blank if not set): [7m [27m
-    Enter your username: [7m [27m"
+    Enter key passpharse (leave blank if not set):
+    Enter your username:"
   `);
 
   // enter test username
@@ -92,7 +92,7 @@ test('Should login with basic input', async () => {
   // wait for username input
   await setTimeout(100);
   expect(lastFrame()).toMatchInlineSnapshot(`
-    "[1mLogging into: http://test.url[22m
+    "Logging into: http://test.url
     Using key: id_rsa
     Using username: testUser
     Loading...
