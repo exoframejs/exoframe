@@ -18,6 +18,7 @@
     "highland": "^2.13.5",
     "multimatch": "^5.0.0",
     "serialize-error": "^8.1.0",
+    "sshpk": "^1.16.1",
     "tar-fs": "^2.1.0"
   },
   "devDependencies": {
