@@ -11,12 +11,12 @@
   "dependencies": {
     "chalk": "^4.1.2",
     "commander": "^8.3.0",
+    "exoframe-cli": "^7.0.0",
     "got": "^11.8.2",
     "htm": "^3.1.0",
     "ink": "^3.2.0",
     "ink-select-input": "^4.2.0",
     "ink-text-input": "^4.0.1",
-    "react": "^17.0.2",
-    "sshpk": "^1.16.1"
+    "react": "^17.0.2"
   }
 }

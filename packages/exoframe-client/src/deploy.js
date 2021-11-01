@@ -5,7 +5,7 @@ import multimatch from 'multimatch';
 import path from 'path';
 import { serializeError } from 'serialize-error';
 import tar from 'tar-fs';
-import { formatServices } from './utils/formatServices';
+import { formatServices } from './utils/formatServices.js';
 
 /**
  * @typedef {object} DeployParams
