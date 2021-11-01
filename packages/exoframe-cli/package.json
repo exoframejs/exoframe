@@ -7,16 +7,37 @@
   "repository": "git@github.com:exoframejs/exoframe.git",
   "author": "Tim Ermilov <yamalight@gmail.com>",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "lint": "eslint src/",
+    "test": "TZ=Greenland NODE_ENV=testing NODE_OPTIONS=--experimental-vm-modules jest --watch",
+    "test:ci": "TZ=Greenland NODE_ENV=testing NODE_OPTIONS=--experimental-vm-modules jest"
+  },
   "dependencies": {
     "chalk": "^4.1.2",
     "commander": "^8.3.0",
-    "exoframe-cli": "^7.0.0",
+    "exoframe-client": "^7.0.0",
     "got": "^11.8.2",
     "htm": "^3.1.0",
     "ink": "^3.2.0",
     "ink-select-input": "^4.2.0",
     "ink-text-input": "^4.0.1",
     "react": "^17.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.1.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-prettier": "^4.0.0",
+    "ink-testing-library": "^2.1.0",
+    "jest": "^27.3.1",
+    "nock": "^13.1.4",
+    "prettier": "^2.4.1"
+  },
+  "jest": {
+    "transform": {},
+    "testEnvironment": "jest-environment-node"
+  },
+  "engines": {
+    "node": ">=16"
   }
 }

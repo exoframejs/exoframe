@@ -12,11 +12,7 @@ loginCmd
   .option('-p, --passphrase [passphrase]', 'Passphrase for user private key (if set)')
   .option('-u, --url [url]', 'URL of a new endpoint')
   .action(({ key, passphrase, url }) => {
-    render(html`<${Login} key=${key} passphrase=${passphrase} url=${url} />`);
+    render(html`<${Login} keyPath=${key} passphrase=${passphrase} url=${url} />`);
   });
 
 export default loginCmd;
-
-/* if (url && url.length) {
-      await endpointHandler({ url });
-    }*/

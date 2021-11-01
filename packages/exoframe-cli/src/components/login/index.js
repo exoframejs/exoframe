@@ -11,8 +11,8 @@ import { usePrivateKeys } from './usePrivateKeys.js';
 const SelectInput = inkSelectInput.default;
 const TextInput = inkTextInput.UncontrolledTextInput;
 
-export default function Login({ key, passphrase, url }) {
-  const [currentKey, setCurrentKey] = useState(key);
+export default function Login({ keyPath, passphrase, url }) {
+  const [currentKey, setCurrentKey] = useState(keyPath);
   const [username, setUsername] = useState('');
   const [keypassphrase, setKeypassphrase] = useState(passphrase);
   // load private keys if no key is provided
@@ -24,6 +24,14 @@ export default function Login({ key, passphrase, url }) {
   } = useLogin({ key: currentKey?.value, passphrase: keypassphrase, url, username });
   // get config
   const config = useMemo(() => getConfig(), []);
+  const endpoint = useMemo(() => url ?? config.endpoint, [config.endpoint, url]);
+
+  /*
+  TODO: Do I still need that?
+  if (url && url.length) {
+    await endpointHandler({ url });
+  } 
+  */
 
   const error = keyError || loginError;
 
@@ -46,8 +54,14 @@ export default function Login({ key, passphrase, url }) {
   }
 
   return html`<${Box} flexDirection="column">
-    <${Text} bold>Logging into: ${config.endpoint}<//>
-    ${showKeySelection && html`<${SelectInput} items=${privateKeys} onSelect=${handleSelect} />`}
+    <${Text} bold>Logging into: ${endpoint}<//>
+    ${showKeySelection &&
+    html`
+      <${Box} flexDirection="column">
+        <${Text} bold>Select a private key to use:<//>
+        <${SelectInput} items=${privateKeys} onSelect=${handleSelect} />
+      <//>
+    `}
     ${currentKey &&
     html`<${Box} flexDirection="column">
       <${Text}>Using key: ${currentKey.label}<//>
@@ -56,7 +70,7 @@ export default function Login({ key, passphrase, url }) {
         <${Text}>Enter key passpharse (leave blank if not set): <//>
         <${TextInput} onSubmit=${handlePassphrase} mask="*" />
       <//>`}
-      ${keypassphrase?.length > 0 &&
+      ${keypassphrase !== undefined &&
       !username &&
       html`<${Box}>
         <${Text}>Enter your username: <//>
