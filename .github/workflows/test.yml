@@ -48,9 +48,9 @@ jobs:
       - name: install
         run: npm ci
       - name: lint
-        run: npm run lint -w exoframe-cli
+        run: npm run lint -w exoframe
       - name: test
-        run: npm run test:ci -w exoframe-cli
+        run: npm run test:ci -w exoframe
 
   test-server:
     runs-on: ubuntu-latest
