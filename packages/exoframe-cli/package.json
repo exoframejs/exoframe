@@ -9,8 +9,8 @@
   "license": "MIT",
   "scripts": {
     "lint": "eslint src/",
-    "test": "FORCE_COLOR=0 TZ=Greenland NODE_ENV=testing NODE_OPTIONS=--experimental-vm-modules jest --watch",
-    "test:ci": "FORCE_COLOR=0 TZ=Greenland NODE_ENV=testing NODE_OPTIONS=--experimental-vm-modules jest"
+    "test": "TZ=Greenland NODE_ENV=testing NODE_OPTIONS=--experimental-vm-modules jest --watch",
+    "test:ci": "TZ=Greenland NODE_ENV=testing NODE_OPTIONS=--experimental-vm-modules jest"
   },
   "dependencies": {
     "chalk": "^4.1.2",
@@ -35,7 +35,10 @@
   },
   "jest": {
     "transform": {},
-    "testEnvironment": "jest-environment-node"
+    "testEnvironment": "jest-environment-node",
+    "setupFiles": [
+      "<rootDir>/.jest/setEnv.js"
+    ]
   },
   "engines": {
     "node": ">=16"
