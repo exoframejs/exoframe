@@ -18,7 +18,7 @@ async function executeLogin({ endpoint, username, keyPath, passphrase, setError,
   } catch (e) {
     setError(`Check your username and password and try again.
     ${e.toString()}
-    ${JSON.stringify(e.response, null, 2)}
+    ${e.response ? JSON.stringify(e.response, null, 2) : ''}
     `);
   }
 }

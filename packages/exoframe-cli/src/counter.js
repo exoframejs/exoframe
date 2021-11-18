@@ -1,4 +1,3 @@
-import { html } from 'htm/react';
 import { Text } from 'ink';
 import { useEffect, useState } from 'react';
 
@@ -15,5 +14,5 @@ export const Counter = () => {
     };
   }, []);
 
-  return html`<${Text} color="green">${counter} tests passed</${Text}>`;
+  return <Text color="green">{counter} tests passed</Text>;
 };

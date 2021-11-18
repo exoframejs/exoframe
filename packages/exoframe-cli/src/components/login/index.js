@@ -1,8 +1,7 @@
-import { html } from 'htm/react';
 import { Box, Text } from 'ink';
 import inkSelectInput from 'ink-select-input';
 import inkTextInput from 'ink-text-input';
-import { useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { getConfig } from '../../config/index.js';
 import { useLogin } from './useLogin.js';
 import { usePrivateKeys } from './usePrivateKeys.js';
@@ -25,12 +24,12 @@ function KeySelect({ showKeySelection, privateKeys, handleSelect }) {
     return null;
   }
 
-  return html`
-    <${Box} flexDirection="column">
-      <${Text} bold>Select a private key to use:<//>
-      <${SelectInput} items=${privateKeys} onSelect=${handleSelect} />
-    <//>
-  `;
+  return (
+    <Box flexDirection="column">
+      <Text bold>Select a private key to use:</Text>
+      <SelectInput items={privateKeys} onSelect={handleSelect} />
+    </Box>
+  );
 }
 
 /**
@@ -49,21 +48,24 @@ function AskForPassAndUsername({ currentKey, keypassphrase, handlePassphrase, us
     return null;
   }
 
-  return html`<${Box} flexDirection="column">
-    <${Text}>Using key: ${currentKey.label}<//>
-    ${!keypassphrase &&
-    html`<${Box}>
-      <${Text}>Enter key passpharse (leave blank if not set): <//>
-      <${TextInput} onSubmit=${handlePassphrase} mask="*" />
-    <//>`}
-    ${keypassphrase !== undefined &&
-    !username &&
-    html`<${Box}>
-      <${Text}>Enter your username: <//>
-      <${TextInput} onSubmit=${handleUsername} />
-    <//>`}
-    ${username?.length > 1 && html`<${Text}>Using username: ${username}<//>`}
-  <//>`;
+  return (
+    <Box flexDirection="column">
+      <Text>Using key: {currentKey.label}</Text>
+      {keypassphrase === undefined && (
+        <Box>
+          <Text>Enter key passpharse (leave blank if not set): </Text>
+          <TextInput onSubmit={handlePassphrase} mask="*" />
+        </Box>
+      )}
+      {keypassphrase !== undefined && !username && (
+        <Box>
+          <Text>Enter your username: </Text>
+          <TextInput onSubmit={handleUsername} />
+        </Box>
+      )}
+      {username?.length > 1 && <Text>Using username: {username}</Text>}
+    </Box>
+  );
 }
 
 /**
@@ -76,7 +78,13 @@ function AskForPassAndUsername({ currentKey, keypassphrase, handlePassphrase, us
  * @returns {React.ReactElement} Passphrase and username input component
  */
 export default function Login({ keyPath, passphrase, url }) {
-  const [currentKey, setCurrentKey] = useState(keyPath);
+  const [currentKey, setCurrentKey] = useState(() => {
+    if (!keyPath) return;
+    return {
+      label: keyPath.split('/').pop(),
+      value: keyPath,
+    };
+  });
   const [username, setUsername] = useState('');
   const [keypassphrase, setKeypassphrase] = useState(passphrase);
   // load private keys if no key is provided
@@ -111,22 +119,29 @@ export default function Login({ keyPath, passphrase, url }) {
 
   // show error if any
   if (error) {
-    return html`<${Box} flexDirection="column">
-      <${Text} bold color="red">Error logging in!<//>
-      <${Text}>${error}<//>
-    <//>`;
+    return (
+      <Box flexDirection="column">
+        <Text bold color="red">
+          Error logging in!
+        </Text>
+        <Text>{error}</Text>
+      </Box>
+    );
   }
 
-  return html`<${Box} flexDirection="column">
-    <${Text} bold>Logging into: ${endpoint}<//>
-    <${KeySelect} showKeySelection=${showKeySelection} privateKeys=${privateKeys} handleSelect=${handleSelect} />
-    <${AskForPassAndUsername}
-      currentKey=${currentKey}
-      keypassphrase=${keypassphrase}
-      handlePassphrase=${handlePassphrase}
-      username=${username}
-      handleUsername=${handleUsername}
-    />
-    ${loading && html`<${Text}>Loading...<//>`}${loginResponse?.length > 1 && html`<${Text}>${loginResponse}<//>`}
-  <//>`;
+  return (
+    <Box flexDirection="column">
+      <Text bold>Logging into: {endpoint}</Text>
+      <KeySelect showKeySelection={showKeySelection} privateKeys={privateKeys} handleSelect={handleSelect} />
+      <AskForPassAndUsername
+        currentKey={currentKey}
+        keypassphrase={keypassphrase}
+        handlePassphrase={handlePassphrase}
+        username={username}
+        handleUsername={handleUsername}
+      />
+      {loading && <Text>Loading...</Text>}
+      {loginResponse?.length > 1 && <Text>{loginResponse}</Text>}
+    </Box>
+  );
 }

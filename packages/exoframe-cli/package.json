@@ -24,6 +24,8 @@
     "react": "^17.0.2"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.16.4",
+    "@babel/preset-react": "^7.16.0",
     "eslint": "^8.1.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-standard": "^16.0.3",
@@ -34,7 +36,6 @@
     "prettier": "^2.4.1"
   },
   "jest": {
-    "transform": {},
     "testEnvironment": "jest-environment-node",
     "setupFiles": [
       "<rootDir>/.jest/setEnv.js"
