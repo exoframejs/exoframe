@@ -8,11 +8,13 @@
   "author": "Tim Ermilov <yamalight@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "build": "babel src --out-dir lib/ --watch",
     "lint": "eslint src/",
     "test": "TZ=Greenland NODE_ENV=testing NODE_OPTIONS=--experimental-vm-modules jest --watch",
     "test:ci": "TZ=Greenland NODE_ENV=testing NODE_OPTIONS=--experimental-vm-modules jest"
   },
   "dependencies": {
+    "apache-md5": "^1.1.7",
     "chalk": "^4.1.2",
     "commander": "^8.3.0",
     "exoframe-client": "^7.0.0",
@@ -20,10 +22,14 @@
     "htm": "^3.1.0",
     "ink": "^3.2.0",
     "ink-select-input": "^4.2.0",
+    "ink-select-input-horizontal": "^4.5.1",
     "ink-text-input": "^4.0.1",
+    "lodash": "^4.17.21",
     "react": "^17.0.2"
   },
   "devDependencies": {
+    "@babel/cli": "^7.16.0",
+    "@babel/core": "^7.16.0",
     "@babel/preset-env": "^7.16.4",
     "@babel/preset-react": "^7.16.0",
     "eslint": "^8.1.0",
