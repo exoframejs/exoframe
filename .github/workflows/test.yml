@@ -47,8 +47,10 @@ jobs:
           node-version: '16.x'
       - name: install
         run: npm ci
-      - name: lint
-        run: npm run lint -w exoframe
+      # currently broken due to top-level await issues with
+      # eslint and eslint-plugin-import
+      # - name: lint
+      #  run: npm run lint -w exoframe
       - name: test
         run: npm run test:ci -w exoframe
 
