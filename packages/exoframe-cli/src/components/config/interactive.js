@@ -1,16 +1,13 @@
-import { Box, Text, useInput } from 'ink';
-import inkSelectInput from 'ink-select-input';
-import React, { useMemo, useState } from 'react';
+import { Box, Text, useFocusManager, useInput } from 'ink';
+import React, { useEffect, useMemo } from 'react';
 import { PromptArrayInput } from './prompts/arrayInput.js';
+import { PromptAuthInput } from './prompts/auth.js';
 import { PromptButton } from './prompts/button.js';
 import { PromptInput } from './prompts/input.js';
 import { PromptKeyValInput } from './prompts/keyvalInput.js';
 import { PromptListInput } from './prompts/list.js';
 import { prompts } from './promptsList.js';
 import { useConfig } from './useConfig.js';
-
-// get ink components (not use ESM yet)
-const SelectInput = inkSelectInput.default;
 
 function Status({ status }) {
   if (status === 'loading') {
@@ -51,26 +48,26 @@ function Status({ status }) {
  *
  */
 export default function InteractiveConfigUpdate() {
-  const [currentField, setCurrentField] = useState(0);
+  const { focusNext, focusPrevious, focus } = useFocusManager();
   const useConfigProps = useConfig();
   const { status } = useConfigProps;
 
-  const promptsCount = useMemo(() => prompts.length - 1, [prompts]);
-
-  const prevPrompt = () => setCurrentField((c) => (c > 1 ? c - 1 : 0));
-  const nextPrompt = () => setCurrentField((c) => (c < promptsCount ? c + 1 : promptsCount));
-
   useInput((input, key) => {
     if (key.return) {
-      nextPrompt();
+      focusNext();
     }
     if (key.upArrow) {
-      prevPrompt();
+      focusPrevious();
     }
     if (key.downArrow) {
-      nextPrompt();
+      focusNext();
     }
   });
+
+  // focus name input on mount
+  useEffect(() => {
+    focus('name');
+  }, []);
 
   const promptWidth = useMemo(() => {
     const promptMargin = 6;
@@ -85,56 +82,28 @@ export default function InteractiveConfigUpdate() {
       <Box flexDirection="column" paddingBottom={1}>
         {prompts.map((prompt, i) => {
           switch (prompt.type) {
+            case 'auth':
+              return (
+                <PromptAuthInput key={prompt.name} prompt={prompt} width={promptWidth} useConfig={useConfigProps} />
+              );
             case 'list':
               return (
-                <PromptListInput
-                  key={prompt.name}
-                  prompt={prompt}
-                  isCurrent={currentField === i}
-                  width={promptWidth}
-                  useConfig={useConfigProps}
-                />
+                <PromptListInput key={prompt.name} prompt={prompt} width={promptWidth} useConfig={useConfigProps} />
               );
             case 'array-input':
               return (
-                <PromptArrayInput
-                  key={prompt.name}
-                  prompt={prompt}
-                  isCurrent={currentField === i}
-                  width={promptWidth}
-                  useConfig={useConfigProps}
-                />
+                <PromptArrayInput key={prompt.name} prompt={prompt} width={promptWidth} useConfig={useConfigProps} />
               );
             case 'keyval-input':
               return (
-                <PromptKeyValInput
-                  key={prompt.name}
-                  prompt={prompt}
-                  isCurrent={currentField === i}
-                  width={promptWidth}
-                  useConfig={useConfigProps}
-                />
+                <PromptKeyValInput key={prompt.name} prompt={prompt} width={promptWidth} useConfig={useConfigProps} />
               );
             case 'input':
-              return (
-                <PromptInput
-                  key={prompt.name}
-                  prompt={prompt}
-                  isCurrent={currentField === i}
-                  width={promptWidth}
-                  useConfig={useConfigProps}
-                />
-              );
+              return <PromptInput key={prompt.name} prompt={prompt} width={promptWidth} useConfig={useConfigProps} />;
             case 'button':
-              return (
-                <PromptButton
-                  key={prompt.name}
-                  prompt={prompt}
-                  isCurrent={currentField === i}
-                  width={promptWidth}
-                  useConfig={useConfigProps}
-                />
-              );
+              return <PromptButton key={prompt.name} prompt={prompt} width={promptWidth} useConfig={useConfigProps} />;
+            default:
+              return <Box />;
           }
         })}
       </Box>

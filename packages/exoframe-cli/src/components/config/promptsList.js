@@ -8,6 +8,7 @@ export const prompts = [
     message: 'Project name (required):',
     placeholder: 'Exoframe project name',
     prop: 'name',
+    focused: true,
   },
   // default stuff
   {
@@ -133,13 +134,13 @@ export const prompts = [
     prop: 'imageFile',
   },
   // basic auth part
-  /* {
-    type: 'confirm',
+  {
+    type: 'auth',
     name: 'basicAuth',
     message: 'Basic auth user:',
     placeholder: 'username:pwd-hash (optional)',
     prop: 'basicAuth',
-  }, */
+  },
   // save button
   {
     type: 'button',

@@ -1,4 +1,4 @@
-import { Box, Text } from 'ink';
+import { Box, Text, useFocus } from 'ink';
 import inkSelectInput from 'ink-select-input-horizontal';
 import get from 'lodash/get.js';
 import React, { useCallback, useMemo } from 'react';
@@ -6,7 +6,8 @@ import React, { useCallback, useMemo } from 'react';
 // get ink components (not use ESM yet)
 const SelectInput = inkSelectInput.default;
 
-export function PromptListInput({ prompt, width, isCurrent, useConfig }) {
+export function PromptListInput({ prompt, width, useConfig }) {
+  const { isFocused } = useFocus();
   const { config, updateConfig } = useConfig;
   const val = useMemo(() => get(config, prompt.prop) ?? '', [prompt, config]);
   const handleSelect = useCallback(
@@ -19,12 +20,12 @@ export function PromptListInput({ prompt, width, isCurrent, useConfig }) {
   return (
     <Box flexDirection="row" key={prompt.name}>
       <Box width={width}>
-        {isCurrent ? <Text color="blue">&gt; </Text> : <Text>&nbsp;&nbsp;</Text>}
-        <Text color={isCurrent ? 'blue' : 'white'}>{prompt.message}</Text>
+        {isFocused ? <Text color="blue">&gt; </Text> : <Text>&nbsp;&nbsp;</Text>}
+        <Text color={isFocused ? 'blue' : 'white'}>{prompt.message}</Text>
       </Box>
       <Box>
-        {!isCurrent && <Text>{String(val)}</Text>}
-        {isCurrent && (
+        {!isFocused && <Text>{String(val)}</Text>}
+        {isFocused && (
           <SelectInput
             items={prompt.list}
             initialIndex={prompt.list.findIndex((i) => i.value === val)}

@@ -1,4 +1,3 @@
-import md5 from 'apache-md5';
 import { writeFile } from 'fs/promises';
 
 export const writeConfig = async (configPath, newConfig) => {
@@ -49,12 +48,8 @@ export const writeConfig = async (configPath, newConfig) => {
   if (newConfig?.imageFile?.length) {
     config.imageFile = newConfig.imageFile;
   }
-  if (newConfig?.users?.length) {
-    config.basicAuth = newConfig.users.reduce((acc, curr, index) => {
-      const delimeter = newConfig.users.length - 1 === index ? '' : ',';
-      const pair = `${curr.username}:${md5(curr.password)}`;
-      return `${acc}${pair}${delimeter}`;
-    }, '');
+  if (newConfig?.basicAuth?.length) {
+    config.basicAuth = newConfig.basicAuth;
   }
 
   // write config
