@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { mkdirSync, readFileSync, statSync, writeFileSync } from 'fs';
+import { mkdir, readFile, stat, writeFile } from 'fs/promises';
 import jsyaml from 'js-yaml';
 import { homedir } from 'os';
 import { join } from 'path';
@@ -18,21 +18,21 @@ let userConfig = defaultConfig;
 
 // create config folder if doesn't exist
 try {
-  statSync(baseFolder);
+  await stat(baseFolder);
 } catch (e) {
-  mkdirSync(baseFolder);
+  await mkdir(baseFolder);
 }
 
 // create user config if doesn't exist
 try {
-  statSync(configPath);
+  await stat(configPath);
 } catch (e) {
-  writeFileSync(configPath, jsyaml.dump(defaultConfig), 'utf8');
+  await writeFile(configPath, jsyaml.dump(defaultConfig), 'utf8');
 }
 
 // load
 try {
-  const newCfg = jsyaml.load(readFileSync(configPath, 'utf8'));
+  const newCfg = jsyaml.load(await readFile(configPath, 'utf8'));
   // assign new config and clean endpoint url
   userConfig = Object.assign(newCfg, {
     endpoint: newCfg.endpoint.replace(/\/$/, ''),
@@ -41,9 +41,9 @@ try {
   console.error('Error parsing user config:', e);
 }
 
-export function updateConfig(newCfg) {
+export async function updateConfig(newCfg) {
   const cfg = Object.assign(userConfig, newCfg);
-  writeFileSync(configPath, jsyaml.dump(cfg), 'utf8');
+  await writeFile(configPath, jsyaml.dump(cfg), 'utf8');
 }
 
 export function isLoggedIn() {
@@ -55,10 +55,10 @@ export function isLoggedIn() {
   return true;
 }
 
-export function logout(cfg) {
+export async function logout(cfg) {
   delete cfg.user;
   delete cfg.token;
-  updateConfig(cfg);
+  await updateConfig(cfg);
 }
 
 export function getConfig() {

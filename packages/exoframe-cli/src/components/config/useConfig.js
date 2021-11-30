@@ -1,5 +1,4 @@
-import fs from 'fs';
-import { readFile } from 'fs/promises';
+import { readFile, stat } from 'fs/promises';
 import set from 'lodash/set.js';
 import path from 'path';
 import { useEffect, useMemo, useState } from 'react';
@@ -26,7 +25,7 @@ const defaultConfig = {
 const loadConfig = async ({ configPath, setStatus, setError, setConfig }) => {
   setStatus('loading');
   try {
-    fs.statSync(configPath);
+    await stat(configPath);
     const cfg = (await readFile(configPath)).toString();
     setStatus('exists');
     setConfig(JSON.parse(cfg));

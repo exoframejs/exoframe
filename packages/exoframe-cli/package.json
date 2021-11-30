@@ -11,7 +11,7 @@
     "build": "babel src --out-dir lib/ --watch",
     "lint": "eslint src/",
     "test": "TZ=Greenland NODE_ENV=testing NODE_OPTIONS=--experimental-vm-modules jest --watch",
-    "test:ci": "TZ=Greenland NODE_ENV=testing NODE_OPTIONS=--experimental-vm-modules jest"
+    "test:ci": "TZ=Greenland NODE_ENV=testing NODE_OPTIONS=--experimental-vm-modules jest --collectCoverage"
   },
   "dependencies": {
     "apache-md5": "^1.1.7",

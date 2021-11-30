@@ -32,6 +32,7 @@ const { getConfig, updateConfig } = await import('../src/config/index.js');
 
 const url = 'http://test.url';
 const username = 'testUser';
+const INPUT_TIMEOUT = 50;
 const ENTER = '\r';
 const ARROW_DOWN = '\u001B[B';
 
@@ -53,7 +54,7 @@ test('Should login with basic input', async () => {
   expect(lastFrame()).toMatchInlineSnapshot(`"Logging into: http://test.url"`);
 
   // wait for keys
-  await setTimeout(100);
+  await setTimeout(INPUT_TIMEOUT);
   expect(lastFrame()).toMatchInlineSnapshot(`
     "Logging into: http://test.url
     Select a private key to use:
@@ -63,11 +64,11 @@ test('Should login with basic input', async () => {
   `);
 
   // select first key
-  await setTimeout(100);
+  await setTimeout(INPUT_TIMEOUT);
   stdin.write(ENTER);
 
   // wait for passphrase input
-  await setTimeout(100);
+  await setTimeout(INPUT_TIMEOUT);
   expect(lastFrame()).toMatchInlineSnapshot(`
     "Logging into: http://test.url
     Using key: id_rsa
@@ -75,11 +76,11 @@ test('Should login with basic input', async () => {
   `);
 
   // use no passphrase
-  await setTimeout(100);
+  await setTimeout(INPUT_TIMEOUT);
   stdin.write(ENTER);
 
   // wait for username input
-  await setTimeout(100);
+  await setTimeout(INPUT_TIMEOUT);
   expect(lastFrame()).toMatchInlineSnapshot(`
     "Logging into: http://test.url
     Using key: id_rsa
@@ -88,11 +89,11 @@ test('Should login with basic input', async () => {
 
   // enter test username
   stdin.write(username);
-  await setTimeout(100);
+  await setTimeout(INPUT_TIMEOUT);
   stdin.write(ENTER);
 
   // wait for username input
-  await setTimeout(100);
+  await setTimeout(INPUT_TIMEOUT);
   expect(lastFrame()).toMatchInlineSnapshot(`
     "Logging into: http://test.url
     Using key: id_rsa
@@ -102,7 +103,7 @@ test('Should login with basic input', async () => {
   `);
 
   // give time to execute requests
-  await setTimeout(100);
+  await setTimeout(INPUT_TIMEOUT);
 
   // make sure servers were actually called
   expect(loginReqServer.isDone()).toBe(true);
@@ -143,7 +144,7 @@ test('Should login using key with passphrase', async () => {
   expect(lastFrame()).toMatchInlineSnapshot(`"Logging into: http://test.url"`);
 
   // wait for keys
-  await setTimeout(100);
+  await setTimeout(INPUT_TIMEOUT);
   expect(lastFrame()).toMatchInlineSnapshot(`
     "Logging into: http://test.url
     Select a private key to use:
@@ -153,15 +154,15 @@ test('Should login using key with passphrase', async () => {
   `);
 
   // select key with passphrase
-  await setTimeout(100);
+  await setTimeout(INPUT_TIMEOUT);
   stdin.write(ARROW_DOWN);
-  await setTimeout(100);
+  await setTimeout(INPUT_TIMEOUT);
   stdin.write(ARROW_DOWN);
-  await setTimeout(100);
+  await setTimeout(INPUT_TIMEOUT);
   stdin.write(ENTER);
 
   // wait for passphrase input
-  await setTimeout(100);
+  await setTimeout(INPUT_TIMEOUT);
   expect(lastFrame()).toMatchInlineSnapshot(`
     "Logging into: http://test.url
     Using key: id_rsa_keyphrase
@@ -169,13 +170,13 @@ test('Should login using key with passphrase', async () => {
   `);
 
   // use correct test passphrase
-  await setTimeout(100);
+  await setTimeout(INPUT_TIMEOUT);
   stdin.write('test123');
-  await setTimeout(100);
+  await setTimeout(INPUT_TIMEOUT);
   stdin.write(ENTER);
 
   // wait for username input
-  await setTimeout(100);
+  await setTimeout(INPUT_TIMEOUT);
   expect(lastFrame()).toMatchInlineSnapshot(`
     "Logging into: http://test.url
     Using key: id_rsa_keyphrase
@@ -184,11 +185,11 @@ test('Should login using key with passphrase', async () => {
 
   // enter test username
   stdin.write(username);
-  await setTimeout(100);
+  await setTimeout(INPUT_TIMEOUT);
   stdin.write(ENTER);
 
   // wait for username input
-  await setTimeout(100);
+  await setTimeout(INPUT_TIMEOUT);
   expect(lastFrame()).toMatchInlineSnapshot(`
     "Logging into: http://test.url
     Using key: id_rsa_keyphrase
@@ -198,7 +199,7 @@ test('Should login using key with passphrase', async () => {
   `);
 
   // give time to execute requests
-  await setTimeout(100);
+  await setTimeout(INPUT_TIMEOUT);
 
   // make sure servers were actually called
   expect(loginReqServer.isDone()).toBe(true);
@@ -237,13 +238,13 @@ test('Should fail to login with non-existent private key', async () => {
   `);
 
   // enter test username
-  await setTimeout(100);
+  await setTimeout(INPUT_TIMEOUT);
   stdin.write(username);
-  await setTimeout(100);
+  await setTimeout(INPUT_TIMEOUT);
   stdin.write(ENTER);
 
   // wait for error
-  await setTimeout(100);
+  await setTimeout(INPUT_TIMEOUT);
   expect(lastFrame()).toMatchInlineSnapshot(`
     "Error logging in!
     Check your username and password and try again.
@@ -269,7 +270,7 @@ test('Should not login with broken private key', async () => {
   expect(lastFrame()).toMatchInlineSnapshot(`"Logging into: http://test.url"`);
 
   // wait for keys
-  await setTimeout(100);
+  await setTimeout(INPUT_TIMEOUT);
   expect(lastFrame()).toMatchInlineSnapshot(`
       "Logging into: http://test.url
       Select a private key to use:
@@ -279,13 +280,13 @@ test('Should not login with broken private key', async () => {
     `);
 
   // select broken key
-  await setTimeout(100);
+  await setTimeout(INPUT_TIMEOUT);
   stdin.write(ARROW_DOWN);
-  await setTimeout(100);
+  await setTimeout(INPUT_TIMEOUT);
   stdin.write(ENTER);
 
   // wait for passphrase input
-  await setTimeout(100);
+  await setTimeout(INPUT_TIMEOUT);
   expect(lastFrame()).toMatchInlineSnapshot(`
     "Logging into: http://test.url
     Using key: id_rsa_b
@@ -293,11 +294,11 @@ test('Should not login with broken private key', async () => {
   `);
 
   // use no passphrase
-  await setTimeout(100);
+  await setTimeout(INPUT_TIMEOUT);
   stdin.write(ENTER);
 
   // wait for username input
-  await setTimeout(100);
+  await setTimeout(INPUT_TIMEOUT);
   expect(lastFrame()).toMatchInlineSnapshot(`
     "Logging into: http://test.url
     Using key: id_rsa_b
@@ -305,13 +306,13 @@ test('Should not login with broken private key', async () => {
   `);
 
   // enter test username
-  await setTimeout(100);
+  await setTimeout(INPUT_TIMEOUT);
   stdin.write(username);
-  await setTimeout(100);
+  await setTimeout(INPUT_TIMEOUT);
   stdin.write(ENTER);
 
   // wait for error
-  await setTimeout(100);
+  await setTimeout(INPUT_TIMEOUT);
   expect(lastFrame()).toMatchInlineSnapshot(`
     "Error logging in!
     Check your username and password and try again.

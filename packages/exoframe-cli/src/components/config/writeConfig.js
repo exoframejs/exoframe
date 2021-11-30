@@ -26,8 +26,8 @@ export const writeConfig = async (configPath, newConfig) => {
   }
   if (newConfig?.rateLimit?.average && newConfig?.rateLimit?.burst) {
     config.rateLimit = {
-      average: newConfig.rateLimit.average,
-      burst: newConfig.rateLimit.burst,
+      average: Number(newConfig.rateLimit.average),
+      burst: Number(newConfig.rateLimit.burst),
     };
   }
   if (newConfig?.hostname?.length) {
