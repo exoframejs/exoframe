@@ -49,9 +49,6 @@
     "testEnvironment": "jest-environment-node",
     "setupFiles": [
       "<rootDir>/.jest/setEnv.js"
-    ],
-    "testIgnorePatterns": [
-      "<rootDir>/exoframe.json"
     ]
   },
   "engines": {

@@ -12,16 +12,28 @@ import { fileURLToPath } from 'url';
 
 const baseFolder = path.dirname(fileURLToPath(import.meta.url));
 
+// folders
+// basic project
 const folder = 'test_html_project';
 const folderPath = path.join('test', 'fixtures', folder);
 const testFolder = path.join(baseFolder, 'fixtures', folder);
 
+// ignore project
 const ignoreFolder = 'test_ignore_project';
 const ignoreFolderPath = path.join('test', 'fixtures', ignoreFolder);
 const ignoreTestFolder = path.join(baseFolder, 'fixtures', ignoreFolder);
 
+// custom config project
 const customConfigFolder = 'test_custom_config_project';
 const customConfigFolderPath = path.join('test', 'fixtures', customConfigFolder);
+
+// custom config project
+const brokenConfigFolder = 'test_broken_config';
+const brokenConfigFolderPath = path.join('test', 'fixtures', brokenConfigFolder);
+
+// no name config project
+const noNameConfigFolder = 'test_noname_config';
+const noNameConfigFolderPath = path.join('test', 'fixtures', noNameConfigFolder);
 
 jest.unstable_mockModule('../src/config/index.js', () => {
   let config = {
@@ -506,61 +518,37 @@ test('Should display error on zero deployments', async () => {
 
 // test
 test('Should not deploy with config without project name', async () => {
-  // corrupt config with string
-  const exoConfig = JSON.parse(fs.readFileSync(path.join(baseFolder, '..', 'exoframe.json')).toString());
-  exoConfig.name = '';
-  fs.writeFileSync(path.join(baseFolder, '..', 'exoframe.json'), JSON.stringify(exoConfig));
-
-  const { lastFrame } = render(<Deploy />);
-  expect(lastFrame()).toMatchInlineSnapshot(`"Deploying current project to: http://localhost:8080"`);
+  const { lastFrame } = render(<Deploy folder={noNameConfigFolderPath} />);
+  expect(lastFrame()).toMatchInlineSnapshot(`"Deploying test/fixtures/test_noname_config to: http://localhost:8080"`);
 
   // give time to execute requests
   await setTimeout(DEPLOY_TIMEOUT);
 
   // make sure output is correct
   expect(lastFrame()).toMatchInlineSnapshot(`
-    "Deploying current project to: http://localhost:8080
+    "Deploying test/fixtures/test_noname_config to: http://localhost:8080
     Error: Error: Project should have a valid name in config!"
   `);
 });
 
 // test
 test('Should not deploy with broken config', async () => {
-  // corrupt config with string
-  fs.writeFileSync(path.join(baseFolder, '..', 'exoframe.json'), 'I am broken json now');
-
-  const { lastFrame } = render(<Deploy />);
-  expect(lastFrame()).toMatchInlineSnapshot(`"Deploying current project to: http://localhost:8080"`);
+  const { lastFrame } = render(<Deploy folder={brokenConfigFolderPath} />);
+  expect(lastFrame()).toMatchInlineSnapshot(`"Deploying test/fixtures/test_broken_config to: http://localhost:8080"`);
 
   // give time to execute requests
   await setTimeout(DEPLOY_TIMEOUT);
 
   // make sure output is correct
-  expect(lastFrame()).toMatchInlineSnapshot(`
-    "Deploying current project to: http://localhost:8080
+  const output = lastFrame();
+  const cleanOutput = output.replace(/stack"\:(.+)/gs, '');
+  expect(cleanOutput).toMatchInlineSnapshot(`
+    "Deploying test/fixtures/test_broken_config to: http://localhost:8080
     Error: Error: Your exoframe.json is not valid: {
       \\"name\\": \\"SyntaxError\\",
-      \\"message\\": \\"Unexpected token I in JSON at position 0\\",
-      \\"stack\\": \\"SyntaxError: Unexpected token I in JSON at position 0\\\\n    at JSON.parse (<anonymous>)\\\\n
-        at deploy
-    (/home/yamalight/github/exoframe/exoframe/packages/exoframe-client/src/deploy.js:143:19)\\\\n    at
-    deployProject (/home/yamalight/github/exoframe/exoframe/packages/exoframe-cli/src/components/deploy/
-    index.js:39:50)\\\\n    at
-    /home/yamalight/github/exoframe/exoframe/packages/exoframe-cli/src/components/deploy/index.js:68:5\\\\n
-        at invokePassiveEffectCreate (/home/yamalight/github/exoframe/exoframe/node_modules/react-reconc
-    iler/cjs/react-reconciler.development.js:16054:20)\\\\n    at Object.invokeGuardedCallbackProd
-    (/home/yamalight/github/exoframe/exoframe/node_modules/react-reconciler/cjs/react-reconciler.develop
-    ment.js:12101:10)\\\\n    at invokeGuardedCallback (/home/yamalight/github/exoframe/exoframe/node_modul
-    es/react-reconciler/cjs/react-reconciler.development.js:12292:31)\\\\n    at flushPassiveEffectsImpl
-    (/home/yamalight/github/exoframe/exoframe/node_modules/react-reconciler/cjs/react-reconciler.develop
-    ment.js:16141:9)\\\\n    at unstable_runWithPriority (/home/yamalight/github/exoframe/exoframe/node_mod
-    ules/scheduler/cjs/scheduler.development.js:468:12)\\\\n    at runWithPriority (/home/yamalight/github/
-    exoframe/exoframe/node_modules/react-reconciler/cjs/react-reconciler.development.js:2495:10)\\"
-    }"
+      \\"message\\": \\"Unexpected token i in JSON at position 0\\",
+      \\""
   `);
-
-  // fix config
-  fs.writeFileSync(path.join(baseFolder, '..', 'exoframe.json'), '{"name":"test"}');
 });
 
 // test
