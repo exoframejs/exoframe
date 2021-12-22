@@ -90,8 +90,8 @@ const INPUT_TIMEOUT = process.env.TEST_INPUT_TIMEOUT ? parseInt(process.env.TEST
 const ENTER = '\r';
 const ARROW_RIGHT = '\u001B[C';
 
-// increase global timeout
-jest.setTimeout(INPUT_TIMEOUT * 20);
+// increase default 5s global timeout by input timeout x 20
+jest.setTimeout(5000 + INPUT_TIMEOUT * 20);
 
 // reset config before each test
 beforeEach(async () => resetConfig());
