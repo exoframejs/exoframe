@@ -90,6 +90,10 @@ const INPUT_TIMEOUT = process.env.TEST_INPUT_TIMEOUT ? parseInt(process.env.TEST
 const ENTER = '\r';
 const ARROW_RIGHT = '\u001B[C';
 
+// increase global timeout
+jest.setTimeout(INPUT_TIMEOUT * 20);
+
+// reset config before each test
 beforeEach(async () => resetConfig());
 
 test('Should generate config from parameters in non-interactive mode', async () => {
