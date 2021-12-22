@@ -63,7 +63,7 @@ export default function NonInteractiveConfigUpdate(props) {
             </Box>
           ))}
       </Box>
-      {status === 'save' && (
+      {status === 'saved' && (
         <Box>
           <Text bold color="green">
             Config updated!

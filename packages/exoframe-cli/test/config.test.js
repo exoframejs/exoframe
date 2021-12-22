@@ -90,7 +90,7 @@ const INPUT_TIMEOUT = 50;
 const ENTER = '\r';
 const ARROW_RIGHT = '\u001B[C';
 
-beforeAll(async () => resetConfig());
+beforeEach(async () => resetConfig());
 
 test('Should generate config from parameters in non-interactive mode', async () => {
   const { lastFrame } = render(
@@ -104,7 +104,7 @@ test('Should generate config from parameters in non-interactive mode', async () 
     />
   );
 
-  await setTimeout(INPUT_TIMEOUT);
+  await setTimeout(INPUT_TIMEOUT * 2);
   expect(lastFrame()).toMatchInlineSnapshot(`
     "Mode changed to: non-interactive
 
@@ -114,7 +114,8 @@ test('Should generate config from parameters in non-interactive mode', async () 
     Updating project with: give-project-name
     Updating name with: test name 123
     Updating hostname with: test123.dev
-    "
+
+    Config updated!"
   `);
 
   const newConfig = await getConfig();

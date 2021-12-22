@@ -49,6 +49,9 @@
     "testEnvironment": "jest-environment-node",
     "setupFiles": [
       "<rootDir>/.jest/setEnv.js"
+    ],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/test/fixtures/"
     ]
   },
   "engines": {
