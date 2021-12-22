@@ -172,15 +172,15 @@ test('Should deploy without path', async () => {
     .post('/deploy')
     .reply(() => replyWithStream([{ message: 'Deployment success!', deployments, level: 'info' }]));
 
-  const { lastFrame } = render(<Deploy />);
-  expect(lastFrame()).toMatchInlineSnapshot(`"Deploying current project to: http://localhost:8080"`);
+  const { lastFrame } = render(<Deploy folder={folderPath} />);
+  expect(lastFrame()).toMatchInlineSnapshot(`"Deploying test/fixtures/test_html_project to: http://localhost:8080"`);
 
   // give time to execute requests
   await setTimeout(DEPLOY_TIMEOUT);
 
   // make sure output is correct
   expect(lastFrame()).toMatchInlineSnapshot(`
-    "Deploying current project to: http://localhost:8080
+    "Deploying test/fixtures/test_html_project to: http://localhost:8080
     Deployed services:
     IDURLHostnameType
     testlocalhosttestContainer"
@@ -209,15 +209,15 @@ test('Should deploy without auth but with token', async () => {
   // remove auth from config
   updateConfig({ endpoint: 'http://localhost:8080' });
 
-  const { lastFrame } = render(<Deploy token="test-token" />);
-  expect(lastFrame()).toMatchInlineSnapshot(`"Deploying current project to: http://localhost:8080"`);
+  const { lastFrame } = render(<Deploy folder={folderPath} token="test-token" />);
+  expect(lastFrame()).toMatchInlineSnapshot(`"Deploying test/fixtures/test_html_project to: http://localhost:8080"`);
 
   // give time to execute requests
   await setTimeout(DEPLOY_TIMEOUT);
 
   // make sure output is correct
   expect(lastFrame()).toMatchInlineSnapshot(`
-    "Deploying current project to: http://localhost:8080
+    "Deploying test/fixtures/test_html_project to: http://localhost:8080
     Deployed services:
     IDURLHostnameType
     testlocalhosttestContainer"
@@ -239,15 +239,15 @@ test('Should execute update', async () => {
     .post('/update')
     .reply(() => replyWithStream([{ message: 'Deployment success!', deployments, level: 'info' }]));
 
-  const { lastFrame } = render(<Deploy update={true} />);
-  expect(lastFrame()).toMatchInlineSnapshot(`"Updating current project to: http://localhost:8080"`);
+  const { lastFrame } = render(<Deploy folder={folderPath} update={true} />);
+  expect(lastFrame()).toMatchInlineSnapshot(`"Updating test/fixtures/test_html_project to: http://localhost:8080"`);
 
   // give time to execute requests
   await setTimeout(DEPLOY_TIMEOUT);
 
   // make sure output is correct
   expect(lastFrame()).toMatchInlineSnapshot(`
-    "Updating current project to: http://localhost:8080
+    "Updating test/fixtures/test_html_project to: http://localhost:8080
     Deployed services:
     IDURLHostnameType
     testlocalhosttestContainer"
@@ -267,15 +267,15 @@ test('Should open webpage after deploy', async () => {
     .post('/deploy')
     .reply(() => replyWithStream([{ message: 'Deployment success!', deployments, level: 'info' }]));
 
-  const { lastFrame } = render(<Deploy open={true} />);
-  expect(lastFrame()).toMatchInlineSnapshot(`"Deploying current project to: http://localhost:8080"`);
+  const { lastFrame } = render(<Deploy folder={folderPath} open={true} />);
+  expect(lastFrame()).toMatchInlineSnapshot(`"Deploying test/fixtures/test_html_project to: http://localhost:8080"`);
 
   // give time to execute requests
   await setTimeout(DEPLOY_TIMEOUT);
 
   // make sure output is correct
   expect(lastFrame()).toMatchInlineSnapshot(`
-    "Deploying current project to: http://localhost:8080
+    "Deploying test/fixtures/test_html_project to: http://localhost:8080
     Deployed services:
     IDURLHostnameType
     testlocalhosttestContainer"
@@ -363,15 +363,15 @@ test('Should display error log', async () => {
       ])
     );
 
-  const { lastFrame } = render(<Deploy />);
-  expect(lastFrame()).toMatchInlineSnapshot(`"Deploying current project to: http://localhost:8080"`);
+  const { lastFrame } = render(<Deploy folder={folderPath} />);
+  expect(lastFrame()).toMatchInlineSnapshot(`"Deploying test/fixtures/test_html_project to: http://localhost:8080"`);
 
   // give time to execute requests
   await setTimeout(DEPLOY_TIMEOUT);
 
   // make sure output is correct
   expect(lastFrame()).toMatchInlineSnapshot(`
-    "Deploying current project to: http://localhost:8080
+    "Deploying test/fixtures/test_html_project to: http://localhost:8080
     Error: Build failed! See build log for details.
      Log:
       Error log
@@ -394,15 +394,15 @@ test('Should display error on malformed JSON', async () => {
       cb(null, [200, 'Bad Gateway']);
     });
 
-  const { lastFrame } = render(<Deploy />);
-  expect(lastFrame()).toMatchInlineSnapshot(`"Deploying current project to: http://localhost:8080"`);
+  const { lastFrame } = render(<Deploy folder={folderPath} />);
+  expect(lastFrame()).toMatchInlineSnapshot(`"Deploying test/fixtures/test_html_project to: http://localhost:8080"`);
 
   // give time to execute requests
   await setTimeout(DEPLOY_TIMEOUT);
 
   // make sure output is correct
   expect(lastFrame()).toMatchInlineSnapshot(`
-    "Deploying current project to: http://localhost:8080
+    "Deploying test/fixtures/test_html_project to: http://localhost:8080
     Error: Bad Gateway"
   `);
 
@@ -497,15 +497,15 @@ test('Should display error on zero deployments', async () => {
       cb(null, [200, {}]);
     });
 
-  const { lastFrame } = render(<Deploy />);
-  expect(lastFrame()).toMatchInlineSnapshot(`"Deploying current project to: http://localhost:8080"`);
+  const { lastFrame } = render(<Deploy folder={folderPath} />);
+  expect(lastFrame()).toMatchInlineSnapshot(`"Deploying test/fixtures/test_html_project to: http://localhost:8080"`);
 
   // give time to execute requests
   await setTimeout(DEPLOY_TIMEOUT);
 
   // make sure output is correct
   expect(lastFrame()).toMatchInlineSnapshot(`
-    "Deploying current project to: http://localhost:8080
+    "Deploying test/fixtures/test_html_project to: http://localhost:8080
     Error: Error: Something went wrong!"
   `);
 
@@ -571,15 +571,15 @@ test('Should deauth on 401', async () => {
   // handle correct request
   const deployServer = nock('http://localhost:8080').post('/deploy').reply(401, { error: 'Deauth test' });
 
-  const { lastFrame } = render(<Deploy />);
-  expect(lastFrame()).toMatchInlineSnapshot(`"Deploying current project to: http://localhost:8080"`);
+  const { lastFrame } = render(<Deploy folder={folderPath} />);
+  expect(lastFrame()).toMatchInlineSnapshot(`"Deploying test/fixtures/test_html_project to: http://localhost:8080"`);
 
   // give time to execute requests
   await setTimeout(DEPLOY_TIMEOUT);
 
   // make sure output is correct
   expect(lastFrame()).toMatchInlineSnapshot(`
-    "Deploying current project to: http://localhost:8080
+    "Deploying test/fixtures/test_html_project to: http://localhost:8080
     Error: Error: authorization expired! Please, relogin and try again."
   `);
 
