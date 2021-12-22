@@ -90,6 +90,8 @@ const INPUT_TIMEOUT = 50;
 const ENTER = '\r';
 const ARROW_RIGHT = '\u001B[C';
 
+beforeAll(async () => resetConfig());
+
 test('Should generate config from parameters in non-interactive mode', async () => {
   const { lastFrame } = render(
     <Config
