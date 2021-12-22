@@ -8,11 +8,15 @@ import { setTimeout } from 'timers/promises';
 import { fileURLToPath } from 'url';
 
 const baseFolder = path.dirname(fileURLToPath(import.meta.url));
+const fixturesFolder = path.join(baseFolder, 'fixtures');
+const testFolder = path.join(fixturesFolder, 'config-test');
+
+// mock current work dir
+jest.spyOn(process, 'cwd').mockImplementation(() => testFolder);
 
 jest.unstable_mockModule('os', () => {
-  const fixturesDir = path.join(baseFolder, 'fixtures');
   return {
-    homedir: () => fixturesDir,
+    homedir: () => testFolder,
   };
 });
 
@@ -35,13 +39,13 @@ jest.unstable_mockModule('fs', () => {
 const { default: Config } = await import('../src/components/config/index.js');
 
 const getConfig = async () => {
-  const str = await readFile('./exoframe.json');
+  const str = await readFile(path.join(testFolder, 'exoframe.json'));
   const cfg = JSON.parse(str);
   return cfg;
 };
 
 const resetConfig = async () => {
-  await writeFile('./exoframe.json', JSON.stringify({ name: 'test' }));
+  await writeFile(path.join(testFolder, 'exoframe.json'), JSON.stringify({ name: 'test' }));
 };
 
 const verifyBasicAuth = (input, actual) => {
