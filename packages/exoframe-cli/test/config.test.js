@@ -86,7 +86,7 @@ const users = [
   },
 ];
 
-const INPUT_TIMEOUT = 50;
+const INPUT_TIMEOUT = process.env.TEST_INPUT_TIMEOUT ? parseInt(process.env.TEST_INPUT_TIMEOUT) : 50;
 const ENTER = '\r';
 const ARROW_RIGHT = '\u001B[C';
 
