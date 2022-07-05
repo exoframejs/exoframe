@@ -1,8 +1,8 @@
-import { expect, test } from '@jest/globals';
 import { executeLogin, generateSignature, getLoginRequest, loginWithLoginRequest } from 'exoframe-client';
 import nock from 'nock';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { expect, test } from 'vitest';
 
 const baseFolder = path.dirname(fileURLToPath(import.meta.url));
 const endpoint = 'http://localhost:8080';

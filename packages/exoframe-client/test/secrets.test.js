@@ -1,6 +1,6 @@
-import { expect, test } from '@jest/globals';
 import { createSecret, getSecret, listSecrets, removeSecret } from 'exoframe-client';
 import nock from 'nock';
+import { expect, test } from 'vitest';
 
 const testSecret = {
   name: 'test',
@@ -33,9 +33,9 @@ test('Should list secrets', async () => {
   const result = await listSecrets({ endpoint, token });
   // make sure it was successful
   expect(result).toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "meta": Object {
+    [
+      {
+        "meta": {
           "created": "2017-02-01T01:01:01.001Z",
         },
         "name": "test",
@@ -58,8 +58,8 @@ test('Should get secret value', async () => {
   const result = await getSecret({ name: testSecret.name, endpoint, token });
   // make sure log in was successful
   expect(result).toMatchInlineSnapshot(`
-    Object {
-      "meta": Object {
+    {
+      "meta": {
         "created": "2018-02-01T01:01:01.001Z",
       },
       "name": "test",

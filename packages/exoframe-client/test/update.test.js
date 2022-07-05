@@ -1,6 +1,6 @@
-import { expect, test } from '@jest/globals';
 import { checkUpdates, executeUpdate } from 'exoframe-client';
 import nock from 'nock';
+import { expect, test } from 'vitest';
 
 const endpoint = 'http://localhost:8080';
 const token = 'test-123';
@@ -45,7 +45,7 @@ test('Should throw update error', async () => {
     // make sure it throws
     expect(err).toMatchInlineSnapshot(`[HTTPError: Response code 500 (Internal Server Error)]`);
     expect(err.response.body).toMatchInlineSnapshot(`
-      Object {
+      {
         "error": "Test error",
         "log": "log",
         "updated": false,

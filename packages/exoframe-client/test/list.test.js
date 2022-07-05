@@ -1,6 +1,6 @@
-import { expect, test } from '@jest/globals';
 import { listDeployments } from 'exoframe-client';
 import nock from 'nock';
+import { expect, test } from 'vitest';
 
 const containers = [
   {
@@ -93,8 +93,8 @@ test('Should get list of deployments', async () => {
   expect(listServer.isDone()).toBeTruthy();
   // first check console output
   expect(resultContainer).toMatchInlineSnapshot(`
-    Array [
-      Object {
+    [
+      {
         "domain": "test.host",
         "host": "Not set",
         "name": "test",
@@ -102,7 +102,7 @@ test('Should get list of deployments', async () => {
         "status": "Up 10 minutes",
         "type": "Container",
       },
-      Object {
+      {
         "domain": "Not set",
         "host": "Not set",
         "name": "test2",
@@ -110,7 +110,7 @@ test('Should get list of deployments', async () => {
         "status": "Up 12 minutes",
         "type": "Container",
       },
-      Object {
+      {
         "domain": "Not set",
         "host": "Not set",
         "name": "test3",
@@ -118,7 +118,7 @@ test('Should get list of deployments', async () => {
         "status": "Up 13 minutes",
         "type": "Container",
       },
-      Object {
+      {
         "domain": "Not set",
         "host": "alias4",
         "name": "test4",

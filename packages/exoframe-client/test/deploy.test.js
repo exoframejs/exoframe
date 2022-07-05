@@ -1,4 +1,3 @@
-import { expect, test } from '@jest/globals';
 import { deploy } from 'exoframe-client';
 import fs from 'fs';
 import _ from 'highland';
@@ -7,6 +6,7 @@ import path from 'path';
 import { Readable } from 'stream';
 import tar from 'tar-fs';
 import { fileURLToPath } from 'url';
+import { expect, test } from 'vitest';
 
 // reply with stream helper
 const replyWithStream = (dataArr) => {
@@ -78,9 +78,9 @@ test('Should deploy', async () => {
   expect(deployServer.isDone()).toBeTruthy();
   // make sure resulting snapshot is correct
   expect(result).toMatchInlineSnapshot(`
-    Object {
-      "formattedServices": Array [
-        Object {
+    {
+      "formattedServices": [
+        {
           "domain": "localhost",
           "host": "test",
           "name": "test",
@@ -89,21 +89,21 @@ test('Should deploy', async () => {
           "type": "Container",
         },
       ],
-      "log": Array [
-        Array [
+      "log": [
+        [
           "
     No .exoframeignore file found, using default ignores",
         ],
-        Array [
+        [
           "
     Ignoring following paths:",
-          Array [
+          [
             ".git",
             "node_modules",
             ".exoframeignore",
           ],
         ],
-        Array [
+        [
           "Server response:",
           "{
       \\"message\\": \\"Deployment success!\\",
@@ -167,9 +167,9 @@ test('Should deploy with endpoint flag', async () => {
   expect(deployServer.isDone()).toBeTruthy();
   // first check console output
   expect(result).toMatchInlineSnapshot(`
-    Object {
-      "formattedServices": Array [
-        Object {
+    {
+      "formattedServices": [
+        {
           "domain": "localhost",
           "host": "test",
           "name": "test",
@@ -178,21 +178,21 @@ test('Should deploy with endpoint flag', async () => {
           "type": "Container",
         },
       ],
-      "log": Array [
-        Array [
+      "log": [
+        [
           "
     No .exoframeignore file found, using default ignores",
         ],
-        Array [
+        [
           "
     Ignoring following paths:",
-          Array [
+          [
             ".git",
             "node_modules",
             ".exoframeignore",
           ],
         ],
-        Array [
+        [
           "Server response:",
           "{
       \\"message\\": \\"Deployment success!\\",
@@ -251,9 +251,9 @@ test('Should execute update', async () => {
   expect(updateServer.isDone()).toBeTruthy();
   // first check console output
   expect(result).toMatchInlineSnapshot(`
-    Object {
-      "formattedServices": Array [
-        Object {
+    {
+      "formattedServices": [
+        {
           "domain": "localhost",
           "host": "test",
           "name": "test",
@@ -262,21 +262,21 @@ test('Should execute update', async () => {
           "type": "Container",
         },
       ],
-      "log": Array [
-        Array [
+      "log": [
+        [
           "
     No .exoframeignore file found, using default ignores",
         ],
-        Array [
+        [
           "
     Ignoring following paths:",
-          Array [
+          [
             ".git",
             "node_modules",
             ".exoframeignore",
           ],
         ],
-        Array [
+        [
           "Server response:",
           "{
       \\"message\\": \\"Deployment success!\\",
@@ -358,9 +358,9 @@ test('Should deploy with custom config', async () => {
   expect(deployServer.isDone()).toBeTruthy();
   // first check console output
   expect(result).toMatchInlineSnapshot(`
-    Object {
-      "formattedServices": Array [
-        Object {
+    {
+      "formattedServices": [
+        {
           "domain": "localhost",
           "host": "test",
           "name": "test",
@@ -369,22 +369,22 @@ test('Should deploy with custom config', async () => {
           "type": "Container",
         },
       ],
-      "log": Array [
-        Array [
+      "log": [
+        [
           "
     No .exoframeignore file found, using default ignores",
         ],
-        Array [
+        [
           "
     Ignoring following paths:",
-          Array [
+          [
             ".git",
             "node_modules",
             ".exoframeignore",
             "exoframe.json",
           ],
         ],
-        Array [
+        [
           "Server response:",
           "{
       \\"message\\": \\"Deployment success!\\",
@@ -447,10 +447,10 @@ test('Should return error log', async () => {
     expect(deployServer.isDone()).toBeTruthy();
     // first check console output
     expect(err.response).toMatchInlineSnapshot(`
-      Object {
+      {
         "error": "Build failed! See build log for details.",
         "level": "error",
-        "log": Array [
+        "log": [
           "Error log",
           "here",
         ],
@@ -478,7 +478,7 @@ test('Should throw error on malformed JSON', async () => {
     expect(deployServer.isDone()).toBeTruthy();
     // first check console output
     expect(err.response).toMatchInlineSnapshot(`
-      Object {
+      {
         "error": "Bad Gateway",
       }
     `);
@@ -516,9 +516,9 @@ test('Should ignore specified files', async () => {
   expect(deployServer.isDone()).toBeTruthy();
   // first check console output
   expect(result).toMatchInlineSnapshot(`
-    Object {
-      "formattedServices": Array [
-        Object {
+    {
+      "formattedServices": [
+        {
           "domain": "localhost",
           "host": "test",
           "name": "test",
@@ -527,17 +527,17 @@ test('Should ignore specified files', async () => {
           "type": "Container",
         },
       ],
-      "log": Array [
-        Array [
+      "log": [
+        [
           "
     Ignoring following paths:",
-          Array [
+          [
             "yarn.lock",
             "ignore.me",
             ".exoframeignore",
           ],
         ],
-        Array [
+        [
           "Server response:",
           "{
       \\"message\\": \\"Deployment success!\\",
