@@ -17,9 +17,9 @@ export const getLogs = ({ id, follow, endpoint, token }) =>
     const remoteUrl = `${endpoint}/logs/${id}`;
 
     // construct query
-    const query = {};
+    const searchParams = {};
     if (follow) {
-      query.follow = 'true';
+      searchParams.query = { follow: 'true' };
     }
 
     // construct shared request params
@@ -27,7 +27,7 @@ export const getLogs = ({ id, follow, endpoint, token }) =>
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      query,
+      searchParams,
     };
 
     // create resulting stream
