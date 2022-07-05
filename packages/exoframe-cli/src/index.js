@@ -1,9 +1,10 @@
-import commander from 'commander';
+import { Command } from 'commander';
 import { readFile } from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import config from './commands/config.js';
-import login from './commands/login.js';
+import endpoint from './commands/endpoint.js';
+// import config from './commands/config.js';
+// import login from './commands/login.js';
 
 const baseFolder = path.dirname(fileURLToPath(import.meta.url));
 const pkg = JSON.parse((await readFile(path.join(baseFolder, '..', 'package.json'))).toString());
@@ -13,14 +14,15 @@ const pkg = JSON.parse((await readFile(path.join(baseFolder, '..', 'package.json
 // checkUpdate(pkg);
 
 // init program
-const program = new commander.Command();
+const program = new Command();
 
 // set version
 program.version(pkg.version);
 
 // add commands
-program.addCommand(login);
-program.addCommand(config);
+program.addCommand(endpoint);
+// program.addCommand(login);
+// program.addCommand(config);
 
 // version(pkg.version)
 //   .demand(1)

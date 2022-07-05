@@ -6,6 +6,7 @@ test/fixtures/deploying/
 test/fixtures/extensions/package-lock.json
 test/fixtures/recipes/package-lock.json
 test/fixtures/secrets.db
+test/fixtures/traefik/traefik.log
 dist/
 bin/server-core.js
 bin/runner.js

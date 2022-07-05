@@ -1,5 +1,5 @@
 {
-  "extends": ["eslint:recommended", "standard", "standard-jsx", "standard-react", "prettier"],
+  "extends": ["eslint:recommended", "standard", "prettier"],
   "plugins": ["prettier"],
   "env": {
     "node": true
@@ -9,7 +9,6 @@
     "promise/param-names": "off",
     "prefer-promise-reject-errors": "off",
     "no-control-regex": "off",
-    "react/prop-types": "off",
     "prettier/prettier": "error"
   }
 }

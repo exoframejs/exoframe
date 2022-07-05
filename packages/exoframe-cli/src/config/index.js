@@ -6,7 +6,7 @@ import { join } from 'path';
 
 // construct paths
 const xdgConfigFolder = process.env.XDG_CONFIG_HOME || join(homedir(), '.config');
-const baseFolder = join(xdgConfigFolder, '.exoframe');
+const baseFolder = join(xdgConfigFolder, 'exoframe');
 const configPath = join(baseFolder, 'cli.config.yml');
 
 const defaultConfig = {

@@ -1,4 +1,4 @@
 #!/usr/bin/env node
-import program from './lib/index.js';
+import program from './src/index.js';
 
 program.parse(process.argv);
