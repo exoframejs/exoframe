@@ -24,6 +24,7 @@
     "open": "^8.4.0"
   },
   "devDependencies": {
+    "c8": "^7.11.3",
     "eslint": "^8.1.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-standard": "^17.0.0",
