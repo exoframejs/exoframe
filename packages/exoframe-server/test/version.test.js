@@ -1,12 +1,12 @@
-import { afterAll, beforeAll, expect, jest, test } from '@jest/globals';
 import getPort from 'get-port';
 import nock from 'nock';
+import { afterAll, beforeAll, expect, test, vi } from 'vitest';
 import authToken from './fixtures/authToken.js';
 import serverReleasesJSON from './fixtures/version/server-releases.json';
 import traefikReleasesJSON from './fixtures/version/traefik-releases.json';
 
 // mock config
-jest.unstable_mockModule('../src/config/index.js', () => import('./__mocks__/config.js'));
+vi.mock('../src/config/index.js', () => import('./__mocks__/config.js'));
 
 // import server after mocking config
 const { startServer } = await import('../src/index.js');
@@ -21,14 +21,10 @@ nock('https://api.github.com/repos')
 // container vars
 let fastify;
 
-// set timeout to 60s
-jest.setTimeout(60000);
-
 beforeAll(async () => {
   // start server
   const port = await getPort();
   fastify = await startServer(port);
-  return fastify;
 });
 
 afterAll(() => fastify.close());

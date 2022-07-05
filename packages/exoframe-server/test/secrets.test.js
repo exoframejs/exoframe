@@ -1,14 +1,15 @@
-import { afterAll, beforeAll, expect, jest, test } from '@jest/globals';
 import getPort from 'get-port';
 import { dirname, join } from 'path';
 import { pack } from 'tar-fs';
 import { fileURLToPath } from 'url';
+import { afterAll, beforeAll, expect, test, vi } from 'vitest';
 import { getSecretsCollection } from '../src/db/secrets.js';
 import docker from '../src/docker/docker.js';
 import authToken from './fixtures/authToken.js';
 
 // mock config
-jest.unstable_mockModule('../src/config/index.js', () => import('./__mocks__/config.js'));
+vi.mock('../src/config/index.js', () => import('./__mocks__/config.js'));
+
 const config = await import('../src/config/index.js');
 
 // switch config to normal
@@ -30,14 +31,10 @@ const testSecret = {
 // container vars
 let fastify;
 
-// set timeout to 60s
-jest.setTimeout(60000);
-
 beforeAll(async () => {
   // start server
   const port = await getPort();
   fastify = await startServer(port);
-  return fastify;
 });
 
 afterAll(() => fastify.close());

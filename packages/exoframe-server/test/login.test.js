@@ -1,15 +1,15 @@
-import { afterAll, beforeAll, expect, jest, test } from '@jest/globals';
 import { readFileSync } from 'fs';
 import getPort from 'get-port';
 import jwt from 'jsonwebtoken';
 import { dirname, join } from 'path';
 import sshpk from 'sshpk';
 import { fileURLToPath } from 'url';
+import { afterAll, beforeAll, expect, test, vi } from 'vitest';
 import { auth as authConfig } from '../config.js';
 import { getTokenCollection } from '../src/db/index.js';
 
 // mock config
-jest.unstable_mockModule('../src/config/index.js', () => import('./__mocks__/config.js'));
+vi.mock('../src/config/index.js', () => import('./__mocks__/config.js'));
 
 // import server after mocking config
 const { startServer } = await import('../src/index.js');
@@ -34,13 +34,9 @@ let loginPhrase = '';
 let loginReqId = '';
 let deployToken = '';
 
-// set timeout to 60s
-jest.setTimeout(60000);
-
 beforeAll(async () => {
   const port = await getPort();
   server = await startServer(port);
-  return server;
 });
 
 afterAll(() => server.close());

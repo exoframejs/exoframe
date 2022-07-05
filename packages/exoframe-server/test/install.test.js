@@ -1,11 +1,8 @@
-import { describe, expect, jest, test } from '@jest/globals';
 import { exec as execCb } from 'child_process';
 import { promisify } from 'util';
+import { describe, expect, test } from 'vitest';
 
 const exec = promisify(execCb);
-
-// set timeout to 0.5s
-jest.setTimeout(500);
 
 const shellOptions = {
   env: { HOME: '/root' },
@@ -14,12 +11,27 @@ const shellOptions = {
 describe('Test install script', () => {
   test('Should print help', async () => {
     const { stdout } = await exec('tools/install.sh -h');
-    expect(stdout).toMatchSnapshot();
+    expect(stdout).toMatchInlineSnapshot(`
+      "
+      Usage:
+        -D, --dry-run     Dry run. Print command instead of executing it.
+        -e, --email       Enter email to enable SSL support.
+        -d, --domain      * Enter exoframe-server domain.
+        -p, --password    * Enter your private key used for JWT encryption.
+
+      "
+    `);
   });
 
   test('Should print only docker command', async () => {
     const { stdout } = await exec('tools/install.sh --dry-run --password PASSWORD -d EXAMPLE.COM', shellOptions);
-    expect(stdout).toMatchSnapshot();
+    expect(stdout).toMatchInlineSnapshot(`
+      "
+      Commands to run inside server:
+
+      docker run -d -v /var/run/docker.sock:/var/run/docker.sock -v /root/.exoframe:/root/.exoframe -v /root/.ssh/authorized_keys:/root/.ssh/authorized_keys:ro -e EXO_PRIVATE_KEY=PASSWORD --label traefik.enable=true --label traefik.http.routers.exoframe-server.rule=Host(\`exoframe.EXAMPLE.COM\`) --restart always --name exoframe-server exoframe/server
+      "
+    `);
   });
 
   test('Should include mkdir command', async () => {
@@ -27,7 +39,18 @@ describe('Test install script', () => {
       'tools/install.sh --dry-run --password PASSWORD -d EXAMPLE.COM -e EMAIL@GMAIL.COM',
       shellOptions
     );
-    expect(stdout).toMatchSnapshot();
+    expect(stdout).toMatchInlineSnapshot(`
+      "
+      Commands to run inside server:
+
+      mkdir -p /root/.exoframe && touch /root/.exoframe/server.config.yml
+      echo \\"letsencrypt: true\\" >> /root/.exoframe/server.config.yml
+      echo \\"letsencryptEmail: EMAIL@GMAIL.COM\\" >> /root/.exoframe/server.config.yml
+
+
+      docker run -d -v /var/run/docker.sock:/var/run/docker.sock -v /root/.exoframe:/root/.exoframe -v /root/.ssh/authorized_keys:/root/.ssh/authorized_keys:ro -e EXO_PRIVATE_KEY=PASSWORD --label traefik.enable=true --label traefik.http.routers.exoframe-server.rule=Host(\`exoframe.EXAMPLE.COM\`) --label traefik.http.routers.exoframe-server-web.rule=Host(\`exoframe.EXAMPLE.COM\`) --label traefik.http.routers.exoframe-server.tls.certresolver=exoframeChallenge --label traefik.http.middlewares.exoframe-server-redirect.redirectscheme.scheme=https --label traefik.http.routers.exoframe-server-web.entrypoints=web --label traefik.http.routers.exoframe-server-web.middlewares=exoframe-server-redirect@docker --label traefik.http.routers.exoframe-server.entrypoints=websecure --label entryPoints.web.address=:80 --label entryPoints.websecure.address=:443 --restart always --name exoframe-server exoframe/server
+      "
+    `);
   });
 
   test('Should fail command', async () => {

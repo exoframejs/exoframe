@@ -1,7 +1,7 @@
 // npm packages
+import fastifyAuth from '@fastify/auth';
+import cors from '@fastify/cors';
 import initFastify from 'fastify';
-import fastifyAuth from 'fastify-auth';
-import cors from 'fastify-cors';
 import setupAuth from './auth/index.js';
 import { getConfig, waitForConfig } from './config/index.js';
 import { initDocker } from './docker/init.js';
@@ -33,8 +33,8 @@ export async function startServer(port = 8080) {
   await setupAuth(fastify).register(routes).ready();
 
   // start server
-  await fastify.listen(port, '0.0.0.0');
-  logger.info(`Server running at: ${fastify.server.address().port}`);
+  await fastify.listen({ port, host: '0.0.0.0' });
+  logger.info(`Server running at: 0.0.0.0:${port}`);
 
   return fastify;
 }

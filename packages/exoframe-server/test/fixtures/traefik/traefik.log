@@ -1,0 +1,270 @@
+time="2022-07-05T11:26:52Z" level=info msg="Traefik version 2.8.0 built on 2022-06-29T15:43:58Z"
+time="2022-07-05T11:26:52Z" level=debug msg="Static configuration loaded {\"global\":{\"checkNewVersion\":true},\"serversTransport\":{\"maxIdleConnsPerHost\":200},\"entryPoints\":{\"web\":{\"address\":\":80\",\"transport\":{\"lifeCycle\":{\"graceTimeOut\":\"10s\"},\"respondingTimeouts\":{\"idleTimeout\":\"3m0s\"}},\"forwardedHeaders\":{},\"http\":{},\"http2\":{\"maxConcurrentStreams\":250},\"udp\":{\"timeout\":\"3s\"}}},\"providers\":{\"providersThrottleDuration\":\"2s\",\"docker\":{\"watch\":true,\"endpoint\":\"unix:///var/run/docker.sock\",\"defaultRule\":\"Host(`{{ normalize .Name }}`)\",\"swarmModeRefreshSeconds\":\"15s\"}},\"log\":{\"level\":\"DEBUG\",\"filePath\":\"/var/traefik/traefik.log\",\"format\":\"common\"},\"pilot\":{\"dashboard\":true}}"
+time="2022-07-05T11:26:52Z" level=info msg="\nStats collection is disabled.\nHelp us improve Traefik by turning this feature on :)\nMore details on: https://doc.traefik.io/traefik/contributing/data-collection/\n"
+time="2022-07-05T11:26:52Z" level=warning msg="Traefik Pilot is deprecated and will be removed soon. Please check our Blog for migration instructions later this year."
+time="2022-07-05T11:26:52Z" level=info msg="Starting provider aggregator aggregator.ProviderAggregator"
+time="2022-07-05T11:26:52Z" level=debug msg="Starting TCP Server" entryPointName=web
+time="2022-07-05T11:26:52Z" level=info msg="Starting provider *traefik.Provider"
+time="2022-07-05T11:26:52Z" level=debug msg="*traefik.Provider provider configuration: {}"
+time="2022-07-05T11:26:52Z" level=info msg="Starting provider *docker.Provider"
+time="2022-07-05T11:26:52Z" level=debug msg="*docker.Provider provider configuration: {\"watch\":true,\"endpoint\":\"unix:///var/run/docker.sock\",\"defaultRule\":\"Host(`{{ normalize .Name }}`)\",\"swarmModeRefreshSeconds\":\"15s\"}"
+time="2022-07-05T11:26:52Z" level=info msg="Starting provider *acme.ChallengeTLSALPN"
+time="2022-07-05T11:26:52Z" level=debug msg="*acme.ChallengeTLSALPN provider configuration: {}"
+time="2022-07-05T11:26:52Z" level=debug msg="Configuration received: {\"http\":{\"services\":{\"noop\":{}},\"serversTransports\":{\"default\":{\"maxIdleConnsPerHost\":200}}},\"tcp\":{},\"udp\":{},\"tls\":{}}" providerName=internal
+time="2022-07-05T11:26:52Z" level=debug msg="No default certificate, generating one" tlsStoreName=default
+time="2022-07-05T11:26:52Z" level=debug msg="Provider connection established with docker 20.10.17 (API 1.41)" providerName=docker
+time="2022-07-05T11:26:52Z" level=debug msg="Filtering disabled container" providerName=docker container=exoframe-traefik-48805ee3c88c65956bc8de91c365fcc7c49efdbdf22aa3c9d7ddcb1d92a2afd9
+time="2022-07-05T11:26:52Z" level=debug msg="Filtering disabled container" providerName=docker container=exoframe-server-test-bee4ef89e189f9a249d863f3998fd65223ec8de4851fef19b24c316befdac2da
+time="2022-07-05T11:26:52Z" level=debug msg="Configuration received: {\"http\":{},\"tcp\":{},\"udp\":{}}" providerName=docker
+time="2022-07-05T11:26:52Z" level=debug msg="No default certificate, generating one" tlsStoreName=default
+time="2022-07-05T11:27:04Z" level=debug msg="Provider event received {Status:start ID:d5855eb6567a3b1da31fc9d232e3c0d48ad2b609a9fad1b14f2c2dda3e9af4a2 From:exoframe/server:latest Type:container Action:start Actor:{ID:d5855eb6567a3b1da31fc9d232e3c0d48ad2b609a9fad1b14f2c2dda3e9af4a2 Attributes:map[image:exoframe/server:latest name:exoframe-server-b2a85dd06e12 test:label version:6.2.3]} Scope:local Time:1657020424 TimeNano:1657020424670689904}" providerName=docker
+time="2022-07-05T11:27:04Z" level=debug msg="Filtering disabled container" providerName=docker container=exoframe-server-b2a85dd06e12-d5855eb6567a3b1da31fc9d232e3c0d48ad2b609a9fad1b14f2c2dda3e9af4a2
+time="2022-07-05T11:27:04Z" level=debug msg="Filtering disabled container" providerName=docker container=exoframe-traefik-48805ee3c88c65956bc8de91c365fcc7c49efdbdf22aa3c9d7ddcb1d92a2afd9
+time="2022-07-05T11:27:04Z" level=debug msg="Filtering disabled container" providerName=docker container=exoframe-server-test-bee4ef89e189f9a249d863f3998fd65223ec8de4851fef19b24c316befdac2da
+time="2022-07-05T11:27:04Z" level=debug msg="Configuration received: {\"http\":{},\"tcp\":{},\"udp\":{}}" providerName=docker
+time="2022-07-05T11:27:04Z" level=debug msg="Skipping unchanged configuration." providerName=docker
+time="2022-07-05T11:27:04Z" level=info msg="I have to go..."
+time="2022-07-05T11:27:04Z" level=info msg="Stopping server gracefully"
+time="2022-07-05T11:27:04Z" level=debug msg="Waiting 10s seconds before killing connections." entryPointName=web
+time="2022-07-05T11:27:04Z" level=error msg="accept tcp [::]:80: use of closed network connection" entryPointName=web
+time="2022-07-05T11:27:04Z" level=error msg="close tcp [::]:80: use of closed network connection" entryPointName=web
+time="2022-07-05T11:27:04Z" level=debug msg="Entry point web closed" entryPointName=web
+time="2022-07-05T11:27:04Z" level=info msg="Server stopped"
+time="2022-07-05T11:27:04Z" level=info msg="Shutting down"
+time="2022-07-05T11:31:58Z" level=info msg="Traefik version 2.8.0 built on 2022-06-29T15:43:58Z"
+time="2022-07-05T11:31:58Z" level=debug msg="Static configuration loaded {\"global\":{\"checkNewVersion\":true},\"serversTransport\":{\"maxIdleConnsPerHost\":200},\"entryPoints\":{\"web\":{\"address\":\":80\",\"transport\":{\"lifeCycle\":{\"graceTimeOut\":\"10s\"},\"respondingTimeouts\":{\"idleTimeout\":\"3m0s\"}},\"forwardedHeaders\":{},\"http\":{},\"http2\":{\"maxConcurrentStreams\":250},\"udp\":{\"timeout\":\"3s\"}}},\"providers\":{\"providersThrottleDuration\":\"2s\",\"docker\":{\"watch\":true,\"endpoint\":\"unix:///var/run/docker.sock\",\"defaultRule\":\"Host(`{{ normalize .Name }}`)\",\"swarmModeRefreshSeconds\":\"15s\"}},\"log\":{\"level\":\"DEBUG\",\"filePath\":\"/var/traefik/traefik.log\",\"format\":\"common\"},\"pilot\":{\"dashboard\":true}}"
+time="2022-07-05T11:31:58Z" level=info msg="\nStats collection is disabled.\nHelp us improve Traefik by turning this feature on :)\nMore details on: https://doc.traefik.io/traefik/contributing/data-collection/\n"
+time="2022-07-05T11:31:58Z" level=warning msg="Traefik Pilot is deprecated and will be removed soon. Please check our Blog for migration instructions later this year."
+time="2022-07-05T11:31:58Z" level=info msg="Starting provider aggregator aggregator.ProviderAggregator"
+time="2022-07-05T11:31:58Z" level=debug msg="Starting TCP Server" entryPointName=web
+time="2022-07-05T11:31:58Z" level=info msg="Starting provider *traefik.Provider"
+time="2022-07-05T11:31:58Z" level=debug msg="*traefik.Provider provider configuration: {}"
+time="2022-07-05T11:31:58Z" level=info msg="Starting provider *docker.Provider"
+time="2022-07-05T11:31:58Z" level=debug msg="*docker.Provider provider configuration: {\"watch\":true,\"endpoint\":\"unix:///var/run/docker.sock\",\"defaultRule\":\"Host(`{{ normalize .Name }}`)\",\"swarmModeRefreshSeconds\":\"15s\"}"
+time="2022-07-05T11:31:58Z" level=info msg="Starting provider *acme.ChallengeTLSALPN"
+time="2022-07-05T11:31:58Z" level=debug msg="*acme.ChallengeTLSALPN provider configuration: {}"
+time="2022-07-05T11:31:58Z" level=debug msg="Configuration received: {\"http\":{\"services\":{\"noop\":{}},\"serversTransports\":{\"default\":{\"maxIdleConnsPerHost\":200}}},\"tcp\":{},\"udp\":{},\"tls\":{}}" providerName=internal
+time="2022-07-05T11:31:58Z" level=debug msg="No default certificate, generating one" tlsStoreName=default
+time="2022-07-05T11:31:58Z" level=debug msg="Provider connection established with docker 20.10.17 (API 1.41)" providerName=docker
+time="2022-07-05T11:31:58Z" level=debug msg="Filtering disabled container" providerName=docker container=exoframe-traefik-5b432e83dfa2fec13b1eb07f0d6fff9ca5b59c50c236d7aff7a130b8d30f53e4
+time="2022-07-05T11:31:58Z" level=debug msg="Filtering disabled container" providerName=docker container=exoframe-server-test-a93e625851f4fd4c1203297d7c7544abe08dac480cb78ca82f2b850465ba13bf
+time="2022-07-05T11:31:58Z" level=debug msg="Configuration received: {\"http\":{},\"tcp\":{},\"udp\":{}}" providerName=docker
+time="2022-07-05T11:31:58Z" level=debug msg="No default certificate, generating one" tlsStoreName=default
+time="2022-07-05T11:31:59Z" level=debug msg="Provider event received {Status:start ID:39674aba41ab9a451e5e4a3d36fa70ff589e967453088dc7cdd0320211f43bf6 From:exo-admin-test-node-lock-deploy:latest Type:container Action:start Actor:{ID:39674aba41ab9a451e5e4a3d36fa70ff589e967453088dc7cdd0320211f43bf6 Attributes:map[exoframe.deployment:exo-admin-test-node-lock-deploy-1f4adc16 exoframe.project:exo-admin-test-node-lock-deploy exoframe.user:admin image:exo-admin-test-node-lock-deploy:latest name:exo-admin-test-node-lock-deploy-1f4adc16 traefik.docker.network:exoframe traefik.enable:true traefik.http.middlewares.exo-admin-test-node-lock-deploy-1f4adc16-compress.compress:true traefik.http.routers.exo-admin-test-node-lock-deploy-1f4adc16-web.rule:Host(`localhost`) traefik.http.routers.exo-admin-test-node-lock-deploy-1f4adc16.middlewares:exo-admin-test-node-lock-deploy-1f4adc16-compress@docker traefik.http.routers.exo-admin-test-node-lock-deploy-1f4adc16.rule:Host(`localhost`) traefik.http.services.exo-admin-test-node-lock-deploy.loadbalancer.server.port:80]} Scope:local Time:1657020719 TimeNano:1657020719460829979}" providerName=docker
+time="2022-07-05T11:31:59Z" level=debug msg="Filtering disabled container" providerName=docker container=exoframe-traefik-5b432e83dfa2fec13b1eb07f0d6fff9ca5b59c50c236d7aff7a130b8d30f53e4
+time="2022-07-05T11:31:59Z" level=debug msg="Filtering disabled container" container=exoframe-server-test-a93e625851f4fd4c1203297d7c7544abe08dac480cb78ca82f2b850465ba13bf providerName=docker
+time="2022-07-05T11:31:59Z" level=debug msg="Provider event received {Status:die ID:39674aba41ab9a451e5e4a3d36fa70ff589e967453088dc7cdd0320211f43bf6 From:exo-admin-test-node-lock-deploy:latest Type:container Action:die Actor:{ID:39674aba41ab9a451e5e4a3d36fa70ff589e967453088dc7cdd0320211f43bf6 Attributes:map[exitCode:137 exoframe.deployment:exo-admin-test-node-lock-deploy-1f4adc16 exoframe.project:exo-admin-test-node-lock-deploy exoframe.user:admin image:exo-admin-test-node-lock-deploy:latest name:exo-admin-test-node-lock-deploy-1f4adc16 traefik.docker.network:exoframe traefik.enable:true traefik.http.middlewares.exo-admin-test-node-lock-deploy-1f4adc16-compress.compress:true traefik.http.routers.exo-admin-test-node-lock-deploy-1f4adc16-web.rule:Host(`localhost`) traefik.http.routers.exo-admin-test-node-lock-deploy-1f4adc16.middlewares:exo-admin-test-node-lock-deploy-1f4adc16-compress@docker traefik.http.routers.exo-admin-test-node-lock-deploy-1f4adc16.rule:Host(`localhost`) traefik.http.services.exo-admin-test-node-lock-deploy.loadbalancer.server.port:80]} Scope:local Time:1657020719 TimeNano:1657020719485742749}" providerName=docker
+time="2022-07-05T11:32:00Z" level=debug msg="Filtering disabled container" container=exoframe-traefik-5b432e83dfa2fec13b1eb07f0d6fff9ca5b59c50c236d7aff7a130b8d30f53e4 providerName=docker
+time="2022-07-05T11:32:00Z" level=debug msg="Filtering disabled container" providerName=docker container=exoframe-server-test-a93e625851f4fd4c1203297d7c7544abe08dac480cb78ca82f2b850465ba13bf
+time="2022-07-05T11:32:00Z" level=debug msg="Configuration received: {\"http\":{},\"tcp\":{},\"udp\":{}}" providerName=docker
+time="2022-07-05T11:32:00Z" level=debug msg="Skipping unchanged configuration." providerName=docker
+time="2022-07-05T11:32:02Z" level=debug msg="Provider event received {Status:start ID:19cf39e7eae950cb56a1b98d24c4fa5266ac0cb0de694e50bfc4da019e203fba From:exo-admin-test-html-deploy:latest Type:container Action:start Actor:{ID:19cf39e7eae950cb56a1b98d24c4fa5266ac0cb0de694e50bfc4da019e203fba Attributes:map[exoframe.deployment:exo-admin-test-html-deploy-e1fabf97 exoframe.project:simple-html exoframe.user:admin image:exo-admin-test-html-deploy:latest maintainer:NGINX Docker Maintainers <docker-maint@nginx.com> name:exo-admin-test-html-deploy-e1fabf97 traefik.docker.network:exoframe traefik.enable:true traefik.http.middlewares.exo-admin-test-html-deploy-e1fabf97-auth.basicauth.users:user:$apr1$$9Cv/OMGj$$ZomWQzuQbL.3TRCS81A1g/ traefik.http.middlewares.exo-admin-test-html-deploy-e1fabf97-compress.compress:true traefik.http.middlewares.exo-admin-test-html-deploy-e1fabf97-rate.ratelimit.average:1 traefik.http.middlewares.exo-admin-test-html-deploy-e1fabf97-rate.ratelimit.burst:5 traefik.http.routers.exo-admin-test-html-deploy-e1fabf97.middlewares:exo-admin-test-html-deploy-e1fabf97-compress@docker,exo-admin-test-html-deploy-e1fabf97-rate@docker,exo-admin-test-html-deploy-e1fabf97-auth@docker]} Scope:local Time:1657020722 TimeNano:1657020722230295803}" providerName=docker
+time="2022-07-05T11:32:02Z" level=debug msg="Filtering disabled container" providerName=docker container=exoframe-traefik-5b432e83dfa2fec13b1eb07f0d6fff9ca5b59c50c236d7aff7a130b8d30f53e4
+time="2022-07-05T11:32:02Z" level=debug msg="Filtering disabled container" providerName=docker container=exoframe-server-test-a93e625851f4fd4c1203297d7c7544abe08dac480cb78ca82f2b850465ba13bf
+time="2022-07-05T11:32:02Z" level=debug msg="Configuration received: {\"http\":{\"routers\":{\"exo-admin-test-html-deploy-e1fabf97\":{\"middlewares\":[\"exo-admin-test-html-deploy-e1fabf97-compress@docker\",\"exo-admin-test-html-deploy-e1fabf97-rate@docker\",\"exo-admin-test-html-deploy-e1fabf97-auth@docker\"],\"service\":\"exo-admin-test-html-deploy-e1fabf97\",\"rule\":\"Host(`exo-admin-test-html-deploy-e1fabf97`)\"}},\"services\":{\"exo-admin-test-html-deploy-e1fabf97\":{\"loadBalancer\":{\"servers\":[{\"url\":\"http://172.20.0.3:80\"}],\"passHostHeader\":true}}},\"middlewares\":{\"exo-admin-test-html-deploy-e1fabf97-auth\":{\"basicAuth\":{\"users\":[\"user:$apr1$$9Cv/OMGj$$ZomWQzuQbL.3TRCS81A1g/\"]}},\"exo-admin-test-html-deploy-e1fabf97-compress\":{\"compress\":{}},\"exo-admin-test-html-deploy-e1fabf97-rate\":{\"rateLimit\":{\"average\":1,\"period\":\"1s\",\"burst\":5}}}},\"tcp\":{},\"udp\":{}}" providerName=docker
+time="2022-07-05T11:32:02Z" level=debug msg="No entryPoint defined for this router, using the default one(s) instead: [web]" routerName=exo-admin-test-html-deploy-e1fabf97
+time="2022-07-05T11:32:02Z" level=debug msg="No default certificate, generating one" tlsStoreName=default
+time="2022-07-05T11:32:02Z" level=debug msg="Creating middleware" middlewareType=Pipelining entryPointName=web routerName=exo-admin-test-html-deploy-e1fabf97@docker serviceName=exo-admin-test-html-deploy-e1fabf97 middlewareName=pipelining
+time="2022-07-05T11:32:02Z" level=debug msg="Creating load-balancer" routerName=exo-admin-test-html-deploy-e1fabf97@docker serviceName=exo-admin-test-html-deploy-e1fabf97 entryPointName=web
+time="2022-07-05T11:32:02Z" level=debug msg="Creating server 0 http://172.20.0.3:80" entryPointName=web routerName=exo-admin-test-html-deploy-e1fabf97@docker serviceName=exo-admin-test-html-deploy-e1fabf97 serverName=0
+time="2022-07-05T11:32:02Z" level=debug msg="child http://172.20.0.3:80 now UP"
+time="2022-07-05T11:32:02Z" level=debug msg="Propagating new UP status"
+time="2022-07-05T11:32:02Z" level=debug msg="Added outgoing tracing middleware exo-admin-test-html-deploy-e1fabf97" entryPointName=web routerName=exo-admin-test-html-deploy-e1fabf97@docker middlewareName=tracing middlewareType=TracingForwarder
+time="2022-07-05T11:32:02Z" level=debug msg="Creating middleware" middlewareType=BasicAuth routerName=exo-admin-test-html-deploy-e1fabf97@docker entryPointName=web middlewareName=exo-admin-test-html-deploy-e1fabf97-auth@docker
+time="2022-07-05T11:32:02Z" level=debug msg="Adding tracing to middleware" entryPointName=web routerName=exo-admin-test-html-deploy-e1fabf97@docker middlewareName=exo-admin-test-html-deploy-e1fabf97-auth@docker
+time="2022-07-05T11:32:02Z" level=debug msg="Creating middleware" entryPointName=web routerName=exo-admin-test-html-deploy-e1fabf97@docker middlewareName=exo-admin-test-html-deploy-e1fabf97-rate@docker middlewareType=RateLimiterType
+time="2022-07-05T11:32:02Z" level=debug msg="Using IPStrategy" middlewareName=exo-admin-test-html-deploy-e1fabf97-rate@docker middlewareType=RateLimiterType entryPointName=web routerName=exo-admin-test-html-deploy-e1fabf97@docker
+time="2022-07-05T11:32:02Z" level=debug msg="Adding tracing to middleware" entryPointName=web routerName=exo-admin-test-html-deploy-e1fabf97@docker middlewareName=exo-admin-test-html-deploy-e1fabf97-rate@docker
+time="2022-07-05T11:32:02Z" level=debug msg="Creating middleware" middlewareType=Compress entryPointName=web routerName=exo-admin-test-html-deploy-e1fabf97@docker middlewareName=exo-admin-test-html-deploy-e1fabf97-compress@docker
+time="2022-07-05T11:32:02Z" level=debug msg="Adding tracing to middleware" routerName=exo-admin-test-html-deploy-e1fabf97@docker entryPointName=web middlewareName=exo-admin-test-html-deploy-e1fabf97-compress@docker
+time="2022-07-05T11:32:02Z" level=debug msg="Creating middleware" entryPointName=web middlewareName=traefik-internal-recovery middlewareType=Recovery
+time="2022-07-05T11:32:04Z" level=debug msg="Provider event received {Status:start ID:2a2223606b2e763b62d359cc83ce36259ad3a877c358bd5f37f431d7464e80fa From:exo-admin-test-html-deploy:latest Type:container Action:start Actor:{ID:2a2223606b2e763b62d359cc83ce36259ad3a877c358bd5f37f431d7464e80fa Attributes:map[exoframe.deployment:exo-admin-test-html-deploy-693b494f exoframe.project:simple-html exoframe.user:admin image:exo-admin-test-html-deploy:latest maintainer:NGINX Docker Maintainers <docker-maint@nginx.com> name:exo-admin-test-html-deploy-693b494f traefik.docker.network:exoframe traefik.enable:true traefik.http.middlewares.exo-admin-test-html-deploy-693b494f-auth.basicauth.users:user:$apr1$$9Cv/OMGj$$ZomWQzuQbL.3TRCS81A1g/ traefik.http.middlewares.exo-admin-test-html-deploy-693b494f-compress.compress:true traefik.http.middlewares.exo-admin-test-html-deploy-693b494f-rate.ratelimit.average:1 traefik.http.middlewares.exo-admin-test-html-deploy-693b494f-rate.ratelimit.burst:5 traefik.http.routers.exo-admin-test-html-deploy-693b494f.middlewares:exo-admin-test-html-deploy-693b494f-compress@docker,exo-admin-test-html-deploy-693b494f-rate@docker,exo-admin-test-html-deploy-693b494f-auth@docker]} Scope:local Time:1657020724 TimeNano:1657020724601449908}" providerName=docker
+time="2022-07-05T11:32:04Z" level=debug msg="Filtering disabled container" providerName=docker container=exoframe-traefik-5b432e83dfa2fec13b1eb07f0d6fff9ca5b59c50c236d7aff7a130b8d30f53e4
+time="2022-07-05T11:32:04Z" level=debug msg="Filtering disabled container" providerName=docker container=exoframe-server-test-a93e625851f4fd4c1203297d7c7544abe08dac480cb78ca82f2b850465ba13bf
+time="2022-07-05T11:32:04Z" level=debug msg="Provider event received {Status:start ID:4be578a5247325a2748336f3eefb427f50461e64e95921f6bd5125eed69db22a From:exoframe/server:latest Type:container Action:start Actor:{ID:4be578a5247325a2748336f3eefb427f50461e64e95921f6bd5125eed69db22a Attributes:map[image:exoframe/server:latest name:exoframe-server-b2a85dd06e12 test:label version:6.2.3]} Scope:local Time:1657020724 TimeNano:1657020724738873493}" providerName=docker
+time="2022-07-05T11:32:04Z" level=debug msg="Filtering disabled container" providerName=docker container=exoframe-server-b2a85dd06e12-4be578a5247325a2748336f3eefb427f50461e64e95921f6bd5125eed69db22a
+time="2022-07-05T11:32:04Z" level=debug msg="Filtering disabled container" providerName=docker container=exoframe-traefik-5b432e83dfa2fec13b1eb07f0d6fff9ca5b59c50c236d7aff7a130b8d30f53e4
+time="2022-07-05T11:32:04Z" level=debug msg="Filtering disabled container" providerName=docker container=exoframe-server-test-a93e625851f4fd4c1203297d7c7544abe08dac480cb78ca82f2b850465ba13bf
+time="2022-07-05T11:32:04Z" level=debug msg="Provider event received {Status:die ID:19cf39e7eae950cb56a1b98d24c4fa5266ac0cb0de694e50bfc4da019e203fba From:exo-admin-test-html-deploy:latest Type:container Action:die Actor:{ID:19cf39e7eae950cb56a1b98d24c4fa5266ac0cb0de694e50bfc4da019e203fba Attributes:map[exitCode:137 exoframe.deployment:exo-admin-test-html-deploy-e1fabf97 exoframe.project:simple-html exoframe.user:admin image:exo-admin-test-html-deploy:latest maintainer:NGINX Docker Maintainers <docker-maint@nginx.com> name:exo-admin-test-html-deploy-e1fabf97 traefik.docker.network:exoframe traefik.enable:true traefik.http.middlewares.exo-admin-test-html-deploy-e1fabf97-auth.basicauth.users:user:$apr1$$9Cv/OMGj$$ZomWQzuQbL.3TRCS81A1g/ traefik.http.middlewares.exo-admin-test-html-deploy-e1fabf97-compress.compress:true traefik.http.middlewares.exo-admin-test-html-deploy-e1fabf97-rate.ratelimit.average:1 traefik.http.middlewares.exo-admin-test-html-deploy-e1fabf97-rate.ratelimit.burst:5 traefik.http.routers.exo-admin-test-html-deploy-e1fabf97.middlewares:exo-admin-test-html-deploy-e1fabf97-compress@docker,exo-admin-test-html-deploy-e1fabf97-rate@docker,exo-admin-test-html-deploy-e1fabf97-auth@docker]} Scope:local Time:1657020724 TimeNano:1657020724761235003}" providerName=docker
+time="2022-07-05T11:32:04Z" level=debug msg="Configuration received: {\"http\":{\"routers\":{\"exo-admin-test-html-deploy-693b494f\":{\"middlewares\":[\"exo-admin-test-html-deploy-693b494f-compress@docker\",\"exo-admin-test-html-deploy-693b494f-rate@docker\",\"exo-admin-test-html-deploy-693b494f-auth@docker\"],\"service\":\"exo-admin-test-html-deploy-693b494f\",\"rule\":\"Host(`exo-admin-test-html-deploy-693b494f`)\"},\"exo-admin-test-html-deploy-e1fabf97\":{\"middlewares\":[\"exo-admin-test-html-deploy-e1fabf97-compress@docker\",\"exo-admin-test-html-deploy-e1fabf97-rate@docker\",\"exo-admin-test-html-deploy-e1fabf97-auth@docker\"],\"service\":\"exo-admin-test-html-deploy-e1fabf97\",\"rule\":\"Host(`exo-admin-test-html-deploy-e1fabf97`)\"}},\"services\":{\"exo-admin-test-html-deploy-693b494f\":{\"loadBalancer\":{\"servers\":[{\"url\":\"http://172.20.0.5:80\"}],\"passHostHeader\":true}},\"exo-admin-test-html-deploy-e1fabf97\":{\"loadBalancer\":{\"servers\":[{\"url\":\"http://172.20.0.3:80\"}],\"passHostHeader\":true}}},\"middlewares\":{\"exo-admin-test-html-deploy-693b494f-auth\":{\"basicAuth\":{\"users\":[\"user:$apr1$$9Cv/OMGj$$ZomWQzuQbL.3TRCS81A1g/\"]}},\"exo-admin-test-html-deploy-693b494f-compress\":{\"compress\":{}},\"exo-admin-test-html-deploy-693b494f-rate\":{\"rateLimit\":{\"average\":1,\"period\":\"1s\",\"burst\":5}},\"exo-admin-test-html-deploy-e1fabf97-auth\":{\"basicAuth\":{\"users\":[\"user:$apr1$$9Cv/OMGj$$ZomWQzuQbL.3TRCS81A1g/\"]}},\"exo-admin-test-html-deploy-e1fabf97-compress\":{\"compress\":{}},\"exo-admin-test-html-deploy-e1fabf97-rate\":{\"rateLimit\":{\"average\":1,\"period\":\"1s\",\"burst\":5}}}},\"tcp\":{},\"udp\":{}}" providerName=docker
+time="2022-07-05T11:32:04Z" level=debug msg="No entryPoint defined for this router, using the default one(s) instead: [web]" routerName=exo-admin-test-html-deploy-693b494f
+time="2022-07-05T11:32:04Z" level=debug msg="No entryPoint defined for this router, using the default one(s) instead: [web]" routerName=exo-admin-test-html-deploy-e1fabf97
+time="2022-07-05T11:32:04Z" level=debug msg="No default certificate, generating one" tlsStoreName=default
+time="2022-07-05T11:32:04Z" level=info msg="I have to go..."
+time="2022-07-05T11:32:04Z" level=info msg="Stopping server gracefully"
+time="2022-07-05T11:32:04Z" level=debug msg="Waiting 10s seconds before killing connections." entryPointName=web
+time="2022-07-05T11:32:04Z" level=error msg="accept tcp [::]:80: use of closed network connection" entryPointName=web
+time="2022-07-05T11:32:04Z" level=error msg="close tcp [::]:80: use of closed network connection" entryPointName=web
+time="2022-07-05T11:32:04Z" level=debug msg="Entry point web closed" entryPointName=web
+time="2022-07-05T11:32:04Z" level=info msg="Server stopped"
+time="2022-07-05T11:32:04Z" level=info msg="Shutting down"
+time="2022-07-05T11:32:04Z" level=debug msg="FIXME: Got an status-code for which error does not match any expected type!!!: -1" module=api status_code=-1
+time="2022-07-05T11:32:04Z" level=warning msg="Failed to inspect container 2a2223606b2e763b62d359cc83ce36259ad3a877c358bd5f37f431d7464e80fa, error: Get \"http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/2a2223606b2e763b62d359cc83ce36259ad3a877c358bd5f37f431d7464e80fa/json\": context canceled" providerName=docker
+time="2022-07-05T11:32:04Z" level=debug msg="FIXME: Got an status-code for which error does not match any expected type!!!: -1" module=api status_code=-1
+time="2022-07-05T11:32:04Z" level=warning msg="Failed to inspect container 4be578a5247325a2748336f3eefb427f50461e64e95921f6bd5125eed69db22a, error: Get \"http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/4be578a5247325a2748336f3eefb427f50461e64e95921f6bd5125eed69db22a/json\": context canceled" providerName=docker
+time="2022-07-05T11:32:04Z" level=debug msg="FIXME: Got an status-code for which error does not match any expected type!!!: -1" status_code=-1 module=api
+time="2022-07-05T11:32:04Z" level=warning msg="Failed to inspect container 19cf39e7eae950cb56a1b98d24c4fa5266ac0cb0de694e50bfc4da019e203fba, error: Get \"http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/19cf39e7eae950cb56a1b98d24c4fa5266ac0cb0de694e50bfc4da019e203fba/json\": context canceled" providerName=docker
+time="2022-07-05T11:32:04Z" level=debug msg="FIXME: Got an status-code for which error does not match any expected type!!!: -1" status_code=-1 module=api
+time="2022-07-05T11:32:04Z" level=warning msg="Failed to inspect container 5b432e83dfa2fec13b1eb07f0d6fff9ca5b59c50c236d7aff7a130b8d30f53e4, error: Get \"http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/5b432e83dfa2fec13b1eb07f0d6fff9ca5b59c50c236d7aff7a130b8d30f53e4/json\": context canceled" providerName=docker
+time="2022-07-05T11:32:04Z" level=debug msg="FIXME: Got an status-code for which error does not match any expected type!!!: -1" status_code=-1 module=api
+time="2022-07-05T11:32:04Z" level=warning msg="Failed to inspect container a93e625851f4fd4c1203297d7c7544abe08dac480cb78ca82f2b850465ba13bf, error: Get \"http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/a93e625851f4fd4c1203297d7c7544abe08dac480cb78ca82f2b850465ba13bf/json\": context canceled" providerName=docker
+time="2022-07-05T11:32:04Z" level=error msg="Cannot connect to docker server context canceled" providerName=docker
+time="2022-07-05T11:32:04Z" level=debug msg="Creating middleware" middlewareType=Pipelining entryPointName=web routerName=exo-admin-test-html-deploy-693b494f@docker serviceName=exo-admin-test-html-deploy-693b494f middlewareName=pipelining
+time="2022-07-05T11:32:04Z" level=debug msg="Creating load-balancer" entryPointName=web routerName=exo-admin-test-html-deploy-693b494f@docker serviceName=exo-admin-test-html-deploy-693b494f
+time="2022-07-05T11:32:04Z" level=debug msg="Creating server 0 http://172.20.0.5:80" routerName=exo-admin-test-html-deploy-693b494f@docker serviceName=exo-admin-test-html-deploy-693b494f serverName=0 entryPointName=web
+time="2022-07-05T11:32:04Z" level=debug msg="child http://172.20.0.5:80 now UP"
+time="2022-07-05T11:32:04Z" level=debug msg="Propagating new UP status"
+time="2022-07-05T11:32:04Z" level=debug msg="Added outgoing tracing middleware exo-admin-test-html-deploy-693b494f" middlewareName=tracing middlewareType=TracingForwarder entryPointName=web routerName=exo-admin-test-html-deploy-693b494f@docker
+time="2022-07-05T11:32:04Z" level=debug msg="Creating middleware" middlewareName=exo-admin-test-html-deploy-693b494f-auth@docker middlewareType=BasicAuth routerName=exo-admin-test-html-deploy-693b494f@docker entryPointName=web
+time="2022-07-05T11:32:04Z" level=debug msg="Adding tracing to middleware" entryPointName=web routerName=exo-admin-test-html-deploy-693b494f@docker middlewareName=exo-admin-test-html-deploy-693b494f-auth@docker
+time="2022-07-05T11:32:04Z" level=debug msg="Creating middleware" middlewareType=RateLimiterType entryPointName=web routerName=exo-admin-test-html-deploy-693b494f@docker middlewareName=exo-admin-test-html-deploy-693b494f-rate@docker
+time="2022-07-05T11:32:04Z" level=debug msg="Using IPStrategy" middlewareType=RateLimiterType entryPointName=web routerName=exo-admin-test-html-deploy-693b494f@docker middlewareName=exo-admin-test-html-deploy-693b494f-rate@docker
+time="2022-07-05T11:32:04Z" level=debug msg="Adding tracing to middleware" entryPointName=web routerName=exo-admin-test-html-deploy-693b494f@docker middlewareName=exo-admin-test-html-deploy-693b494f-rate@docker
+time="2022-07-05T11:32:04Z" level=debug msg="Creating middleware" routerName=exo-admin-test-html-deploy-693b494f@docker middlewareName=exo-admin-test-html-deploy-693b494f-compress@docker middlewareType=Compress entryPointName=web
+time="2022-07-05T11:32:04Z" level=debug msg="Adding tracing to middleware" entryPointName=web routerName=exo-admin-test-html-deploy-693b494f@docker middlewareName=exo-admin-test-html-deploy-693b494f-compress@docker
+time="2022-07-05T11:32:04Z" level=debug msg="Creating middleware" middlewareType=Pipelining serviceName=exo-admin-test-html-deploy-e1fabf97 entryPointName=web routerName=exo-admin-test-html-deploy-e1fabf97@docker middlewareName=pipelining
+time="2022-07-05T11:32:04Z" level=debug msg="Creating load-balancer" entryPointName=web routerName=exo-admin-test-html-deploy-e1fabf97@docker serviceName=exo-admin-test-html-deploy-e1fabf97
+time="2022-07-05T11:32:04Z" level=debug msg="Creating server 0 http://172.20.0.3:80" entryPointName=web routerName=exo-admin-test-html-deploy-e1fabf97@docker serviceName=exo-admin-test-html-deploy-e1fabf97 serverName=0
+time="2022-07-05T11:32:04Z" level=debug msg="child http://172.20.0.3:80 now UP"
+time="2022-07-05T11:32:04Z" level=debug msg="Propagating new UP status"
+time="2022-07-05T11:32:04Z" level=debug msg="Added outgoing tracing middleware exo-admin-test-html-deploy-e1fabf97" middlewareName=tracing middlewareType=TracingForwarder entryPointName=web routerName=exo-admin-test-html-deploy-e1fabf97@docker
+time="2022-07-05T11:32:04Z" level=debug msg="Creating middleware" entryPointName=web routerName=exo-admin-test-html-deploy-e1fabf97@docker middlewareName=exo-admin-test-html-deploy-e1fabf97-auth@docker middlewareType=BasicAuth
+time="2022-07-05T11:32:04Z" level=debug msg="Adding tracing to middleware" routerName=exo-admin-test-html-deploy-e1fabf97@docker entryPointName=web middlewareName=exo-admin-test-html-deploy-e1fabf97-auth@docker
+time="2022-07-05T11:32:04Z" level=debug msg="Creating middleware" middlewareName=exo-admin-test-html-deploy-e1fabf97-rate@docker middlewareType=RateLimiterType entryPointName=web routerName=exo-admin-test-html-deploy-e1fabf97@docker
+time="2022-07-05T11:32:04Z" level=debug msg="Using IPStrategy" routerName=exo-admin-test-html-deploy-e1fabf97@docker middlewareName=exo-admin-test-html-deploy-e1fabf97-rate@docker middlewareType=RateLimiterType entryPointName=web
+time="2022-07-05T11:32:04Z" level=debug msg="Adding tracing to middleware" entryPointName=web routerName=exo-admin-test-html-deploy-e1fabf97@docker middlewareName=exo-admin-test-html-deploy-e1fabf97-rate@docker
+time="2022-07-05T11:32:04Z" level=debug msg="Creating middleware" middlewareName=exo-admin-test-html-deploy-e1fabf97-compress@docker middlewareType=Compress entryPointName=web routerName=exo-admin-test-html-deploy-e1fabf97@docker
+time="2022-07-05T11:32:04Z" level=debug msg="Adding tracing to middleware" entryPointName=web routerName=exo-admin-test-html-deploy-e1fabf97@docker middlewareName=exo-admin-test-html-deploy-e1fabf97-compress@docker
+time="2022-07-05T11:32:04Z" level=debug msg="Creating middleware" middlewareName=traefik-internal-recovery middlewareType=Recovery entryPointName=web
+time="2022-07-05T11:47:41Z" level=info msg="Traefik version 2.8.0 built on 2022-06-29T15:43:58Z"
+time="2022-07-05T11:47:41Z" level=debug msg="Static configuration loaded {\"global\":{\"checkNewVersion\":true},\"serversTransport\":{\"maxIdleConnsPerHost\":200},\"entryPoints\":{\"web\":{\"address\":\":80\",\"transport\":{\"lifeCycle\":{\"graceTimeOut\":\"10s\"},\"respondingTimeouts\":{\"idleTimeout\":\"3m0s\"}},\"forwardedHeaders\":{},\"http\":{},\"http2\":{\"maxConcurrentStreams\":250},\"udp\":{\"timeout\":\"3s\"}}},\"providers\":{\"providersThrottleDuration\":\"2s\",\"docker\":{\"watch\":true,\"endpoint\":\"unix:///var/run/docker.sock\",\"defaultRule\":\"Host(`{{ normalize .Name }}`)\",\"swarmModeRefreshSeconds\":\"15s\"}},\"log\":{\"level\":\"DEBUG\",\"filePath\":\"/var/traefik/traefik.log\",\"format\":\"common\"},\"pilot\":{\"dashboard\":true}}"
+time="2022-07-05T11:47:41Z" level=info msg="\nStats collection is disabled.\nHelp us improve Traefik by turning this feature on :)\nMore details on: https://doc.traefik.io/traefik/contributing/data-collection/\n"
+time="2022-07-05T11:47:41Z" level=warning msg="Traefik Pilot is deprecated and will be removed soon. Please check our Blog for migration instructions later this year."
+time="2022-07-05T11:47:41Z" level=info msg="Starting provider aggregator aggregator.ProviderAggregator"
+time="2022-07-05T11:47:41Z" level=debug msg="Starting TCP Server" entryPointName=web
+time="2022-07-05T11:47:41Z" level=info msg="Starting provider *traefik.Provider"
+time="2022-07-05T11:47:41Z" level=debug msg="*traefik.Provider provider configuration: {}"
+time="2022-07-05T11:47:41Z" level=info msg="Starting provider *docker.Provider"
+time="2022-07-05T11:47:41Z" level=debug msg="*docker.Provider provider configuration: {\"watch\":true,\"endpoint\":\"unix:///var/run/docker.sock\",\"defaultRule\":\"Host(`{{ normalize .Name }}`)\",\"swarmModeRefreshSeconds\":\"15s\"}"
+time="2022-07-05T11:47:41Z" level=info msg="Starting provider *acme.ChallengeTLSALPN"
+time="2022-07-05T11:47:41Z" level=debug msg="*acme.ChallengeTLSALPN provider configuration: {}"
+time="2022-07-05T11:47:41Z" level=debug msg="Configuration received: {\"http\":{\"services\":{\"noop\":{}},\"serversTransports\":{\"default\":{\"maxIdleConnsPerHost\":200}}},\"tcp\":{},\"udp\":{},\"tls\":{}}" providerName=internal
+time="2022-07-05T11:47:41Z" level=debug msg="No default certificate, generating one" tlsStoreName=default
+time="2022-07-05T11:47:41Z" level=debug msg="Provider connection established with docker 20.10.17 (API 1.41)" providerName=docker
+time="2022-07-05T11:47:41Z" level=debug msg="Filtering disabled container" providerName=docker container=exoframe-traefik-e20f92509e3d62f2e7f823582b0d9ecaa7de95f71970e320d653d6bef0d597ba
+time="2022-07-05T11:47:41Z" level=debug msg="Filtering disabled container" providerName=docker container=exoframe-server-test-d0bfad7ebfb41cb3a828496e4dd2d18cb88f6e545452fc2fb9dbceea40921dc4
+time="2022-07-05T11:47:41Z" level=debug msg="Configuration received: {\"http\":{},\"tcp\":{},\"udp\":{}}" providerName=docker
+time="2022-07-05T11:47:41Z" level=debug msg="No default certificate, generating one" tlsStoreName=default
+time="2022-07-05T11:47:47Z" level=debug msg="Provider event received {Status:start ID:e2d9843dec2d41697616653946b370b347fd4f64d97dde0dfc8098b4343bccda From:exoframe/server:latest Type:container Action:start Actor:{ID:e2d9843dec2d41697616653946b370b347fd4f64d97dde0dfc8098b4343bccda Attributes:map[image:exoframe/server:latest name:exoframe-server-b2a85dd06e12 test:label version:6.2.3]} Scope:local Time:1657021667 TimeNano:1657021667151258727}" providerName=docker
+time="2022-07-05T11:47:47Z" level=debug msg="Filtering disabled container" providerName=docker container=exoframe-server-b2a85dd06e12-e2d9843dec2d41697616653946b370b347fd4f64d97dde0dfc8098b4343bccda
+time="2022-07-05T11:47:47Z" level=debug msg="Filtering disabled container" providerName=docker container=exoframe-traefik-e20f92509e3d62f2e7f823582b0d9ecaa7de95f71970e320d653d6bef0d597ba
+time="2022-07-05T11:47:47Z" level=debug msg="Filtering disabled container" providerName=docker container=exoframe-server-test-d0bfad7ebfb41cb3a828496e4dd2d18cb88f6e545452fc2fb9dbceea40921dc4
+time="2022-07-05T11:47:47Z" level=debug msg="Configuration received: {\"http\":{},\"tcp\":{},\"udp\":{}}" providerName=docker
+time="2022-07-05T11:47:47Z" level=debug msg="Skipping unchanged configuration." providerName=docker
+time="2022-07-05T11:47:47Z" level=info msg="I have to go..."
+time="2022-07-05T11:47:47Z" level=info msg="Stopping server gracefully"
+time="2022-07-05T11:47:47Z" level=debug msg="Waiting 10s seconds before killing connections." entryPointName=web
+time="2022-07-05T11:47:47Z" level=error msg="accept tcp [::]:80: use of closed network connection" entryPointName=web
+time="2022-07-05T11:47:47Z" level=error msg="close tcp [::]:80: use of closed network connection" entryPointName=web
+time="2022-07-05T11:47:47Z" level=debug msg="Entry point web closed" entryPointName=web
+time="2022-07-05T11:47:47Z" level=info msg="Server stopped"
+time="2022-07-05T11:47:47Z" level=info msg="Shutting down"
+time="2022-07-05T11:50:33Z" level=info msg="Traefik version 2.8.0 built on 2022-06-29T15:43:58Z"
+time="2022-07-05T11:50:33Z" level=debug msg="Static configuration loaded {\"global\":{\"checkNewVersion\":true},\"serversTransport\":{\"maxIdleConnsPerHost\":200},\"entryPoints\":{\"web\":{\"address\":\":80\",\"transport\":{\"lifeCycle\":{\"graceTimeOut\":\"10s\"},\"respondingTimeouts\":{\"idleTimeout\":\"3m0s\"}},\"forwardedHeaders\":{},\"http\":{},\"http2\":{\"maxConcurrentStreams\":250},\"udp\":{\"timeout\":\"3s\"}}},\"providers\":{\"providersThrottleDuration\":\"2s\",\"docker\":{\"watch\":true,\"endpoint\":\"unix:///var/run/docker.sock\",\"defaultRule\":\"Host(`{{ normalize .Name }}`)\",\"swarmModeRefreshSeconds\":\"15s\"}},\"log\":{\"level\":\"DEBUG\",\"filePath\":\"/var/traefik/traefik.log\",\"format\":\"common\"},\"pilot\":{\"dashboard\":true}}"
+time="2022-07-05T11:50:33Z" level=info msg="\nStats collection is disabled.\nHelp us improve Traefik by turning this feature on :)\nMore details on: https://doc.traefik.io/traefik/contributing/data-collection/\n"
+time="2022-07-05T11:50:33Z" level=warning msg="Traefik Pilot is deprecated and will be removed soon. Please check our Blog for migration instructions later this year."
+time="2022-07-05T11:50:33Z" level=info msg="Starting provider aggregator aggregator.ProviderAggregator"
+time="2022-07-05T11:50:33Z" level=debug msg="Starting TCP Server" entryPointName=web
+time="2022-07-05T11:50:33Z" level=info msg="Starting provider *traefik.Provider"
+time="2022-07-05T11:50:33Z" level=debug msg="*traefik.Provider provider configuration: {}"
+time="2022-07-05T11:50:33Z" level=info msg="Starting provider *docker.Provider"
+time="2022-07-05T11:50:33Z" level=debug msg="*docker.Provider provider configuration: {\"watch\":true,\"endpoint\":\"unix:///var/run/docker.sock\",\"defaultRule\":\"Host(`{{ normalize .Name }}`)\",\"swarmModeRefreshSeconds\":\"15s\"}"
+time="2022-07-05T11:50:33Z" level=info msg="Starting provider *acme.ChallengeTLSALPN"
+time="2022-07-05T11:50:33Z" level=debug msg="*acme.ChallengeTLSALPN provider configuration: {}"
+time="2022-07-05T11:50:33Z" level=debug msg="Configuration received: {\"http\":{\"services\":{\"noop\":{}},\"serversTransports\":{\"default\":{\"maxIdleConnsPerHost\":200}}},\"tcp\":{},\"udp\":{},\"tls\":{}}" providerName=internal
+time="2022-07-05T11:50:33Z" level=debug msg="No default certificate, generating one" tlsStoreName=default
+time="2022-07-05T11:50:33Z" level=debug msg="Provider connection established with docker 20.10.17 (API 1.41)" providerName=docker
+time="2022-07-05T11:50:33Z" level=debug msg="Filtering disabled container" providerName=docker container=exoframe-traefik-d2e79164f0ed7e4662374b7c3e0538ea27b68999cb4c7464349925bd7ea31614
+time="2022-07-05T11:50:33Z" level=debug msg="Filtering disabled container" providerName=docker container=exoframe-server-test-4c6d0f2515e9b00d04bf2bdfd607d2d27959598386957440e46550b4c25cef0d
+time="2022-07-05T11:50:33Z" level=debug msg="Configuration received: {\"http\":{},\"tcp\":{},\"udp\":{}}" providerName=docker
+time="2022-07-05T11:50:33Z" level=debug msg="No default certificate, generating one" tlsStoreName=default
+time="2022-07-05T11:50:38Z" level=debug msg="Provider event received {Status:start ID:fe361ae441bb84341f398f8d22ced140961aa4f0d78a2ce8b7e0bec22e38e8ca From:exoframe/server:latest Type:container Action:start Actor:{ID:fe361ae441bb84341f398f8d22ced140961aa4f0d78a2ce8b7e0bec22e38e8ca Attributes:map[image:exoframe/server:latest name:exoframe-server-b2a85dd06e12 test:label version:6.2.3]} Scope:local Time:1657021838 TimeNano:1657021838931037973}" providerName=docker
+time="2022-07-05T11:50:38Z" level=debug msg="Filtering disabled container" providerName=docker container=exoframe-server-b2a85dd06e12-fe361ae441bb84341f398f8d22ced140961aa4f0d78a2ce8b7e0bec22e38e8ca
+time="2022-07-05T11:50:38Z" level=debug msg="Filtering disabled container" container=exoframe-traefik-d2e79164f0ed7e4662374b7c3e0538ea27b68999cb4c7464349925bd7ea31614 providerName=docker
+time="2022-07-05T11:50:38Z" level=debug msg="Filtering disabled container" providerName=docker container=exoframe-server-test-4c6d0f2515e9b00d04bf2bdfd607d2d27959598386957440e46550b4c25cef0d
+time="2022-07-05T11:50:38Z" level=debug msg="Configuration received: {\"http\":{},\"tcp\":{},\"udp\":{}}" providerName=docker
+time="2022-07-05T11:50:38Z" level=debug msg="Skipping unchanged configuration." providerName=docker
+time="2022-07-05T11:50:39Z" level=info msg="I have to go..."
+time="2022-07-05T11:50:39Z" level=info msg="Stopping server gracefully"
+time="2022-07-05T11:50:39Z" level=debug msg="Waiting 10s seconds before killing connections." entryPointName=web
+time="2022-07-05T11:50:39Z" level=error msg="accept tcp [::]:80: use of closed network connection" entryPointName=web
+time="2022-07-05T11:50:39Z" level=error msg="close tcp [::]:80: use of closed network connection" entryPointName=web
+time="2022-07-05T11:50:39Z" level=debug msg="Entry point web closed" entryPointName=web
+time="2022-07-05T11:50:39Z" level=info msg="Server stopped"
+time="2022-07-05T11:50:39Z" level=info msg="Shutting down"
+time="2022-07-05T11:53:10Z" level=info msg="Traefik version 2.8.0 built on 2022-06-29T15:43:58Z"
+time="2022-07-05T11:53:10Z" level=debug msg="Static configuration loaded {\"global\":{\"checkNewVersion\":true},\"serversTransport\":{\"maxIdleConnsPerHost\":200},\"entryPoints\":{\"web\":{\"address\":\":80\",\"transport\":{\"lifeCycle\":{\"graceTimeOut\":\"10s\"},\"respondingTimeouts\":{\"idleTimeout\":\"3m0s\"}},\"forwardedHeaders\":{},\"http\":{},\"http2\":{\"maxConcurrentStreams\":250},\"udp\":{\"timeout\":\"3s\"}}},\"providers\":{\"providersThrottleDuration\":\"2s\",\"docker\":{\"watch\":true,\"endpoint\":\"unix:///var/run/docker.sock\",\"defaultRule\":\"Host(`{{ normalize .Name }}`)\",\"swarmModeRefreshSeconds\":\"15s\"}},\"log\":{\"level\":\"DEBUG\",\"filePath\":\"/var/traefik/traefik.log\",\"format\":\"common\"},\"pilot\":{\"dashboard\":true}}"
+time="2022-07-05T11:53:10Z" level=info msg="\nStats collection is disabled.\nHelp us improve Traefik by turning this feature on :)\nMore details on: https://doc.traefik.io/traefik/contributing/data-collection/\n"
+time="2022-07-05T11:53:10Z" level=warning msg="Traefik Pilot is deprecated and will be removed soon. Please check our Blog for migration instructions later this year."
+time="2022-07-05T11:53:10Z" level=info msg="Starting provider aggregator aggregator.ProviderAggregator"
+time="2022-07-05T11:53:10Z" level=debug msg="Starting TCP Server" entryPointName=web
+time="2022-07-05T11:53:10Z" level=info msg="Starting provider *traefik.Provider"
+time="2022-07-05T11:53:10Z" level=debug msg="*traefik.Provider provider configuration: {}"
+time="2022-07-05T11:53:10Z" level=info msg="Starting provider *acme.ChallengeTLSALPN"
+time="2022-07-05T11:53:10Z" level=debug msg="*acme.ChallengeTLSALPN provider configuration: {}"
+time="2022-07-05T11:53:10Z" level=info msg="Starting provider *docker.Provider"
+time="2022-07-05T11:53:10Z" level=debug msg="*docker.Provider provider configuration: {\"watch\":true,\"endpoint\":\"unix:///var/run/docker.sock\",\"defaultRule\":\"Host(`{{ normalize .Name }}`)\",\"swarmModeRefreshSeconds\":\"15s\"}"
+time="2022-07-05T11:53:10Z" level=debug msg="Configuration received: {\"http\":{\"services\":{\"noop\":{}},\"serversTransports\":{\"default\":{\"maxIdleConnsPerHost\":200}}},\"tcp\":{},\"udp\":{},\"tls\":{}}" providerName=internal
+time="2022-07-05T11:53:10Z" level=debug msg="No default certificate, generating one" tlsStoreName=default
+time="2022-07-05T11:53:10Z" level=debug msg="Provider connection established with docker 20.10.17 (API 1.41)" providerName=docker
+time="2022-07-05T11:53:10Z" level=debug msg="Filtering disabled container" container=exoframe-traefik-6e9bef7c2b27f81844359e17cdd7d8eb05407895145406a6f93ee9942ba8f050 providerName=docker
+time="2022-07-05T11:53:10Z" level=debug msg="Filtering disabled container" providerName=docker container=exoframe-server-test-4edd252ccdb2c4ae6c388bcb6fef6cb0ee462dcb9459986e72f02a0f04b777a0
+time="2022-07-05T11:53:10Z" level=debug msg="Configuration received: {\"http\":{},\"tcp\":{},\"udp\":{}}" providerName=docker
+time="2022-07-05T11:53:10Z" level=debug msg="No default certificate, generating one" tlsStoreName=default
+time="2022-07-05T11:53:15Z" level=debug msg="Provider event received {Status:start ID:65f308f19b2ded5bb90d67bb7dbcc0f42d4c5f7e897b7668ede83d8c2cf65016 From:exoframe/server:latest Type:container Action:start Actor:{ID:65f308f19b2ded5bb90d67bb7dbcc0f42d4c5f7e897b7668ede83d8c2cf65016 Attributes:map[image:exoframe/server:latest name:exoframe-server-b2a85dd06e12 test:label version:6.2.3]} Scope:local Time:1657021995 TimeNano:1657021995360282663}" providerName=docker
+time="2022-07-05T11:53:15Z" level=debug msg="Filtering disabled container" container=exoframe-server-b2a85dd06e12-65f308f19b2ded5bb90d67bb7dbcc0f42d4c5f7e897b7668ede83d8c2cf65016 providerName=docker
+time="2022-07-05T11:53:15Z" level=debug msg="Filtering disabled container" providerName=docker container=exoframe-traefik-6e9bef7c2b27f81844359e17cdd7d8eb05407895145406a6f93ee9942ba8f050
+time="2022-07-05T11:53:15Z" level=debug msg="Filtering disabled container" providerName=docker container=exoframe-server-test-4edd252ccdb2c4ae6c388bcb6fef6cb0ee462dcb9459986e72f02a0f04b777a0
+time="2022-07-05T11:53:15Z" level=debug msg="Configuration received: {\"http\":{},\"tcp\":{},\"udp\":{}}" providerName=docker
+time="2022-07-05T11:53:15Z" level=debug msg="Skipping unchanged configuration." providerName=docker
+time="2022-07-05T11:53:15Z" level=info msg="I have to go..."
+time="2022-07-05T11:53:15Z" level=info msg="Stopping server gracefully"
+time="2022-07-05T11:53:15Z" level=debug msg="Waiting 10s seconds before killing connections." entryPointName=web
+time="2022-07-05T11:53:15Z" level=error msg="accept tcp [::]:80: use of closed network connection" entryPointName=web
+time="2022-07-05T11:53:15Z" level=error msg="close tcp [::]:80: use of closed network connection" entryPointName=web
+time="2022-07-05T11:53:15Z" level=debug msg="Entry point web closed" entryPointName=web
+time="2022-07-05T11:53:15Z" level=info msg="Server stopped"
+time="2022-07-05T11:53:15Z" level=info msg="Shutting down"
+time="2022-07-05T11:54:17Z" level=info msg="Traefik version 2.8.0 built on 2022-06-29T15:43:58Z"
+time="2022-07-05T11:54:17Z" level=debug msg="Static configuration loaded {\"global\":{\"checkNewVersion\":true},\"serversTransport\":{\"maxIdleConnsPerHost\":200},\"entryPoints\":{\"web\":{\"address\":\":80\",\"transport\":{\"lifeCycle\":{\"graceTimeOut\":\"10s\"},\"respondingTimeouts\":{\"idleTimeout\":\"3m0s\"}},\"forwardedHeaders\":{},\"http\":{},\"http2\":{\"maxConcurrentStreams\":250},\"udp\":{\"timeout\":\"3s\"}}},\"providers\":{\"providersThrottleDuration\":\"2s\",\"docker\":{\"watch\":true,\"endpoint\":\"unix:///var/run/docker.sock\",\"defaultRule\":\"Host(`{{ normalize .Name }}`)\",\"swarmModeRefreshSeconds\":\"15s\"}},\"log\":{\"level\":\"DEBUG\",\"filePath\":\"/var/traefik/traefik.log\",\"format\":\"common\"},\"pilot\":{\"dashboard\":true}}"
+time="2022-07-05T11:54:17Z" level=info msg="\nStats collection is disabled.\nHelp us improve Traefik by turning this feature on :)\nMore details on: https://doc.traefik.io/traefik/contributing/data-collection/\n"
+time="2022-07-05T11:54:17Z" level=warning msg="Traefik Pilot is deprecated and will be removed soon. Please check our Blog for migration instructions later this year."
+time="2022-07-05T11:54:17Z" level=info msg="Starting provider aggregator aggregator.ProviderAggregator"
+time="2022-07-05T11:54:17Z" level=debug msg="Starting TCP Server" entryPointName=web
+time="2022-07-05T11:54:17Z" level=info msg="Starting provider *traefik.Provider"
+time="2022-07-05T11:54:17Z" level=debug msg="*traefik.Provider provider configuration: {}"
+time="2022-07-05T11:54:17Z" level=info msg="Starting provider *acme.ChallengeTLSALPN"
+time="2022-07-05T11:54:17Z" level=debug msg="*acme.ChallengeTLSALPN provider configuration: {}"
+time="2022-07-05T11:54:17Z" level=info msg="Starting provider *docker.Provider"
+time="2022-07-05T11:54:17Z" level=debug msg="*docker.Provider provider configuration: {\"watch\":true,\"endpoint\":\"unix:///var/run/docker.sock\",\"defaultRule\":\"Host(`{{ normalize .Name }}`)\",\"swarmModeRefreshSeconds\":\"15s\"}"
+time="2022-07-05T11:54:17Z" level=debug msg="Configuration received: {\"http\":{\"services\":{\"noop\":{}},\"serversTransports\":{\"default\":{\"maxIdleConnsPerHost\":200}}},\"tcp\":{},\"udp\":{},\"tls\":{}}" providerName=internal
+time="2022-07-05T11:54:17Z" level=debug msg="No default certificate, generating one" tlsStoreName=default
+time="2022-07-05T11:54:17Z" level=debug msg="Provider connection established with docker 20.10.17 (API 1.41)" providerName=docker
+time="2022-07-05T11:54:17Z" level=debug msg="Filtering disabled container" container=exoframe-traefik-c481e919546d4ad450ec9feec2aad2765d90b2de71a3b08fe23e115494924fcd providerName=docker
+time="2022-07-05T11:54:17Z" level=debug msg="Filtering disabled container" container=exoframe-server-test-cc0f47e6d5278e7ce36be1dd5ccdc83c45dfede58702123133d3f46b2157757b providerName=docker
+time="2022-07-05T11:54:17Z" level=debug msg="Configuration received: {\"http\":{},\"tcp\":{},\"udp\":{}}" providerName=docker
+time="2022-07-05T11:54:17Z" level=debug msg="No default certificate, generating one" tlsStoreName=default
+time="2022-07-05T11:54:23Z" level=debug msg="Provider event received {Status:start ID:d30dfa70090b4326681776492d819b5fd45550be2e1612110f03233ef4897ee6 From:exoframe/server:latest Type:container Action:start Actor:{ID:d30dfa70090b4326681776492d819b5fd45550be2e1612110f03233ef4897ee6 Attributes:map[image:exoframe/server:latest name:exoframe-server-b2a85dd06e12 test:label version:6.2.3]} Scope:local Time:1657022063 TimeNano:1657022063150698943}" providerName=docker
+time="2022-07-05T11:54:23Z" level=debug msg="Filtering disabled container" providerName=docker container=exoframe-server-b2a85dd06e12-d30dfa70090b4326681776492d819b5fd45550be2e1612110f03233ef4897ee6
+time="2022-07-05T11:54:23Z" level=debug msg="Filtering disabled container" providerName=docker container=exoframe-traefik-c481e919546d4ad450ec9feec2aad2765d90b2de71a3b08fe23e115494924fcd
+time="2022-07-05T11:54:23Z" level=debug msg="Filtering disabled container" providerName=docker container=exoframe-server-test-cc0f47e6d5278e7ce36be1dd5ccdc83c45dfede58702123133d3f46b2157757b
+time="2022-07-05T11:54:23Z" level=debug msg="Configuration received: {\"http\":{},\"tcp\":{},\"udp\":{}}" providerName=docker
+time="2022-07-05T11:54:23Z" level=debug msg="Skipping unchanged configuration." providerName=docker
+time="2022-07-05T11:54:23Z" level=info msg="I have to go..."
+time="2022-07-05T11:54:23Z" level=info msg="Stopping server gracefully"
+time="2022-07-05T11:54:23Z" level=debug msg="Waiting 10s seconds before killing connections." entryPointName=web
+time="2022-07-05T11:54:23Z" level=error msg="accept tcp [::]:80: use of closed network connection" entryPointName=web
+time="2022-07-05T11:54:23Z" level=error msg="close tcp [::]:80: use of closed network connection" entryPointName=web
+time="2022-07-05T11:54:23Z" level=debug msg="Entry point web closed" entryPointName=web
+time="2022-07-05T11:54:23Z" level=info msg="Server stopped"
+time="2022-07-05T11:54:23Z" level=info msg="Shutting down"

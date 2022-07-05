@@ -1,12 +1,20 @@
+import { readFile } from 'fs/promises';
 import fetch from 'node-fetch';
+import { dirname, join } from 'path';
 import cmp from 'semver-compare';
-import packageInfo from '../../package.json';
+import { fileURLToPath } from 'url';
 import docker from '../docker/docker.js';
 
 // urls for tags request
 const exoServerUrl = `https://api.github.com/repos/exoframejs/exoframe-server/releases`;
 const traefikUrl = 'https://api.github.com/repos/containous/traefik/releases';
 const traefikVersionPrefix = 'v2';
+
+// load package.json info
+const baseFolder = dirname(fileURLToPath(import.meta.url));
+const packagePath = join(baseFolder, '..', '..', 'package.json');
+const packageString = await readFile(packagePath, 'utf-8');
+const packageInfo = JSON.parse(packageString);
 
 const getLatestVersion = async (url, versionPrefix) => {
   const res = await fetch(url).then((r) => r.json());

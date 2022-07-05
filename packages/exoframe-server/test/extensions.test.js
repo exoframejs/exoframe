@@ -1,11 +1,11 @@
-import { afterAll, beforeAll, expect, jest, test } from '@jest/globals';
 import { readdirSync } from 'fs';
 import getPort from 'get-port';
 import { join } from 'path';
+import { afterAll, beforeAll, expect, test, vi } from 'vitest';
 import authToken from './fixtures/authToken.js';
 
 // mock config
-jest.unstable_mockModule('../src/config/index.js', () => import('./__mocks__/config.js'));
+vi.mock('../src/config/index.js', () => import('./__mocks__/config.js'));
 
 // import server after mocking config
 const { startServer } = await import('../src/index.js');
@@ -19,14 +19,10 @@ let fastify;
 // test template name
 const testTemplate = 'exoframe-template-java';
 
-// set timeout to 60s
-jest.setTimeout(60000);
-
 beforeAll(async () => {
   // start server
   const port = await getPort();
   fastify = await startServer(port);
-  return fastify;
 });
 
 afterAll(() => fastify.close());

@@ -1,13 +1,13 @@
-import { afterAll, beforeAll, expect, jest, test } from '@jest/globals';
 import { readdirSync, writeFileSync } from 'fs';
 import getPort from 'get-port';
 import mkdirp from 'mkdirp';
 import { join } from 'path';
+import { afterAll, beforeAll, expect, test, vi } from 'vitest';
 import { runNPM } from '../src/util/index.js';
 import authToken from './fixtures/authToken.js';
 
 // mock config
-jest.unstable_mockModule('../src/config/index.js', () => import('./__mocks__/config.js'));
+vi.mock('../src/config/index.js', () => import('./__mocks__/config.js'));
 
 // import server after mocking config
 const { startServer } = await import('../src/index.js');
@@ -22,14 +22,10 @@ let fastify;
 const testInstallRecipe = 'exoframe-recipe-wordpress';
 const testRunRecipe = 'test-recipe';
 
-// set timeout to 60s
-jest.setTimeout(60000);
-
 beforeAll(async () => {
   // start server
   const port = await getPort();
   fastify = await startServer(port);
-  return fastify;
 });
 
 afterAll(() => {
@@ -54,7 +50,35 @@ test('Should install new recipe and return list of questions', async () => {
   expect(response.statusCode).toEqual(200);
   expect(result.success).toBeTruthy();
   expect(result.log.length).toBeGreaterThan(0);
-  expect(result.questions).toMatchSnapshot();
+  expect(result.questions).toMatchInlineSnapshot(`
+    [
+      {
+        "message": "Wordpress project name:",
+        "name": "projectName",
+        "type": "input",
+      },
+      {
+        "message": "MySQL root password:",
+        "name": "mysqlPassword",
+        "type": "input",
+      },
+      {
+        "message": "Domain for Wordpress:",
+        "name": "wordpressDomain",
+        "type": "input",
+      },
+      {
+        "message": "Also start PHPMyAdmin?",
+        "name": "phpmyadminStart",
+        "type": "confirm",
+      },
+      {
+        "message": "Domain for PHPMyAdmin:",
+        "name": "phpmyadminDomain",
+        "type": "input",
+      },
+    ]
+  `);
 
   // check folder
   const files = readdirSync(join(recipesFolder, 'node_modules'));
@@ -97,5 +121,16 @@ test('Should execute recipe', async () => {
   expect(response.statusCode).toEqual(200);
   expect(result.success).toBeTruthy();
   expect(result.log.length).toBeGreaterThan(0);
-  expect(result.log).toMatchSnapshot();
+  expect(result.log).toMatchInlineSnapshot(`
+    [
+      {
+        "data": {
+          "other": "2",
+          "test": "1",
+        },
+        "level": "info",
+        "message": "works!",
+      },
+    ]
+  `);
 });

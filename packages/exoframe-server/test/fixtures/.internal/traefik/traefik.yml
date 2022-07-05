@@ -1,0 +1,10 @@
+log:
+  level: DEBUG
+  filePath: /var/traefik/traefik.log
+entryPoints:
+  web:
+    address: ':80'
+providers:
+  docker:
+    endpoint: unix:///var/run/docker.sock
+    exposedByDefault: false
