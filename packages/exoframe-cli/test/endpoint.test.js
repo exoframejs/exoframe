@@ -1,21 +1,28 @@
 import enquirer from 'enquirer';
 import { setTimeout } from 'timers/promises';
-import { expect, test, vi } from 'vitest';
-import { getUserConfig } from './util/config.js';
-
-// import component
-const program = (await import('../src/index.js')).default;
+import { afterAll, beforeAll, expect, test, vi } from 'vitest';
+import { getUserConfig, setupMocks } from './util/config.js';
 
 const mockEndpoint = 'http://test.endpoint';
 const mockEndpoint2 = 'http://test';
 
+// setup mocks
+const clearMocks = setupMocks();
+
 // get current user config
 const origCfg = await getUserConfig();
+
+let program;
+beforeAll(async () => {
+  // import component
+  program = (await import('../src/index.js')).default;
+});
+afterAll(() => clearMocks());
 
 // test config generation
 test('Should add new endpoint', async () => {
   // spy on console
-  const consoleSpy = vi.spyOn(console, 'log');
+  const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
   // execute addition
   program.parse(['node', 'index.js', 'endpoint', 'add', mockEndpoint]);
@@ -42,13 +49,13 @@ test('Should add new endpoint', async () => {
   expect(cfg.endpoints[0].endpoint).toEqual(origCfg.endpoint);
 
   // clear
-  consoleSpy.mockReset();
+  consoleSpy.mockRestore();
 });
 
 // test config generation
 test('Should add second new endpoint', async () => {
   // spy on console
-  const consoleSpy = vi.spyOn(console, 'log');
+  const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
   // execute addition
   program.parse(['node', 'index.js', 'endpoint', 'add', mockEndpoint2]);
@@ -80,13 +87,13 @@ test('Should add second new endpoint', async () => {
   expect(cfg.endpoints[1].token).toBeUndefined();
 
   // restore console
-  consoleSpy.mockReset();
+  consoleSpy.mockRestore();
 });
 
 // test config generation
 test('Should select old endpoint', async () => {
   // spy on console
-  const consoleSpy = vi.spyOn(console, 'log');
+  const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
   // mock enquirer reply
   const enqSpy = vi
@@ -126,14 +133,14 @@ test('Should select old endpoint', async () => {
   expect(cfg.endpoints[1].token).toBeUndefined();
 
   // restore spies
-  consoleSpy.mockReset();
-  enqSpy.mockReset();
+  consoleSpy.mockRestore();
+  enqSpy.mockRestore();
 });
 
 // test config generation
 test('Should select old endpoint using URL param', async () => {
   // spy on console
-  const consoleSpy = vi.spyOn(console, 'log');
+  const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
   // execute switch
   program.parse(['node', 'index.js', 'endpoint', mockEndpoint]);
@@ -168,12 +175,12 @@ test('Should select old endpoint using URL param', async () => {
   expect(cfg.endpoints[1].token).toBeUndefined();
 
   // restore console
-  consoleSpy.mockReset();
+  consoleSpy.mockRestore();
 });
 
 test('Should show error on remove of non-existent endpoint', async () => {
   // spy on console
-  const consoleSpy = vi.spyOn(console, 'log');
+  const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
   // execute switch
   program.parse(['node', 'index.js', 'endpoint', 'rm', 'do-not-exist']);
@@ -193,12 +200,12 @@ test('Should show error on remove of non-existent endpoint', async () => {
   `);
 
   // restore spies
-  consoleSpy.mockReset();
+  consoleSpy.mockRestore();
 });
 
 test('Should remove current endpoint using enquirer', async () => {
   // spy on console
-  const consoleSpy = vi.spyOn(console, 'log');
+  const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
   // mock enquirer reply
   const enqSpy = vi
@@ -235,13 +242,13 @@ test('Should remove current endpoint using enquirer', async () => {
   expect(cfg.endpoints[0].token).toBeUndefined();
 
   // restore spies
-  consoleSpy.mockReset();
-  enqSpy.mockReset();
+  consoleSpy.mockRestore();
+  enqSpy.mockRestore();
 });
 
 test('Should remove existing endpoint using param', async () => {
   // spy on console
-  const consoleSpy = vi.spyOn(console, 'log');
+  const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
   // execute switch
   program.parse(['node', 'index.js', 'endpoint', 'rm', origCfg.endpoint]);
@@ -270,12 +277,12 @@ test('Should remove existing endpoint using param', async () => {
   expect(cfg.endpoints.length).toEqual(0);
 
   // restore spies
-  consoleSpy.mockReset();
+  consoleSpy.mockRestore();
 });
 
 test('Should not remove only endpoint', async () => {
   // spy on console
-  const consoleSpy = vi.spyOn(console, 'log');
+  const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
   // execute switch
   program.parse(['node', 'index.js', 'endpoint', 'rm', mockEndpoint2]);
@@ -302,5 +309,5 @@ test('Should not remove only endpoint', async () => {
   expect(cfg.endpoints.length).toEqual(0);
 
   // restore spies
-  consoleSpy.mockReset();
+  consoleSpy.mockRestore();
 });

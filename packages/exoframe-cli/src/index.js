@@ -3,8 +3,8 @@ import { readFile } from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import endpoint from './commands/endpoint.js';
+import login from './commands/login.js';
 // import config from './commands/config.js';
-// import login from './commands/login.js';
 
 const baseFolder = path.dirname(fileURLToPath(import.meta.url));
 const pkg = JSON.parse((await readFile(path.join(baseFolder, '..', 'package.json'))).toString());
@@ -21,15 +21,13 @@ program.version(pkg.version);
 
 // add commands
 program.addCommand(endpoint);
-// program.addCommand(login);
+program.addCommand(login);
 // program.addCommand(config);
 
 // version(pkg.version)
 //   .demand(1)
 //   .help()
 //   .command(deploy)
-//   .command(login)
-//   .command(endpoint)
 //   .command(endpointRm)
 //   .command(list)
 //   .command(logs)

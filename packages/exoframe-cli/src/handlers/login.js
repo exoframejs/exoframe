@@ -25,7 +25,6 @@ async function getKeys() {
 }
 
 async function executeLogin({ endpoint, username, keyPath, passphrase }) {
-  console.log('login: ', { endpoint, username, keyPath, passphrase });
   const user = { username };
   const { token } = await executeExoLogin({
     endpoint,

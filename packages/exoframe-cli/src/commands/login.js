@@ -1,7 +1,7 @@
-import commander from 'commander';
+import { Command } from 'commander';
 import { loginHandler } from '../handlers/login.js';
 
-const loginCmd = new commander.Command('login');
+const loginCmd = new Command('login');
 
 loginCmd
   .description('login into exoframe server')
