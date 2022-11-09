@@ -24,6 +24,7 @@
     "open": "^8.4.0"
   },
   "devDependencies": {
+    "@vitest/coverage-c8": "^0.25.1",
     "c8": "^7.11.3",
     "eslint": "^8.1.0",
     "eslint-config-prettier": "^8.3.0",
