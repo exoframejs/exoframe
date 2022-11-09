@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import enquirer from 'enquirer';
+import inquirer from 'inquirer';
 import { getConfig, updateConfig } from '../config/index.js';
 
 /**
@@ -54,13 +54,13 @@ export const endpointSwitchHandler = async (url) => {
     // if multiple - show selector
     const prompts = [];
     prompts.push({
-      type: 'Select',
+      type: 'list',
       name: 'newEndpoint',
       message: 'Choose endpoint:',
       default: userConfig.endpoint,
       choices: [userConfig.endpoint].concat(userConfig.endpoints.map((entry) => entry.endpoint)),
     });
-    const { newEndpoint } = await enquirer.prompt(prompts);
+    const { newEndpoint } = await inquirer.prompt(prompts);
     // if user selected current - just exit
     if (newEndpoint === userConfig.endpoint) {
       console.log(chalk.yellow('Already selected. Not changing endpoint.'));
@@ -119,13 +119,13 @@ export const endpointRmHandler = async (url) => {
     // if multiple - show selector
     const prompts = [];
     prompts.push({
-      type: 'Select',
+      type: 'list',
       name: 'delEndpoint',
       message: 'Choose endpoint to remove:',
       default: userConfig.endpoint,
       choices: [userConfig.endpoint].concat(userConfig.endpoints.map((entry) => entry.endpoint)),
     });
-    const { delEndpoint } = await enquirer.prompt(prompts);
+    const { delEndpoint } = await inquirer.prompt(prompts);
     // assign new selected as entered endpoint
     endpointUrl = delEndpoint;
   }

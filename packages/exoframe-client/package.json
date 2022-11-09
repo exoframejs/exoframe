@@ -30,7 +30,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "nock": "^13.1.3",
     "prettier": "^2.0.5",
-    "vitest": "^0.17.0"
+    "vitest": "^0.25.1"
   },
   "engines": {
     "node": ">=16"

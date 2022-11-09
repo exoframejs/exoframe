@@ -48,7 +48,7 @@
     "nodemon": "^2.0.18",
     "pino-pretty": "^8.1.0",
     "prettier": "^2.0.5",
-    "vitest": "^0.17.0"
+    "vitest": "^0.25.1"
   },
   "engines": {
     "node": ">= 16.14"

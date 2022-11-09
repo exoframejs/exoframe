@@ -1,4 +1,4 @@
-import enquirer from 'enquirer';
+import inquirer from 'inquirer';
 import nock from 'nock';
 import { join } from 'path';
 import { setTimeout } from 'timers/promises';
@@ -55,12 +55,12 @@ afterAll(() => clearMocks());
 // test login
 test('Should login', async () => {
   const correctLoginSrv = nock('http://localhost:8080').post('/login', correctLogin).reply(200, { token });
-  // stup inquirer answers
-  const enquirerSpy = vi.spyOn(enquirer, 'prompt').mockImplementationOnce(() => Promise.resolve(correctLogin.user));
+  // stub inquirer answers
+  const inquirerSpy = vi.spyOn(inquirer, 'prompt').mockImplementationOnce(() => Promise.resolve(correctLogin.user));
   // spy on console
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
   // execute login
-  program.parse(['node', 'index.js', 'login', '--key', privateKeyPath]);
+  program.parse(['login', '--key', privateKeyPath], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -87,7 +87,7 @@ test('Should login', async () => {
 
   // clear mocks
   consoleSpy.mockReset();
-  enquirerSpy.mockReset();
+  inquirerSpy.mockReset();
 });
 
 // test login
@@ -96,13 +96,13 @@ test('Should login using key with passphrase', async () => {
     .post('/login', correctLoginWithPassphrase)
     .reply(200, { token });
   // stup inquirer answers
-  const enquirerSpy = vi
-    .spyOn(enquirer, 'prompt')
+  const inquirerSpy = vi
+    .spyOn(inquirer, 'prompt')
     .mockImplementationOnce(() => ({ username: correctLoginWithPassphrase.user.username }));
   // spy on console
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
   // execute login
-  program.parse(['node', 'index.js', 'login', '--key', privateKeyPathWithPassphrase, '--passphrase', 'test123']);
+  program.parse(['login', '--key', privateKeyPathWithPassphrase, '--passphrase', 'test123'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -129,7 +129,7 @@ test('Should login using key with passphrase', async () => {
   expect(cfg.user.username).toEqual(correctLoginWithPassphrase.user.username);
 
   // restore
-  enquirerSpy.mockReset();
+  inquirerSpy.mockReset();
   consoleSpy.mockReset();
 });
 
@@ -138,11 +138,11 @@ test('Should fail to login with broken private key', async () => {
   const wrongUser = { username: 'wrong', privateKeyName: 'i am broken', password: '' };
 
   // stup inquirer answers
-  const enquirerSpy = vi.spyOn(enquirer, 'prompt').mockImplementationOnce(() => wrongUser);
+  const inquirerSpy = vi.spyOn(inquirer, 'prompt').mockImplementationOnce(() => wrongUser);
   // spy on console
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
   // execute login
-  program.parse(['node', 'index.js', 'login', '--key', 'asd']);
+  program.parse(['login', '--key', 'asd'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -167,18 +167,18 @@ test('Should fail to login with broken private key', async () => {
   expect(cfg.user.username).toEqual(correctLogin.user.username);
 
   // restore
-  enquirerSpy.mockReset();
+  inquirerSpy.mockReset();
   consoleSpy.mockReset();
 });
 
 // test failure
 test('Should not login with broken certificate', async () => {
   // stup inquirer answers
-  const enquirerSpy = vi.spyOn(enquirer, 'prompt').mockImplementationOnce(() => failedLogin.user);
+  const inquirerSpy = vi.spyOn(inquirer, 'prompt').mockImplementationOnce(() => failedLogin.user);
   // spy on console
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
   // execute login
-  program.parse(['node', 'index.js', 'login', '--key', privateKeyPathBroken]);
+  program.parse(['login', '--key', privateKeyPathBroken], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -203,7 +203,7 @@ test('Should not login with broken certificate', async () => {
   expect(cfg.user.username).toEqual(correctLogin.user.username);
 
   // restore
-  enquirerSpy.mockReset();
+  inquirerSpy.mockReset();
   consoleSpy.mockReset();
 });
 
@@ -215,11 +215,11 @@ test('Should login and update endpoint when endpoint was provided', async () => 
   const correctEndpointLoginSrv = nock(testEndpointUrl).post('/login', correctLogin).reply(200, { token });
 
   // stub inquirer answers
-  const enquirerSpy = vi.spyOn(enquirer, 'prompt').mockImplementationOnce(() => correctLogin.user);
+  const inquirerSpy = vi.spyOn(inquirer, 'prompt').mockImplementationOnce(() => correctLogin.user);
   // spy on console
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
   // execute login
-  program.parse(['node', 'index.js', 'login', '--key', privateKeyPath, '--url', testEndpointUrl]);
+  program.parse(['login', '--key', privateKeyPath, '--url', testEndpointUrl], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -256,6 +256,6 @@ test('Should login and update endpoint when endpoint was provided', async () => 
   expect(cfg.endpoint).toEqual(testEndpointUrl);
 
   // restore
-  enquirerSpy.mockReset();
+  inquirerSpy.mockReset();
   consoleSpy.mockReset();
 });

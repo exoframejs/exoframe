@@ -1,4 +1,4 @@
-import enquirer from 'enquirer';
+import inquirer from 'inquirer';
 import { setTimeout } from 'timers/promises';
 import { afterAll, beforeAll, expect, test, vi } from 'vitest';
 import { getUserConfig, setupMocks } from './util/config.js';
@@ -25,7 +25,7 @@ test('Should add new endpoint', async () => {
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
   // execute addition
-  program.parse(['node', 'index.js', 'endpoint', 'add', mockEndpoint]);
+  program.parse(['endpoint', 'add', mockEndpoint], { from: 'user' });
 
   // first check console output
   expect(consoleSpy.mock.calls).toMatchInlineSnapshot(`
@@ -58,7 +58,7 @@ test('Should add second new endpoint', async () => {
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
   // execute addition
-  program.parse(['node', 'index.js', 'endpoint', 'add', mockEndpoint2]);
+  program.parse(['endpoint', 'add', mockEndpoint2], { from: 'user' });
 
   // first check console output
   expect(consoleSpy.mock.calls).toMatchInlineSnapshot(`
@@ -97,11 +97,11 @@ test('Should select old endpoint', async () => {
 
   // mock enquirer reply
   const enqSpy = vi
-    .spyOn(enquirer, 'prompt')
+    .spyOn(inquirer, 'prompt')
     .mockImplementationOnce(() => Promise.resolve({ newEndpoint: origCfg.endpoint }));
 
   // execute switch
-  program.parse(['node', 'index.js', 'endpoint']);
+  program.parse(['endpoint'], { from: 'user' });
 
   // give time to IO
   await setTimeout(10);
@@ -143,7 +143,7 @@ test('Should select old endpoint using URL param', async () => {
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
   // execute switch
-  program.parse(['node', 'index.js', 'endpoint', mockEndpoint]);
+  program.parse(['endpoint', mockEndpoint], { from: 'user' });
 
   // give time to IO
   await setTimeout(10);
@@ -183,7 +183,7 @@ test('Should show error on remove of non-existent endpoint', async () => {
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
   // execute switch
-  program.parse(['node', 'index.js', 'endpoint', 'rm', 'do-not-exist']);
+  program.parse(['endpoint', 'rm', 'do-not-exist'], { from: 'user' });
 
   // give time to IO
   await setTimeout(10);
@@ -209,11 +209,11 @@ test('Should remove current endpoint using enquirer', async () => {
 
   // mock enquirer reply
   const enqSpy = vi
-    .spyOn(enquirer, 'prompt')
+    .spyOn(inquirer, 'prompt')
     .mockImplementationOnce(() => Promise.resolve({ delEndpoint: mockEndpoint }));
 
   // execute switch
-  program.parse(['node', 'index.js', 'endpoint', 'rm']);
+  program.parse(['endpoint', 'rm'], { from: 'user' });
 
   // give time to IO
   await setTimeout(10);
@@ -251,7 +251,7 @@ test('Should remove existing endpoint using param', async () => {
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
   // execute switch
-  program.parse(['node', 'index.js', 'endpoint', 'rm', origCfg.endpoint]);
+  program.parse(['endpoint', 'rm', origCfg.endpoint], { from: 'user' });
 
   // give time to IO
   await setTimeout(10);
@@ -285,7 +285,7 @@ test('Should not remove only endpoint', async () => {
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
   // execute switch
-  program.parse(['node', 'index.js', 'endpoint', 'rm', mockEndpoint2]);
+  program.parse(['endpoint', 'rm', mockEndpoint2], { from: 'user' });
 
   // give time to IO
   await setTimeout(10);

@@ -1,4 +1,5 @@
 #!/usr/bin/env node
-import program from './src/index.js';
+import createNewProgram from './src/index.js';
 
+const program = await createNewProgram();
 program.parse(process.argv);

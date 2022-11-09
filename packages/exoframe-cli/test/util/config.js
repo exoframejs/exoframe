@@ -10,13 +10,18 @@ export const setupMocks = () => {
   const cwdSpy = vi.spyOn(process, 'cwd').mockImplementation(() => testFolder);
   const osSpy = vi.spyOn(os, 'homedir').mockImplementation(() => testFolder);
 
+  let exoConfigExists = true;
   let exoConfig = { name: 'test' };
   let userConfig = jsyaml.dump({ endpoint: 'http://localhost:8080' });
 
   const mkdirSpy = vi.spyOn(fs.promises, 'mkdir').mockImplementation(async () => {
     return;
   });
-  const statSpy = vi.spyOn(fs.promises, 'stat').mockImplementation(async () => {
+  const statSpy = vi.spyOn(fs.promises, 'stat').mockImplementation(async (path) => {
+    // console.log('stat', path);
+    if (path.includes('exoframe.json') && !exoConfigExists) {
+      throw new Error('ENOENT Does not exist');
+    }
     return;
   });
   const rfSpy = vi.spyOn(fs.promises, 'readFile').mockImplementation(async (path) => {
@@ -33,9 +38,16 @@ export const setupMocks = () => {
     // console.log('writefile', { path, string });
     if (path.includes('.json')) {
       exoConfig = JSON.parse(string);
+      exoConfigExists = true;
       return;
     }
     userConfig = string;
+  });
+  const ulSpy = vi.spyOn(fs.promises, 'unlink').mockImplementation(async (path, string) => {
+    // console.log('unlink', { path, string });
+    if (path.includes('exoframe.json')) {
+      exoConfigExists = false;
+    }
   });
 
   return () => {
@@ -45,6 +57,7 @@ export const setupMocks = () => {
     statSpy.mockRestore();
     rfSpy.mockRestore();
     wfSpy.mockRestore();
+    ulSpy.mockRestore();
   };
 };
 
@@ -58,6 +71,10 @@ export const getUserConfig = async () => {
   const str = await fs.promises.readFile(join(testFolder, 'cli.config.yml'), 'utf-8');
   const cfg = jsyaml.load(str);
   return cfg;
+};
+
+export const removeConfig = async () => {
+  await fs.promises.unlink(join(testFolder, 'exoframe.json'));
 };
 
 export const resetConfig = async () => {
