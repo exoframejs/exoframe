@@ -1,7 +1,6 @@
 /* eslint no-await-in-loop: off */
 import { randomUUID } from 'crypto';
 import _ from 'highland';
-import { Readable } from 'stream';
 import { getConfig, tempDockerDir } from '../config/index.js';
 import { build } from '../docker/build.js';
 import { scheduleCleanup, schedulePrune } from '../docker/cleanup.js';
@@ -30,7 +29,7 @@ const deploy = async ({ username, folder, existing, resultStream }) => {
     existing,
     username,
     resultStream,
-    tempDockerDir: tempDockerDir,
+    tempDockerDir,
     folder,
     docker: {
       daemon: docker,
@@ -96,10 +95,10 @@ export default (fastify) => {
       // run deploy
       deploy({ username, folder, resultStream }).then(() => schedulePrune());
       // reply with deploy stream
-      const responseStream = new Readable().wrap(resultStream);
-      reply.code(200).send(responseStream);
+      const responseStream = resultStream.toNodeStream();
       // schedule temp folder cleanup on end
       responseStream.on('end', () => cleanTemp(folder));
+      return reply.code(200).send(responseStream);
     },
   });
 
@@ -132,8 +131,7 @@ export default (fastify) => {
       // deploy new versions
       deploy({ username, folder, payload: request.payload, resultStream });
       // reply with deploy stream
-      const responseStream = new Readable().wrap(resultStream);
-      reply.code(200).send(responseStream);
+      const responseStream = resultStream.toNodeStream();
       // schedule temp folder and container cleanup on deployment end
       responseStream.on('end', () => {
         // schedule container cleanup
@@ -141,6 +139,7 @@ export default (fastify) => {
         // clean temp folder
         cleanTemp(folder);
       });
+      return reply.code(200).send(responseStream);
     },
   });
 };

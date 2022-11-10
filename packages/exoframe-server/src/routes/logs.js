@@ -1,5 +1,4 @@
 import _ from 'highland';
-import { Readable } from 'stream';
 import docker from '../docker/docker.js';
 
 const generateLogsConfig = (follow) => ({
@@ -27,14 +26,12 @@ const getContainerLogs = async ({ username, id, reply, follow }) => {
     // if not running in container - just notify user
     if (!serverContainer) {
       const logStream = fixLogStream(`${new Date().toISOString()} Exoframe server not running in container!`);
-      reply.send(logStream);
-      return;
+      return reply.send(logStream);
     }
     const container = docker.getContainer(serverContainer.Id);
     const logs = await container.logs(generateLogsConfig(follow));
     const logStream = fixLogStream(logs);
-    reply.send(logStream);
-    return;
+    return reply.send(logStream);
   }
 
   // try to find container by user and name
@@ -45,8 +42,7 @@ const getContainerLogs = async ({ username, id, reply, follow }) => {
     const container = docker.getContainer(containerInfo.Id);
     const logs = await container.logs(generateLogsConfig(follow));
     const logStream = fixLogStream(logs);
-    reply.send(logStream);
-    return;
+    return reply.send(logStream);
   }
 
   // if not found by name - try to find by project
@@ -71,8 +67,7 @@ const getContainerLogs = async ({ username, id, reply, follow }) => {
   );
   // flatten results
   const allLogsStream = _(logRequests).flatten();
-  // send wrapped highland stream as response
-  reply.send(new Readable().wrap(allLogsStream));
+  return reply.send(allLogsStream);
 };
 
 export default (fastify) => {
@@ -86,7 +81,7 @@ export default (fastify) => {
       const { follow } = request.query;
 
       // get container logs
-      getContainerLogs({ username, id, reply, follow });
+      return await getContainerLogs({ username, id, reply, follow });
     },
   });
 };

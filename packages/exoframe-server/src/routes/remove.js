@@ -12,8 +12,7 @@ const removeUserContainer = async ({ username, id, reply }) => {
   // if container found by name - remove
   if (containerInfo) {
     await removeContainer(containerInfo);
-    reply.code(204).send('removed');
-    return;
+    return reply.code(204).send('removed');
   }
 
   // if not found by name - try to find by domain.
@@ -26,8 +25,7 @@ const removeUserContainer = async ({ username, id, reply }) => {
 
   if (containersByUrl.length) {
     await Promise.all(containersByUrl.map(removeContainer));
-    reply.code(204).send('removed');
-    return;
+    return reply.code(204).send('removed');
   }
 
   // if not found by name and url - try to find by project
@@ -37,11 +35,10 @@ const removeUserContainer = async ({ username, id, reply }) => {
 
   if (containersByProject.length) {
     await Promise.all(containersByProject.map(removeContainer));
-    reply.code(204).send('removed');
-    return;
+    return reply.code(204).send('removed');
   }
 
-  reply.code(404).send({ error: 'Container or function not found!' });
+  return reply.code(404).send({ error: 'Container or function not found!' });
 };
 
 export default (fastify) => {
@@ -53,7 +50,7 @@ export default (fastify) => {
       const { username } = request.user;
       const { id } = request.params;
 
-      removeUserContainer({ username, id, reply });
+      return await removeUserContainer({ username, id, reply });
     },
   });
 };
