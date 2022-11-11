@@ -62,6 +62,19 @@ const deployments = [
   },
 ];
 
+const cleanLogsFromPaths = (logsArray) => {
+  return logsArray.map((logs) =>
+    logs.map((line) => {
+      // if it's a string - replace paths
+      if (typeof line === 'string') {
+        return line?.replace?.(fixturesFolder, '');
+      }
+      // otherwise return original
+      return line;
+    })
+  );
+};
+
 const open = (await import('open')).default;
 let program;
 let clearMocks;
@@ -101,10 +114,10 @@ test('Should deploy simple project', async () => {
   // check that server was called
   expect(deployServer.isDone()).toBe(true);
   // first check console output
-  expect(consoleSpy.mock.calls).toMatchInlineSnapshot(`
+  expect(cleanLogsFromPaths(consoleSpy.mock.calls)).toMatchInlineSnapshot(`
     [
       [
-        "Deploying /home/yamalight/github/exoframe/exoframe/packages/exoframe-cli/test/fixtures/test_html_project to endpoint:",
+        "Deploying /test_html_project to endpoint:",
         "http://localhost:8080",
       ],
       [
@@ -149,10 +162,10 @@ test('Should deploy with endpoint flag', async () => {
   // check that server was called
   expect(deployServer.isDone()).toBeTruthy();
   // first check console output
-  expect(consoleSpy.mock.calls).toMatchInlineSnapshot(`
+  expect(cleanLogsFromPaths(consoleSpy.mock.calls)).toMatchInlineSnapshot(`
     [
       [
-        "Deploying /home/yamalight/github/exoframe/exoframe/packages/exoframe-cli/test/fixtures/test_html_project to endpoint:",
+        "Deploying /test_html_project to endpoint:",
         "http://localhost:3000",
       ],
       [
@@ -190,7 +203,7 @@ test('Should deploy without path', async () => {
   // check that server was called
   expect(deployServer.isDone()).toBeTruthy();
   // first check console output
-  expect(consoleSpy.mock.calls).toMatchInlineSnapshot(`
+  expect(cleanLogsFromPaths(consoleSpy.mock.calls)).toMatchInlineSnapshot(`
     [
       [
         "Deploying current project to endpoint:",
@@ -234,10 +247,10 @@ test('Should deploy with token', async () => {
   // check that server was called
   expect(deployServer.isDone()).toBeTruthy();
   // first check console output
-  expect(consoleSpy.mock.calls).toMatchInlineSnapshot(`
+  expect(cleanLogsFromPaths(consoleSpy.mock.calls)).toMatchInlineSnapshot(`
     [
       [
-        "Deploying /home/yamalight/github/exoframe/exoframe/packages/exoframe-cli/test/fixtures/test_html_project to endpoint:",
+        "Deploying /test_html_project to endpoint:",
         "http://localhost:8080",
       ],
       [
@@ -279,10 +292,10 @@ test('Should execute update', async () => {
   // check that server was called
   expect(updateServer.isDone()).toBeTruthy();
   // first check console output
-  expect(consoleSpy.mock.calls).toMatchInlineSnapshot(`
+  expect(cleanLogsFromPaths(consoleSpy.mock.calls)).toMatchInlineSnapshot(`
     [
       [
-        "Updating /home/yamalight/github/exoframe/exoframe/packages/exoframe-cli/test/fixtures/test_html_project to endpoint:",
+        "Updating /test_html_project to endpoint:",
         "http://localhost:8080",
       ],
       [
@@ -322,10 +335,10 @@ test('Should open webpage after deploy', async () => {
   // make sure opn was called once
   expect(open).toHaveBeenCalled();
   // first check console output
-  expect(consoleSpy.mock.calls).toMatchInlineSnapshot(`
+  expect(cleanLogsFromPaths(consoleSpy.mock.calls)).toMatchInlineSnapshot(`
     [
       [
-        "Deploying /home/yamalight/github/exoframe/exoframe/packages/exoframe-cli/test/fixtures/test_html_project to endpoint:",
+        "Deploying /test_html_project to endpoint:",
         "http://localhost:8080",
       ],
       [
@@ -389,10 +402,10 @@ test('Should deploy with a custom config', async () => {
   // check that server was called
   expect(deployServer.isDone()).toBeTruthy();
   // first check console output
-  expect(consoleSpy.mock.calls).toMatchInlineSnapshot(`
+  expect(cleanLogsFromPaths(consoleSpy.mock.calls)).toMatchInlineSnapshot(`
   [
     [
-      "Deploying /home/yamalight/github/exoframe/exoframe/packages/exoframe-cli/test/fixtures/test_custom_config_project to endpoint:",
+      "Deploying /test_custom_config_project to endpoint:",
       "http://localhost:8080",
     ],
     [
@@ -439,10 +452,10 @@ test('Should display error log', async () => {
   // check that server was called
   expect(deployServer.isDone()).toBeTruthy();
   // first check console output
-  expect(consoleSpy.mock.calls).toMatchInlineSnapshot(`
+  expect(cleanLogsFromPaths(consoleSpy.mock.calls)).toMatchInlineSnapshot(`
     [
       [
-        "Deploying /home/yamalight/github/exoframe/exoframe/packages/exoframe-cli/test/fixtures/test_html_project to endpoint:",
+        "Deploying /test_html_project to endpoint:",
         "http://localhost:8080",
       ],
       [
@@ -488,10 +501,10 @@ test('Should display error on malformed JSON', async () => {
   // check that server was called
   expect(deployServer.isDone()).toBeTruthy();
   // first check console output
-  expect(consoleSpy.mock.calls).toMatchInlineSnapshot(`
+  expect(cleanLogsFromPaths(consoleSpy.mock.calls)).toMatchInlineSnapshot(`
     [
       [
-        "Deploying /home/yamalight/github/exoframe/exoframe/packages/exoframe-cli/test/fixtures/test_html_project to endpoint:",
+        "Deploying /test_html_project to endpoint:",
         "http://localhost:8080",
       ],
       [
@@ -533,10 +546,10 @@ test('Should display verbose output', async () => {
   expect(deployServer.isDone()).toBeTruthy();
   // first check console output
   // check beginning of log
-  expect(consoleSpy.mock.calls).toMatchInlineSnapshot(`
+  expect(cleanLogsFromPaths(consoleSpy.mock.calls)).toMatchInlineSnapshot(`
     [
       [
-        "Deploying /home/yamalight/github/exoframe/exoframe/packages/exoframe-cli/test/fixtures/test_html_project to endpoint:",
+        "Deploying /test_html_project to endpoint:",
         "http://localhost:8080",
       ],
       [
@@ -605,10 +618,10 @@ test('Should ignore specified files', async () => {
   // check that server was called
   expect(deployServer.isDone()).toBeTruthy();
   // first check console output
-  expect(consoleSpy.mock.calls).toMatchInlineSnapshot(`
+  expect(cleanLogsFromPaths(consoleSpy.mock.calls)).toMatchInlineSnapshot(`
     [
       [
-        "Deploying /home/yamalight/github/exoframe/exoframe/packages/exoframe-cli/test/fixtures/test_ignore_project to endpoint:",
+        "Deploying /test_ignore_project to endpoint:",
         "http://localhost:8080",
       ],
       [
@@ -648,10 +661,10 @@ test('Should display error on zero deployments', async () => {
   // check that server was called
   expect(deployServer.isDone()).toBeTruthy();
   // first check console output
-  expect(consoleSpy.mock.calls).toMatchInlineSnapshot(`
+  expect(cleanLogsFromPaths(consoleSpy.mock.calls)).toMatchInlineSnapshot(`
     [
       [
-        "Deploying /home/yamalight/github/exoframe/exoframe/packages/exoframe-cli/test/fixtures/test_html_project to endpoint:",
+        "Deploying /test_html_project to endpoint:",
         "http://localhost:8080",
       ],
       [
@@ -684,10 +697,10 @@ test('Should not deploy with config without project name', async () => {
   await setTimeout(IO_TIMEOUT);
 
   // check console output
-  expect(consoleSpy.mock.calls).toMatchInlineSnapshot(`
+  expect(cleanLogsFromPaths(consoleSpy.mock.calls)).toMatchInlineSnapshot(`
     [
       [
-        "Deploying /home/yamalight/github/exoframe/exoframe/packages/exoframe-cli/test/fixtures/test_noname_config to endpoint:",
+        "Deploying /test_noname_config to endpoint:",
         "http://localhost:8080",
       ],
       [
@@ -740,7 +753,7 @@ test('Should not deploy with non-existent path', async () => {
   await setTimeout(IO_TIMEOUT);
 
   // check error correctness
-  expect(consoleSpy.mock.calls).toMatchInlineSnapshot(`
+  expect(cleanLogsFromPaths(consoleSpy.mock.calls)).toMatchInlineSnapshot(`
     [
       [
         "Deploying i-do-no-exist to endpoint:",
@@ -774,10 +787,10 @@ test('Should deauth on 401', async () => {
   // check that server was called
   expect(deployServer.isDone()).toBeTruthy();
   // first check console output
-  expect(consoleSpy.mock.calls).toMatchInlineSnapshot(`
+  expect(cleanLogsFromPaths(consoleSpy.mock.calls)).toMatchInlineSnapshot(`
     [
       [
-        "Deploying /home/yamalight/github/exoframe/exoframe/packages/exoframe-cli/test/fixtures/test_html_project to endpoint:",
+        "Deploying /test_html_project to endpoint:",
         "http://localhost:8080",
       ],
       [
