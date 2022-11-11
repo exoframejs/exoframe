@@ -1,4 +1,4 @@
-import fs from 'fs';
+import { readFile, stat, writeFile } from 'fs/promises';
 import got from 'got';
 import _ from 'highland';
 import multimatch from 'multimatch';
@@ -42,6 +42,27 @@ import { formatServices } from './utils/formatServices.js';
  */
 
 const defaultIgnores = ['.git', 'node_modules', '.exoframeignore'];
+
+/**
+ * Converts folder path to full workdir path
+ * @param {String} folder path
+ * @returns {String} resolved workdir path
+ */
+const folderToWorkdir = (folder) => {
+  const cwd = process.cwd();
+  // if no folder is given - use current dir
+  if (!folder) {
+    return cwd;
+  }
+
+  // if folder is absolute path - use as-is
+  if (path.isAbsolute(folder)) {
+    return folder;
+  }
+
+  // otherwise append path to current workdir
+  return path.join(cwd, folder);
+};
 
 /**
  * Converts stream to response
@@ -117,22 +138,20 @@ export const deploy = async ({ folder, endpoint, token, update, configFile = 'ex
   }
 
   // create config vars
-  const workdir = folder ? path.join(process.cwd(), folder) : process.cwd();
+  const workdir = folderToWorkdir(folder);
   const folderName = path.basename(workdir);
   const remoteUrl = `${endpoint}/${update ? 'update' : 'deploy'}`;
 
   // make sure workdir exists
-  if (!fs.existsSync(workdir)) {
-    throw new Error(`Path do not exists`);
-  }
+  await stat(workdir);
 
   // create config if doesn't exist
   const configPath = path.join(workdir, configFile);
   try {
-    fs.statSync(configPath);
+    await stat(configPath);
   } catch (e) {
     const defaultConfig = JSON.stringify({ name: folderName });
-    fs.writeFileSync(configPath, defaultConfig, 'utf-8');
+    await writeFile(configPath, defaultConfig, 'utf-8');
     // if in verbose mode - log config creation
     verbose && log('Create new default config:', defaultConfig);
   }
@@ -140,7 +159,7 @@ export const deploy = async ({ folder, endpoint, token, update, configFile = 'ex
   // syntax-check & validate config
   let config;
   try {
-    config = JSON.parse(fs.readFileSync(configPath).toString());
+    config = JSON.parse(await readFile(configPath, 'utf-8'));
   } catch (e) {
     throw new Error(`Your exoframe.json is not valid: ${JSON.stringify(serializeError(e), null, 2)}`);
   }
@@ -154,9 +173,7 @@ export const deploy = async ({ folder, endpoint, token, update, configFile = 'ex
   const ignorePath = path.join(workdir, '.exoframeignore');
   let ignores = defaultIgnores;
   try {
-    ignores = fs
-      .readFileSync(ignorePath)
-      .toString()
+    ignores = (await readFile(ignorePath, 'utf-8'))
       .split('\n')
       .filter((line) => line && line.length > 0)
       .concat(['.exoframeignore']);
@@ -204,7 +221,7 @@ export const deploy = async ({ folder, endpoint, token, update, configFile = 'ex
   // pipe stream to remote
   const res = await streamToResponse({ tarStream, remoteUrl, options, verbose });
   // check deployments
-  if (!res?.deployments || !res?.deployments.length) {
+  if (!res?.deployments?.length) {
     const err = new Error('Something went wrong!');
     err.response = res;
     throw err;

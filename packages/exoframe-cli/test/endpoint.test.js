@@ -1,6 +1,6 @@
 import inquirer from 'inquirer';
 import { setTimeout } from 'timers/promises';
-import { afterAll, beforeAll, expect, test, vi } from 'vitest';
+import { afterAll, beforeEach, expect, test, vi } from 'vitest';
 import { getUserConfig, setupMocks } from './util/config.js';
 
 const mockEndpoint = 'http://test.endpoint';
@@ -13,9 +13,10 @@ const clearMocks = setupMocks();
 const origCfg = await getUserConfig();
 
 let program;
-beforeAll(async () => {
+beforeEach(async () => {
   // import component
-  program = (await import('../src/index.js')).default;
+  const { createProgram } = await import('../src/index.js');
+  program = await createProgram();
 });
 afterAll(() => clearMocks());
 
@@ -150,16 +151,16 @@ test('Should select old endpoint using URL param', async () => {
 
   // first check console output
   expect(consoleSpy.mock.calls).toMatchInlineSnapshot(`
-     [
-       [
-         "Updating endpoint URL to:",
-         "http://test.endpoint",
-       ],
-       [
-         "Endpoint URL updated!",
-       ],
-     ]
-   `);
+    [
+      [
+        "Updating endpoint URL to:",
+        "http://test.endpoint",
+      ],
+      [
+        "Endpoint URL updated!",
+      ],
+    ]
+  `);
 
   // then check config changes
   const cfg = await getUserConfig();

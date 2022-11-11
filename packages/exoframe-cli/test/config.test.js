@@ -1,7 +1,7 @@
 import md5 from 'apache-md5';
 import inquirer from 'inquirer';
 import { setTimeout } from 'timers/promises';
-import { afterAll, afterEach, beforeAll, expect, test, vi } from 'vitest';
+import { afterAll, afterEach, beforeEach, expect, test, vi } from 'vitest';
 import { getConfig, removeConfig, resetConfig, setupMocks } from './util/config.js';
 
 // setup mocks
@@ -11,9 +11,10 @@ const clearMocks = setupMocks();
 const IO_TIMEOUT = 50;
 
 let program;
-beforeAll(async () => {
+beforeEach(async () => {
   // import component
-  program = (await import('../src/index.js')).default;
+  const { createProgram } = await import('../src/index.js');
+  program = await createProgram();
 });
 afterAll(() => clearMocks());
 
@@ -179,12 +180,6 @@ test('Should update config in interactive mode', async () => {
     .spyOn(inquirer, 'prompt')
     .mockImplementationOnce(() => Promise.resolve({ prop: 'name' }))
     .mockImplementationOnce(() => Promise.resolve({ name: newName }));
-
-  // monkey patch option values in config command since commander.js for some reason retains
-  // old arguments from prior calls
-  // TODO: figure out if there's a better way to do this
-  // see this ticket in commander: https://github.com/tj/commander.js/issues/1819
-  program.commands.find((c) => c.name() === 'config')._optionValues = {};
 
   // execute config update
   program.parse(['config'], { from: 'user' });

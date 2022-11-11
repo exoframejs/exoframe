@@ -2,7 +2,7 @@ import inquirer from 'inquirer';
 import nock from 'nock';
 import { join } from 'path';
 import { setTimeout } from 'timers/promises';
-import { afterAll, beforeAll, expect, test, vi } from 'vitest';
+import { afterAll, beforeEach, expect, test, vi } from 'vitest';
 import { getUserConfig, setupMocks } from './util/config.js';
 import { fixturesFolder } from './util/paths.js';
 
@@ -46,9 +46,10 @@ const failedLogin = { user: { username: 'broken' }, signature: '', requestId: lo
 nock('http://localhost:8080').get('/login').times(4).reply(200, loginRequest);
 
 let program;
-beforeAll(async () => {
+beforeEach(async () => {
   // import component
-  program = (await import('../src/index.js')).default;
+  const { createProgram } = await import('../src/index.js');
+  program = await createProgram();
 });
 afterAll(() => clearMocks());
 
