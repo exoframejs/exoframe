@@ -637,7 +637,8 @@ test('Should not deploy with non-existent path', async () => {
     await deploy({ folder: 'i-do-not-exist-at-all', endpoint, token: 'test-token', verbose: 3 });
   } catch (err) {
     // check console output
-    expect(err).toMatchInlineSnapshot('[Error: ENOENT: no such file or directory, stat \'/home/yamalight/github/exoframe/exoframe/packages/exoframe-client/i-do-not-exist-at-all\']');
+    expect(err.message).toContain('ENOENT: no such file or directory');
+    expect(err.message).toContain('i-do-not-exist-at-all');
   }
 });
 
