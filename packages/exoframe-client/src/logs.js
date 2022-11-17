@@ -37,21 +37,20 @@ export const getLogs = ({ id, follow, endpoint, token }) =>
     const logStream = got.stream(remoteUrl, options);
     logStream.on('error', (e) => {
       // if authorization is expired/broken/etc
-      if (e.statusCode === 401) {
+      if (e.response?.statusCode === 401) {
         const authErr = new Error('Authorization expired!');
         emitter.emit('error', authErr);
-        throw authErr;
+        return;
       }
 
       // if container was not found
-      if (e.statusCode === 404) {
+      if (e.response?.statusCode === 404) {
         const lookupErr = new Error('Container was not found!');
         emitter.emit('error', lookupErr);
-        throw lookupErr;
+        return;
       }
 
       emitter.emit('error', e);
-      throw e;
     });
 
     // close result stream on end

@@ -2,7 +2,7 @@ import nock from 'nock';
 import { Readable } from 'stream';
 import { setTimeout } from 'timers/promises';
 import { afterAll, beforeEach, expect, test, vi } from 'vitest';
-import { setupDeployMocks } from './util/config.js';
+import { getUserConfig, resetUserConfig, setupDeployMocks } from './util/config.js';
 
 // setup mocks
 const clearMocks = setupDeployMocks();
@@ -92,4 +92,45 @@ test('Should get list of deployments', async () => {
   // clear mocks
   consoleSpy.mockReset();
   logServer.done();
+});
+
+test('Should deauth on 401', async () => {
+  // spy on console
+  const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+  // handle correct request
+  const logServer = nock('http://localhost:8080').get(`/logs/${id}`).reply(401);
+
+  // execute logs
+  program.parse(['logs', id], { from: 'user' });
+
+  // give time to IO / net
+  await setTimeout(IO_TIMEOUT);
+
+  // make sure log in was successful
+  // check that server was called
+  expect(logServer.isDone()).toBeTruthy();
+  // first check console output
+  expect(consoleSpy.mock.calls).toMatchInlineSnapshot(`
+    [
+      [
+        "Getting logs for deployment:",
+        "test-id",
+        "
+    ",
+      ],
+      [
+        "Error while getting logs:",
+        "HTTPError: Response code 401 (Unauthorized)",
+      ],
+    ]
+  `);
+  // make sure write was called
+  const cfg = await getUserConfig();
+  expect(cfg.user).toBeUndefined();
+  expect(cfg.token).toBeUndefined();
+  // restore mocks
+  consoleSpy.mockRestore();
+  logServer.done();
+  // reset config to original state
+  resetUserConfig();
 });

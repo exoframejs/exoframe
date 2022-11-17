@@ -18,6 +18,7 @@ export const logsHandler = async (id, { follow = false } = {}) => {
   // services request url
   const logsEmitter = await getLogs({ id, follow, endpoint, token });
   logsEmitter.on('error', (e) => {
+    console.error({ e, msg: e.message });
     // if authorization is expired/broken/etc
     if (e.message === 'Authorization expired!') {
       logout(userConfig);
