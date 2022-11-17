@@ -4,6 +4,7 @@ import { getConfig, isLoggedIn, logout } from '../config/index.js';
 
 export const logsHandler = async (id, { follow = false } = {}) => {
   if (!isLoggedIn()) {
+    console.log(chalk.red('Error: not logged in!'), 'Please, login and try again.');
     return;
   }
 

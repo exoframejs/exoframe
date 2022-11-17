@@ -15,6 +15,7 @@ export const deployProject = async (
 ) => {
   // exit if not logged in and no token provided
   if (!deployToken && !isLoggedIn()) {
+    console.log(chalk.red('Error: not logged in!'), 'Please, login and try again.');
     return;
   }
 

@@ -9,6 +9,7 @@ import { createListCmd } from './commands/list.js';
 import { createLoginCmd } from './commands/login.js';
 import { createLogsCmd } from './commands/logs.js';
 import { createRemoveCmd } from './commands/remove.js';
+import { createSecretsCmd } from './commands/secrets.js';
 
 const baseFolder = path.dirname(fileURLToPath(import.meta.url));
 const pkg = JSON.parse((await readFile(path.join(baseFolder, '..', 'package.json'))).toString());
@@ -32,12 +33,12 @@ export const createProgram = () => {
   program.addCommand(createListCmd());
   program.addCommand(createLogsCmd());
   program.addCommand(createRemoveCmd());
+  program.addCommand(createSecretsCmd());
 
   //   .command(token)
   //   .command(update)
   //   .command(template)
   //   .command(setup)
-  //   .command(secrets)
   //   .command(system)
 
   return program;

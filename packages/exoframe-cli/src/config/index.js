@@ -4,6 +4,11 @@ import jsyaml from 'js-yaml';
 import { homedir } from 'os';
 import { join } from 'path';
 
+// TODO:
+// this needs some refactoring to make it load config on any
+// new instantiation of program
+// currently reading only first time causes some issues with tests
+
 // construct paths
 const xdgConfigFolder = process.env.XDG_CONFIG_HOME || join(homedir(), '.config');
 const baseFolder = join(xdgConfigFolder, 'exoframe');
