@@ -1,10 +1,9 @@
 import chalk from 'chalk';
-import Table from 'cli-table3';
 import { deploy as deployExo } from 'exoframe-client';
 import open from 'open';
 import ora from 'ora';
 import { getConfig, isLoggedIn, logout } from '../config/index.js';
-import { tableBorder, tableStyle } from '../config/table.js';
+import { renderDeployments } from '../util/renderDeployments.js';
 
 /**
  * Change endpoint in config to given one
@@ -66,19 +65,7 @@ export const deployProject = async (
     // log result
     console.log('Your project is now deployed as:\n');
     // create table
-    const resultTable = new Table({
-      head: ['ID', 'URL', 'Hostname', 'Type'],
-      chars: tableBorder,
-      style: tableStyle,
-    });
-
-    // process deployments
-    formattedServices.forEach(({ name, domain, host, type }) => {
-      resultTable.push([name, domain, host, type]);
-    });
-
-    // draw table
-    console.log(resultTable.toString());
+    renderDeployments(formattedServices);
 
     // open in browser
     if (openInBrowser && formattedServices[0].domain && formattedServices[0].domain !== 'not set') {

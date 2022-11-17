@@ -88,7 +88,7 @@ test('Should get list of deployments', async () => {
   // handle correct request
   const listServer = nock(endpoint).get(`/list`).reply(200, { containers });
   // execute login
-  const { containers: resultContainer } = await listDeployments({ endpoint, token });
+  const resultContainer = await listDeployments({ endpoint, token });
   // check that server was called
   expect(listServer.isDone()).toBeTruthy();
   // first check console output
