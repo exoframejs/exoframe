@@ -8,6 +8,7 @@ import { createEndpointCmd } from './commands/endpoint.js';
 import { createListCmd } from './commands/list.js';
 import { createLoginCmd } from './commands/login.js';
 import { createLogsCmd } from './commands/logs.js';
+import { createRemoveCmd } from './commands/remove.js';
 
 const baseFolder = path.dirname(fileURLToPath(import.meta.url));
 const pkg = JSON.parse((await readFile(path.join(baseFolder, '..', 'package.json'))).toString());
@@ -30,8 +31,8 @@ export const createProgram = () => {
   program.addCommand(createLoginCmd());
   program.addCommand(createListCmd());
   program.addCommand(createLogsCmd());
+  program.addCommand(createRemoveCmd());
 
-  //   .command(remove)
   //   .command(token)
   //   .command(update)
   //   .command(template)
