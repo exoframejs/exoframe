@@ -131,3 +131,19 @@ test('Should get list of deployments', async () => {
   // close server
   listServer.done();
 });
+
+// test list
+test('Should throw error on de-auth', async () => {
+  // handle correct request
+  const listServer = nock(endpoint).get(`/list`).reply(401, { error: 'Auth expired' });
+  // execute login
+  try {
+    await listDeployments({ endpoint, token });
+  } catch (err) {
+    expect(err).toMatchInlineSnapshot('[Error: Authorization expired!]');
+  }
+  // check that server was called
+  expect(listServer.isDone()).toBeTruthy();
+  // close server
+  listServer.done();
+});

@@ -6,7 +6,7 @@ import { formatServices } from './utils/formatServices.js';
  * @param {object} params
  * @param {string} params.endpoint - exoframe server endpoint
  * @param {string} params.token - exoframe auth token
- * @returns {import('./utils/formatServices.js').FormattedService[]}
+ * @returns {Promise<import('./utils/formatServices.js').FormattedService[]>}
  */
 export const listDeployments = async ({ endpoint, token }) => {
   // services request url
@@ -31,7 +31,7 @@ export const listDeployments = async ({ endpoint, token }) => {
     ({ containers = [] } = body);
   } catch (e) {
     // if authorization is expired/broken/etc
-    if (e.statusCode === 401) {
+    if (e.response?.statusCode === 401) {
       throw new Error('Authorization expired!');
     }
 
