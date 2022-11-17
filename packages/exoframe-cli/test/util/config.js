@@ -19,14 +19,19 @@ export const setupDeployMocks = () => {
   };
 };
 
-export const setupMocks = () => {
+export const setupMocks = (addUser = true) => {
   // mock current work dir
   const cwdSpy = vi.spyOn(process, 'cwd').mockImplementation(() => testFolder);
   const osSpy = vi.spyOn(os, 'homedir').mockImplementation(() => testFolder);
 
   let exoConfigExists = true;
   let exoConfig = { name: 'test' };
-  let userConfig = jsyaml.dump({ endpoint: 'http://localhost:8080' });
+  const defaultUserConfig = { endpoint: 'http://localhost:8080' };
+  if (addUser) {
+    defaultUserConfig.user = { username: 'admin' };
+    defaultUserConfig.token = 'test-token';
+  }
+  let userConfig = jsyaml.dump(defaultUserConfig);
 
   const mkdirSpy = vi.spyOn(fs.promises, 'mkdir').mockImplementation(async () => {});
   const statSpy = vi.spyOn(fs.promises, 'stat').mockImplementation(async (path) => {

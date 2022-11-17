@@ -7,7 +7,7 @@ const mockEndpoint = 'http://test.endpoint';
 const mockEndpoint2 = 'http://test';
 
 // setup mocks
-const clearMocks = setupMocks();
+const clearMocks = setupMocks(false);
 
 // get current user config
 const origCfg = await getUserConfig();

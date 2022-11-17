@@ -1,10 +1,10 @@
 import nock from 'nock';
 import { setTimeout } from 'timers/promises';
 import { afterAll, beforeEach, expect, test, vi } from 'vitest';
-import { getUserConfig, resetUserConfig, setupDeployMocks } from './util/config.js';
+import { getUserConfig, resetUserConfig, setupMocks } from './util/config.js';
 
 // setup mocks
-const clearMocks = setupDeployMocks();
+const clearMocks = setupMocks();
 
 // timeout for IO/net
 const IO_TIMEOUT = 50;

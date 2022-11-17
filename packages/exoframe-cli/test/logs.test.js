@@ -2,10 +2,10 @@ import nock from 'nock';
 import { Readable } from 'stream';
 import { setTimeout } from 'timers/promises';
 import { afterAll, beforeEach, expect, test, vi } from 'vitest';
-import { getUserConfig, resetUserConfig, setupDeployMocks } from './util/config.js';
+import { getUserConfig, resetUserConfig, setupMocks } from './util/config.js';
 
 // setup mocks
-const clearMocks = setupDeployMocks();
+const clearMocks = setupMocks();
 
 // timeout for IO/net
 const IO_TIMEOUT = 50;
@@ -119,8 +119,8 @@ test('Should deauth on 401', async () => {
     ",
       ],
       [
-        "Error while getting logs:",
-        "HTTPError: Response code 401 (Unauthorized)",
+        "Error: authorization expired!",
+        "Please, relogin and try again.",
       ],
     ]
   `);
