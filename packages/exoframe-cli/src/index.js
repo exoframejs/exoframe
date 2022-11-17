@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url';
 import { createConfigCmd } from './commands/config.js';
 import { createDeployCmd } from './commands/deploy.js';
 import { createEndpointCmd } from './commands/endpoint.js';
+import { createListCmd } from './commands/list.js';
 import { createLoginCmd } from './commands/login.js';
 
 const baseFolder = path.dirname(fileURLToPath(import.meta.url));
@@ -26,11 +27,8 @@ export const createProgram = () => {
   program.addCommand(createDeployCmd());
   program.addCommand(createEndpointCmd());
   program.addCommand(createLoginCmd());
+  program.addCommand(createListCmd());
 
-  //   .help()
-  //   .command(deploy)
-  //   .command(endpointRm)
-  //   .command(list)
   //   .command(logs)
   //   .command(remove)
   //   .command(token)
@@ -39,7 +37,6 @@ export const createProgram = () => {
   //   .command(setup)
   //   .command(secrets)
   //   .command(system)
-  //   .command(completion(yargs)).argv;
 
   return program;
 };
