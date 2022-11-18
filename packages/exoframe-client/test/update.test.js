@@ -79,7 +79,23 @@ test('Should get update versions', async () => {
   updateServer.done();
 });
 
-test('Should deauth on 401', async () => {
+test('Should deauth on 401 on check', async () => {
+  // handle correct request
+  const updateServer = nock(endpoint).get('/version').reply(401);
+  // execute update
+  try {
+    await checkUpdates({ endpoint, token });
+  } catch (err) {
+    // make sure it errors out
+    expect(err).toMatchInlineSnapshot(`[Error: Authorization expired!]`);
+  }
+  // check that server was called
+  expect(updateServer.isDone()).toBeTruthy();
+  // tear down nock
+  updateServer.done();
+});
+
+test('Should deauth on 401 on update', async () => {
   // handle correct request
   const updateServer = nock(endpoint).post(`/update/traefik`).reply(401);
   // execute update

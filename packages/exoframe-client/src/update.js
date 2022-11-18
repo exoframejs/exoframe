@@ -21,22 +21,31 @@ const validTargets = ['traefik', 'server', 'all'];
  * @returns {UpdateResult}
  */
 export const checkUpdates = async ({ endpoint, token }) => {
-  // services request url
-  const remoteUrl = `${endpoint}/version`;
-  // construct shared request params
-  const options = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    responseType: 'json',
-  };
-  // send request
-  const { body, statusCode } = await got.get(remoteUrl, options);
-  if (statusCode !== 200 || body.error) {
-    throw new Error(body.error || 'Oops. Something went wrong! Try again please.');
-  }
+  try {
+    // services request url
+    const remoteUrl = `${endpoint}/version`;
+    // construct shared request params
+    const options = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      responseType: 'json',
+    };
+    // send request
+    const { body, statusCode } = await got.get(remoteUrl, options);
+    if (statusCode !== 200 || body.error) {
+      throw new Error(body.error || 'Oops. Something went wrong! Try again please.');
+    }
 
-  return body;
+    return body;
+  } catch (e) {
+    // if authorization is expired/broken/etc
+    if (e.response.statusCode === 401) {
+      throw new Error('Authorization expired!');
+    }
+
+    throw e;
+  }
 };
 
 /**
