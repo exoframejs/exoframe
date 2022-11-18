@@ -62,7 +62,7 @@ export default (fastify) => {
         // our vars
         serverConfig,
         username,
-        tempDockerDir: tempDockerDir,
+        tempDockerDir,
         folder,
         docker: {
           daemon: docker,

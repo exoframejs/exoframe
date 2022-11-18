@@ -9,7 +9,7 @@
   "license": "MIT",
   "scripts": {
     "build": "babel src --out-dir lib/ --watch",
-    "lint": "eslint src/",
+    "lint": "eslint src/ test/",
     "test": "TZ=Greenland NODE_ENV=testing FORCE_COLOR=false vitest",
     "test:ci": "TZ=Greenland NODE_ENV=testing FORCE_COLOR=false vitest run --coverage"
   },

@@ -11,7 +11,6 @@ import { getTokenCollection, reqCollection } from '../db/index.js';
 
 // promisify readfile
 const readFile = promisify(_readFile);
-const jwtVerify = promisify(jwt.verify);
 
 // path to keys
 const keysFolder = getConfig().publicKeysPath;

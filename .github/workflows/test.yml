@@ -53,10 +53,8 @@ jobs:
             ${{ runner.os }}-node-
       - name: install
         run: npm ci
-      # currently broken due to top-level await issues with
-      # eslint and eslint-plugin-import
-      # - name: lint
-      #  run: npm run lint -w exoframe
+      - name: lint
+        run: npm run lint -w exoframe
       - name: test
         env:
           TEST_INPUT_TIMEOUT: 100
@@ -83,9 +81,7 @@ jobs:
             ${{ runner.os }}-node-
       - name: install
         run: npm ci
-      # currently broken due to top-level await issues with
-      # eslint and eslint-plugin-import
-      # - name: lint
-      #  run: npm run lint -w exoframe-server
+      - name: lint
+        run: npm run lint -w exoframe-server
       - name: test
         run: npm run test:ci -w exoframe-server
