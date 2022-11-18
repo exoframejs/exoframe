@@ -16,6 +16,7 @@ vi.mock('ora', () => {
     start: fn,
     fail: fn,
     succeed: fn,
+    warn: fn,
   };
   return {
     default: (msg) => {

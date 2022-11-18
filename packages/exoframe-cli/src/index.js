@@ -14,6 +14,7 @@ import { createSetupCmd } from './commands/setup.js';
 import { createSystemCmd } from './commands/system.js';
 import { createTemplateCmd } from './commands/template.js';
 import { createTokenCmd } from './commands/token.js';
+import { createUpdateCmd } from './commands/update.js';
 
 const baseFolder = path.dirname(fileURLToPath(import.meta.url));
 const pkg = JSON.parse((await readFile(path.join(baseFolder, '..', 'package.json'))).toString());
@@ -42,8 +43,7 @@ export const createProgram = () => {
   program.addCommand(createSystemCmd());
   program.addCommand(createTemplateCmd());
   program.addCommand(createTokenCmd());
-
-  //   .command(update)
+  program.addCommand(createUpdateCmd());
 
   return program;
 };
