@@ -169,6 +169,12 @@ test('Should deploy with endpoint flag', async () => {
         "http://localhost:3000",
       ],
       [
+        "Deploying project to server...",
+      ],
+      [
+        "Deployment finished!",
+      ],
+      [
         "Your project is now deployed as:
     ",
       ],
@@ -299,6 +305,12 @@ test('Should execute update', async () => {
         "http://localhost:8080",
       ],
       [
+        "Deploying project to server...",
+      ],
+      [
+        "Deployment finished!",
+      ],
+      [
         "Your project is now deployed as:
     ",
       ],
@@ -340,6 +352,12 @@ test('Should open webpage after deploy', async () => {
       [
         "Deploying /test_html_project to endpoint:",
         "http://localhost:8080",
+      ],
+      [
+        "Deploying project to server...",
+      ],
+      [
+        "Deployment finished!",
       ],
       [
         "Your project is now deployed as:
@@ -409,6 +427,12 @@ test('Should deploy with a custom config', async () => {
       "http://localhost:8080",
     ],
     [
+      "Deploying project to server...",
+    ],
+    [
+      "Deployment finished!",
+    ],
+    [
       "Your project is now deployed as:
   ",
     ],
@@ -459,6 +483,12 @@ test('Should display error log', async () => {
         "http://localhost:8080",
       ],
       [
+        "Deploying project to server...",
+      ],
+      [
+        "Deployment failed!",
+      ],
+      [
         "Error deploying project:",
         "Build failed! See build log for details.",
       ],
@@ -506,6 +536,12 @@ test('Should display error on malformed JSON', async () => {
       [
         "Deploying /test_html_project to endpoint:",
         "http://localhost:8080",
+      ],
+      [
+        "Deploying project to server...",
+      ],
+      [
+        "Deployment failed!",
       ],
       [
         "Error deploying project:",
@@ -625,6 +661,12 @@ test('Should ignore specified files', async () => {
         "http://localhost:8080",
       ],
       [
+        "Deploying project to server...",
+      ],
+      [
+        "Deployment finished!",
+      ],
+      [
         "Your project is now deployed as:
     ",
       ],
@@ -668,6 +710,12 @@ test('Should display error on zero deployments', async () => {
         "http://localhost:8080",
       ],
       [
+        "Deploying project to server...",
+      ],
+      [
+        "Deployment failed!",
+      ],
+      [
         "Error deploying project:",
         "Error: Something went wrong!",
       ],
@@ -702,6 +750,12 @@ test('Should not deploy with config without project name', async () => {
       [
         "Deploying /test_noname_config to endpoint:",
         "http://localhost:8080",
+      ],
+      [
+        "Deploying project to server...",
+      ],
+      [
+        "Deployment failed!",
       ],
       [
         "Error deploying project:",
@@ -760,6 +814,12 @@ test('Should not deploy with non-existent path', async () => {
         "http://localhost:8080",
       ],
       [
+        "Deploying project to server...",
+      ],
+      [
+        "Deployment failed!",
+      ],
+      [
         "Error deploying project:",
         "Project folder not found!",
       ],
@@ -792,6 +852,12 @@ test('Should deauth on 401', async () => {
       [
         "Deploying /test_html_project to endpoint:",
         "http://localhost:8080",
+      ],
+      [
+        "Deploying project to server...",
+      ],
+      [
+        "Deployment failed!",
       ],
       [
         "Error: authorization expired!",

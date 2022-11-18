@@ -4,26 +4,6 @@ import { setTimeout } from 'timers/promises';
 import { afterAll, beforeEach, expect, test, vi } from 'vitest';
 import { getUserConfig, resetUserConfig, setupMocks } from './util/config.js';
 
-vi.mock('ora', () => {
-  const fn = (...args) => {
-    if (args.length > 0) {
-      console.log(...args);
-    }
-    return self;
-  };
-  const self = {
-    start: fn,
-    fail: fn,
-    succeed: fn,
-  };
-  return {
-    default: (msg) => {
-      fn(msg);
-      return self;
-    },
-  };
-});
-
 // setup mocks
 const clearMocks = setupMocks();
 

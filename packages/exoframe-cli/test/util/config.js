@@ -5,6 +5,26 @@ import { join } from 'path';
 import { vi } from 'vitest';
 import { fixturesFolder, testFolder } from './paths.js';
 
+vi.mock('ora', () => {
+  const fn = (...args) => {
+    if (args.length > 0) {
+      console.log(...args);
+    }
+    return self;
+  };
+  const self = {
+    start: fn,
+    fail: fn,
+    succeed: fn,
+  };
+  return {
+    default: (msg) => {
+      fn(msg);
+      return self;
+    },
+  };
+});
+
 export const setupDeployMocks = () => {
   // mock current work dir
   process.env.XDG_CONFIG_HOME = join(fixturesFolder, '.config');
