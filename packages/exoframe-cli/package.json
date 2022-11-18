@@ -23,7 +23,8 @@
     "inquirer": "^9.1.0",
     "lodash": "^4.17.21",
     "open": "^8.4.0",
-    "ora": "^6.1.2"
+    "ora": "^6.1.2",
+    "pretty-bytes": "^6.0.0"
   },
   "devDependencies": {
     "@vitest/coverage-c8": "^0.25.1",
