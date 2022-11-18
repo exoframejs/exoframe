@@ -3,7 +3,7 @@ import { pruneSystem } from 'exoframe-client';
 import prettyBytes from 'pretty-bytes';
 import { getConfig, isLoggedIn, logout } from '../../config/index.js';
 
-export const systemPruneHandler = async (name, { yes } = {}) => {
+export const systemPruneHandler = async () => {
   if (!isLoggedIn()) {
     console.log(chalk.red('Error: not logged in!'), 'Please, login and try again.');
     return;

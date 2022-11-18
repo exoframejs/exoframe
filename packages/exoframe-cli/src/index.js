@@ -12,6 +12,7 @@ import { createRemoveCmd } from './commands/remove.js';
 import { createSecretsCmd } from './commands/secrets.js';
 import { createSetupCmd } from './commands/setup.js';
 import { createSystemCmd } from './commands/system.js';
+import { createTemplateCmd } from './commands/template.js';
 
 const baseFolder = path.dirname(fileURLToPath(import.meta.url));
 const pkg = JSON.parse((await readFile(path.join(baseFolder, '..', 'package.json'))).toString());
@@ -38,10 +39,10 @@ export const createProgram = () => {
   program.addCommand(createSecretsCmd());
   program.addCommand(createSetupCmd());
   program.addCommand(createSystemCmd());
+  program.addCommand(createTemplateCmd());
 
   //   .command(token)
   //   .command(update)
-  //   .command(template)
 
   return program;
 };
