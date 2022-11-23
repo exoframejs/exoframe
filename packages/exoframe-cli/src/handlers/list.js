@@ -5,13 +5,13 @@ import { renderDeployments } from '../util/renderDeployments.js';
 
 export const listHandler = async () => {
   // exit if not logged in
-  if (!isLoggedIn()) {
+  if (!(await isLoggedIn())) {
     console.log(chalk.red('Error: not logged in!'), 'Please, login and try again.');
     return;
   }
 
   // get user config
-  const userConfig = getConfig();
+  const userConfig = await getConfig();
 
   // get current endpoint and auth token
   const { endpoint, token } = userConfig;
@@ -40,7 +40,7 @@ export const listHandler = async () => {
   } catch (err) {
     // if authorization is expired/broken/etc
     if (err.message === 'Authorization expired!') {
-      logout(userConfig);
+      await logout();
       console.log(chalk.red('Error: authorization expired!'), 'Please, relogin and try again.');
       return;
     }

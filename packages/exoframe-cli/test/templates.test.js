@@ -313,8 +313,7 @@ test('Should deauth on 401 on creation', async () => {
   await resetUserConfig();
 });
 
-// TODO: fixme after config reload is done on import, not on load
-test.skip('Should deauth on 401 on list', async () => {
+test('Should deauth on 401 on list', async () => {
   // spy on console
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
   // handle correct request
@@ -330,7 +329,18 @@ test.skip('Should deauth on 401 on list', async () => {
   // check that server was called
   expect(templateServer.isDone()).toBeTruthy();
   // first check console output
-  expect(consoleSpy.mock.calls).toMatchInlineSnapshot();
+  expect(consoleSpy.mock.calls).toMatchInlineSnapshot(`
+    [
+      [
+        "Listing deployment templates for:",
+        "http://localhost:8080",
+      ],
+      [
+        "Error: authorization expired!",
+        "Please, relogin and try again.",
+      ],
+    ]
+  `);
   // make sure write was called
   const cfg = await getUserConfig();
   expect(cfg.user).toBeUndefined();
@@ -342,8 +352,7 @@ test.skip('Should deauth on 401 on list', async () => {
   await resetUserConfig();
 });
 
-// TODO: fixme after config reload is done on import, not on load
-test.skip('Should deauth on 401 on removal', async () => {
+test('Should deauth on 401 on removal', async () => {
   // spy on console
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
   // handle correct request
@@ -359,7 +368,24 @@ test.skip('Should deauth on 401 on removal', async () => {
   // check that server was called
   expect(templateServer.isDone()).toBeTruthy();
   // first check console output
-  expect(consoleSpy.mock.calls).toMatchInlineSnapshot();
+  expect(consoleSpy.mock.calls).toMatchInlineSnapshot(`
+    [
+      [
+        "Removing deployment template for:",
+        "http://localhost:8080",
+      ],
+      [
+        "Removing deployment template...",
+      ],
+      [
+        "Template removal failed!",
+      ],
+      [
+        "Error: authorization expired!",
+        "Please, relogin and try again.",
+      ],
+    ]
+  `);
   // make sure write was called
   const cfg = await getUserConfig();
   expect(cfg.user).toBeUndefined();

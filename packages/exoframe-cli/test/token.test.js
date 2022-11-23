@@ -331,8 +331,7 @@ test('Should deauth on 401 on creation', async () => {
   await resetUserConfig();
 });
 
-// TODO: fixme after config loading is refactored
-test.skip('Should deauth on 401 on list', async () => {
+test('Should deauth on 401 on list', async () => {
   // spy on console
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
   // handle correct request
@@ -371,8 +370,7 @@ test.skip('Should deauth on 401 on list', async () => {
   await resetUserConfig();
 });
 
-// TODO: fixme
-test.skip('Should deauth on 401 on removal', async () => {
+test('Should deauth on 401 on removal', async () => {
   // spy on console
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
   // handle correct request
@@ -388,7 +386,24 @@ test.skip('Should deauth on 401 on removal', async () => {
   // check that server was called
   expect(tokenServer.isDone()).toBeTruthy();
   // first check console output
-  expect(consoleSpy.mock.calls).toMatchInlineSnapshot();
+  expect(consoleSpy.mock.calls).toMatchInlineSnapshot(`
+    [
+      [
+        "Removing deployment token for:",
+        "http://localhost:8080",
+      ],
+      [
+        "Removing deployment token...",
+      ],
+      [
+        "Token removal failed!",
+      ],
+      [
+        "Error: authorization expired!",
+        "Please, relogin and try again.",
+      ],
+    ]
+  `);
   // make sure write was called
   const cfg = await getUserConfig();
   expect(cfg.user).toBeUndefined();

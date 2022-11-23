@@ -14,13 +14,13 @@ export const deployProject = async (
   { config, endpoint: userEndpoint, token: deployToken, update, open: openInBrowser, verbose } = {}
 ) => {
   // exit if not logged in and no token provided
-  if (!deployToken && !isLoggedIn()) {
+  if (!deployToken && !(await isLoggedIn())) {
     console.log(chalk.red('Error: not logged in!'), 'Please, login and try again.');
     return;
   }
 
   // get user config
-  const userConfig = getConfig();
+  const userConfig = await getConfig();
 
   // select endpoint
   const endpoint = userEndpoint ?? userConfig.endpoint;
@@ -84,7 +84,7 @@ export const deployProject = async (
     const response = e.response || {};
     // if authorization is expired/broken/etc
     if (response.statusCode === 401) {
-      logout(userConfig);
+      await logout();
       console.log(chalk.red('Error: authorization expired!'), 'Please, relogin and try again.');
       return process.exit(1);
     }

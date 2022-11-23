@@ -5,13 +5,13 @@ import ora from 'ora';
 import { getConfig, isLoggedIn, logout } from '../config/index.js';
 
 export const setupHandler = async (recipe, { verbose } = {}) => {
-  if (!isLoggedIn()) {
+  if (!(await isLoggedIn())) {
     console.log(chalk.red('Error!'), '\nYou need to sign in first or supply a authentication token.');
     return;
   }
 
   // get user config
-  const userConfig = getConfig();
+  const userConfig = await getConfig();
 
   // get current endpoint and auth token
   const { endpoint, token } = userConfig;
@@ -68,7 +68,7 @@ export const setupHandler = async (recipe, { verbose } = {}) => {
     spinner.fail('Recipe execution failed!');
     // if authorization is expired/broken/etc
     if (e.message === 'Authorization expired!') {
-      logout(userConfig);
+      await logout();
       console.log(chalk.red('Error: authorization expired!'), 'Please, relogin and try again.');
       return;
     }

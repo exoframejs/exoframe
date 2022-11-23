@@ -12,6 +12,9 @@ const clearMocks = setupMocks(false);
 // get current user config
 const origCfg = await getUserConfig();
 
+// timeout for IO/net
+const IO_TIMEOUT = 50;
+
 let program;
 beforeEach(async () => {
   // import component
@@ -27,6 +30,9 @@ test('Should add new endpoint', async () => {
 
   // execute addition
   program.parse(['endpoint', 'add', mockEndpoint], { from: 'user' });
+
+  // give time to IO / net
+  await setTimeout(IO_TIMEOUT);
 
   // first check console output
   expect(consoleSpy.mock.calls).toMatchInlineSnapshot(`
@@ -60,6 +66,9 @@ test('Should add second new endpoint', async () => {
 
   // execute addition
   program.parse(['endpoint', 'add', mockEndpoint2], { from: 'user' });
+
+  // give time to IO / net
+  await setTimeout(IO_TIMEOUT);
 
   // first check console output
   expect(consoleSpy.mock.calls).toMatchInlineSnapshot(`
@@ -104,8 +113,8 @@ test('Should select old endpoint', async () => {
   // execute switch
   program.parse(['endpoint'], { from: 'user' });
 
-  // give time to IO
-  await setTimeout(10);
+  // give time to IO / net
+  await setTimeout(IO_TIMEOUT);
 
   // first check console output
   expect(consoleSpy.mock.calls).toMatchInlineSnapshot(`
@@ -146,8 +155,8 @@ test('Should select old endpoint using URL param', async () => {
   // execute switch
   program.parse(['endpoint', mockEndpoint], { from: 'user' });
 
-  // give time to IO
-  await setTimeout(10);
+  // give time to IO / net
+  await setTimeout(IO_TIMEOUT);
 
   // first check console output
   expect(consoleSpy.mock.calls).toMatchInlineSnapshot(`
@@ -186,8 +195,8 @@ test('Should show error on remove of non-existent endpoint', async () => {
   // execute switch
   program.parse(['endpoint', 'rm', 'do-not-exist'], { from: 'user' });
 
-  // give time to IO
-  await setTimeout(10);
+  // give time to IO / net
+  await setTimeout(IO_TIMEOUT);
 
   // first check console output
   expect(consoleSpy.mock.calls).toMatchInlineSnapshot(`
@@ -216,8 +225,8 @@ test('Should remove current endpoint using enquirer', async () => {
   // execute switch
   program.parse(['endpoint', 'rm'], { from: 'user' });
 
-  // give time to IO
-  await setTimeout(10);
+  // give time to IO / net
+  await setTimeout(IO_TIMEOUT);
 
   // first check console output
   expect(consoleSpy.mock.calls).toMatchInlineSnapshot(`
@@ -254,8 +263,8 @@ test('Should remove existing endpoint using param', async () => {
   // execute switch
   program.parse(['endpoint', 'rm', origCfg.endpoint], { from: 'user' });
 
-  // give time to IO
-  await setTimeout(10);
+  // give time to IO / net
+  await setTimeout(IO_TIMEOUT);
 
   // first check console output
   expect(consoleSpy.mock.calls).toMatchInlineSnapshot(`
@@ -288,8 +297,8 @@ test('Should not remove only endpoint', async () => {
   // execute switch
   program.parse(['endpoint', 'rm', mockEndpoint2], { from: 'user' });
 
-  // give time to IO
-  await setTimeout(10);
+  // give time to IO / net
+  await setTimeout(IO_TIMEOUT);
 
   // first check console output
   expect(consoleSpy.mock.calls).toMatchInlineSnapshot(`

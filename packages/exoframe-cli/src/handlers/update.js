@@ -5,13 +5,13 @@ import ora from 'ora';
 import { getConfig, isLoggedIn, logout } from '../config/index.js';
 
 export const updateHandler = async (target) => {
-  if (!isLoggedIn()) {
+  if (!(await isLoggedIn())) {
     console.log(chalk.red('Error: not logged in!'), 'Please, login and try again.');
     return;
   }
 
   // get user config
-  const userConfig = getConfig();
+  const userConfig = await getConfig();
 
   // get current endpoint and auth token
   const { endpoint, token } = userConfig;
@@ -98,7 +98,7 @@ export const updateHandler = async (target) => {
     spinner.fail('Update failed!');
     // if authorization is expired/broken/etc
     if (e.message === 'Authorization expired!') {
-      logout(userConfig);
+      await logout();
       console.log(chalk.red('Error: authorization expired!'), 'Please, relogin and try again.');
       return;
     }

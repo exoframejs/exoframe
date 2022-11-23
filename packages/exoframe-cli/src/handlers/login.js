@@ -42,7 +42,7 @@ export const loginHandler = async ({ key, passphrase, url }) => {
   }
 
   // get user config
-  const userConfig = getConfig();
+  const userConfig = await getConfig();
 
   // log the endpoint we'll be using
   console.log(chalk.bold('Logging in to:'), userConfig.endpoint);

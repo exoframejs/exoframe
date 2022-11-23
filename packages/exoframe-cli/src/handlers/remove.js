@@ -3,7 +3,7 @@ import { removeDeployment } from 'exoframe-client';
 import { getConfig, isLoggedIn, logout } from '../config/index.js';
 
 export const removeHandler = async (id, { token: deployToken } = {}) => {
-  if (!deployToken && !isLoggedIn()) {
+  if (!deployToken && !(await isLoggedIn())) {
     console.log(chalk.red('Error!'), '\nYou need to sign in first or supply a authentication token.');
     return;
   }
@@ -11,7 +11,7 @@ export const removeHandler = async (id, { token: deployToken } = {}) => {
   console.log(chalk.bold('Removing deployment:'), id);
 
   // get user config
-  const userConfig = getConfig();
+  const userConfig = await getConfig();
 
   // get current endpoint and auth token
   const endpoint = userConfig.endpoint;
@@ -33,7 +33,7 @@ export const removeHandler = async (id, { token: deployToken } = {}) => {
   } catch (e) {
     // if authorization is expired/broken/etc
     if (e.message === 'Authorization expired!') {
-      logout(userConfig);
+      await logout();
       console.log(chalk.red('Error: authorization expired!'), 'Please, relogin and try again.');
       return;
     }

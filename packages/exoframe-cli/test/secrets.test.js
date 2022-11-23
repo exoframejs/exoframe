@@ -432,8 +432,7 @@ test('Should deauth on 401 on creation', async () => {
   secretServer.done();
 });
 
-// TODO: update how config works then re-enable this
-test.skip('Should deauth on 401 on list', async () => {
+test('Should deauth on 401 on list', async () => {
   // spy on console
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
   // handle correct request

@@ -7,7 +7,7 @@ import { getConfig, updateConfig } from '../config/index.js';
  * @param {String} endpoint - new endpoint URL
  */
 export const changeEndpoint = async (endpoint) => {
-  const userConfig = getConfig();
+  const userConfig = await getConfig();
 
   // if current endpoint set - move it to endpoints
   if (userConfig.endpoint) {
@@ -28,7 +28,7 @@ export const changeEndpoint = async (endpoint) => {
   const user = newData?.user;
   const token = newData?.token;
   const endpoints = userConfig.endpoints.filter((e) => e.endpoint !== endpoint);
-  updateConfig({ endpoint, user, token, endpoints });
+  await updateConfig({ endpoint, user, token, endpoints });
   console.log(chalk.green('Endpoint URL updated!'));
 };
 
@@ -37,7 +37,7 @@ export const changeEndpoint = async (endpoint) => {
  * Shows list of endpoints and asks user to choose new one
  */
 export const endpointSwitchHandler = async (url) => {
-  const userConfig = getConfig();
+  const userConfig = await getConfig();
 
   // if one endpoint only - show this
   if (!userConfig.endpoints?.length) {
@@ -85,7 +85,7 @@ export const endpointAddHandler = async (url) => {
     return;
   }
 
-  const userConfig = getConfig();
+  const userConfig = await getConfig();
 
   // if user selected current - just exit
   if (url === userConfig.endpoint) {
@@ -103,7 +103,7 @@ export const endpointAddHandler = async (url) => {
  * @param {String} [url] - endpoint URL to remove
  */
 export const endpointRmHandler = async (url) => {
-  const userConfig = getConfig();
+  const userConfig = await getConfig();
 
   // assign given string as base endpoint
   let endpointUrl = url;

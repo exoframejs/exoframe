@@ -3,13 +3,13 @@ import { listSecrets } from 'exoframe-client';
 import { getConfig, isLoggedIn, logout } from '../../config/index.js';
 
 export const listSecretsHandler = async () => {
-  if (!isLoggedIn()) {
+  if (!(await isLoggedIn())) {
     console.log(chalk.red('Error: not logged in!'), 'Please, login and try again.');
     return;
   }
 
   // get user config
-  const userConfig = getConfig();
+  const userConfig = await getConfig();
 
   // get current endpoint and auth token
   const { endpoint, token } = userConfig;
@@ -31,7 +31,7 @@ export const listSecretsHandler = async () => {
   } catch (e) {
     // if authorization is expired/broken/etc
     if (e.message === 'Authorization expired!') {
-      logout(userConfig);
+      await logout();
       console.log(chalk.red('Error: authorization expired!'), 'Please, relogin and try again.');
       return;
     }
