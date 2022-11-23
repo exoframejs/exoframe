@@ -1,7 +1,7 @@
 {
   "name": "exoframe-server",
-  "version": "7.0.0",
-  "description": "Exoframe is a self-hosted tool that allows simple one-command deployments using Docker",
+  "version": "7.0.0-pre+alpha.1",
+  "description": "Exoframe server, a self-hosted deployment tool",
   "main": "src/index.js",
   "bin": "bin/exoframe-server.js",
   "type": "module",

@@ -1,0 +1,92 @@
+name: Prerelease
+
+on:
+  # only run when tagged with VER-pre* tag
+  push:
+    tags:
+      - '*-pre*'
+  # only run if tests are finished
+  workflow_run:
+    workflows: ['Test']
+    branches: [main]
+    types:
+      - completed
+
+jobs:
+  publish-client:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+          registry-url: 'https://registry.npmjs.org'
+      # get versions for currently published and local packages
+      - name: check versions
+        id: versions
+        run: |
+          echo "current=$(npm info exoframe-client@next version || echo 'no published package yet')" >> $GITHUB_OUTPUT
+          echo "new=$(npm info ./packages/exoframe-client version)" >> $GITHUB_OUTPUT
+      # install and publish if local version is not the same as published
+      - name: install
+        if: ${{ steps.versions.outputs.current != steps.versions.outputs.new }}
+        run: npm ci
+      - name: publish
+        if: ${{ steps.versions.outputs.current != steps.versions.outputs.new }}
+        run: npm publish --access public --tag next -w exoframe-client
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  publish-cli:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+          registry-url: 'https://registry.npmjs.org'
+      # get versions for currently published and local packages
+      - name: check versions
+        id: versions
+        run: |
+          echo "current=$(npm info exoframe@next version || echo 'no published package yet')" >> $GITHUB_OUTPUT
+          echo "new=$(npm info ./packages/exoframe-cli version)" >> $GITHUB_OUTPUT
+      # install, build and publish if local version is not the same as published
+      - name: install
+        if: ${{ steps.versions.outputs.current != steps.versions.outputs.new }}
+        run: npm ci
+      - name: build
+        if: ${{ steps.versions.outputs.current != steps.versions.outputs.new }}
+        run: npm run build -w exoframe
+      - name: publish
+        if: ${{ steps.versions.outputs.current != steps.versions.outputs.new }}
+        run: npm publish --access public --tag next -w exoframe
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  publish-server:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+          registry-url: 'https://registry.npmjs.org'
+      # get versions for currently published and local packages
+      - name: check versions
+        id: versions
+        run: |
+          echo "current=$(npm info exoframe-server@next version || echo 'no published package yet')" >> $GITHUB_OUTPUT
+          echo "new=$(npm info ./packages/exoframe-server version)" >> $GITHUB_OUTPUT
+      # install and publish if local version is not the same as published
+      - name: install
+        if: ${{ steps.versions.outputs.current != steps.versions.outputs.new }}
+        run: npm ci
+      - name: publish
+        if: ${{ steps.versions.outputs.current != steps.versions.outputs.new }}
+        run: npm publish --access public --tag next -w exoframe-server
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
