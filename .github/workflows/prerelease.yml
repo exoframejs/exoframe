@@ -5,12 +5,6 @@ on:
   push:
     tags:
       - '*-pre*'
-  # only run if tests are finished
-  workflow_run:
-    workflows: ['Test']
-    branches: [main]
-    types:
-      - completed
 
 jobs:
   publish-client:
