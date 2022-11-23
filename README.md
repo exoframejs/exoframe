@@ -2,8 +2,8 @@
 
 > Simple Docker deployment tool
 
-> :warning: **This is a pre-release version**: it might be unstable at the moment!
-> If you are looking for stable version and docs - look in [legacy-master]() branch.
+> :warning: **This is a pre-release version**: it is a work in progress and might be unstable at the moment!
+> If you are looking for stable version and docs - look in [legacy-master](https://github.com/exoframejs/exoframe/tree/legacy-master) branch.
 
 [![Test Status](https://github.com/exoframejs/exoframe/workflows/Test/badge.svg)](https://github.com/exoframejs/exoframe/actions?query=workflow%3ATest)
 [![npm](https://img.shields.io/npm/v/exoframe.svg)](https://www.npmjs.com/package/exoframe)
