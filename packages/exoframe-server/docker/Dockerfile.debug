@@ -1,17 +1,20 @@
-FROM node:16
+FROM node:18
+
+# create default folder for config and logs
+RUN mkdir -p /root/.config/exoframe/exoframe-server
 
 # create folder and set it as workdir
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
-# copy binary
-COPY bin/server-core.js /usr/src/app/server-core.js
-COPY bin/exoframe-server.js /usr/src/app/exoframe-server.js
+# Install app dependencies
+COPY package*.json ./
+RUN npm install
 
-# copy home.html
-COPY bin/home.html /usr/src/app/home.html
+# copy app source
+COPY . /usr/src/app
 
 # expose ports
 EXPOSE 8080
 
-CMD ["node", "exoframe-server.js"]
+CMD ["node", "bin/exoframe-server.js"]

@@ -85,6 +85,32 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      # publish to docker hub
+      - name: Login to DockerHub Registry
+        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Build & push docker image
+        working-directory: ./packages/exoframe-server
+        env:
+          IMAGE_NAME: exoframe/server
+        run: |
+          REF=${GITHUB_REF##*/}
+          TAG=$REF
+          DEBUG_TAG="debug_$TAG"
+          VERSION=$(npm info ./packages/exoframe-server version)
+          echo REF=$GITHUB_REF
+          echo TAG=$TAG
+          echo DEBUG_TAG=$DEBUG_TAG
+          echo IMAGE_NAME=$IMAGE_NAME
+          echo VERSION=$VERSION
+          # Build docker image
+          docker build -f docker/Dockerfile --quiet --cache-from $IMAGE_NAME:$TAG --label "version=$VERSION" -t $IMAGE_NAME:$TAG .
+          # Build debug docker image
+          docker build -f docker/Dockerfile.debug --quiet --cache-from $IMAGE_NAME:$DEBUG_TAG --label "version=$VERSION" -t $IMAGE_NAME:$DEBUG_TAG .
+          docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:next
+          docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:debug_next
+          # Push all images to registry
+          docker push $IMAGE_NAME
+
   publish-recipe-ghost:
     runs-on: ubuntu-latest
     steps:

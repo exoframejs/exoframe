@@ -1,10 +1,17 @@
-FROM node:16-alpine
+FROM node:18-alpine
 
 # create new workdir
 WORKDIR /app
 
+# create default folder for config and logs
+RUN mkdir -p /root/.config/exoframe/exoframe-server
+
+# Install app dependencies
+COPY package*.json ./
+RUN npm install
+
 # copy source
-COPY bin/ /app
+COPY . /app
 
 # set environment to production
 ENV NODE_ENV production
@@ -13,4 +20,4 @@ ENV NODE_ENV production
 EXPOSE 8080
 
 # set binary as entry point
-CMD ["node", "exoframe-server.js"]
+CMD ["node", "bin/exoframe-server.js"]

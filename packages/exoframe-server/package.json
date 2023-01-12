@@ -8,10 +8,6 @@
   "scripts": {
     "start": "node index.js",
     "watch": "nodemon --watch src/ index.js",
-    "docker:start": "docker-compose -f docker/docker-compose.yml up",
-    "docker:exec": "docker-compose -f docker/docker-compose.yml exec server",
-    "docker:cleanup": "docker rm -f exoframe-server; docker rm -f exoframe-traefik",
-    "cleanup": "npm run docker:cleanup",
     "lint": "eslint src/ test/ bin/exoframe-server.js",
     "test": "NODE_ENV=testing vitest",
     "test:ci": "NODE_ENV=testing vitest run --coverage"
