@@ -1,0 +1,21 @@
+{
+  "name": "exoframe-template-java",
+  "version": "1.0.0-pre-alpha.1",
+  "description": "Java deployment template for exoframe",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Tim Ermilov <yamalight@gmail.com> (http://codezen.net)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/exoframejs/exoframe.git"
+  },
+  "bugs": {
+    "url": "https://github.com/exoframejs/exoframe/issues"
+  },
+  "homepage": "https://github.com/exoframejs/exoframe#readme"
+}
