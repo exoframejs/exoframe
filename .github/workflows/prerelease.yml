@@ -84,3 +84,28 @@ jobs:
         run: npm publish --access public --tag next -w exoframe-server
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  publish-recipe-ghost:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+          registry-url: 'https://registry.npmjs.org'
+      # get versions for currently published and local packages
+      - name: check versions
+        id: versions
+        run: |
+          echo "current=$(npm info exoframe-recipe-ghost@next version || echo 'no published package yet')" >> $GITHUB_OUTPUT
+          echo "new=$(npm info ./packages/exoframe-recipe-ghost version)" >> $GITHUB_OUTPUT
+      # install and publish if local version is not the same as published
+      - name: install
+        if: ${{ steps.versions.outputs.current != steps.versions.outputs.new }}
+        run: npm ci
+      - name: publish
+        if: ${{ steps.versions.outputs.current != steps.versions.outputs.new }}
+        run: npm publish --access public --tag next -w exoframe-recipe-ghost
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
