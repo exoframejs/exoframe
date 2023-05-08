@@ -85,9 +85,18 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      # publish to docker hub
+      # publish to docker hub and github registry
       - name: Login to DockerHub Registry
-        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Log in to Github Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build & push docker image
         working-directory: ./packages/exoframe-server
         env:
@@ -107,9 +116,12 @@ jobs:
           # Build debug docker image
           docker build -f docker/Dockerfile.debug --quiet --cache-from $IMAGE_NAME:$DEBUG_TAG --label "version=$VERSION" -t $IMAGE_NAME:$DEBUG_TAG .
           docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:next
+          docker tag $IMAGE_NAME:$TAG ghcr.io/$IMAGE_NAME:next
           docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:debug_next
+          docker tag $IMAGE_NAME:$TAG ghcr.io/$IMAGE_NAME:debug_next
           # Push all images to registry
           docker push $IMAGE_NAME
+          docker push ghcr.io/$IMAGE_NAME
 
   publish-recipe-ghost:
     runs-on: ubuntu-latest
