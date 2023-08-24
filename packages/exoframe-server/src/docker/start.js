@@ -283,8 +283,8 @@ export async function start({ image, username, folder, resultStream, existing = 
   if (config.volumes && config.volumes.length) {
     const mounts = config.volumes
       .map((vol) => vol.split(':'))
-      .map(([src, dest]) => ({
-        Type: 'volume',
+      .map(([src, dest, type = 'volume']) => ({
+        Type: type,
         Source: src,
         Target: dest,
       }));

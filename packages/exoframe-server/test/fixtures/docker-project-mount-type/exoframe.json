@@ -1,0 +1,9 @@
+{
+  "name": "test-docker-deploy-with-custom-mount",
+  "hostname": "test",
+  "project": "test-mount-project",
+  "restart": "no",
+  "volumes": [
+    "/tmp:/test-temp:bind"
+  ]
+}

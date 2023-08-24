@@ -25,6 +25,7 @@ const currentDir = dirname(fileURLToPath(import.meta.url));
 const streamDockerImage = pack(join(currentDir, 'fixtures', 'docker-image-project'));
 const streamDockerImageExternal = pack(join(currentDir, 'fixtures', 'docker-image-external'));
 const streamDocker = pack(join(currentDir, 'fixtures', 'docker-project'));
+const streamDockerMountType = pack(join(currentDir, 'fixtures', 'docker-project-mount-type'));
 const streamNode = pack(join(currentDir, 'fixtures', 'node-project'));
 const streamNodeLock = pack(join(currentDir, 'fixtures', 'node-lock-project'));
 const streamHtml = pack(join(currentDir, 'fixtures', 'html-project'));
@@ -110,6 +111,63 @@ test('Should deploy simple docker project', async () => {
   ).toBeDefined();
   expect(
     container.Config.Env.find((env) => env.startsWith('EXOFRAME_HOST=exo-admin-test-docker-deploy-'))
+  ).toBeDefined();
+
+  // cleanup
+  const instance = docker.getContainer(containerInfo.Id);
+  await instance.remove({ force: true });
+});
+
+test('Should deploy simple docker project with custom mount type', async () => {
+  const options = Object.assign(optionsBase, {
+    payload: streamDockerMountType,
+  });
+
+  const response = await fastify.inject(options);
+  // parse result into lines
+  const result = response.payload
+    .split('\n')
+    .filter((l) => l && l.length)
+    .map((line) => JSON.parse(line));
+
+  // find deployments
+  const completeDeployments = result.find((it) => it.deployments && it.deployments.length).deployments;
+
+  // check response
+  expect(response.statusCode).toEqual(200);
+  expect(completeDeployments.length).toEqual(1);
+  expect(completeDeployments[0].Name.startsWith('/exo-admin-test-docker-deploy-with-custom-mount-')).toBeTruthy();
+
+  // check docker services
+  const allContainers = await docker.listContainers();
+  const containerInfo = allContainers.find((c) => c.Names.includes(completeDeployments[0].Name));
+  const name = completeDeployments[0].Name.slice(1);
+
+  expect(containerInfo).toBeDefined();
+  expect(containerInfo.Labels['exoframe.deployment']).toEqual(name);
+  expect(containerInfo.Labels['exoframe.user']).toEqual('admin');
+  expect(containerInfo.Labels['exoframe.project']).toEqual('test-mount-project');
+  expect(containerInfo.Labels['traefik.docker.network']).toEqual('exoframe');
+  expect(containerInfo.Labels['traefik.enable']).toEqual('true');
+  expect(containerInfo.NetworkSettings.Networks.exoframe).toBeDefined();
+  expect(containerInfo.Mounts.length).toEqual(1);
+  expect(containerInfo.Mounts[0].Type).toEqual('bind');
+  expect(containerInfo.Mounts[0].Source).toEqual('/tmp');
+  expect(containerInfo.Mounts[0].Destination).toEqual('/test-temp');
+
+  const containerData = docker.getContainer(containerInfo.Id);
+  const container = await containerData.inspect();
+  expect(container.NetworkSettings.Networks.exoframe.Aliases.includes('test')).toBeTruthy();
+  expect(container.HostConfig.RestartPolicy).toMatchObject({ Name: 'no', MaximumRetryCount: 0 });
+  expect(container.Config.Env).toContain('EXOFRAME_USER=admin');
+  expect(container.Config.Env).toContain('EXOFRAME_PROJECT=test-mount-project');
+  expect(
+    container.Config.Env.find((env) =>
+      env.startsWith('EXOFRAME_DEPLOYMENT=exo-admin-test-docker-deploy-with-custom-mount-')
+    )
+  ).toBeDefined();
+  expect(
+    container.Config.Env.find((env) => env.startsWith('EXOFRAME_HOST=exo-admin-test-docker-deploy-with-custom-mount-'))
   ).toBeDefined();
 
   // cleanup
