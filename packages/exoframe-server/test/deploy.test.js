@@ -26,6 +26,7 @@ const streamDockerImage = pack(join(currentDir, 'fixtures', 'docker-image-projec
 const streamDockerImageExternal = pack(join(currentDir, 'fixtures', 'docker-image-external'));
 const streamDocker = pack(join(currentDir, 'fixtures', 'docker-project'));
 const streamDockerMountType = pack(join(currentDir, 'fixtures', 'docker-project-mount-type'));
+const streamDockerBuildargs = pack(join(currentDir, 'fixtures', 'docker-project-buildargs'));
 const streamNode = pack(join(currentDir, 'fixtures', 'node-project'));
 const streamNodeLock = pack(join(currentDir, 'fixtures', 'node-lock-project'));
 const streamHtml = pack(join(currentDir, 'fixtures', 'html-project'));
@@ -172,6 +173,50 @@ test('Should deploy simple docker project with custom mount type', async () => {
 
   // cleanup
   const instance = docker.getContainer(containerInfo.Id);
+  await instance.remove({ force: true });
+});
+
+test('Should deploy simple docker project with buildargs', async () => {
+  const options = Object.assign(optionsBase, {
+    payload: streamDockerBuildargs,
+  });
+
+  const response = await fastify.inject(options);
+  // parse result into lines
+  const result = response.payload
+    .split('\n')
+    .filter((l) => l && l.length)
+    .map((line) => JSON.parse(line));
+
+  // find deployments
+  const completeDeployments = result.find((it) => it.deployments && it.deployments.length).deployments;
+
+  // check response
+  expect(response.statusCode).toEqual(200);
+  expect(completeDeployments.length).toEqual(1);
+  expect(completeDeployments[0].Name.startsWith('/exo-admin-test-docker-deploy-buildargs-')).toBeTruthy();
+
+  // check docker services
+  const allContainers = await docker.listContainers();
+  const containerInfo = allContainers.find((c) => c.Names.includes(completeDeployments[0].Name));
+  const name = completeDeployments[0].Name.slice(1);
+
+  expect(containerInfo).toBeDefined();
+  expect(containerInfo.Labels['exoframe.deployment']).toEqual(name);
+  expect(containerInfo.Labels['exoframe.user']).toEqual('admin');
+  expect(containerInfo.Labels['exoframe.project']).toEqual('test-project-buildargs');
+  expect(containerInfo.Labels['traefik.docker.network']).toEqual('exoframe');
+  expect(containerInfo.Labels['traefik.enable']).toEqual('true');
+  expect(containerInfo.NetworkSettings.Networks.exoframe).toBeDefined();
+
+  // get container
+  const instance = docker.getContainer(containerInfo.Id);
+
+  // get logs and ensure they match build args from config
+  const logs = await instance.logs({ stdout: true });
+  expect(logs).toContain('test_exoframe');
+
+  // cleanup
   await instance.remove({ force: true });
 });
 

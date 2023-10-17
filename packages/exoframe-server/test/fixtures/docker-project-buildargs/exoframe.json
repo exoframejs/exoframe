@@ -1,0 +1,9 @@
+{
+  "name": "test-docker-deploy-buildargs",
+  "project": "test-project-buildargs",
+  "restart": "no",
+  "buildargs": {
+    "ARG1": "test",
+    "ARG2": "exoframe"
+  }
+}

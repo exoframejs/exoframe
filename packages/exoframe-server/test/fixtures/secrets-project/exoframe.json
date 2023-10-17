@@ -5,5 +5,8 @@
   "env": {
     "test": "@test-secret"
   },
+  "buildargs": {
+    "ARG1": "@test-secret"
+  },
   "hostname": "secrets"
 }

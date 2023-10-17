@@ -142,8 +142,14 @@ test('Should deploy simple docker project with secret', async () => {
   expect(key).toEqual('test');
   expect(value).toEqual(testSecret.secretValue);
 
-  // cleanup
+  // get instance
   const instance = docker.getContainer(containerInfo.Id);
+
+  // validate that logs include secret as output as part of build args
+  const logs = await instance.logs({ stdout: true });
+  expect(logs).toContain(testSecret.secretValue);
+
+  // cleanup
   await instance.remove({ force: true });
 });
 

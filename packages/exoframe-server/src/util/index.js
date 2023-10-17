@@ -126,6 +126,19 @@ export function getEnv({ username, config, name, host, project = config.project 
   ];
 }
 
+export function getBuildargs({ username, config }) {
+  // replace env vars values with secrets if needed
+  const secrets = getSecretsCollection().find({ user: username });
+  // generate env vars (with secrets)
+  const buildArgs = config.buildargs
+    ? Object.entries(config.buildargs).map(([key, value]) => [key, valueOrSecret(value, secrets)])
+    : [];
+  if (buildArgs.length > 0) {
+    return Object.fromEntries(buildArgs);
+  }
+  return undefined;
+}
+
 export function functionToContainerFormat({ config, route, type = 'http' }) {
   return {
     Name: `/${config.name}`,

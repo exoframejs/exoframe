@@ -3,19 +3,19 @@ import { join } from 'path';
 import { pack } from 'tar-fs';
 import { tempDockerDir } from '../config/index.js';
 import logger from '../logger/index.js';
-import { getProjectConfig, tagFromConfig, writeStatus } from '../util/index.js';
+import { getBuildargs, getProjectConfig, tagFromConfig, writeStatus } from '../util/index.js';
 import docker from './docker.js';
 
 const noop = () => {};
 
-export function buildFromParams({ tarStream, tag, logLine = noop }) {
+export function buildFromParams({ tarStream, tag, buildargs, logLine = noop }) {
   return new Promise(async (resolve, reject) => {
     // deploy as docker
     const log = [];
     // track errors
     let hasErrors = false;
     // send build command
-    const output = await docker.buildImage(tarStream, { t: tag, pull: true });
+    const output = await docker.buildImage(tarStream, { buildargs, t: tag, pull: true });
     output.on('data', (d) => {
       const str = d.toString();
       const parts = str.split('\n');
@@ -68,9 +68,19 @@ export async function build({ username, folder, resultStream }) {
   logger.debug('building with tag:', tag);
   writeStatus(resultStream, { message: `Building image with tag: ${tag}`, level: 'verbose' });
 
+  // construct build args
+  const buildargs = getBuildargs({ username, config });
+  if (buildargs) {
+    logger.debug('building with args:', buildargs);
+    writeStatus(resultStream, {
+      message: `Building image with buildargs: ${Object.keys(buildargs).join(', ')}`,
+      level: 'verbose',
+    });
+  }
+
   // create logger function
   const logLine = (data) => writeStatus(resultStream, data);
 
   // return build
-  return buildFromParams({ tarStream, tag, logLine });
+  return buildFromParams({ tarStream, tag, buildargs, logLine });
 }
