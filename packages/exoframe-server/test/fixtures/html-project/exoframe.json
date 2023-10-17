@@ -1,6 +1,6 @@
 {
   "name": "test-html-deploy",
-  "domain": false,
+  "domain": "test.com",
   "project": "simple-html",
   "restart": "no",
   "rateLimit": {

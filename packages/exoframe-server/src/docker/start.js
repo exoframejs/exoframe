@@ -68,7 +68,7 @@ export async function startFromParams({
     'exoframe.user': username,
     'exoframe.project': projectName,
     'traefik.docker.network': serverConfig.exoframeNetwork,
-    'traefik.enable': 'true',
+    'traefik.enable': 'false',
   });
 
   // create middlewares array
@@ -93,13 +93,14 @@ export async function startFromParams({
   }
 
   // if host is set - add it to config
-  if (frontend && frontend.length) {
+  if (frontend?.length > 0) {
     let usePort = port;
     // if user hasn't given port - detect it from image exposed ports
     if (!usePort) {
       usePort = await portFromImage(image).catch(() => 80);
       logger.debug('Detected deployment port:', usePort);
     }
+    Labels['traefik.enable'] = 'true';
     Labels[`traefik.http.services.${projectName}.loadbalancer.server.port`] = String(port);
     Labels[`traefik.http.routers.${name}.rule`] = frontend;
     Labels[`traefik.http.routers.${name}-web.rule`] = frontend;
@@ -170,7 +171,7 @@ export async function start({ image, username, folder, resultStream, existing = 
   const project = projectFromConfig({ username, config });
 
   // generate host
-  const host = getHost({ serverConfig, name, config });
+  const host = getHost({ serverConfig, name: config.name, config });
 
   // generate env vars
   const Env = getEnv({ username, config, name, project, host }).map((pair) => pair.join('='));
@@ -210,7 +211,7 @@ export async function start({ image, username, folder, resultStream, existing = 
     'exoframe.user': username,
     'exoframe.project': project,
     'traefik.docker.network': serverConfig.exoframeNetwork,
-    'traefik.enable': 'true',
+    'traefik.enable': 'false',
   });
 
   // create middlewares array
@@ -235,7 +236,7 @@ export async function start({ image, username, folder, resultStream, existing = 
   }
 
   // if host is set - add it to config
-  if (host && host.length) {
+  if (host?.length) {
     let { port } = config;
     // if user hasn't given port - detect it from image exposed ports
     if (!port) {
@@ -243,6 +244,7 @@ export async function start({ image, username, folder, resultStream, existing = 
       port = await portFromImage(image).catch(() => 80);
       logger.debug('Detected deployment port:', port);
     }
+    Labels['traefik.enable'] = 'true';
     Labels[`traefik.http.services.${project}.loadbalancer.server.port`] = String(port);
     const rule = host.includes('Host(') ? host : `Host(\`${host}\`)`;
     Labels[`traefik.http.routers.${name}.rule`] = rule;
