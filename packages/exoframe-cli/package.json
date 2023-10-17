@@ -17,31 +17,30 @@
     "test:ci": "TZ=Greenland NODE_ENV=testing FORCE_COLOR=false vitest run --coverage"
   },
   "dependencies": {
-    "apache-md5": "^1.1.7",
-    "chalk": "^5.0.1",
+    "apache-md5": "^1.1.8",
+    "chalk": "^5.3.0",
     "cli-table3": "^0.6.3",
-    "commander": "^9.3.0",
+    "commander": "^11.1.0",
     "exoframe-client": "^7.0.0-pre",
-    "got": "^12.1.0",
-    "inquirer": "^9.1.0",
+    "got": "^13.0.0",
+    "inquirer": "^9.2.11",
     "lodash": "^4.17.21",
-    "open": "^8.4.0",
-    "ora": "^6.1.2",
-    "pretty-bytes": "^6.0.0"
+    "open": "^9.1.0",
+    "ora": "^7.0.1",
+    "pretty-bytes": "^6.1.1"
   },
   "devDependencies": {
-    "@vercel/ncc": "^0.34.0",
-    "@vitest/coverage-c8": "^0.25.1",
-    "c8": "^7.11.3",
-    "eslint": "^8.1.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-config-standard": "^17.0.0",
-    "eslint-plugin-prettier": "^4.0.0",
+    "@vercel/ncc": "^0.38.0",
+    "@vitest/coverage-v8": "^0.34.6",
+    "eslint": "^8.51.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-prettier": "^5.0.1",
     "mock-stdin": "^1.0.0",
-    "nock": "^13.1.4",
-    "prettier": "^2.4.1",
-    "tar-fs": "^2.1.1",
-    "vitest": "^0.25.1"
+    "nock": "^13.3.4",
+    "prettier": "^3.0.3",
+    "tar-fs": "^3.0.4",
+    "vitest": "^0.34.6"
   },
   "engines": {
     "node": ">=18"

@@ -63,10 +63,10 @@ export const setupMocks = (addUser = true) => {
   });
   const rfSpy = vi.spyOn(fs.promises, 'readFile').mockImplementation(async (path) => {
     // console.log('readfile', { path, userConfig, exoConfig });
-    if (path.includes('.json')) {
+    if ((typeof path === 'string' && path.includes('.json')) || path.href?.includes('.json')) {
       return Buffer.from(JSON.stringify(exoConfig));
     }
-    if (path.includes('.yml')) {
+    if ((typeof path === 'string' && path.includes('.yml')) || path.href?.includes('.yml')) {
       return Buffer.from(userConfig);
     }
     return fs.readFileSync(path);
