@@ -617,17 +617,9 @@ test('Should not deploy with broken config', async () => {
     // next clear out paths
     const cleanError = err
       .toString()
-      // replace all folder ref
-      .replaceAll(baseFolder, '')
-      // remove stack as it might vary
-      .replace(/"stack": "(.+?)"/gi, '');
-    expect(cleanError).toMatchInlineSnapshot(`
-      "Error: Your exoframe.json is not valid: {
-        \\"name\\": \\"SyntaxError\\",
-        \\"message\\": \\"Unexpected token I in JSON at position 0\\",
-        
-      }"
-    `);
+      // remove stringified json error as it might vary per host
+      .split('{')[0];
+    expect(cleanError).toMatchInlineSnapshot('"Error: Your exoframe.json is not valid: "');
   }
 });
 

@@ -13,23 +13,23 @@
     "test:ci": "TZ=Greenland NODE_ENV=testing vitest run --coverage"
   },
   "dependencies": {
-    "got": "^12.1.0",
+    "got": "^13.0.0",
     "highland": "^2.13.5",
     "multimatch": "^6.0.0",
-    "serialize-error": "^11.0.0",
-    "sshpk": "^1.16.1",
-    "tar-fs": "^2.1.0"
+    "serialize-error": "^11.0.2",
+    "sshpk": "^1.17.0",
+    "tar-fs": "^3.0.4"
   },
   "devDependencies": {
     "@vitest/coverage-c8": "^0.25.1",
-    "apache-md5": "^1.1.5",
-    "eslint": "^8.0.1",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-config-standard": "^17.0.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "nock": "^13.1.3",
-    "prettier": "^2.0.5",
-    "vitest": "^0.25.1"
+    "apache-md5": "^1.1.8",
+    "eslint": "^8.51.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-prettier": "^5.0.1",
+    "nock": "^13.3.4",
+    "prettier": "^3.0.3",
+    "vitest": "^0.34.6"
   },
   "engines": {
     "node": ">=20"
