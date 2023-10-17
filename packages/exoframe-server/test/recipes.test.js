@@ -1,6 +1,6 @@
 import { readdirSync, writeFileSync } from 'fs';
 import getPort from 'get-port';
-import mkdirp from 'mkdirp';
+import { mkdirp } from 'mkdirp';
 import { join } from 'path';
 import { afterAll, beforeAll, expect, test, vi } from 'vitest';
 import { runNPM } from '../src/util/index.js';
@@ -88,7 +88,7 @@ test('Should install new recipe and return list of questions', async () => {
 test('Should execute recipe', async () => {
   // write test module to folder
   const folder = join(recipesFolder, 'node_modules', testRunRecipe);
-  mkdirp.sync(folder);
+  await mkdirp(folder);
   writeFileSync(
     join(folder, 'index.js'),
     `exports.runSetup = async ({answers}) => {

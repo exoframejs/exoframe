@@ -1,6 +1,6 @@
 import { existsSync, readFileSync, statSync, writeFileSync } from 'fs';
 import jsyaml from 'js-yaml';
-import mkdirp from 'mkdirp';
+import { mkdirp } from 'mkdirp';
 import { join } from 'path';
 import { baseFolder, getConfig, waitForConfig } from '../config/index.js';
 import logger from '../logger/index.js';
@@ -73,7 +73,7 @@ async function generateTraefikConfig(config, volumePath) {
   try {
     statSync(getInternalTraefikPath(volumePath));
   } catch (e) {
-    mkdirp.sync(getInternalTraefikPath(volumePath));
+    await mkdirp(getInternalTraefikPath(volumePath));
   }
 
   // write new generated traefik config
@@ -118,7 +118,7 @@ export async function initTraefik(exoNet) {
     try {
       statSync(volumePath);
     } catch (e) {
-      mkdirp.sync(volumePath);
+      await mkdirp(volumePath);
     }
     logger.info('Server is running without docker.');
   }

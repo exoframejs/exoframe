@@ -3,7 +3,7 @@ import { randomUUID } from 'crypto';
 import { readFileSync } from 'fs';
 import _ from 'lodash';
 import { join } from 'path';
-import rimraf from 'rimraf';
+import { rimraf } from 'rimraf';
 import { extract } from 'tar-fs';
 import { tempDockerDir } from '../config/index.js';
 import { getSecretsCollection } from '../db/secrets.js';
@@ -18,8 +18,8 @@ const valueOrSecret = (value, secrets) => {
 };
 
 // cleanup temp folder
-export function cleanTemp(folder) {
-  return new Promise((resolve) => rimraf(join(tempDockerDir, folder), resolve));
+export async function cleanTemp(folder) {
+  return rimraf(join(tempDockerDir, folder));
 }
 
 // unpack function for incoming project files

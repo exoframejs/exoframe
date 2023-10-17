@@ -53,8 +53,8 @@ export default (fastify) => {
       // create new deploy folder for user
       const folder = `${username}-${randomUUID()}`;
       mkdirSync(join(tempDockerDir, folder));
-      // load recipe with update parameter to force reload
-      const recipe = await import(`${recipePath}?update=${Date.now()}`);
+      // load recipe
+      const recipe = await import(recipePath);
       // generate recipe props
       const recipeProps = {
         // user answers
