@@ -21,7 +21,7 @@
     "tar-fs": "^3.0.4"
   },
   "devDependencies": {
-    "@vitest/coverage-c8": "^0.25.1",
+    "@vitest/coverage-v8": "^0.34.6",
     "apache-md5": "^1.1.8",
     "eslint": "^8.51.0",
     "eslint-config-prettier": "^9.0.0",
