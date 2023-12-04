@@ -797,6 +797,8 @@ test('Should not deploy with broken config', async () => {
 
 // test
 test('Should not deploy with non-existent path', async () => {
+  // mock process.exit() module for testing
+  const exitSpy = vi.spyOn(process, 'exit').mockImplementation(() => {});
   // spy on console
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
@@ -825,12 +827,17 @@ test('Should not deploy with non-existent path', async () => {
       ],
     ]
   `);
+  // make sure exit was called
+  expect(exitSpy).toHaveBeenCalled();
   // restore console
   consoleSpy.mockRestore();
+  exitSpy.mockRestore();
 });
 
 // test
 test('Should deauth on 401', async () => {
+  // mock process.exit() module for testing
+  const exitSpy = vi.spyOn(process, 'exit').mockImplementation(() => {});
   // spy on console
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
@@ -869,8 +876,11 @@ test('Should deauth on 401', async () => {
   const cfg = await getUserConfig();
   expect(cfg.user).toBeUndefined();
   expect(cfg.token).toBeUndefined();
+  // make sure exit was called
+  expect(exitSpy).toHaveBeenCalled();
   // restore mocks
   consoleSpy.mockRestore();
+  exitSpy.mockRestore();
   deployServer.done();
   // reset config to original state
   resetUserConfig();
