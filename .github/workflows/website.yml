@@ -1,0 +1,28 @@
+name: Website to Github pages
+# deploy website to github pages on push
+on:
+  push:
+    branches: '*'
+
+jobs:
+  deploy-website:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: 'npm'
+      - name: install
+        run: npm ci
+      - name: build
+        run: npm run build -w exoframe-website
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: packages/exoframe-website/build
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
