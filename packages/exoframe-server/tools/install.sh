@@ -1,6 +1,13 @@
 #!/bin/bash
 
-FILE=$HOME/.exoframe/server.config.yml
+# Check if XDG_CONFIG_HOME is set, otherwise use default
+if [ -z "$XDG_CONFIG_HOME" ]; then
+    config_dir="$HOME/.config"
+else
+    config_dir="$XDG_CONFIG_HOME"
+fi
+
+FILE=$config_dir/exoframe/server.config.yml
 DRY_RUN=0
 ssl=false
 INTERACTIVE=true
@@ -61,11 +68,11 @@ fi
 
 VAR="docker run -d \
 -v /var/run/docker.sock:/var/run/docker.sock \
--v $HOME/.exoframe:/root/.exoframe \
+-v $config_dir/exoframe:/root/.exoframe \
 -v $HOME/.ssh/authorized_keys:/root/.ssh/authorized_keys:ro \
 -e EXO_PRIVATE_KEY=$passvar \
 --label traefik.enable=true \
---label traefik.http.routers.exoframe-server.rule=Host(\`exoframe.$domain\`)"
+--label traefik.http.routers.exoframe-server.rule=Host(\`$domain\`)"
 
 if [ $ssl ] && [ $ssl != false ]; then
     if [ $DRY_RUN -eq 0 ]; then
@@ -74,7 +81,7 @@ if [ $ssl ] && [ $ssl != false ]; then
         echo "letsencryptEmail: $ssl" >> $FILE
     fi
     VAR+=" \
---label traefik.http.routers.exoframe-server-web.rule=Host(\`exoframe.$domain\`) \
+--label traefik.http.routers.exoframe-server-web.rule=Host(\`$domain\`) \
 --label traefik.http.routers.exoframe-server.tls.certresolver=exoframeChallenge \
 --label traefik.http.middlewares.exoframe-server-redirect.redirectscheme.scheme=https \
 --label traefik.http.routers.exoframe-server-web.entrypoints=web \
