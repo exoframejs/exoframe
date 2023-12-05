@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # Server Configuration
 
-Exoframe stores its config in `~/.exoframe/server.config.yml`.  
+Exoframe stores its config in `~/.config/exoframe/server.config.yml`.  
 Currently it contains the following settings:
 
 ```yaml
@@ -55,9 +55,9 @@ swarm: false
 # Additional Traefik ports, default: null
 traefikPorts:
   - '7788/tcp':
-    - HostPort: '7788'
+      - HostPort: '7788'
   - '7788/udp':
-    - HostPort: '7788'
+      - HostPort: '7788'
 
 # plugins config
 plugins:

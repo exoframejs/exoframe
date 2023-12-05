@@ -68,7 +68,7 @@ fi
 
 VAR="docker run -d \
 -v /var/run/docker.sock:/var/run/docker.sock \
--v $config_dir/exoframe:/root/.exoframe \
+-v $config_dir/exoframe:/root/.config/exoframe \
 -v $HOME/.ssh/authorized_keys:/root/.ssh/authorized_keys:ro \
 -e EXO_PRIVATE_KEY=$passvar \
 --label traefik.enable=true \

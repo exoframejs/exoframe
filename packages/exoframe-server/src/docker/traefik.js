@@ -105,7 +105,7 @@ export async function initTraefik(exoNet) {
   const server = allContainers.find((c) => c.Names.find((n) => n.startsWith('/exoframe-server')));
   // if server was found - extract traefik path from it
   if (server) {
-    const configVol = (server.Mounts || []).find((v) => v.Destination === '/root/.exoframe');
+    const configVol = (server.Mounts || []).find((v) => v.Destination === '/root/.config/exoframe');
     if (configVol) {
       volumePath = configVol.Source;
       logger.info('Server is running inside docker.');

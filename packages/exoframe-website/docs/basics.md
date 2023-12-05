@@ -211,7 +211,7 @@ Exoframe CLI has a number of special commands, specifically:
 
 ## Exoframe CLI - Configuration
 
-Exoframe stores its config in `~/.exoframe/cli.config.yml`.
+Exoframe stores its config in `~/.config/exoframe/cli.config.yml`.
 Currently it contains list of endpoint URLs with associated usernames and authentication tokens:
 
 ```yaml
