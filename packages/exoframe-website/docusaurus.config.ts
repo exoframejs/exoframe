@@ -4,7 +4,7 @@ import { themes as prismThemes } from 'prism-react-renderer';
 
 const config: Config = {
   title: 'Exoframe',
-  tagline: 'Simple Docker deployment tool',
+  tagline: 'Simple self-hosted Docker deployment tool',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
@@ -91,7 +91,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Exoframe. Built with Docusaurus.`,
+      copyright: `Copyright © 2017-${new Date().getFullYear()} Exoframe. Built with Docusaurus.`,
     },
     prism: {
       theme: prismThemes.github,

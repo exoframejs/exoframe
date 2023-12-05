@@ -16,6 +16,11 @@
   }
 }
 
+.featureSvg {
+  height: 150px;
+  width: 150px;
+}
+
 .buttons {
   display: flex;
   align-items: center;
