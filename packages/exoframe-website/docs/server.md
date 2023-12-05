@@ -52,6 +52,13 @@ publicKeysPath: '/path/to/your/public/keys'
 # whether Exoframe server would be running in swarm mode, default "false"
 swarm: false
 
+# Additional Traefik ports, default: null
+traefikPorts:
+  - '7788/tcp':
+    - HostPort: '7788'
+  - '7788/udp':
+    - HostPort: '7788'
+
 # plugins config
 plugins:
   # list of plugins that has to be installed and loaded by exoframe-server on startup

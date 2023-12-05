@@ -2,7 +2,7 @@
 sidebar_position: 2
 ---
 
-# Exoframe Server
+# Installing Exoframe Server
 
 ## Installation and Usage
 
