@@ -2,11 +2,10 @@
 sidebar_position: 6
 ---
 
-# Complex recipes
+# Complex Recipes
 
-Exoframe also provides support for third-party complex deployment recipes.
-They allow to quickly and easily deploy complex projects.
+Exoframe also supports third-party complex deployment recipes, providing a quick and easy way to deploy intricate projects.
 
-For example, you can deploy Wordpress with PHPMyAdmin by simply executing `exoframe setup` and entering [exoframe-recipe-wordpress](https://github.com/exoframejs/exoframe-recipe-wordpress) as desired recipe.
+For instance, deploying Ghost is as simple as executing `exoframe setup` and entering [exoframe-recipe-ghost](https://github.com/exoframejs/exoframe/tree/main/packages/exoframe-recipe-ghost) as the desired recipe.
 
-You can find the list of available recipes [on npm](https://www.npmjs.com/search?q=exoframe-recipe).
+Check the list of available recipes [on npm](https://www.npmjs.com/search?q=exoframe-recipe).

@@ -2,18 +2,17 @@
 sidebar_position: 4
 ---
 
-# Accessing Exoframe data from within the deployed application
+# Exoframe Deployment Environment Variables
 
-Exoframe provides a set of environment variables that are set on each deployment to allow getting project info and settings.  
-Currently those are:
+Exoframe sets environment variables on each deployment to provide access to project information and settings. The variables include:
 
 ```bash
-# owner of current deployment
+# Owner of the current deployment
 EXOFRAME_USER=admin
-# project of current deployment
+# Project of the current deployment
 EXOFRAME_PROJECT=projectName
-# full deployment ID
+# Full deployment ID
 EXOFRAME_DEPLOYMENT=exo-admin-deployName-ID
-# host used to expose current deployment (if any)
+# Host used to expose the current deployment (if any)
 EXOFRAME_HOST=exo-admin-deployName-ID.baseDomain
 ```
