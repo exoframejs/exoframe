@@ -43,6 +43,6 @@ This way also requires you to have Node.js, yarn, Docker and docker-compose inst
 ## Using Exoframe-Server debug version from docker hub
 
 It is also possible to run Exoframe-Server in development mode by using docker image available in docker hub.  
-Exoframe-Server can be started by running `docker run -v ... exoframe/server:debug` (see [server setup](../getting-started/server.md) for full command).  
+Exoframe-Server can be started by running `docker run -v ... exoframe/server:debug` (see [server setup](../manual-install/server.md) for full command).  
 This will start Exoframe-Server in development mode.  
 This way requires you to have Docker installed.

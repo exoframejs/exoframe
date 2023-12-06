@@ -51,14 +51,14 @@ docker run -d \
 --label traefik.http.routers.exoframe-server.tls.certresolver=exoframeChallenge
 ```
 
-3.  Edit config file to fit your needs (see [Server Configuration](../server.md) section)
+3.  Edit config file to fit your needs (see [Server Configuration](../config/server.md) section)
 
 Then install [Exoframe CLI](https://github.com/exoframejs/exoframe), point it to your new Exoframe server and use it.
 
 ## Installation and usage with Letsencrypt
 
 1.  Make sure you have Docker [installed and running](https://docs.docker.com/engine/installation/) on your host.
-2.  Create exoframe config file and enable `letsencrypt` in it (see [Server Configuration](../server.md) section)
+2.  Create exoframe config file and enable `letsencrypt` in it (see [Server Configuration](../config/server.md) section)
 3.  Pull and run Exoframe server using docker:
 
 ```sh
@@ -106,28 +106,3 @@ docker run -d \
 **Note**:
 It is important to enable `letsencrypt` in Exoframe config _before_ starting Exoframe server.  
 If that's not done - Exoframe will not create `exoframeChallenge` resolver for TLS and Traefik will error out.
-
-## Installation and usage in Swarm mode
-
-Exoframe also supports running in [Swarm mode](https://docs.docker.com/engine/swarm/).  
-To run Exoframe server in swarm, you need to do the following:
-
-1.  Make sure you have Docker on your host.
-2.  Make sure your Docker has [Swarm mode enabled](https://docs.docker.com/engine/swarm/swarm-tutorial/create-swarm/).
-3.  Pull and run Exoframe server using Docker on your manager node:
-
-```
-docker service create \
-  --mount type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock \
-  --mount type=bind,source=/path/to/exoframe-folder,target=/root/.config/exoframe \
-  --mount type=bind,source=/home/user/.ssh/authorized_keys,target=/root/.ssh/authorized_keys,readonly \
-  -e EXO_PRIVATE_KEY=your_private_key \
-  --label traefik.enable=true \
-  --label "traefik.http.routers.exoframe-server.rule=Host(\`exoframe.your-host.com\`)"  \
-  --label traefik.port=8080 \
-  --constraint=node.role==manager \
-  --name exoframe-server \
-  exoframe/server
-```
-
-Note that both Exoframe server and Traefik will be run on your manager node.

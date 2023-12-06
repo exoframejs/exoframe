@@ -33,7 +33,7 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/exoframejs/exoframe/main
 
 The script will guide you through the basic setup process.
 
-For detailed manual server installation instructions, please consult the [Installing Exoframe Server](./server.md) section.
+For detailed manual server installation instructions, please consult the [Installing Exoframe Server](../manual-install/server.md) section.
 
 ### Installing Exoframe CLI
 

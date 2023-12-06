@@ -6,7 +6,7 @@ sidebar_position: 3
 
 Exoframe allows extending the types of deployments it supports using third party plugins.  
 This guide aims to explain basics you need to know to create your own templates.  
-If you are looking for template usage - please see [Basics](../basics.md) part of the docs.
+If you are looking for template usage - please see [Basics](../getting-started/basics.md) part of the docs.
 
 ## Basics
 

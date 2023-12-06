@@ -6,7 +6,7 @@ sidebar_position: 2
 
 Exoframe allows doing complex deployments using third party recipes.  
 This guide aims to explain basics you need to know to create your own recipes.  
-If you are looking for recipe usage - please see [Basics](../basics.md) part of the docs.
+If you are looking for recipe usage - please see [Basics](../getting-started/basics.md) part of the docs.
 
 ## Basics
 
