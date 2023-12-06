@@ -24,7 +24,8 @@ const testConfig = {
   updateChannel: 'stable',
   traefikImage: 'traefik:latest',
   traefikName: 'exoframe-traefik',
-  traefikArgs: [],
+  traefikLabels: {},
+  traefikDisableGeneratedConfig: false,
   exoframeNetwork: 'exoframe',
   publicKeysPath,
 };
