@@ -31,6 +31,13 @@ The config file has the following structure:
     // Use secrets to hide sensitive values from env vars
     "OTHER_VAR": "@my-secret"
   },
+  // Object of key-values for build args [optional, no env vars are assigned by default]
+  // Used during docker image build phase
+  "buildargs": {
+    "BUILD_ARG": "123",
+    // Use secrets to hide sensitive values from build args
+    "OTHER_ARG": "@my-secret"
+  },
   // Additional Docker labels for your container [optional]
   "labels": {
     "my.custom.label": "value",
