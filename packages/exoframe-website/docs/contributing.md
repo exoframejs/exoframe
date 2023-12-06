@@ -1,8 +1,8 @@
 ---
-sidebar_position: 6
+sidebar_position: 9
 ---
 
-# I want to contribute
+# How to contribute
 
 Awesome! All contributions are welcome.  
 If you want to add new feature or implement a significant change that hasn't been discussed yet - please _open an issue first_!

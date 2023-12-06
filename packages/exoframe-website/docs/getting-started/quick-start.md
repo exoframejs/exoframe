@@ -21,7 +21,7 @@ Therefore, it is recommended to run Exoframe on a server with at least 1GB of RA
 
 ## Installation and Basic Usage
 
-To use Exoframe, you'll need two components: the Exoframe CLI and the [Exoframe Server](https://github.com/exoframejs/exoframe-server).
+To use Exoframe, you'll need two components: the Exoframe CLI and the [Exoframe Server](https://github.com/exoframejs/exoframe/tree/main/packages/exoframe-server).
 
 ### Installing Exoframe Server
 
@@ -53,7 +53,7 @@ Alternatively, you can run Exoframe via `npx`:
 npx exoframe --help
 ```
 
-Once you have Exoframe CLI installed, ensure that [Exoframe Server](https://github.com/exoframejs/exoframe-server) is deployed and running. Confirm its proper functioning by opening `http://your.exoframe.url` in the browser; if you see the Exoframe logo, it is working as expected.
+Once you have Exoframe CLI installed, ensure that [Exoframe Server](https://github.com/exoframejs/exoframe/tree/main/packages/exoframe-server) is deployed and running. Confirm its proper functioning by opening `http://your.exoframe.url` in the browser; if you see the Exoframe logo, it is working as expected.
 
 After installation, set the server endpoint in the CLI:
 
@@ -67,12 +67,39 @@ Then, log in with:
 exoframe login
 ```
 
-After logging in, deploy your projects by simply running:
+## Deploying Your First Project
+
+After logging in, you're ready to deploy your first project.
+
+First, create a new Exoframe project configuration by executing the following command in the project folder:
+
+```bash
+exoframe init
+```
+
+Then, deploy your project by running the following command:
 
 ```bash
 exoframe
 ```
 
+## Updating Deployed Projects
+
+Exoframe provides an easy way to update deployed projects.
+This can be accomplished by adding the `--update` (or `-u`) flag to the deploy command:
+
+```bash
+exoframe --update
+```
+
+Here's how it works:
+
+1. Exoframe deploys the new version of the specified project.
+2. Exoframe then waits for the new version to start up.
+3. Finally, Exoframe removes the old running deployments for the given project.
+
+This feature can be combined with [deployment tokens](../advanced/deploy-token.md) to achieve [simple continuous deployment](../recipes/cd.md) for your projects.
+
 ## Next Steps
 
-Explore more about basic commands available to you in the [Basics](../basics.md) section.
+Discover more about Exoframe basics in the [Basics](./basics.md) section.
