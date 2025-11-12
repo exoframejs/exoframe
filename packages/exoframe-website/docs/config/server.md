@@ -24,7 +24,8 @@ autoprune: false
 
 # Base top-level domain to use for deployments without domains specified, default "false"
 # Used as postfix, e.g., if you specify ".example.com" (dot is auto-prepended if not present)
-# All your deployments will be auto-deployed as "deployment-id.example.com"
+# All your deployments will be auto-deployed as "<project-name>.example.com"
+# Since v7 keeps the deployment UUID when you redeploy, the generated domain stays the same across updates.
 baseDomain: false
 
 # CORS support; can be "true" ("*" header) or an object with the "origin" property, default "false"

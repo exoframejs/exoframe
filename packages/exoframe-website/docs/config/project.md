@@ -51,9 +51,13 @@ The config file has the following structure:
   // Either in Docker or any other middleware collection
   "middlewares": ["my-middleware@docker"],
   // Additional Docker volumes for your container [optional]
-  // While you can use server paths in the sourceVolume place
-  // It is recommended to use named volumes
-  "volumes": ["sourceVolume:/path/in/container"],
+  // Format: "source:destination[:type]". Type defaults to "volume",
+  // but you can specify other Docker mount types such as "bind" or "tmpfs".
+  // While you can use server paths in the source place, named volumes are recommended.
+  "volumes": [
+    "sourceVolume:/path/in/container",
+    "/tmp/local-cache:/app/cache:bind"
+  ],
   // Internal hostname for the container [optional]
   // See Docker docs for more info
   // No hostname is assigned by default
