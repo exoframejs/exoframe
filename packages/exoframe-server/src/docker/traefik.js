@@ -161,7 +161,7 @@ export async function initTraefik(exoNet) {
   const container = await docker.createContainer({
     Image: config.traefikImage,
     name: config.traefikName,
-    Cmd: '--configFile=/var/traefik-config/traefik.yml',
+    Cmd: ['--configFile=/var/traefik-config/traefik.yml'],
     Labels: {
       'exoframe.deployment': 'exo-traefik',
       'exoframe.user': 'admin',
