@@ -11,10 +11,7 @@ const clearMocks = setupMocks();
 const IO_TIMEOUT = 50;
 
 // mock response data
-const testSecret = {
-  secretName: 'test',
-  secretValue: '12345',
-};
+const testSecret = { secretName: 'test', secretValue: '12345' };
 
 let program;
 beforeEach(async () => {
@@ -38,7 +35,7 @@ test('Should create new secret from user input', async () => {
   const enqSpy = vi.spyOn(inquirer, 'prompt').mockImplementationOnce(() => Promise.resolve(testSecret));
 
   // execute logs
-  program.parse(['secret', 'add'], { from: 'user' });
+  await program.parseAsync(['secret', 'add'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -89,7 +86,9 @@ test('Should create new secret from flags', async () => {
     .reply(200, { name: localSecret.name, value: localSecret.value });
 
   // execute logs
-  program.parse(['secret', 'add', '--name', localSecret.name, '--value', localSecret.value], { from: 'user' });
+  await program.parseAsync(['secret', 'add', '--name', localSecret.name, '--value', localSecret.value], {
+    from: 'user',
+  });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -139,7 +138,7 @@ test('Should list secrets', async () => {
     .reply(200, { secrets: [{ name: testSecret.secretName, meta: { created: createDate } }] });
 
   // execute logs
-  program.parse(['secret', 'ls'], { from: 'user' });
+  await program.parseAsync(['secret', 'ls'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -178,7 +177,7 @@ test('Should list zero secrets', async () => {
   const secretsServer = nock('http://localhost:8080').get('/secrets').reply(200, { secrets: [] });
 
   // execute logs
-  program.parse(['secret', 'ls'], { from: 'user' });
+  await program.parseAsync(['secret', 'ls'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -229,7 +228,7 @@ test('Should get secret value', async () => {
     .mockImplementationOnce(() => Promise.resolve({ doGet: true }));
 
   // execute logs
-  program.parse(['secret', 'get'], { from: 'user' });
+  await program.parseAsync(['secret', 'get'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -280,7 +279,7 @@ test('Should get secret value via argument', async () => {
     .reply(200, { secret: { ...testSecret, meta: { created: createDate } } });
 
   // execute logs
-  program.parse(['secret', 'get', '-y', testSecret.secretName], { from: 'user' });
+  await program.parseAsync(['secret', 'get', '-y', testSecret.secretName], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -335,7 +334,7 @@ test('Should remove secret via interactive input', async () => {
     .mockImplementationOnce(() => Promise.resolve({ selectedSecret: testSecret.secretName }));
 
   // execute logs
-  program.parse(['secret', 'remove'], { from: 'user' });
+  await program.parseAsync(['secret', 'remove'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -370,7 +369,7 @@ test('Should remove secret via flags', async () => {
   const secretServer = nock('http://localhost:8080').delete('/secrets').reply(204, '');
 
   // execute logs
-  program.parse(['secret', 'remove', testSecret.secretName], { from: 'user' });
+  await program.parseAsync(['secret', 'remove', testSecret.secretName], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -402,7 +401,7 @@ test('Should deauth on 401 on creation', async () => {
   const secretServer = nock('http://localhost:8080').post('/secrets').reply(401);
 
   // execute logs
-  program.parse(['secret', 'add', '--name', 'test', '--value', 'deauth'], { from: 'user' });
+  await program.parseAsync(['secret', 'add', '--name', 'test', '--value', 'deauth'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -439,7 +438,7 @@ test('Should deauth on 401 on list', async () => {
   const secretsServer = nock('http://localhost:8080').get('/secrets').reply(401);
 
   // execute logs
-  program.parse(['secret', 'ls'], { from: 'user' });
+  await program.parseAsync(['secret', 'ls'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);

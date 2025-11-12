@@ -29,7 +29,7 @@ test('Should list tokens', async () => {
     .reply(200, { tokens: [{ tokenName: 'test', meta: { created: createDate } }] });
 
   // execute logs
-  program.parse(['token', 'ls'], { from: 'user' });
+  await program.parseAsync(['token', 'ls'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -67,7 +67,7 @@ test('Should list zero tokens', async () => {
   const tokenServer = nock('http://localhost:8080').get('/deployToken').reply(200, { tokens: [] });
 
   // execute logs
-  program.parse(['token', 'ls'], { from: 'user' });
+  await program.parseAsync(['token', 'ls'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -108,7 +108,7 @@ test('Should generate new token via interactive input', async () => {
   const enqSpy = vi.spyOn(inquirer, 'prompt').mockImplementationOnce(() => Promise.resolve({ tokenName: 'test' }));
 
   // execute logs
-  program.parse(['token', 'add'], { from: 'user' });
+  await program.parseAsync(['token', 'add'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -160,7 +160,7 @@ test('Should generate new token via flags', async () => {
   const tokenServer = nock('http://localhost:8080').post('/deployToken').reply(200, { name: 'test', value: 'val' });
 
   // execute logs
-  program.parse(['token', 'add', 'test'], { from: 'user' });
+  await program.parseAsync(['token', 'add', 'test'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -220,7 +220,7 @@ test('Should remove token via interactive input', async () => {
   const enqSpy = vi.spyOn(inquirer, 'prompt').mockImplementationOnce(() => Promise.resolve({ tokenName: 'test' }));
 
   // execute logs
-  program.parse(['token', 'rm'], { from: 'user' });
+  await program.parseAsync(['token', 'rm'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -258,7 +258,7 @@ test('Should remove token via flags', async () => {
   const tokenServer = nock('http://localhost:8080').delete('/deployToken').reply(204, '');
 
   // execute logs
-  program.parse(['token', 'rm', 'test'], { from: 'user' });
+  await program.parseAsync(['token', 'rm', 'test'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -293,7 +293,7 @@ test('Should deauth on 401 on creation', async () => {
   const tokenServer = nock('http://localhost:8080').post('/deployToken').reply(401);
 
   // execute logs
-  program.parse(['token', 'add', 'test'], { from: 'user' });
+  await program.parseAsync(['token', 'add', 'test'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -338,7 +338,7 @@ test('Should deauth on 401 on list', async () => {
   const tokenServer = nock('http://localhost:8080').get('/deployToken').reply(401);
 
   // execute logs
-  program.parse(['token', 'ls'], { from: 'user' });
+  await program.parseAsync(['token', 'ls'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -377,7 +377,7 @@ test('Should deauth on 401 on removal', async () => {
   const tokenServer = nock('http://localhost:8080').delete('/deployToken').reply(401);
 
   // execute logs
-  program.parse(['token', 'rm', 'test'], { from: 'user' });
+  await program.parseAsync(['token', 'rm', 'test'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);

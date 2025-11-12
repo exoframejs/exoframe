@@ -12,16 +12,8 @@ const IO_TIMEOUT = 50;
 
 // mock response data
 const questions = [
-  {
-    type: 'input',
-    name: 'test1',
-    message: 'Test q1:',
-  },
-  {
-    type: 'input',
-    name: 'test2',
-    message: 'Test q2:',
-  },
+  { type: 'input', name: 'test1', message: 'Test q1:' },
+  { type: 'input', name: 'test2', message: 'Test q2:' },
 ];
 
 let program;
@@ -57,7 +49,7 @@ test('Should execute setup via interactive input', async () => {
     .mockImplementationOnce(() => Promise.resolve({ test1: 'answer1', test2: 'answer2' }));
 
   // execute logs
-  program.parse(['setup'], { from: 'user' });
+  await program.parseAsync(['setup'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -133,7 +125,7 @@ test('Should execute setup via flags in verbose mode', async () => {
     .mockImplementationOnce(() => Promise.resolve({ test1: 'answer1', test2: 'answer2' }));
 
   // execute logs
-  program.parse(['setup', '-v', 'test'], { from: 'user' });
+  await program.parseAsync(['setup', '-v', 'test'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -195,7 +187,7 @@ test('Should deauth on 401', async () => {
   const setupServer = nock('http://localhost:8080').get('/setup').query({ recipeName: 'test' }).reply(401);
 
   // execute logs
-  program.parse(['setup', 'test'], { from: 'user' });
+  await program.parseAsync(['setup', 'test'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);

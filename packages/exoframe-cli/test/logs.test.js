@@ -54,7 +54,7 @@ test('Should get list of deployments', async () => {
     });
 
   // execute logs
-  program.parse(['logs', id], { from: 'user' });
+  await program.parseAsync(['logs', id], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -101,7 +101,7 @@ test('Should deauth on 401', async () => {
   const logServer = nock('http://localhost:8080').get(`/logs/${id}`).reply(401);
 
   // execute logs
-  program.parse(['logs', id], { from: 'user' });
+  await program.parseAsync(['logs', id], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);

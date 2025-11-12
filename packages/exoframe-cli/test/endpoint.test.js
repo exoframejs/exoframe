@@ -29,7 +29,7 @@ test('Should add new endpoint', async () => {
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
   // execute addition
-  program.parse(['endpoint', 'add', mockEndpoint], { from: 'user' });
+  await program.parseAsync(['endpoint', 'add', mockEndpoint], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -65,7 +65,7 @@ test('Should add second new endpoint', async () => {
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
   // execute addition
-  program.parse(['endpoint', 'add', mockEndpoint2], { from: 'user' });
+  await program.parseAsync(['endpoint', 'add', mockEndpoint2], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -111,7 +111,7 @@ test('Should select old endpoint', async () => {
     .mockImplementationOnce(() => Promise.resolve({ newEndpoint: origCfg.endpoint }));
 
   // execute switch
-  program.parse(['endpoint'], { from: 'user' });
+  await program.parseAsync(['endpoint'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -153,7 +153,7 @@ test('Should select old endpoint using URL param', async () => {
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
   // execute switch
-  program.parse(['endpoint', mockEndpoint], { from: 'user' });
+  await program.parseAsync(['endpoint', mockEndpoint], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -193,7 +193,7 @@ test('Should show error on remove of non-existent endpoint', async () => {
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
   // execute switch
-  program.parse(['endpoint', 'rm', 'do-not-exist'], { from: 'user' });
+  await program.parseAsync(['endpoint', 'rm', 'do-not-exist'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -223,7 +223,7 @@ test('Should remove current endpoint using enquirer', async () => {
     .mockImplementationOnce(() => Promise.resolve({ delEndpoint: mockEndpoint }));
 
   // execute switch
-  program.parse(['endpoint', 'rm'], { from: 'user' });
+  await program.parseAsync(['endpoint', 'rm'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -261,7 +261,7 @@ test('Should remove existing endpoint using param', async () => {
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
   // execute switch
-  program.parse(['endpoint', 'rm', origCfg.endpoint], { from: 'user' });
+  await program.parseAsync(['endpoint', 'rm', origCfg.endpoint], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -295,7 +295,7 @@ test('Should not remove only endpoint', async () => {
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
   // execute switch
-  program.parse(['endpoint', 'rm', mockEndpoint2], { from: 'user' });
+  await program.parseAsync(['endpoint', 'rm', mockEndpoint2], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);

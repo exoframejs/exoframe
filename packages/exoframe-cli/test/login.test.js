@@ -21,11 +21,7 @@ const loginRequest = { phrase: 'test', uid: '123' };
 // basic private key
 const privateKeyPath = join(fixturesFolder, '.ssh', 'id_rsa');
 const reqToken = await generateSignature({ keyPath: privateKeyPath, loginPhrase: loginRequest.phrase });
-const correctLogin = {
-  user: { username: 'admin' },
-  signature: reqToken.toJSON(),
-  requestId: loginRequest.uid,
-};
+const correctLogin = { user: { username: 'admin' }, signature: reqToken.toJSON(), requestId: loginRequest.uid };
 // private key with passphrase
 const privateKeyPathWithPassphrase = join(fixturesFolder, '.ssh', 'id_rsa_keyphrase');
 const reqTokenKey = await generateSignature({
@@ -61,7 +57,7 @@ test('Should login', async () => {
   // spy on console
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
   // execute login
-  program.parse(['login', '--key', privateKeyPath], { from: 'user' });
+  await program.parseAsync(['login', '--key', privateKeyPath], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -103,7 +99,9 @@ test('Should login using key with passphrase', async () => {
   // spy on console
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
   // execute login
-  program.parse(['login', '--key', privateKeyPathWithPassphrase, '--passphrase', 'test123'], { from: 'user' });
+  await program.parseAsync(['login', '--key', privateKeyPathWithPassphrase, '--passphrase', 'test123'], {
+    from: 'user',
+  });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -143,7 +141,7 @@ test('Should fail to login with broken private key', async () => {
   // spy on console
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
   // execute login
-  program.parse(['login', '--key', 'asd'], { from: 'user' });
+  await program.parseAsync(['login', '--key', 'asd'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -179,7 +177,7 @@ test('Should not login with broken certificate', async () => {
   // spy on console
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
   // execute login
-  program.parse(['login', '--key', privateKeyPathBroken], { from: 'user' });
+  await program.parseAsync(['login', '--key', privateKeyPathBroken], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -220,7 +218,7 @@ test('Should login and update endpoint when endpoint was provided', async () => 
   // spy on console
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
   // execute login
-  program.parse(['login', '--key', privateKeyPath, '--url', testEndpointUrl], { from: 'user' });
+  await program.parseAsync(['login', '--key', privateKeyPath, '--url', testEndpointUrl], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);

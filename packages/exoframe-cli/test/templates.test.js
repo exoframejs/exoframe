@@ -29,7 +29,7 @@ test('Should list templates', async () => {
     .reply(200, { template: '^0.0.1', otherTemplate: '^1.0.0' });
 
   // execute logs
-  program.parse(['template', 'ls'], { from: 'user' });
+  await program.parseAsync(['template', 'ls'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -67,7 +67,7 @@ test('Should list zero templates', async () => {
   const templateServer = nock('http://localhost:8080').get('/templates').reply(200, {});
 
   // execute logs
-  program.parse(['template', 'ls'], { from: 'user' });
+  await program.parseAsync(['template', 'ls'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -111,7 +111,7 @@ test('Should install new template via interactive input', async () => {
   const enqSpy = vi.spyOn(inquirer, 'prompt').mockImplementationOnce(() => Promise.resolve({ templateName: 'test' }));
 
   // execute logs
-  program.parse(['template', 'add'], { from: 'user' });
+  await program.parseAsync(['template', 'add'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -163,7 +163,7 @@ test('Should remove template via interactive input', async () => {
     .mockImplementationOnce(() => Promise.resolve({ templateName: 'testTemplate' }));
 
   // execute logs
-  program.parse(['template', 'rm', '-v'], { from: 'user' });
+  await program.parseAsync(['template', 'rm', '-v'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -225,7 +225,7 @@ test('Should show error and log during template removal', async () => {
     });
 
   // execute logs
-  program.parse(['template', 'rm', 'fail'], { from: 'user' });
+  await program.parseAsync(['template', 'rm', 'fail'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -275,7 +275,7 @@ test('Should deauth on 401 on creation', async () => {
   const templateServer = nock('http://localhost:8080').post('/templates').reply(401);
 
   // execute logs
-  program.parse(['template', 'add', 'test'], { from: 'user' });
+  await program.parseAsync(['template', 'add', 'test'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -320,7 +320,7 @@ test('Should deauth on 401 on list', async () => {
   const templateServer = nock('http://localhost:8080').get('/templates').reply(401);
 
   // execute logs
-  program.parse(['template', 'list'], { from: 'user' });
+  await program.parseAsync(['template', 'list'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -359,7 +359,7 @@ test('Should deauth on 401 on removal', async () => {
   const templateServer = nock('http://localhost:8080').delete('/templates').reply(401);
 
   // execute logs
-  program.parse(['template', 'rm', 'deauth'], { from: 'user' });
+  await program.parseAsync(['template', 'rm', 'deauth'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);

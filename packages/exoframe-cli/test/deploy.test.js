@@ -92,7 +92,7 @@ test('Should deploy simple project', async () => {
     });
 
   // execute config generation
-  program.parse(['deploy', '-v', testFolder], { from: 'user' });
+  await program.parseAsync(['deploy', '-v', testFolder], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -140,7 +140,7 @@ test('Should deploy with endpoint flag', async () => {
     });
 
   // execute config generation
-  program.parse(['deploy', '--endpoint', 'http://localhost:3000', testFolder], { from: 'user' });
+  await program.parseAsync(['deploy', '--endpoint', 'http://localhost:3000', testFolder], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -188,7 +188,7 @@ test('Should deploy without path', async () => {
     .reply(() => replyWithStream([{ message: 'Deployment success!', deployments, level: 'info' }]));
 
   // execute config generation
-  program.parse(['deploy', '-v'], { from: 'user' });
+  await program.parseAsync(['deploy', '-v'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -231,7 +231,7 @@ test('Should deploy with token', async () => {
     .reply(() => replyWithStream([{ message: 'Deployment success!', deployments, level: 'info' }]));
 
   // execute config generation
-  program.parse(['deploy', '-v', '-t', testToken, testFolder], { from: 'user' });
+  await program.parseAsync(['deploy', '-v', '-t', testToken, testFolder], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -276,7 +276,7 @@ test('Should execute update', async () => {
     .reply(() => replyWithStream([{ message: 'Deployment success!', deployments, level: 'info' }]));
 
   // execute config generation
-  program.parse(['deploy', '-u', testFolder], { from: 'user' });
+  await program.parseAsync(['deploy', '-u', testFolder], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -323,7 +323,7 @@ test('Should open webpage after deploy', async () => {
     .reply(() => replyWithStream([{ message: 'Deployment success!', deployments, level: 'info' }]));
 
   // execute config generation
-  program.parse(['deploy', '-o', testFolder], { from: 'user' });
+  await program.parseAsync(['deploy', '-o', testFolder], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -398,7 +398,7 @@ test('Should deploy with a custom config', async () => {
     });
 
   // execute config generation
-  program.parse(['deploy', '-c', 'exoframe-custom.json', customConfigFolderPath], { from: 'user' });
+  await program.parseAsync(['deploy', '-c', 'exoframe-custom.json', customConfigFolderPath], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -454,7 +454,7 @@ test('Should display error log', async () => {
     );
 
   // execute config generation
-  program.parse(['deploy', testFolder], { from: 'user' });
+  await program.parseAsync(['deploy', testFolder], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -509,7 +509,7 @@ test('Should display error on malformed JSON', async () => {
     });
 
   // execute config generation
-  program.parse(['deploy', testFolder], { from: 'user' });
+  await program.parseAsync(['deploy', testFolder], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -559,7 +559,7 @@ test('Should display verbose output', async () => {
     .reply(() => [200, 'Bad Gateway']);
 
   // execute config generation
-  program.parse(['deploy', '-vvv', testFolder], { from: 'user' });
+  await program.parseAsync(['deploy', '-vvv', testFolder], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -632,7 +632,7 @@ test('Should ignore specified files', async () => {
     });
 
   // execute config generation
-  program.parse(['deploy', ignoreTestFolder], { from: 'user' });
+  await program.parseAsync(['deploy', ignoreTestFolder], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -681,7 +681,7 @@ test('Should display error on zero deployments', async () => {
     });
 
   // execute config generation
-  program.parse(['deploy', testFolder], { from: 'user' });
+  await program.parseAsync(['deploy', testFolder], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -726,7 +726,7 @@ test('Should not deploy with config without project name', async () => {
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
   // execute config generation
-  program.parse(['deploy', nonameConfigFolderPath], { from: 'user' });
+  await program.parseAsync(['deploy', nonameConfigFolderPath], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -767,7 +767,7 @@ test('Should not deploy with broken config', async () => {
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
   // execute config generation
-  program.parse(['deploy', brokenConfigFolderPath], { from: 'user' });
+  await program.parseAsync(['deploy', brokenConfigFolderPath], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -790,7 +790,7 @@ test('Should not deploy with non-existent path', async () => {
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
   // execute config generation
-  program.parse(['deploy', 'i-do-no-exist'], { from: 'user' });
+  await program.parseAsync(['deploy', 'i-do-no-exist'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -832,7 +832,7 @@ test('Should deauth on 401', async () => {
   const deployServer = nock('http://localhost:8080').post('/deploy').reply(401, { error: 'Deauth test' });
 
   // execute config generation
-  program.parse(['deploy', testFolder], { from: 'user' });
+  await program.parseAsync(['deploy', testFolder], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);

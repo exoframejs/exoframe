@@ -21,70 +21,29 @@ const containers = [
         'exoframe.project': 'test',
       },
     },
-    State: {
-      Status: 'Up 10 minutes',
-    },
-    NetworkSettings: {
-      Networks: {
-        exoframe: {
-          Aliases: null,
-        },
-      },
-    },
+    State: { Status: 'Up 10 minutes' },
+    NetworkSettings: { Networks: { exoframe: { Aliases: null } } },
   },
   {
     Id: '321',
     Name: '/test2',
-    Config: {
-      Labels: { 'exoframe.project': 'test' },
-    },
-    State: {
-      Status: 'Up 12 minutes',
-    },
-    NetworkSettings: {
-      Networks: {
-        exoframe: {
-          Aliases: null,
-        },
-      },
-    },
+    Config: { Labels: { 'exoframe.project': 'test' } },
+    State: { Status: 'Up 12 minutes' },
+    NetworkSettings: { Networks: { exoframe: { Aliases: null } } },
   },
   {
     Id: '111',
     Name: '/test3',
-    Config: {
-      Labels: { 'exoframe.project': 'other' },
-    },
-    State: {
-      Status: 'Up 13 minutes',
-    },
-    NetworkSettings: {
-      Networks: {
-        exoframe: {
-          Aliases: null,
-        },
-      },
-    },
+    Config: { Labels: { 'exoframe.project': 'other' } },
+    State: { Status: 'Up 13 minutes' },
+    NetworkSettings: { Networks: { exoframe: { Aliases: null } } },
   },
   {
     Id: '444',
     Name: '/test4',
-    Config: {
-      Labels: { 'exoframe.project': 'somethingelse' },
-    },
-    State: {
-      Status: 'Up 10 minutes',
-    },
-    NetworkSettings: {
-      Networks: {
-        default: {
-          Aliases: null,
-        },
-        traefik: {
-          Aliases: ['alias4'],
-        },
-      },
-    },
+    Config: { Labels: { 'exoframe.project': 'somethingelse' } },
+    State: { Status: 'Up 10 minutes' },
+    NetworkSettings: { Networks: { default: { Aliases: null }, traefik: { Aliases: ['alias4'] } } },
   },
 ];
 
@@ -104,7 +63,7 @@ test('Should get list of deployments', async () => {
   const listServer = nock('http://localhost:8080').get(`/list`).reply(200, { containers });
 
   // execute list
-  program.parse(['list'], { from: 'user' });
+  await program.parseAsync(['list'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -146,7 +105,7 @@ test('Should deauth on 401', async () => {
   const listServer = nock('http://localhost:8080').get('/list').reply(401, { error: 'Deauth test' });
 
   // execute config generation
-  program.parse(['list'], { from: 'user' });
+  await program.parseAsync(['list'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);

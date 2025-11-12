@@ -26,7 +26,7 @@ test('Should execute prune', async () => {
     .reply(200, { pruned: true, data: [{ SpaceReclaimed: 1024 }] });
 
   // execute logs
-  program.parse(['system', 'prune'], { from: 'user' });
+  await program.parseAsync(['system', 'prune'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);

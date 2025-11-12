@@ -22,16 +22,8 @@ afterAll(() => clearMocks());
 afterEach(() => resetConfig());
 
 const users = [
-  {
-    username: 'user1',
-    password: 'pass',
-    askAgain: true,
-  },
-  {
-    username: 'user2',
-    password: 'pass',
-    askAgain: false,
-  },
+  { username: 'user1', password: 'pass', askAgain: true },
+  { username: 'user2', password: 'pass', askAgain: false },
 ];
 const verifyBasicAuth = (input, actual) => {
   actual.split(',').forEach((element, index) => {
@@ -49,7 +41,7 @@ test('Should generate new config file', async () => {
   removeConfig();
 
   // execute config generation
-  program.parse(['config', '--init'], { from: 'user' });
+  await program.parseAsync(['config', '--init'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -86,7 +78,7 @@ test('Should update config in non-interactive mode using values from parameters'
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
   // execute config update
-  program.parse(
+  await program.parseAsync(
     [
       'config',
       '--domain',
@@ -182,7 +174,7 @@ test('Should update config in interactive mode', async () => {
     .mockImplementationOnce(() => Promise.resolve({ name: newName }));
 
   // execute config update
-  program.parse(['config'], { from: 'user' });
+  await program.parseAsync(['config'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -216,7 +208,7 @@ test('Should add users basic auth to config', async () => {
     .mockImplementationOnce(() => Promise.resolve(users[1]));
 
   // execute config update
-  program.parse(['config', 'auth'], { from: 'user' });
+  await program.parseAsync(['config', 'auth'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);

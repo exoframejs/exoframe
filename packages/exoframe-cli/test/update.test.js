@@ -35,7 +35,7 @@ test('Should update traefik via flags', async () => {
   const updateServer = nock('http://localhost:8080').post('/update/traefik').reply(200, { updated: true });
 
   // execute logs
-  program.parse(['update', 'traefik'], { from: 'user' });
+  await program.parseAsync(['update', 'traefik'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -105,7 +105,7 @@ test('Should update exoframe via flags', async () => {
   const updateServer = nock('http://localhost:8080').post('/update/server').reply(200, { updated: true });
 
   // execute logs
-  program.parse(['update', 'server'], { from: 'user' });
+  await program.parseAsync(['update', 'server'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -176,7 +176,7 @@ test('Should update all via flags', async () => {
   const updateExoServer = nock('http://localhost:8080').post('/update/server').reply(200, { updated: true });
 
   // execute logs
-  program.parse(['update', 'all'], { from: 'user' });
+  await program.parseAsync(['update', 'all'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -254,7 +254,7 @@ test('Should update all interactively', async () => {
     .mockImplementationOnce(() => Promise.resolve({ upServer: true, upTraefik: true }));
 
   // execute logs
-  program.parse(['update'], { from: 'user' });
+  await program.parseAsync(['update'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -332,7 +332,7 @@ test('Should update exoframe interactively', async () => {
     .mockImplementationOnce(() => Promise.resolve({ upServer: true, upTraefik: false }));
 
   // execute logs
-  program.parse(['update'], { from: 'user' });
+  await program.parseAsync(['update'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -408,7 +408,7 @@ test('Should update traefik interactively', async () => {
     .mockImplementationOnce(() => Promise.resolve({ upServer: false, upTraefik: true }));
 
   // execute logs
-  program.parse(['update'], { from: 'user' });
+  await program.parseAsync(['update'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -482,7 +482,7 @@ test('Should update none interactively', async () => {
     .mockImplementationOnce(() => Promise.resolve({ upServer: false, upTraefik: false }));
 
   // execute logs
-  program.parse(['update'], { from: 'user' });
+  await program.parseAsync(['update'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -546,7 +546,7 @@ test('Should not update if at latest version', async () => {
   const updateStatusServer = nock('http://localhost:8080').get('/version').reply(200, response);
 
   // execute logs
-  program.parse(['update'], { from: 'user' });
+  await program.parseAsync(['update'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -577,7 +577,7 @@ test('Should deauth on 401', async () => {
   const updateStatusServer = nock('http://localhost:8080').get('/version').reply(401);
 
   // execute logs
-  program.parse(['update'], { from: 'user' });
+  await program.parseAsync(['update'], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);

@@ -28,7 +28,7 @@ test('Should remove by id', async () => {
   const rmServer = nock('http://localhost:8080').post(`/remove/${id}`).reply(204);
 
   // execute logs
-  program.parse(['remove', id], { from: 'user' });
+  await program.parseAsync(['remove', id], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -60,7 +60,7 @@ test('Should remove by url', async () => {
   const rmServer = nock('http://localhost:8080').post(`/remove/${url}`).reply(204);
 
   // execute logs
-  program.parse(['remove', url], { from: 'user' });
+  await program.parseAsync(['remove', url], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -95,7 +95,7 @@ test('Should remove by token instead of default auth', async () => {
     .reply(204);
 
   // execute logs
-  program.parse(['remove', '--token', 'test-token', id], { from: 'user' });
+  await program.parseAsync(['remove', '--token', 'test-token', id], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -131,7 +131,7 @@ test('Should show remove error', async () => {
   const rmServer = nock('http://localhost:8080').post(`/remove/${id}`).reply(500);
 
   // execute logs
-  program.parse(['remove', id], { from: 'user' });
+  await program.parseAsync(['remove', id], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -164,7 +164,7 @@ test('Should show not found error', async () => {
   const rmServer = nock('http://localhost:8080').post(`/remove/${id}`).reply(404);
 
   // execute logs
-  program.parse(['remove', id], { from: 'user' });
+  await program.parseAsync(['remove', id], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -197,7 +197,7 @@ test('Should show not found error on empty body', async () => {
   const rmServer = nock('http://localhost:8080').post(`/remove/${id}`).reply(404);
 
   // execute logs
-  program.parse(['remove', id], { from: 'user' });
+  await program.parseAsync(['remove', id], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
@@ -230,7 +230,7 @@ test('Should deauth on 401', async () => {
   const rmServer = nock('http://localhost:8080').post(`/remove/${id}`).reply(401);
 
   // execute logs
-  program.parse(['remove', id], { from: 'user' });
+  await program.parseAsync(['remove', id], { from: 'user' });
 
   // give time to IO / net
   await setTimeout(IO_TIMEOUT);
