@@ -23,10 +23,7 @@ const currentDir = dirname(fileURLToPath(import.meta.url));
 const streamDocker = pack(join(currentDir, 'fixtures', 'secrets-project'));
 
 // test secret
-const testSecret = {
-  secretName: 'test-secret',
-  secretValue: 'test-secret-value',
-};
+const testSecret = { secretName: 'test-secret', secretValue: 'test-secret-value' };
 
 // container vars
 let fastify;
@@ -44,9 +41,7 @@ test('Should create new secret', async () => {
   const options = {
     method: 'POST',
     url: '/secrets',
-    headers: {
-      Authorization: `Bearer ${authToken}`,
-    },
+    headers: { Authorization: `Bearer ${authToken}` },
     payload: testSecret,
   };
 
@@ -62,13 +57,7 @@ test('Should create new secret', async () => {
 
 test('Should get list with new secret', async () => {
   // options base
-  const options = {
-    method: 'GET',
-    url: '/secrets',
-    headers: {
-      Authorization: `Bearer ${authToken}`,
-    },
-  };
+  const options = { method: 'GET', url: '/secrets', headers: { Authorization: `Bearer ${authToken}` } };
 
   const response = await fastify.inject(options);
   const result = JSON.parse(response.payload);
@@ -87,9 +76,7 @@ test('Should get value for the secret', async () => {
   const options = {
     method: 'GET',
     url: `/secrets/${testSecret.secretName}`,
-    headers: {
-      Authorization: `Bearer ${authToken}`,
-    },
+    headers: { Authorization: `Bearer ${authToken}` },
   };
 
   const response = await fastify.inject(options);
@@ -107,10 +94,7 @@ test('Should deploy simple docker project with secret', async () => {
   const options = {
     method: 'POST',
     url: '/deploy',
-    headers: {
-      Authorization: `Bearer ${authToken}`,
-      'Content-Type': 'application/octet-stream',
-    },
+    headers: { Authorization: `Bearer ${authToken}`, 'Content-Type': 'application/octet-stream' },
     payload: streamDocker,
   };
 
@@ -147,7 +131,7 @@ test('Should deploy simple docker project with secret', async () => {
 
   // validate that logs include secret as output as part of build args
   const logs = await instance.logs({ stdout: true });
-  expect(logs).toContain(testSecret.secretValue);
+  expect(logs.toString()).toContain(testSecret.secretValue);
 
   // cleanup
   await instance.remove({ force: true });
@@ -158,12 +142,8 @@ test('Should delete new secret', async () => {
   const options = {
     method: 'DELETE',
     url: '/secrets',
-    headers: {
-      Authorization: `Bearer ${authToken}`,
-    },
-    payload: {
-      secretName: testSecret.secretName,
-    },
+    headers: { Authorization: `Bearer ${authToken}` },
+    payload: { secretName: testSecret.secretName },
   };
 
   // check response

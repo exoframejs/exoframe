@@ -39,19 +39,8 @@ const deployments = [
   {
     Id: '123',
     Name: '/test',
-    Config: {
-      Labels: {
-        'exoframe.deployment': 'test',
-        'traefik.http.routers.test.rule': 'Host(`localhost`)',
-      },
-    },
-    NetworkSettings: {
-      Networks: {
-        exoframe: {
-          Aliases: ['123', 'test'],
-        },
-      },
-    },
+    Config: { Labels: { 'exoframe.deployment': 'test', 'traefik.http.routers.test.rule': 'Host(`localhost`)' } },
+    NetworkSettings: { Networks: { exoframe: { Aliases: ['123', 'test'] } } },
   },
 ];
 
@@ -106,30 +95,30 @@ test('Should deploy', async () => {
         [
           "Server response:",
           "{
-      \\"message\\": \\"Deployment success!\\",
-      \\"deployments\\": [
+      "message": "Deployment success!",
+      "deployments": [
         {
-          \\"Id\\": \\"123\\",
-          \\"Name\\": \\"/test\\",
-          \\"Config\\": {
-            \\"Labels\\": {
-              \\"exoframe.deployment\\": \\"test\\",
-              \\"traefik.http.routers.test.rule\\": \\"Host(\`localhost\`)\\"
+          "Id": "123",
+          "Name": "/test",
+          "Config": {
+            "Labels": {
+              "exoframe.deployment": "test",
+              "traefik.http.routers.test.rule": "Host(\`localhost\`)"
             }
           },
-          \\"NetworkSettings\\": {
-            \\"Networks\\": {
-              \\"exoframe\\": {
-                \\"Aliases\\": [
-                  \\"123\\",
-                  \\"test\\"
+          "NetworkSettings": {
+            "Networks": {
+              "exoframe": {
+                "Aliases": [
+                  "123",
+                  "test"
                 ]
               }
             }
           }
         }
       ],
-      \\"level\\": \\"info\\"
+      "level": "info"
     }",
           "
     ",
@@ -195,30 +184,30 @@ test('Should deploy with endpoint flag', async () => {
         [
           "Server response:",
           "{
-      \\"message\\": \\"Deployment success!\\",
-      \\"deployments\\": [
+      "message": "Deployment success!",
+      "deployments": [
         {
-          \\"Id\\": \\"123\\",
-          \\"Name\\": \\"/test\\",
-          \\"Config\\": {
-            \\"Labels\\": {
-              \\"exoframe.deployment\\": \\"test\\",
-              \\"traefik.http.routers.test.rule\\": \\"Host(\`localhost\`)\\"
+          "Id": "123",
+          "Name": "/test",
+          "Config": {
+            "Labels": {
+              "exoframe.deployment": "test",
+              "traefik.http.routers.test.rule": "Host(\`localhost\`)"
             }
           },
-          \\"NetworkSettings\\": {
-            \\"Networks\\": {
-              \\"exoframe\\": {
-                \\"Aliases\\": [
-                  \\"123\\",
-                  \\"test\\"
+          "NetworkSettings": {
+            "Networks": {
+              "exoframe": {
+                "Aliases": [
+                  "123",
+                  "test"
                 ]
               }
             }
           }
         }
       ],
-      \\"level\\": \\"info\\"
+      "level": "info"
     }",
           "
     ",
@@ -238,13 +227,7 @@ test('Should execute update', async () => {
     .reply(200, () => replyWithStream([{ message: 'Deployment success!', deployments, level: 'info' }]));
 
   // execute login
-  const result = await deploy({
-    folder: folderPath,
-    endpoint,
-    token: 'test-token',
-    verbose: 3,
-    update: true,
-  });
+  const result = await deploy({ folder: folderPath, endpoint, token: 'test-token', verbose: 3, update: true });
 
   // make sure log in was successful
   // check that server was called
@@ -279,30 +262,30 @@ test('Should execute update', async () => {
         [
           "Server response:",
           "{
-      \\"message\\": \\"Deployment success!\\",
-      \\"deployments\\": [
+      "message": "Deployment success!",
+      "deployments": [
         {
-          \\"Id\\": \\"123\\",
-          \\"Name\\": \\"/test\\",
-          \\"Config\\": {
-            \\"Labels\\": {
-              \\"exoframe.deployment\\": \\"test\\",
-              \\"traefik.http.routers.test.rule\\": \\"Host(\`localhost\`)\\"
+          "Id": "123",
+          "Name": "/test",
+          "Config": {
+            "Labels": {
+              "exoframe.deployment": "test",
+              "traefik.http.routers.test.rule": "Host(\`localhost\`)"
             }
           },
-          \\"NetworkSettings\\": {
-            \\"Networks\\": {
-              \\"exoframe\\": {
-                \\"Aliases\\": [
-                  \\"123\\",
-                  \\"test\\"
+          "NetworkSettings": {
+            "Networks": {
+              "exoframe": {
+                "Aliases": [
+                  "123",
+                  "test"
                 ]
               }
             }
           }
         }
       ],
-      \\"level\\": \\"info\\"
+      "level": "info"
     }",
           "
     ",
@@ -331,7 +314,7 @@ test('Should deploy with custom config', async () => {
       s.pipe(
         tar.extract('./', {
           ignore: (name, header) => {
-            fileNames.push(name);
+            fileNames.push(name.split('/').pop());
             return true;
           },
           // @ts-ignore
@@ -387,30 +370,30 @@ test('Should deploy with custom config', async () => {
         [
           "Server response:",
           "{
-      \\"message\\": \\"Deployment success!\\",
-      \\"deployments\\": [
+      "message": "Deployment success!",
+      "deployments": [
         {
-          \\"Id\\": \\"123\\",
-          \\"Name\\": \\"/test\\",
-          \\"Config\\": {
-            \\"Labels\\": {
-              \\"exoframe.deployment\\": \\"test\\",
-              \\"traefik.http.routers.test.rule\\": \\"Host(\`localhost\`)\\"
+          "Id": "123",
+          "Name": "/test",
+          "Config": {
+            "Labels": {
+              "exoframe.deployment": "test",
+              "traefik.http.routers.test.rule": "Host(\`localhost\`)"
             }
           },
-          \\"NetworkSettings\\": {
-            \\"Networks\\": {
-              \\"exoframe\\": {
-                \\"Aliases\\": [
-                  \\"123\\",
-                  \\"test\\"
+          "NetworkSettings": {
+            "Networks": {
+              "exoframe": {
+                "Aliases": [
+                  "123",
+                  "test"
                 ]
               }
             }
           }
         }
       ],
-      \\"level\\": \\"info\\"
+      "level": "info"
     }",
           "
     ",
@@ -540,30 +523,30 @@ test('Should ignore specified files', async () => {
         [
           "Server response:",
           "{
-      \\"message\\": \\"Deployment success!\\",
-      \\"deployments\\": [
+      "message": "Deployment success!",
+      "deployments": [
         {
-          \\"Id\\": \\"123\\",
-          \\"Name\\": \\"/test\\",
-          \\"Config\\": {
-            \\"Labels\\": {
-              \\"exoframe.deployment\\": \\"test\\",
-              \\"traefik.http.routers.test.rule\\": \\"Host(\`localhost\`)\\"
+          "Id": "123",
+          "Name": "/test",
+          "Config": {
+            "Labels": {
+              "exoframe.deployment": "test",
+              "traefik.http.routers.test.rule": "Host(\`localhost\`)"
             }
           },
-          \\"NetworkSettings\\": {
-            \\"Networks\\": {
-              \\"exoframe\\": {
-                \\"Aliases\\": [
-                  \\"123\\",
-                  \\"test\\"
+          "NetworkSettings": {
+            "Networks": {
+              "exoframe": {
+                "Aliases": [
+                  "123",
+                  "test"
                 ]
               }
             }
           }
         }
       ],
-      \\"level\\": \\"info\\"
+      "level": "info"
     }",
           "
     ",
@@ -646,7 +629,9 @@ test('Should throw an error on 401', async () => {
     // check that server was called
     expect(deployServer.isDone()).toBeTruthy();
     // first check console output
-    expect(err).toMatchInlineSnapshot(`[HTTPError: Response code 401 (Unauthorized)]`);
+    expect(err).toMatchInlineSnapshot(
+      `[HTTPError: Request failed with status code 401 (Unauthorized): POST http://localhost:8080/deploy]`
+    );
     expect(err.response.statusCode).toEqual(401);
     // tear down nock
     deployServer.done();

@@ -11,9 +11,7 @@ import { fixturesFolder } from './util/paths.js';
 
 // mock open() module for testing
 vi.mock('open', () => {
-  return {
-    default: vi.fn(),
-  };
+  return { default: vi.fn() };
 });
 
 // timeout for IO/net
@@ -46,19 +44,8 @@ const deployments = [
   {
     Id: '123',
     Name: '/test',
-    Config: {
-      Labels: {
-        'exoframe.deployment': 'test',
-        'traefik.http.routers.test.rule': 'Host(`localhost`)',
-      },
-    },
-    NetworkSettings: {
-      Networks: {
-        exoframe: {
-          Aliases: ['123', 'test'],
-        },
-      },
-    },
+    Config: { Labels: { 'exoframe.deployment': 'test', 'traefik.http.routers.test.rule': 'Host(`localhost`)' } },
+    NetworkSettings: { Networks: { exoframe: { Aliases: ['123', 'test'] } } },
   },
 ];
 
@@ -397,7 +384,7 @@ test('Should deploy with a custom config', async () => {
       s.pipe(
         tar.extract('./', {
           ignore: (name, header) => {
-            fileNames.push(name);
+            fileNames.push(name.split('/').pop());
             return true;
           },
           finish: () => {
@@ -421,26 +408,26 @@ test('Should deploy with a custom config', async () => {
   expect(deployServer.isDone()).toBeTruthy();
   // first check console output
   expect(cleanLogsFromPaths(consoleSpy.mock.calls)).toMatchInlineSnapshot(`
-  [
     [
-      "Deploying /test_custom_config_project to endpoint:",
-      "http://localhost:8080",
-    ],
-    [
-      "Deploying project to server...",
-    ],
-    [
-      "Deployment finished!",
-    ],
-    [
-      "Your project is now deployed as:
-  ",
-    ],
-    [
-      "[31m   ID     [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m[90m [39m[31m   Type        [39m
-     test   [90m [39m   localhost   [90m [39m   test       [90m [39m   Container   ",
-    ],
-  ]
+      [
+        "Deploying /test_custom_config_project to endpoint:",
+        "http://localhost:8080",
+      ],
+      [
+        "Deploying project to server...",
+      ],
+      [
+        "Deployment finished!",
+      ],
+      [
+        "Your project is now deployed as:
+    ",
+      ],
+      [
+        "[31m   ID     [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m[90m [39m[31m   Type        [39m
+       test   [90m [39m   localhost   [90m [39m   test       [90m [39m   Container   ",
+      ],
+    ]
   `);
   // restore mocks
   consoleSpy.mockRestore();

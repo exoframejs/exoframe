@@ -43,7 +43,7 @@ test('Should throw update error', async () => {
     await executeUpdate({ target: 'traefik', endpoint, token });
   } catch (err) {
     // make sure it throws
-    expect(err).toMatchInlineSnapshot(`[HTTPError: Response code 500 (Internal Server Error)]`);
+    expect(err).toMatchInlineSnapshot(`[HTTPError: Request failed with status code 500 (Internal Server Error): POST http://localhost:8080/update/traefik]`);
     expect(err.response.body).toMatchInlineSnapshot(`
       {
         "error": "Test error",

@@ -148,7 +148,7 @@ test('Should show remove error', async () => {
       ],
       [
         "Error removing project:",
-        "HTTPError: Response code 500 (Internal Server Error)",
+        "HTTPError: Request failed with status code 500 (Internal Server Error): POST http://localhost:8080/remove/test-id",
       ],
     ]
   `);

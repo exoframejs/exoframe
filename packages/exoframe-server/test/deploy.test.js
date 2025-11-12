@@ -41,10 +41,7 @@ const streamTemplate = pack(join(currentDir, 'fixtures', 'template-project'));
 const optionsBase = {
   method: 'POST',
   url: '/deploy',
-  headers: {
-    Authorization: `Bearer ${authToken}`,
-    'Content-Type': 'application/octet-stream',
-  },
+  headers: { Authorization: `Bearer ${authToken}`, 'Content-Type': 'application/octet-stream' },
 };
 
 // storage vars
@@ -65,9 +62,7 @@ afterAll(() => {
 });
 
 test('Should deploy simple docker project', async () => {
-  const options = Object.assign(optionsBase, {
-    payload: streamDocker,
-  });
+  const options = Object.assign(optionsBase, { payload: streamDocker });
 
   const response = await fastify.inject(options);
   // parse result into lines
@@ -118,9 +113,7 @@ test('Should deploy simple docker project', async () => {
 });
 
 test('Should deploy simple docker project with custom mount type', async () => {
-  const options = Object.assign(optionsBase, {
-    payload: streamDockerMountType,
-  });
+  const options = Object.assign(optionsBase, { payload: streamDockerMountType });
 
   const response = await fastify.inject(options);
   // parse result into lines
@@ -175,9 +168,7 @@ test('Should deploy simple docker project with custom mount type', async () => {
 });
 
 test('Should deploy simple docker project with buildargs', async () => {
-  const options = Object.assign(optionsBase, {
-    payload: streamDockerBuildargs,
-  });
+  const options = Object.assign(optionsBase, { payload: streamDockerBuildargs });
 
   const response = await fastify.inject(options);
   // parse result into lines
@@ -212,16 +203,14 @@ test('Should deploy simple docker project with buildargs', async () => {
 
   // get logs and ensure they match build args from config
   const logs = await instance.logs({ stdout: true });
-  expect(logs).toContain('test_exoframe');
+  expect(logs.toString()).toContain('test_exoframe');
 
   // cleanup
   await instance.remove({ force: true });
 });
 
 test('Should deploy simple project from image and image tar', async () => {
-  const options = Object.assign(optionsBase, {
-    payload: streamDockerImage,
-  });
+  const options = Object.assign(optionsBase, { payload: streamDockerImage });
 
   const response = await fastify.inject(options);
   // parse result into lines
@@ -262,9 +251,7 @@ test('Should deploy simple project from image and image tar', async () => {
 });
 
 test('Should deploy simple project from external image', async () => {
-  const options = Object.assign(optionsBase, {
-    payload: streamDockerImageExternal,
-  });
+  const options = Object.assign(optionsBase, { payload: streamDockerImageExternal });
 
   const response = await fastify.inject(options);
   // parse result into lines
@@ -305,9 +292,7 @@ test('Should deploy simple project from external image', async () => {
 });
 
 test('Should deploy simple node project', async () => {
-  const options = Object.assign(optionsBase, {
-    payload: streamNode,
-  });
+  const options = Object.assign(optionsBase, { payload: streamNode });
 
   const response = await fastify.inject(options);
   // parse result into lines
@@ -345,9 +330,7 @@ test('Should deploy simple node project', async () => {
 });
 
 test('Should deploy simple node project with package-lock', async () => {
-  const options = Object.assign(optionsBase, {
-    payload: streamNodeLock,
-  });
+  const options = Object.assign(optionsBase, { payload: streamNodeLock });
 
   const response = await fastify.inject(options);
   // parse result into lines
@@ -385,9 +368,7 @@ test('Should deploy simple node project with package-lock', async () => {
 });
 
 test('Should deploy simple HTML project', async () => {
-  const options = Object.assign(optionsBase, {
-    payload: streamHtml,
-  });
+  const options = Object.assign(optionsBase, { payload: streamHtml });
 
   const response = await fastify.inject(options);
   // parse result into lines
@@ -428,10 +409,7 @@ test('Should deploy simple HTML project', async () => {
 });
 
 test('Should update simple HTML project', async () => {
-  const options = Object.assign(optionsBase, {
-    url: '/update',
-    payload: streamHtmlUpdate,
-  });
+  const options = Object.assign(optionsBase, { url: '/update', payload: streamHtmlUpdate });
 
   const response = await fastify.inject(options);
   // parse result into lines
@@ -476,9 +454,7 @@ test('Should update simple HTML project', async () => {
 });
 
 test('Should display error log for broken docker project', async () => {
-  const options = Object.assign(optionsBase, {
-    payload: streamBrokenDocker,
-  });
+  const options = Object.assign(optionsBase, { payload: streamBrokenDocker });
 
   const response = await fastify.inject(options);
   // parse result into lines
@@ -504,9 +480,7 @@ test('Should display error log for broken docker project', async () => {
 });
 
 test('Should display error log for broken Node.js project', async () => {
-  const options = Object.assign(optionsBase, {
-    payload: streamBrokenNode,
-  });
+  const options = Object.assign(optionsBase, { payload: streamBrokenNode });
 
   const response = await fastify.inject(options);
   // parse result into lines
@@ -534,9 +508,7 @@ test('Should display error log for broken Node.js project', async () => {
 });
 
 test('Should display error log for project with broken template', async () => {
-  const options = Object.assign(optionsBase, {
-    payload: streamBrokenTemplate,
-  });
+  const options = Object.assign(optionsBase, { payload: streamBrokenTemplate });
 
   const response = await fastify.inject(options);
   // parse result into lines
@@ -560,9 +532,7 @@ test('Should display error log for project with broken template', async () => {
 });
 
 test('Should have additional labels', async () => {
-  const options = Object.assign(optionsBase, {
-    payload: streamAdditionalLabels,
-  });
+  const options = Object.assign(optionsBase, { payload: streamAdditionalLabels });
 
   const response = await fastify.inject(options);
   // parse result into lines
@@ -595,9 +565,7 @@ test('Should have additional labels', async () => {
 });
 
 test('Should deploy project with configured template', async () => {
-  const options = Object.assign(optionsBase, {
-    payload: streamTemplate,
-  });
+  const options = Object.assign(optionsBase, { payload: streamTemplate });
 
   const response = await fastify.inject(options);
   // parse result into lines

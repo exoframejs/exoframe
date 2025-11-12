@@ -43,7 +43,7 @@ test('Should show remove error', async () => {
     await removeDeployment({ id, endpoint, token });
   } catch (err) {
     // make sure it errored out
-    expect(err).toMatchInlineSnapshot(`[HTTPError: Response code 500 (Internal Server Error)]`);
+    expect(err).toMatchInlineSnapshot(`[HTTPError: Request failed with status code 500 (Internal Server Error): POST http://localhost:8080/remove/test-id]`);
   }
   // check that server was called
   expect(rmServer.isDone()).toBeTruthy();

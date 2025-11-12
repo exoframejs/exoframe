@@ -11,12 +11,7 @@ vi.mock('../src/config/index.js', () => import('./__mocks__/config.js'));
 const { startServer } = await import('../src/index.js');
 
 // options base
-const baseOptions = {
-  method: 'GET',
-  headers: {
-    Authorization: `Bearer ${authToken}`,
-  },
-};
+const baseOptions = { method: 'GET', headers: { Authorization: `Bearer ${authToken}` } };
 
 const generateContainerConfig = ({ name, cmd, username, project, baseName }) => ({
   Image: 'busybox:latest',
@@ -84,9 +79,7 @@ beforeAll(async () => {
 afterAll(() => fastify.close());
 
 test('Should get logs for current deployment', async () => {
-  const options = Object.assign({}, baseOptions, {
-    url: `/logs/${containerName}`,
-  });
+  const options = Object.assign({}, baseOptions, { url: `/logs/${containerName}` });
 
   const response = await fastify.inject(options);
   // check response
@@ -113,9 +106,7 @@ test('Should get logs for current deployment', async () => {
 
 test('Should get logs for current project', async () => {
   // options base
-  const options = Object.assign({}, baseOptions, {
-    url: `/logs/${projectName}`,
-  });
+  const options = Object.assign({}, baseOptions, { url: `/logs/${projectName}` });
 
   const response = await fastify.inject(options);
   // check response
@@ -144,9 +135,7 @@ test('Should get logs for current project', async () => {
 });
 
 test('Should get logs for exoframe-server', async () => {
-  const options = Object.assign({}, baseOptions, {
-    url: '/logs/exoframe-server',
-  });
+  const options = Object.assign({}, baseOptions, { url: '/logs/exoframe-server' });
 
   const response = await fastify.inject(options);
   // check response
@@ -170,9 +159,7 @@ test('Should get logs for exoframe-server', async () => {
 
 test('Should not get logs for nonexistent project', async () => {
   // options base
-  const options = Object.assign({}, baseOptions, {
-    url: `/logs/do-not-exist`,
-  });
+  const options = Object.assign({}, baseOptions, { url: `/logs/do-not-exist` });
 
   const response = await fastify.inject(options);
   const result = JSON.parse(response.payload);
