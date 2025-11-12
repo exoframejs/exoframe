@@ -29,7 +29,7 @@ const verifyWithKey = async ({ key, signature, phrase }) => {
     // validate signature
     const valid = verifier.verify(sig);
     return valid;
-  } catch (e) {
+  } catch {
     // console.error(e);
     return false;
   }
@@ -99,9 +99,7 @@ const loginRoutes = (fastify, opts, next) => {
       }
 
       // generate auth token
-      const replyToken = jwt.sign({ loggedIn: true, user }, auth.privateKey, {
-        algorithm: 'HS256',
-      });
+      const replyToken = jwt.sign({ loggedIn: true, user }, auth.privateKey, { algorithm: 'HS256' });
       reply.send({ token: replyToken });
     },
   });
@@ -117,10 +115,7 @@ const authRoutes = (fastify, opts, next) => {
     method: 'GET',
     path: '/checkToken',
     handler(request, reply) {
-      const replyObj = {
-        message: 'Token is valid',
-        credentials: request.user,
-      };
+      const replyObj = { message: 'Token is valid', credentials: request.user };
       reply.send(replyObj);
     },
   });

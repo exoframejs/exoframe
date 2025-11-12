@@ -18,20 +18,11 @@ function getInternalTraefikPath(volumePath) {
 async function generateTraefikConfig(config, volumePath) {
   // letsencrypt flags
   const letsencrypt = {
-    entryPoints: {
-      web: {
-        address: ':80',
-      },
-      websecure: {
-        address: ':443',
-      },
-    },
+    entryPoints: { web: { address: ':80' }, websecure: { address: ':443' } },
     certificatesResolvers: {
       exoframeChallenge: {
         acme: {
-          httpChallenge: {
-            entryPoint: 'web',
-          },
+          httpChallenge: { entryPoint: 'web' },
           email: config.letsencryptEmail || null,
           storage: '/var/traefik/acme.json',
         },
@@ -40,21 +31,9 @@ async function generateTraefikConfig(config, volumePath) {
   };
 
   let traefikConfig = {
-    log: {
-      level: config.debug ? 'DEBUG' : 'warning',
-      filePath: '/var/traefik/traefik.log',
-    },
-    entryPoints: {
-      web: {
-        address: ':80',
-      },
-    },
-    providers: {
-      docker: {
-        endpoint: 'unix:///var/run/docker.sock',
-        exposedByDefault: false,
-      },
-    },
+    log: { level: config.debug ? 'DEBUG' : 'warning', filePath: '/var/traefik/traefik.log' },
+    entryPoints: { web: { address: ':80' } },
+    providers: { docker: { endpoint: 'unix:///var/run/docker.sock', exposedByDefault: false } },
     ...(config.letsencrypt ? letsencrypt : {}),
   };
 
@@ -72,7 +51,7 @@ async function generateTraefikConfig(config, volumePath) {
   // create internal traefik config folder
   try {
     statSync(getInternalTraefikPath(volumePath));
-  } catch (e) {
+  } catch {
     await mkdirp(getInternalTraefikPath(volumePath));
   }
 
@@ -117,7 +96,7 @@ export async function initTraefik(exoNet) {
   if (initLocal) {
     try {
       statSync(volumePath);
-    } catch (e) {
+    } catch {
       await mkdirp(volumePath);
     }
     logger.info('Server is running without docker.');
@@ -167,31 +146,20 @@ export async function initTraefik(exoNet) {
       'exoframe.user': 'admin',
       ...(config.traefikLabels || {}), // custom traefik labels
     },
-    ExposedPorts: {
-      '80/tcp': {},
-      '443/tcp': {},
-    },
+    ExposedPorts: { '80/tcp': {}, '443/tcp': {} },
     HostConfig: {
-      RestartPolicy: {
-        Name: 'on-failure',
-        MaximumRetryCount: 2,
-      },
+      RestartPolicy: { Name: 'on-failure', MaximumRetryCount: 2 },
       Binds: [
         '/var/run/docker.sock:/var/run/docker.sock', // docker socket
         `${getInternalTraefikPath(volumePath)}:/var/traefik-config`, // mount generated config
         `${getTraefikPath(volumePath)}:/var/traefik`, // mount folder for traefik.log, acme.json
       ],
-      PortBindings: {
-        '80/tcp': [{ HostPort: '80' }],
-        '443/tcp': [{ HostPort: '443' }],
-      },
+      PortBindings: { '80/tcp': [{ HostPort: '80' }], '443/tcp': [{ HostPort: '443' }] },
     },
   });
 
   // connect traefik to exoframe net
-  await exoNet.connect({
-    Container: container.id,
-  });
+  await exoNet.connect({ Container: container.id });
 
   // start container
   await container.start();

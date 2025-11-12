@@ -11,13 +11,7 @@ vi.mock('../src/config/index.js', () => import('./__mocks__/config.js'));
 const { startServer } = await import('../src/index.js');
 
 // options base
-const baseOptions = {
-  method: 'POST',
-  headers: {
-    Authorization: `Bearer ${authToken}`,
-  },
-  payload: {},
-};
+const baseOptions = { method: 'POST', headers: { Authorization: `Bearer ${authToken}` }, payload: {} };
 
 // project & container names
 const containerName = 'rmtest1';
@@ -26,7 +20,7 @@ const projectName = 'rmtestproject';
 // fastify ref
 let fastify;
 
-const generateContainerConfig = ({ name, username, project, baseName, url }) => ({
+const generateContainerConfig = ({ name, username, project, url }) => ({
   Image: 'busybox:latest',
   Cmd: ['sh', '-c', 'sleep 1000'],
   name,
@@ -82,9 +76,7 @@ beforeAll(async () => {
 afterAll(() => fastify.close());
 
 test('Should remove current deployment', async () => {
-  const options = Object.assign({}, baseOptions, {
-    url: `/remove/${containerName}`,
-  });
+  const options = Object.assign({}, baseOptions, { url: `/remove/${containerName}` });
 
   const response = await fastify.inject(options);
   // check response
@@ -98,9 +90,7 @@ test('Should remove current deployment', async () => {
 
 test('Should remove current project', async () => {
   // options base
-  const options = Object.assign({}, baseOptions, {
-    url: `/remove/${projectName}`,
-  });
+  const options = Object.assign({}, baseOptions, { url: `/remove/${projectName}` });
 
   const response = await fastify.inject(options);
   // check response
@@ -114,9 +104,7 @@ test('Should remove current project', async () => {
 
 test('Should return error when removing nonexistent project', async () => {
   // options base
-  const options = Object.assign({}, baseOptions, {
-    url: `/remove/do-not-exist`,
-  });
+  const options = Object.assign({}, baseOptions, { url: `/remove/do-not-exist` });
 
   const response = await fastify.inject(options);
   const result = JSON.parse(response.payload);
@@ -126,9 +114,7 @@ test('Should return error when removing nonexistent project', async () => {
 });
 
 test('Should remove by url', async () => {
-  const options = Object.assign({}, baseOptions, {
-    url: `/remove/test.example.com`,
-  });
+  const options = Object.assign({}, baseOptions, { url: `/remove/test.example.com` });
 
   const response = await fastify.inject(options);
 

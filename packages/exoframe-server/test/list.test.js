@@ -11,15 +11,9 @@ vi.mock('../src/config/index.js', () => import('./__mocks__/config.js'));
 const { startServer } = await import('../src/index.js');
 
 // options base
-const options = {
-  method: 'GET',
-  url: '/list',
-  headers: {
-    Authorization: `Bearer ${authToken}`,
-  },
-};
+const options = { method: 'GET', url: '/list', headers: { Authorization: `Bearer ${authToken}` } };
 
-const generateContainerConfig = ({ name, username, project, baseName }) => ({
+const generateContainerConfig = ({ name, username, project }) => ({
   Image: 'busybox:latest',
   Cmd: ['sh', '-c', 'sleep 1000'],
   name,

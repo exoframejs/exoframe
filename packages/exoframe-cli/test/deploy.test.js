@@ -383,7 +383,7 @@ test('Should deploy with a custom config', async () => {
       const fileNames = [];
       s.pipe(
         tar.extract('./', {
-          ignore: (name, header) => {
+          ignore: (name) => {
             fileNames.push(name.split('/').pop());
             return true;
           },

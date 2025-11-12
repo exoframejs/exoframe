@@ -39,14 +39,12 @@ export async function startFromParams({
   // construct restart policy
   let RestartPolicy = {};
   const Name = ['no', 'on-failure', 'always'].find((c) => c.startsWith(restartPolicy));
-  RestartPolicy = {
-    Name,
-  };
+  RestartPolicy = { Name };
   if (restartPolicy.includes('on-failure')) {
     let restartCount = 2;
     try {
       restartCount = parseInt(restartPolicy.split(':')[1], 10);
-    } catch (e) {
+    } catch {
       // error parsing restart count, using default value
     }
     RestartPolicy.Name = 'on-failure';
@@ -112,25 +110,10 @@ export async function startFromParams({
   }
 
   // create config
-  const containerConfig = {
-    Image: image,
-    name,
-    Env,
-    Labels,
-    HostConfig: {
-      RestartPolicy,
-      Mounts,
-    },
-  };
+  const containerConfig = { Image: image, name, Env, Labels, HostConfig: { RestartPolicy, Mounts } };
 
   if (hostname && hostname.length) {
-    containerConfig.NetworkingConfig = {
-      EndpointsConfig: {
-        exoframe: {
-          Aliases: [hostname],
-        },
-      },
-    };
+    containerConfig.NetworkingConfig = { EndpointsConfig: { exoframe: { Aliases: [hostname] } } };
   }
 
   // create container
@@ -138,9 +121,7 @@ export async function startFromParams({
 
   // connect container to exoframe network
   const exoNet = await initNetwork();
-  await exoNet.connect({
-    Container: container.id,
-  });
+  await exoNet.connect({ Container: container.id });
 
   // connect to additional networks if any
   await Promise.all(
@@ -180,14 +161,12 @@ export async function start({ image, username, folder, resultStream, existing = 
   let RestartPolicy = {};
   const restartPolicy = config.restart || 'on-failure:2';
   const Name = ['no', 'on-failure', 'always'].find((c) => c.startsWith(restartPolicy));
-  RestartPolicy = {
-    Name,
-  };
+  RestartPolicy = { Name };
   if (restartPolicy.includes('on-failure')) {
     let restartCount = 2;
     try {
       restartCount = parseInt(restartPolicy.split(':')[1], 10);
-    } catch (e) {
+    } catch {
       // error parsing restart count, using default value
     }
     RestartPolicy.Name = 'on-failure';
@@ -271,36 +250,18 @@ export async function start({ image, username, folder, resultStream, existing = 
   }
 
   // create config
-  const containerConfig = {
-    Image: image,
-    name,
-    Env,
-    Labels,
-    HostConfig: {
-      RestartPolicy,
-    },
-  };
+  const containerConfig = { Image: image, name, Env, Labels, HostConfig: { RestartPolicy } };
 
   // if volumes are set - add them to config
   if (config.volumes && config.volumes.length) {
     const mounts = config.volumes
       .map((vol) => vol.split(':'))
-      .map(([src, dest, type = 'volume']) => ({
-        Type: type,
-        Source: src,
-        Target: dest,
-      }));
+      .map(([src, dest, type = 'volume']) => ({ Type: type, Source: src, Target: dest }));
     containerConfig.HostConfig.Mounts = mounts;
   }
 
   if (config.hostname && config.hostname.length) {
-    containerConfig.NetworkingConfig = {
-      EndpointsConfig: {
-        exoframe: {
-          Aliases: [config.hostname],
-        },
-      },
-    };
+    containerConfig.NetworkingConfig = { EndpointsConfig: { exoframe: { Aliases: [config.hostname] } } };
   }
 
   writeStatus(resultStream, {
@@ -314,9 +275,7 @@ export async function start({ image, username, folder, resultStream, existing = 
 
   // connect container to exoframe network
   const exoNet = await initNetwork();
-  await exoNet.connect({
-    Container: container.id,
-  });
+  await exoNet.connect({ Container: container.id });
 
   // start container
   await container.start();

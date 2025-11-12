@@ -9,7 +9,7 @@ export async function checkTemplate({ tempDockerDir, folder }) {
   try {
     readFileSync(join(tempDockerDir, folder, 'Dockerfile'));
     return true;
-  } catch (e) {
+  } catch {
     return false;
   }
 }

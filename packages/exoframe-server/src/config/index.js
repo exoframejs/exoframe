@@ -19,33 +19,33 @@ export const tempDockerDir = join(baseFolder, 'deploying');
 // create base folder if doesn't exist
 try {
   statSync(baseFolder);
-} catch (e) {
+} catch {
   mkdirSync(baseFolder);
 }
 
 // create extensions folder if doesn't exist
 try {
   statSync(extensionsFolder);
-} catch (e) {
+} catch {
   mkdirSync(extensionsFolder);
 }
 // init package.json if it doesn't exist
 try {
   statSync(join(extensionsFolder, 'package.json'));
-} catch (e) {
+} catch {
   spawn('npm', ['init', '-y', '--silent'], { cwd: extensionsFolder });
 }
 
 // create recipes folder if doesn't exist
 try {
   statSync(recipesFolder);
-} catch (e) {
+} catch {
   mkdirSync(recipesFolder);
 }
 // init package.json if it doesn't exist
 try {
   statSync(join(recipesFolder, 'package.json'));
-} catch (e) {
+} catch {
   spawn('npm', ['init', '-y', '--silent'], { cwd: recipesFolder });
 }
 
@@ -96,7 +96,7 @@ if (process.env.NODE_ENV !== 'testing') {
   // create user config if doesn't exist
   try {
     statSync(configPath);
-  } catch (e) {
+  } catch {
     writeFileSync(configPath, jsyaml.dump(defaultConfig), 'utf8');
   }
 

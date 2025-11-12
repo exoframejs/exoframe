@@ -13,7 +13,7 @@ const { startServer } = await import('../src/index.js');
 // options base
 const baseOptions = { method: 'GET', headers: { Authorization: `Bearer ${authToken}` } };
 
-const generateContainerConfig = ({ name, cmd, username, project, baseName }) => ({
+const generateContainerConfig = ({ name, cmd, username, project }) => ({
   Image: 'busybox:latest',
   Cmd: ['sh', '-c', `${cmd}; sleep 1000`],
   name,

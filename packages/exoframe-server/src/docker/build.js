@@ -38,7 +38,7 @@ export function buildFromParams({ tarStream, tag, buildargs, logLine = noop }) {
               log.push(s);
               logLine({ message: s, level: 'verbose' });
             }
-          } catch (e) {
+          } catch {
             if (s && s.length) {
               log.push(s);
               logLine({ message: s, level: 'verbose' });

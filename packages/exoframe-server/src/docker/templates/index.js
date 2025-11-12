@@ -1,5 +1,3 @@
-/* eslint global-require: off */
-/* eslint import/no-dynamic-require: off */
 // npm packages
 import { readFileSync } from 'fs';
 import { join } from 'path';

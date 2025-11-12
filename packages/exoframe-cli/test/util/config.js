@@ -12,12 +12,7 @@ vi.mock('ora', () => {
     }
     return self;
   };
-  const self = {
-    start: fn,
-    fail: fn,
-    succeed: fn,
-    warn: fn,
-  };
+  const self = { start: fn, fail: fn, succeed: fn, warn: fn };
   return {
     default: (msg) => {
       fn(msg);
@@ -80,7 +75,7 @@ export const setupMocks = (addUser = true) => {
     }
     userConfig = string;
   });
-  const ulSpy = vi.spyOn(fs.promises, 'unlink').mockImplementation(async (path, string) => {
+  const ulSpy = vi.spyOn(fs.promises, 'unlink').mockImplementation(async (path) => {
     // console.log('unlink', { path, string });
     if (path.includes('exoframe.json')) {
       exoConfigExists = false;
@@ -119,11 +114,7 @@ export const resetUserConfig = async () => {
   const configPath = join(baseFolder, 'cli.config.yml');
   await fs.promises.writeFile(
     configPath,
-    jsyaml.dump({
-      endpoint: 'http://localhost:8080',
-      user: { username: 'admin' },
-      token: 'test-token',
-    }),
+    jsyaml.dump({ endpoint: 'http://localhost:8080', user: { username: 'admin' }, token: 'test-token' }),
     'utf-8'
   );
 };

@@ -9,7 +9,7 @@ export async function checkTemplate({ config }) {
   // if project has image field defined in config
   try {
     return config.image && config.image.length;
-  } catch (e) {
+  } catch {
     return false;
   }
 }

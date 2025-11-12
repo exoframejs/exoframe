@@ -32,9 +32,7 @@ const configPath = join(baseFolder, 'cli.config.yml');
  * Default config object, used if no user config present
  * @type{UserConfig}
  */
-const defaultConfig = {
-  endpoint: 'http://localhost:8080',
-};
+const defaultConfig = { endpoint: 'http://localhost:8080' };
 
 /**
  * Load user config from disk
@@ -47,14 +45,14 @@ export async function getConfig() {
   // create config folder if doesn't exist
   try {
     await stat(baseFolder);
-  } catch (e) {
+  } catch {
     await mkdir(baseFolder);
   }
 
   // create default user config if doesn't exist
   try {
     await stat(configPath);
-  } catch (e) {
+  } catch {
     // write default config to file
     await writeFile(configPath, jsyaml.dump(userConfig), 'utf8');
     // return it
@@ -65,9 +63,7 @@ export async function getConfig() {
   try {
     const newCfg = jsyaml.load(await readFile(configPath, 'utf8'));
     // assign new config and clean endpoint url
-    userConfig = Object.assign(newCfg, {
-      endpoint: newCfg.endpoint.replace(/\/$/, ''),
-    });
+    userConfig = Object.assign(newCfg, { endpoint: newCfg.endpoint.replace(/\/$/, '') });
     return userConfig;
   } catch (e) {
     console.error('Error parsing user config:', e);

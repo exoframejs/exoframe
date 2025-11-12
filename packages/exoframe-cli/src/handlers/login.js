@@ -19,19 +19,14 @@ async function getKeys() {
     const filterOut = ['authorized_keys', 'config', 'known_hosts'];
     const privateKeys = allFiles.filter((f) => !f.endsWith('.pub') && !filterOut.includes(f));
     return privateKeys.map((key) => `${sshFolder}/${key}`);
-  } catch (e) {
+  } catch {
     throw new Error('Could not get private keys!');
   }
 }
 
 async function executeLogin({ endpoint, username, keyPath, passphrase }) {
   const user = { username };
-  const { token } = await executeExoLogin({
-    endpoint,
-    keyPath,
-    username,
-    passphrase,
-  });
+  const { token } = await executeExoLogin({ endpoint, keyPath, username, passphrase });
   updateConfig({ token, user });
 }
 
@@ -53,7 +48,7 @@ export const loginHandler = async ({ key, passphrase, url }) => {
   if (noKey) {
     try {
       privateKeys = await getKeys();
-    } catch (e) {
+    } catch {
       console.log(chalk.red('Error logging in!'), 'Default folder (~/.ssh) with private keys does not exists!');
       return;
     }
@@ -61,26 +56,11 @@ export const loginHandler = async ({ key, passphrase, url }) => {
 
   // generate and show choices
   const prompts = [];
-  prompts.push({
-    type: 'input',
-    name: 'username',
-    message: 'Username:',
-    validate,
-    format,
-  });
+  prompts.push({ type: 'input', name: 'username', message: 'Username:', validate, format });
   // only ask for key if no user key given
   if (noKey) {
-    prompts.push({
-      type: 'list',
-      name: 'privateKeyName',
-      message: 'Private key:',
-      choices: privateKeys,
-    });
-    prompts.push({
-      type: 'password',
-      name: 'password',
-      message: 'Private key passpharse (leave blank if not set):',
-    });
+    prompts.push({ type: 'list', name: 'privateKeyName', message: 'Private key:', choices: privateKeys });
+    prompts.push({ type: 'password', name: 'password', message: 'Private key passpharse (leave blank if not set):' });
   }
 
   // get username, key filename, password and generate key path

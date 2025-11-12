@@ -30,11 +30,14 @@
     "pretty-bytes": "^7.1.0"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.39.1",
     "@vercel/ncc": "^0.38.4",
     "@vitest/coverage-v8": "^4.0.8",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
+    "globals": "^14.0.0",
     "mock-stdin": "^1.0.0",
     "nock": "^14.0.10",
     "prettier": "^3.0.3",

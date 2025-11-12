@@ -100,11 +100,9 @@ const streamToResponse = ({ tarStream, remoteUrl, options, verbose = 0, log = ()
           error = new Error(data.message);
           error.response = data;
         }
-      } catch (e) {
+      } catch {
         error = new Error('Error parsing output!');
-        error.response = {
-          error: s,
-        };
+        error.response = { error: s };
         verbose && log('[error]', 'Error parsing line:', s);
       }
     });
@@ -149,7 +147,7 @@ export const deploy = async ({ folder, endpoint, token, update, configFile = 'ex
   const configPath = path.join(workdir, configFile);
   try {
     await stat(configPath);
-  } catch (e) {
+  } catch {
     const defaultConfig = JSON.stringify({ name: folderName });
     await writeFile(configPath, defaultConfig, 'utf-8');
     // if in verbose mode - log config creation
@@ -177,7 +175,7 @@ export const deploy = async ({ folder, endpoint, token, update, configFile = 'ex
       .split('\n')
       .filter((line) => line && line.length > 0)
       .concat(['.exoframeignore']);
-  } catch (e) {
+  } catch {
     verbose && log('\nNo .exoframeignore file found, using default ignores');
   }
 
@@ -198,10 +196,7 @@ export const deploy = async ({ folder, endpoint, token, update, configFile = 'ex
     map: (headers) => {
       // if working with custom config - change its name before packing
       if (configFile && headers.name === configFile) {
-        return {
-          ...headers,
-          name: 'exoframe.json',
-        };
+        return { ...headers, name: 'exoframe.json' };
       }
 
       return headers;
@@ -211,12 +206,7 @@ export const deploy = async ({ folder, endpoint, token, update, configFile = 'ex
   verbose && log('\nIgnoring following paths:', ignores);
 
   // create request options
-  const options = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/octet-stream',
-    },
-  };
+  const options = { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/octet-stream' } };
 
   // pipe stream to remote
   const res = await streamToResponse({ tarStream, remoteUrl, options, verbose });

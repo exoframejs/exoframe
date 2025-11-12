@@ -48,7 +48,7 @@ export async function checkTemplate({ tempDockerDir, folder }) {
       return true;
     }
     return false;
-  } catch (e) {
+  } catch {
     return false;
   }
 }

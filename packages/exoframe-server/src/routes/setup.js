@@ -1,5 +1,3 @@
-/* eslint global-require: off */
-/* eslint import/no-dynamic-require: off */
 import { randomUUID } from 'crypto';
 import { mkdirSync } from 'fs';
 import { join } from 'path';
@@ -74,9 +72,7 @@ export default (fastify) => {
           getNetwork,
           createNetwork,
         },
-        util: Object.assign({}, util, {
-          logger,
-        }),
+        util: Object.assign({}, util, { logger }),
       };
       // wait for recipe execution
       try {
