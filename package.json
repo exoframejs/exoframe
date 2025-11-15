@@ -4,7 +4,9 @@
     "packages/exoframe-cli",
     "packages/exoframe-client",
     "packages/exoframe-website",
-    "packages/exoframe-server"
+    "packages/exoframe-server",
+    "packages/exoframe-recipe-ghost",
+    "packages/exoframe-template-java"
   ],
   "engines": {
     "node": ">=18.12.0",
