@@ -3,6 +3,7 @@
   "version": "7.0.0-rc.6",
   "description": "CLI for Exoframe, self-hosted deployment tool",
   "main": "dist/index.js",
+  "bin": "dist/index.js",
   "type": "module",
   "repository": "git@github.com:exoframejs/exoframe.git",
   "author": "Tim Ermilov <yamalight@gmail.com>",
