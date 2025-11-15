@@ -108,9 +108,9 @@ jobs:
           IMAGE_NAME: exoframe/server
         run: |
           REF=${GITHUB_REF##*/}
-          TAG=$REF
-          DEBUG_TAG="debug_$TAG"
           VERSION=${{ steps.version.outputs.new }}
+          TAG=$VERSION
+          DEBUG_TAG="debug_$TAG"
           echo REF=$GITHUB_REF
           echo TAG=$TAG
           echo DEBUG_TAG=$DEBUG_TAG
