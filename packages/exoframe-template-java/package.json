@@ -1,6 +1,6 @@
 {
   "name": "exoframe-template-java",
-  "version": "1.0.0-rc.2",
+  "version": "1.0.0-rc.3",
   "description": "Java deployment template for exoframe",
   "main": "index.js",
   "type": "module",
