@@ -85,7 +85,7 @@ test('Should deploy simple docker project', async () => {
   const name = completeDeployments[0].Name.slice(1);
 
   expect(containerInfo).toBeDefined();
-  expect(containerInfo.Labels['exoframe.deployment']).toEqual(name);
+  expect(containerInfo.Labels['exoframe.deployment']).toEqual(name.split('-').slice(0, -1).join('-'));
   expect(containerInfo.Labels['exoframe.user']).toEqual('admin');
   expect(containerInfo.Labels['exoframe.project']).toEqual('test-project');
   expect(containerInfo.Labels['traefik.docker.network']).toEqual('exoframe');
@@ -103,7 +103,7 @@ test('Should deploy simple docker project', async () => {
   expect(container.Config.Env).toContain('EXOFRAME_USER=admin');
   expect(container.Config.Env).toContain('EXOFRAME_PROJECT=test-project');
   expect(
-    container.Config.Env.find((env) => env.startsWith('EXOFRAME_DEPLOYMENT=exo-admin-test-docker-deploy-'))
+    container.Config.Env.find((env) => env.startsWith('EXOFRAME_DEPLOYMENT=exo-admin-test-docker-deploy'))
   ).toBeDefined();
   expect(container.Config.Env.find((env) => env.startsWith('EXOFRAME_HOST=test-docker-deploy'))).toBeDefined();
 
@@ -136,7 +136,7 @@ test('Should deploy simple docker project with custom mount type', async () => {
   const name = completeDeployments[0].Name.slice(1);
 
   expect(containerInfo).toBeDefined();
-  expect(containerInfo.Labels['exoframe.deployment']).toEqual(name);
+  expect(containerInfo.Labels['exoframe.deployment']).toEqual(name.split('-').slice(0, -1).join('-'));
   expect(containerInfo.Labels['exoframe.user']).toEqual('admin');
   expect(containerInfo.Labels['exoframe.project']).toEqual('test-mount-project');
   expect(containerInfo.Labels['traefik.docker.network']).toEqual('exoframe');
@@ -155,7 +155,7 @@ test('Should deploy simple docker project with custom mount type', async () => {
   expect(container.Config.Env).toContain('EXOFRAME_PROJECT=test-mount-project');
   expect(
     container.Config.Env.find((env) =>
-      env.startsWith('EXOFRAME_DEPLOYMENT=exo-admin-test-docker-deploy-with-custom-mount-')
+      env.startsWith('EXOFRAME_DEPLOYMENT=exo-admin-test-docker-deploy-with-custom-mount')
     )
   ).toBeDefined();
   expect(
@@ -191,7 +191,7 @@ test('Should deploy simple docker project with buildargs', async () => {
   const name = completeDeployments[0].Name.slice(1);
 
   expect(containerInfo).toBeDefined();
-  expect(containerInfo.Labels['exoframe.deployment']).toEqual(name);
+  expect(containerInfo.Labels['exoframe.deployment']).toEqual(name.split('-').slice(0, -1).join('-'));
   expect(containerInfo.Labels['exoframe.user']).toEqual('admin');
   expect(containerInfo.Labels['exoframe.project']).toEqual('test-project-buildargs');
   expect(containerInfo.Labels['traefik.docker.network']).toEqual('exoframe');
@@ -233,7 +233,7 @@ test('Should deploy simple project from image and image tar', async () => {
   const name = completeDeployments[0].Name.slice(1);
 
   expect(containerInfo).toBeDefined();
-  expect(containerInfo.Labels['exoframe.deployment']).toEqual(name);
+  expect(containerInfo.Labels['exoframe.deployment']).toEqual(name.split('-').slice(0, -1).join('-'));
   expect(containerInfo.Labels['exoframe.user']).toEqual('admin');
   expect(containerInfo.Labels['exoframe.project']).toEqual('test-image-project');
   expect(containerInfo.Labels['traefik.docker.network']).toEqual('exoframe');
@@ -274,7 +274,7 @@ test('Should deploy simple project from external image', async () => {
   const name = completeDeployments[0].Name.slice(1);
 
   expect(containerInfo).toBeDefined();
-  expect(containerInfo.Labels['exoframe.deployment']).toEqual(name);
+  expect(containerInfo.Labels['exoframe.deployment']).toEqual(name.split('-').slice(0, -1).join('-'));
   expect(containerInfo.Labels['exoframe.user']).toEqual('admin');
   expect(containerInfo.Labels['exoframe.project']).toEqual('test-extimage-project');
   expect(containerInfo.Labels['traefik.docker.network']).toEqual('exoframe');
@@ -316,7 +316,7 @@ test('Should deploy simple node project', async () => {
   const deployId = name.split('-').slice(-1).shift();
 
   expect(container).toBeDefined();
-  expect(container.Labels['exoframe.deployment']).toEqual(name);
+  expect(container.Labels['exoframe.deployment']).toEqual(name.split('-').slice(0, -1).join('-'));
   expect(container.Labels['exoframe.user']).toEqual('admin');
   expect(container.Labels['exoframe.project']).toEqual(name.replace(`-${deployId}`, ''));
   expect(container.Labels['traefik.docker.network']).toEqual('exoframe');
@@ -354,7 +354,7 @@ test('Should deploy simple node project with package-lock', async () => {
   const deployId = name.split('-').slice(-1).shift();
 
   expect(container).toBeDefined();
-  expect(container.Labels['exoframe.deployment']).toEqual(name);
+  expect(container.Labels['exoframe.deployment']).toEqual(name.split('-').slice(0, -1).join('-'));
   expect(container.Labels['exoframe.user']).toEqual('admin');
   expect(container.Labels['exoframe.project']).toEqual(name.replace(`-${deployId}`, ''));
   expect(container.Labels['traefik.docker.network']).toEqual('exoframe');
@@ -391,7 +391,7 @@ test('Should deploy simple HTML project', async () => {
   const container = allContainers.find((c) => c.Names.includes(`/${name}`));
 
   expect(container).toBeDefined();
-  expect(container.Labels['exoframe.deployment']).toEqual(name);
+  expect(container.Labels['exoframe.deployment']).toEqual(name.split('-').slice(0, -1).join('-'));
   expect(container.Labels['exoframe.user']).toEqual('admin');
   expect(container.Labels['exoframe.project']).toEqual('simple-html');
   expect(container.Labels['traefik.docker.network']).toEqual('exoframe');
@@ -432,7 +432,7 @@ test('Should update simple HTML project', async () => {
   const container = allContainers.find((c) => c.Names.includes(`/${name}`));
 
   expect(container).toBeDefined();
-  expect(container.Labels['exoframe.deployment']).toEqual(name);
+  expect(container.Labels['exoframe.deployment']).toEqual(name.split('-').slice(0, -1).join('-'));
   expect(container.Labels['exoframe.user']).toEqual('admin');
   expect(container.Labels['exoframe.project']).toEqual('simple-html');
   expect(container.Labels['traefik.docker.network']).toEqual('exoframe');
@@ -590,7 +590,7 @@ test('Should deploy project with configured template', async () => {
   const deployId = name.split('-').slice(-1).shift();
 
   expect(container).toBeDefined();
-  expect(container.Labels['exoframe.deployment']).toEqual(name);
+  expect(container.Labels['exoframe.deployment']).toEqual(name.split('-').slice(0, -1).join('-'));
   expect(container.Labels['exoframe.user']).toEqual('admin');
   expect(container.Labels['exoframe.project']).toEqual(name.replace(`-${deployId}`, ''));
   expect(container.Labels['traefik.docker.network']).toEqual('exoframe');

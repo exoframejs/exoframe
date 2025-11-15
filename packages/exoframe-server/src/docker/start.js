@@ -2,7 +2,15 @@
 import { getConfig } from '../config/index.js';
 import { createNetwork, initNetwork } from '../docker/network.js';
 import logger from '../logger/index.js';
-import { getEnv, getHost, getProjectConfig, nameFromImage, projectFromConfig, writeStatus } from '../util/index.js';
+import {
+  baseNameFromImage,
+  getEnv,
+  getHost,
+  getProjectConfig,
+  nameFromImage,
+  projectFromConfig,
+  writeStatus,
+} from '../util/index.js';
 import docker from './docker.js';
 
 /**
@@ -141,6 +149,7 @@ export async function startFromParams({
 
 export async function start({ image, username, folder, resultStream, existing = [] }) {
   const name = nameFromImage(image);
+  const deploymentName = baseNameFromImage(image);
 
   // get server config
   const serverConfig = getConfig();
@@ -155,7 +164,7 @@ export async function start({ image, username, folder, resultStream, existing = 
   const host = getHost({ serverConfig, name: config.name, config });
 
   // generate env vars
-  const Env = getEnv({ username, config, name, project, host }).map((pair) => pair.join('='));
+  const Env = getEnv({ username, config, name: deploymentName, project, host }).map((pair) => pair.join('='));
 
   // construct restart policy
   let RestartPolicy = {};
@@ -186,7 +195,7 @@ export async function start({ image, username, folder, resultStream, existing = 
     .concat(config.middlewares || []);
 
   const Labels = Object.assign({}, additionalLabels, {
-    'exoframe.deployment': name,
+    'exoframe.deployment': deploymentName,
     'exoframe.user': username,
     'exoframe.project': project,
     'traefik.docker.network': serverConfig.exoframeNetwork,
