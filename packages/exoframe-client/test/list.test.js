@@ -95,6 +95,7 @@ test('Should get list of deployments', async () => {
   expect(resultContainer).toMatchInlineSnapshot(`
     [
       {
+        "deploymentName": "test",
         "domain": "test.host",
         "host": "Not set",
         "name": "test",
@@ -103,6 +104,7 @@ test('Should get list of deployments', async () => {
         "type": "Container",
       },
       {
+        "deploymentName": undefined,
         "domain": "Not set",
         "host": "Not set",
         "name": "test2",
@@ -111,6 +113,7 @@ test('Should get list of deployments', async () => {
         "type": "Container",
       },
       {
+        "deploymentName": undefined,
         "domain": "Not set",
         "host": "Not set",
         "name": "test3",
@@ -119,6 +122,7 @@ test('Should get list of deployments', async () => {
         "type": "Container",
       },
       {
+        "deploymentName": undefined,
         "domain": "Not set",
         "host": "alias4",
         "name": "test4",

@@ -74,5 +74,5 @@ export const formatServices = (services) =>
     const host = aliases.shift() ?? 'Not set';
     const status = svc?.State?.Status ?? '';
     const type = svc.Config.Labels['exoframe.type'] ? svc.Config.Labels['exoframe.type'] : 'Container';
-    return { name, domain, host, status, project, type };
+    return { deploymentName, name, domain, host, status, project, type };
   });

@@ -70,6 +70,7 @@ test('Should deploy', async () => {
     {
       "formattedServices": [
         {
+          "deploymentName": "test",
           "domain": "localhost",
           "host": "test",
           "name": "test",
@@ -159,6 +160,7 @@ test('Should deploy with endpoint flag', async () => {
     {
       "formattedServices": [
         {
+          "deploymentName": "test",
           "domain": "localhost",
           "host": "test",
           "name": "test",
@@ -237,6 +239,7 @@ test('Should execute update', async () => {
     {
       "formattedServices": [
         {
+          "deploymentName": "test",
           "domain": "localhost",
           "host": "test",
           "name": "test",
@@ -344,6 +347,7 @@ test('Should deploy with custom config', async () => {
     {
       "formattedServices": [
         {
+          "deploymentName": "test",
           "domain": "localhost",
           "host": "test",
           "name": "test",
@@ -502,6 +506,7 @@ test('Should ignore specified files', async () => {
     {
       "formattedServices": [
         {
+          "deploymentName": "test",
           "domain": "localhost",
           "host": "test",
           "name": "test",
