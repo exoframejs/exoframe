@@ -32,6 +32,8 @@ const generateContainerConfig = ({ name, username, project, url }) => ({
   },
 });
 
+const testUrl = 'rmtest.example.com';
+
 beforeAll(async () => {
   // start server
   const port = await getPort();
@@ -50,6 +52,17 @@ beforeAll(async () => {
   });
   const container = await docker.createContainer(containerConfig);
   await container.start();
+  // create test container with url to remove
+  // second project container
+  const urlContainerConfig = generateContainerConfig({
+    name: 'rmtest12',
+    username: 'admin',
+    project: 'rmtest12',
+    baseName: 'exo-admin-rmtest12',
+    url: testUrl,
+  });
+  const urlContainer = await docker.createContainer(urlContainerConfig);
+  await urlContainer.start();
   // create test project to remove
   // first project container
   const prjContainerConfig1 = generateContainerConfig({
@@ -86,6 +99,22 @@ test('Should remove current deployment', async () => {
   const allContainers = await docker.listContainers();
   const exContainer = allContainers.find((c) => c.Names.includes(`/${containerName}`));
   expect(exContainer).toBeUndefined();
+});
+
+test('Should remove container by url', async () => {
+  // options base
+  const options = Object.assign({}, baseOptions, { url: `/remove/${encodeURIComponent(testUrl)}` });
+
+  const response = await fastify.inject(options);
+  // check response
+  expect(response.statusCode).toEqual(204);
+
+  // check docker services
+  const allContainers = await docker.listContainers();
+  const urlContainers = allContainers.filter((c) =>
+    c.Labels[`traefik.http.routers.${c.Labels['exoframe.deployment']}.rule`].includes(testUrl)
+  );
+  expect(urlContainers.length).toEqual(0);
 });
 
 test('Should remove current project', async () => {

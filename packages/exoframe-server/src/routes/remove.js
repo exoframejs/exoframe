@@ -16,15 +16,14 @@ const removeUserContainer = async ({ username, id, reply }) => {
   }
 
   // if not found by name - try to find by domain.
-  const containersByUrl = allContainers.filter((c) => {
+  const containerByUrl = allContainers.find((c) => {
     return (
       c.Labels['exoframe.user'] === username &&
       c.Labels[`traefik.http.routers.${c.Labels['exoframe.deployment']}.rule`].includes(id)
     );
   });
-
-  if (containersByUrl.length) {
-    await Promise.all(containersByUrl.map(removeContainer));
+  if (containerByUrl) {
+    await removeContainer(containerByUrl);
     return reply.code(204).send('removed');
   }
 
