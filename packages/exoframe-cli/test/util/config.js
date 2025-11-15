@@ -1,9 +1,55 @@
+import chalk from 'chalk';
 import fs from 'fs';
 import jsyaml from 'js-yaml';
 import os from 'os';
 import { join } from 'path';
+import { fileURLToPath } from 'url';
 import { vi } from 'vitest';
 import { fixturesFolder, testFolder } from './paths.js';
+
+const clone = (value) => JSON.parse(JSON.stringify(value));
+const createDefaultUserConfig = (addUser = true) => {
+  const cfg = { endpoint: 'http://localhost:8080' };
+  if (addUser) {
+    cfg.user = { username: 'admin' };
+    cfg.token = 'test-token';
+  }
+  return cfg;
+};
+
+const configModulePath = fileURLToPath(new URL('../../src/config/index.js', import.meta.url));
+let mockedUserConfig = null;
+let mockedUserConfigDefaults = null;
+
+const mockConfigModule = (addUser = true) => {
+  mockedUserConfigDefaults = createDefaultUserConfig(addUser);
+  mockedUserConfig = clone(mockedUserConfigDefaults);
+
+  const getConfig = vi.fn(async () => clone(mockedUserConfig));
+  const updateConfig = vi.fn(async (newCfg) => {
+    mockedUserConfig = Object.assign(mockedUserConfig, newCfg);
+    return clone(mockedUserConfig);
+  });
+  const logout = vi.fn(async () => {
+    delete mockedUserConfig.user;
+    delete mockedUserConfig.token;
+  });
+  const isLoggedIn = vi.fn(async () => {
+    const loggedIn = Boolean(mockedUserConfig.user?.username);
+    if (!loggedIn) {
+      console.log(chalk.red('Error: not logged in!'), 'Please, login first!');
+    }
+    return loggedIn;
+  });
+
+  vi.doMock(configModulePath, () => ({ getConfig, updateConfig, logout, isLoggedIn }));
+
+  return () => {
+    vi.doUnmock(configModulePath);
+    mockedUserConfig = null;
+    mockedUserConfigDefaults = null;
+  };
+};
 
 vi.mock('ora', () => {
   const fn = (...args) => {
@@ -21,33 +67,49 @@ vi.mock('ora', () => {
   };
 });
 
-export const setupDeployMocks = () => {
+export const setupDeployMocks = ({ addUser = true, mockConfig = true } = {}) => {
   // mock current work dir
+  const prevXdgConfig = process.env.XDG_CONFIG_HOME;
   process.env.XDG_CONFIG_HOME = join(fixturesFolder, '.config');
   const cwdSpy = vi.spyOn(process, 'cwd').mockImplementation(() => fixturesFolder);
   const osSpy = vi.spyOn(os, 'homedir').mockImplementation(() => fixturesFolder);
   const exitMock = vi.spyOn(process, 'exit').mockImplementation(() => {});
+  const restoreConfigMock = mockConfig ? mockConfigModule(addUser) : null;
 
   return () => {
+    process.env.XDG_CONFIG_HOME = prevXdgConfig;
     cwdSpy.mockRestore();
     osSpy.mockRestore();
     exitMock.mockRestore();
+    restoreConfigMock?.();
   };
 };
 
-export const setupMocks = (addUser = true) => {
+const defaultSetupOptions = { addUser: true, mockConfig: true };
+const normalizeSetupOptions = (firstArg, maybeOptions = {}) => {
+  if (typeof firstArg === 'object') {
+    return { ...defaultSetupOptions, ...firstArg };
+  }
+  if (typeof firstArg === 'boolean') {
+    const optionOverrides = Object.hasOwn(maybeOptions, 'mockConfig') ? { mockConfig: maybeOptions.mockConfig } : {};
+    return { ...defaultSetupOptions, addUser: firstArg, ...optionOverrides };
+  }
+  return { ...defaultSetupOptions };
+};
+
+export const setupMocks = (addUserOrOptions = true, options = {}) => {
+  const { addUser, mockConfig } = normalizeSetupOptions(addUserOrOptions, options);
   // mock current work dir
   const cwdSpy = vi.spyOn(process, 'cwd').mockImplementation(() => testFolder);
   const osSpy = vi.spyOn(os, 'homedir').mockImplementation(() => testFolder);
 
   let exoConfigExists = true;
   let exoConfig = { name: 'test' };
-  const defaultUserConfig = { endpoint: 'http://localhost:8080' };
-  if (addUser) {
-    defaultUserConfig.user = { username: 'admin' };
-    defaultUserConfig.token = 'test-token';
+  let userConfig = null;
+  if (!mockConfig) {
+    userConfig = jsyaml.dump(createDefaultUserConfig(addUser));
   }
-  let userConfig = jsyaml.dump(defaultUserConfig);
+  const restoreConfigMock = mockConfig ? mockConfigModule(addUser) : null;
 
   const mkdirSpy = vi.spyOn(fs.promises, 'mkdir').mockImplementation(async () => {});
   const statSpy = vi.spyOn(fs.promises, 'stat').mockImplementation(async (path) => {
@@ -61,7 +123,7 @@ export const setupMocks = (addUser = true) => {
     if ((typeof path === 'string' && path.includes('.json')) || path.href?.includes('.json')) {
       return Buffer.from(JSON.stringify(exoConfig));
     }
-    if ((typeof path === 'string' && path.includes('.yml')) || path.href?.includes('.yml')) {
+    if (!mockConfig && ((typeof path === 'string' && path.includes('.yml')) || path.href?.includes('.yml'))) {
       return Buffer.from(userConfig);
     }
     return fs.readFileSync(path);
@@ -73,7 +135,9 @@ export const setupMocks = (addUser = true) => {
       exoConfigExists = true;
       return;
     }
-    userConfig = string;
+    if (!mockConfig && path.includes('.yml')) {
+      userConfig = string;
+    }
   });
   const ulSpy = vi.spyOn(fs.promises, 'unlink').mockImplementation(async (path) => {
     // console.log('unlink', { path, string });
@@ -90,6 +154,7 @@ export const setupMocks = (addUser = true) => {
     rfSpy.mockRestore();
     wfSpy.mockRestore();
     ulSpy.mockRestore();
+    restoreConfigMock?.();
   };
 };
 
@@ -100,6 +165,9 @@ export const getConfig = async () => {
 };
 
 export const getUserConfig = async () => {
+  if (mockedUserConfig) {
+    return clone(mockedUserConfig);
+  }
   const xdgConfigFolder = process.env.XDG_CONFIG_HOME || join(os.homedir(), '.config');
   const baseFolder = join(xdgConfigFolder, 'exoframe');
   const configPath = join(baseFolder, 'cli.config.yml');
@@ -109,14 +177,14 @@ export const getUserConfig = async () => {
 };
 
 export const resetUserConfig = async () => {
+  if (mockedUserConfig && mockedUserConfigDefaults) {
+    mockedUserConfig = clone(mockedUserConfigDefaults);
+    return;
+  }
   const xdgConfigFolder = process.env.XDG_CONFIG_HOME || join(os.homedir(), '.config');
   const baseFolder = join(xdgConfigFolder, 'exoframe');
   const configPath = join(baseFolder, 'cli.config.yml');
-  await fs.promises.writeFile(
-    configPath,
-    jsyaml.dump({ endpoint: 'http://localhost:8080', user: { username: 'admin' }, token: 'test-token' }),
-    'utf-8'
-  );
+  await fs.promises.writeFile(configPath, jsyaml.dump(createDefaultUserConfig(true)), 'utf-8');
 };
 
 export const removeConfig = async () => {

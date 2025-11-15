@@ -5,7 +5,7 @@ import { afterAll, afterEach, beforeEach, expect, test, vi } from 'vitest';
 import { getConfig, removeConfig, resetConfig, setupMocks } from './util/config.js';
 
 // setup mocks
-const clearMocks = setupMocks();
+const clearMocks = setupMocks({ mockConfig: false });
 
 // timeout for IO/net
 const IO_TIMEOUT = 50;
