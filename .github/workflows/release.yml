@@ -1,11 +1,12 @@
-name: Prerelease
+name: Release
 
 on:
-  # only run when tagged with version -pre or -rc
+  # only run when tagged with version that is not -pre or -rc
   push:
     tags:
-      - '*-pre*'
-      - '*-rc*'
+      - '*'
+      - '!*-pre*'
+      - '!*-rc*'
 
 jobs:
   publish-client:
@@ -15,21 +16,19 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 24
-          cache: 'npm'
-          registry-url: 'https://registry.npmjs.org'
-      # get versions for currently published and local packages
+          cache: npm
+          registry-url: https://registry.npmjs.org
       - name: check versions
         id: versions
         run: |
-          echo "current=$(npm info exoframe-client@next version || echo 'no published package yet')" >> $GITHUB_OUTPUT
+          echo "current=$(npm info exoframe-client version || echo 'no published package yet')" >> $GITHUB_OUTPUT
           echo "new=$(npm info ./packages/exoframe-client version)" >> $GITHUB_OUTPUT
-      # install and publish if local version is not the same as published
       - name: install
         if: ${{ steps.versions.outputs.current != steps.versions.outputs.new }}
         run: npm ci
       - name: publish
         if: ${{ steps.versions.outputs.current != steps.versions.outputs.new }}
-        run: npm publish --access public --tag next -w exoframe-client
+        run: npm publish --access public --tag latest -w exoframe-client
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -40,15 +39,13 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 24
-          cache: 'npm'
-          registry-url: 'https://registry.npmjs.org'
-      # get versions for currently published and local packages
+          cache: npm
+          registry-url: https://registry.npmjs.org
       - name: check versions
         id: versions
         run: |
-          echo "current=$(npm info exoframe@next version || echo 'no published package yet')" >> $GITHUB_OUTPUT
+          echo "current=$(npm info exoframe version || echo 'no published package yet')" >> $GITHUB_OUTPUT
           echo "new=$(npm info ./packages/exoframe-cli version)" >> $GITHUB_OUTPUT
-      # install, build and publish if local version is not the same as published
       - name: install
         if: ${{ steps.versions.outputs.current != steps.versions.outputs.new }}
         run: npm ci
@@ -57,7 +54,7 @@ jobs:
         run: npm run build -w exoframe
       - name: publish
         if: ${{ steps.versions.outputs.current != steps.versions.outputs.new }}
-        run: npm publish --access public --tag next -w exoframe
+        run: npm publish --access public --tag latest -w exoframe
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -68,25 +65,21 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 24
-          cache: 'npm'
-          registry-url: 'https://registry.npmjs.org'
-      # get versions for currently published and local packages
+          cache: npm
+          registry-url: https://registry.npmjs.org
       - name: check versions
         id: versions
         run: |
-          echo "current=$(npm info exoframe-server@next version || echo 'no published package yet')" >> $GITHUB_OUTPUT
+          echo "current=$(npm info exoframe-server version || echo 'no published package yet')" >> $GITHUB_OUTPUT
           echo "new=$(npm info ./packages/exoframe-server version)" >> $GITHUB_OUTPUT
-      # install and publish if local version is not the same as published
       - name: install
         if: ${{ steps.versions.outputs.current != steps.versions.outputs.new }}
         run: npm ci
       - name: publish
         if: ${{ steps.versions.outputs.current != steps.versions.outputs.new }}
-        run: npm publish --access public --tag next -w exoframe-server
+        run: npm publish --access public --tag latest -w exoframe-server
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      # publish to docker hub and github registry
       - name: Login to DockerHub Registry
         uses: docker/login-action@v2
         with:
@@ -103,26 +96,20 @@ jobs:
         env:
           IMAGE_NAME: exoframe/server
         run: |
-          REF=${GITHUB_REF##*/}
-          TAG=$REF
-          DEBUG_TAG="debug_$TAG"
           VERSION=$(npm info ./packages/exoframe-server version)
-          echo REF=$GITHUB_REF
-          echo TAG=$TAG
-          echo DEBUG_TAG=$DEBUG_TAG
-          echo IMAGE_NAME=$IMAGE_NAME
+          TAG="$VERSION"
+          DEBUG_TAG="debug_$VERSION"
           echo VERSION=$VERSION
-          # Build docker image
           docker build -f docker/Dockerfile --quiet --cache-from $IMAGE_NAME:$TAG --label "version=$VERSION" -t $IMAGE_NAME:$TAG .
-          # Build debug docker image
           docker build -f docker/Dockerfile.debug --quiet --cache-from $IMAGE_NAME:$DEBUG_TAG --label "version=$VERSION" -t $IMAGE_NAME:$DEBUG_TAG .
-          docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:next
-          docker tag $IMAGE_NAME:$TAG ghcr.io/$IMAGE_NAME:next
-          docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:debug_next
-          docker tag $IMAGE_NAME:$TAG ghcr.io/$IMAGE_NAME:debug_next
-          # Push all images to registry
-          docker push $IMAGE_NAME
-          docker push ghcr.io/$IMAGE_NAME
+          docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:latest
+          docker tag $IMAGE_NAME:$DEBUG_TAG $IMAGE_NAME:debug_latest
+          docker tag $IMAGE_NAME:$TAG ghcr.io/$IMAGE_NAME:$TAG
+          docker tag $IMAGE_NAME:$DEBUG_TAG ghcr.io/$IMAGE_NAME:$DEBUG_TAG
+          docker tag $IMAGE_NAME:$TAG ghcr.io/$IMAGE_NAME:latest
+          docker tag $IMAGE_NAME:$DEBUG_TAG ghcr.io/$IMAGE_NAME:debug_latest
+          docker push --all-tags $IMAGE_NAME
+          docker push --all-tags ghcr.io/$IMAGE_NAME
 
   publish-recipe-ghost:
     runs-on: ubuntu-latest
@@ -131,21 +118,19 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 24
-          cache: 'npm'
-          registry-url: 'https://registry.npmjs.org'
-      # get versions for currently published and local packages
+          cache: npm
+          registry-url: https://registry.npmjs.org
       - name: check versions
         id: versions
         run: |
-          echo "current=$(npm info exoframe-recipe-ghost@next version || echo 'no published package yet')" >> $GITHUB_OUTPUT
+          echo "current=$(npm info exoframe-recipe-ghost version || echo 'no published package yet')" >> $GITHUB_OUTPUT
           echo "new=$(npm info ./packages/exoframe-recipe-ghost version)" >> $GITHUB_OUTPUT
-      # install and publish if local version is not the same as published
       - name: install
         if: ${{ steps.versions.outputs.current != steps.versions.outputs.new }}
         run: npm ci
       - name: publish
         if: ${{ steps.versions.outputs.current != steps.versions.outputs.new }}
-        run: npm publish --access public --tag next -w exoframe-recipe-ghost
+        run: npm publish --access public --tag latest -w exoframe-recipe-ghost
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -156,20 +141,18 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 24
-          cache: 'npm'
-          registry-url: 'https://registry.npmjs.org'
-      # get versions for currently published and local packages
+          cache: npm
+          registry-url: https://registry.npmjs.org
       - name: check versions
         id: versions
         run: |
-          echo "current=$(npm info exoframe-template-java@next version || echo 'no published package yet')" >> $GITHUB_OUTPUT
+          echo "current=$(npm info exoframe-template-java version || echo 'no published package yet')" >> $GITHUB_OUTPUT
           echo "new=$(npm info ./packages/exoframe-template-java version)" >> $GITHUB_OUTPUT
-      # install and publish if local version is not the same as published
       - name: install
         if: ${{ steps.versions.outputs.current != steps.versions.outputs.new }}
         run: npm ci
       - name: publish
         if: ${{ steps.versions.outputs.current != steps.versions.outputs.new }}
-        run: npm publish --access public --tag next -w exoframe-template-java
+        run: npm publish --access public --tag latest -w exoframe-template-java
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
