@@ -1,3 +1,4 @@
+import { mkdirSync, statSync } from 'fs';
 import { homedir } from 'os';
 import { join } from 'path';
 import pino from 'pino';
@@ -9,6 +10,13 @@ const logFolder = join(xdgConfigHome, 'exoframe', 'exoframe-server');
 // prepare level
 const levelTesting = process.env.NODE_ENV === 'testing' ? 'error' : false;
 const level = levelTesting || (process.env.NODE_ENV === 'production' ? 'warn' : 'debug');
+
+// create logs folder if doesn't exist
+try {
+  statSync(logFolder);
+} catch {
+  mkdirSync(logFolder);
+}
 
 // use pino-pretty in debug mode
 const transport =
