@@ -91,12 +91,16 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: get version
+        id: version
+        run: |
+          echo "new=$(npm info ./packages/exoframe-server version)" >> $GITHUB_OUTPUT
       - name: Build & push docker image
         working-directory: ./packages/exoframe-server
         env:
           IMAGE_NAME: exoframe/server
         run: |
-          VERSION=$(npm info ./packages/exoframe-server version)
+          VERSION=${{ steps.version.outputs.new }}
           TAG="$VERSION"
           DEBUG_TAG="debug_$VERSION"
           echo VERSION=$VERSION

@@ -98,6 +98,10 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: get version
+        id: version
+        run: |
+          echo "new=$(npm info ./packages/exoframe-server version)" >> $GITHUB_OUTPUT
       - name: Build & push docker image
         working-directory: ./packages/exoframe-server
         env:
@@ -106,7 +110,7 @@ jobs:
           REF=${GITHUB_REF##*/}
           TAG=$REF
           DEBUG_TAG="debug_$TAG"
-          VERSION=$(npm info ./packages/exoframe-server version)
+          VERSION=${{ steps.version.outputs.new }}
           echo REF=$GITHUB_REF
           echo TAG=$TAG
           echo DEBUG_TAG=$DEBUG_TAG
