@@ -80,7 +80,7 @@ exoframe init
 Then, deploy your project by running the following command:
 
 ```bash
-exoframe
+exoframe deploy
 ```
 
 ## Updating Deployed Projects
@@ -89,7 +89,7 @@ Exoframe provides an easy way to update deployed projects.
 This can be accomplished by adding the `--update` (or `-u`) flag to the deploy command:
 
 ```bash
-exoframe --update
+exoframe deploy --update
 ```
 
 Here's how it works:

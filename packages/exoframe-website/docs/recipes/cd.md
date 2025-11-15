@@ -33,7 +33,7 @@ jobs:
       - name: Install dependencies
         run: npm install --ci
       - name: Deploy via Exoframe
-        run: npx exoframe -u -e https://exoframe.example.net -t $EXO_TOKEN
+        run: npx exoframe deploy -u -e https://exoframe.example.net -t $EXO_TOKEN
         env:
           EXO_TOKEN: ${{ secrets.EXO_TOKEN }}
 ```
@@ -47,6 +47,6 @@ jobs:
 - Replace `npm install` with `bun`, `pnpm`, or additional build steps (e.g., `npm run build`).
 - Pass `-c exoframe.prod.json` if you keep multiple configs.
 - Limit the trigger (`on:` block) to whichever branches/tags you consider production.
-- On other CI providers, follow the same blueprint: install Node, prepare your workspace, run `npx exoframe` with the endpoint and token.
+- On other CI providers, follow the same blueprint: install Node, prepare your workspace, run `npx exoframe deploy` with the endpoint and token.
 
 Once configured, every push to the selected branch automatically builds your project and redeploys it via Exoframe without any extra wrappers.
