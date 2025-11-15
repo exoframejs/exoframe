@@ -49,6 +49,16 @@ try {
   spawn('npm', ['init', '-y', '--silent'], { cwd: recipesFolder });
 }
 
+// construct log path
+export const logFolder = join(xdgConfigHome, 'exoframe', 'exoframe-server');
+
+// create logs folder if doesn't exist
+try {
+  statSync(logFolder);
+} catch {
+  mkdirSync(logFolder);
+}
+
 // default config
 const defaultConfig = {
   debug: false,
