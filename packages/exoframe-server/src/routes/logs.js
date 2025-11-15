@@ -54,6 +54,20 @@ const getContainerLogs = async ({ username, id, reply, follow }) => {
     return;
   }
 
+  // if not found by name - try to find by domain.
+  const containerByUrl = allContainers.find((c) => {
+    return (
+      c.Labels['exoframe.user'] === username &&
+      c.Labels[`traefik.http.routers.${c.Labels['exoframe.deployment']}.rule`].includes(id)
+    );
+  });
+  if (containerByUrl) {
+    const container = docker.getContainer(containerByUrl.Id);
+    const logs = await container.logs(generateLogsConfig(follow));
+    const logStream = fixLogStream(logs);
+    return reply.send(logStream);
+  }
+
   // get all log streams and prepend them with service names
   const logRequests = await Promise.all(
     containers.map(async (cInfo) => {

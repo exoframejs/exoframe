@@ -33,7 +33,13 @@ async function generateTraefikConfig(config, volumePath) {
   let traefikConfig = {
     log: { level: config.debug ? 'DEBUG' : 'warning', filePath: '/var/traefik/traefik.log' },
     entryPoints: { web: { address: ':80' } },
-    providers: { docker: { endpoint: 'unix:///var/run/docker.sock', exposedByDefault: false } },
+    providers: {
+      docker: {
+        network: 'exoframe',
+        endpoint: 'unix:///var/run/docker.sock',
+        exposedByDefault: false,
+      },
+    },
     ...(config.letsencrypt ? letsencrypt : {}),
   };
 

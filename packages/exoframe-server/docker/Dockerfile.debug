@@ -1,4 +1,4 @@
-FROM node:18
+FROM node:24
 
 # create default folder for config and logs
 RUN mkdir -p /root/.config/exoframe/exoframe-server

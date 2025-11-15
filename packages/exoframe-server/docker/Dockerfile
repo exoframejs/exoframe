@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:24-alpine
 
 # create new workdir
 WORKDIR /app
@@ -14,7 +14,7 @@ RUN npm install
 COPY . /app
 
 # set environment to production
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
 # expose ports
 EXPOSE 8080

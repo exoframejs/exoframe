@@ -8,7 +8,7 @@ import docker from '../docker/docker.js';
 // urls for tags request
 const exoServerUrl = `https://api.github.com/repos/exoframejs/exoframe-server/releases`;
 const traefikUrl = 'https://api.github.com/repos/containous/traefik/releases';
-const traefikVersionPrefix = 'v2';
+const traefikVersionPrefix = 'v3';
 
 // load package.json info
 const baseFolder = dirname(fileURLToPath(import.meta.url));

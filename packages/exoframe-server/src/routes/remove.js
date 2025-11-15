@@ -19,7 +19,7 @@ const removeUserContainer = async ({ username, id, reply }) => {
   const containersByUrl = allContainers.filter((c) => {
     return (
       c.Labels['exoframe.user'] === username &&
-      c.Labels[`traefik.http.routers.${c.Labels['exoframe.deployment']}.rule`] === `Host(\`${id}\`)`
+      c.Labels[`traefik.http.routers.${c.Labels['exoframe.deployment']}.rule`].includes(id)
     );
   });
 
