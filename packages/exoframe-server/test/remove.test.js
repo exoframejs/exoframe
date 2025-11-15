@@ -112,7 +112,7 @@ test('Should remove container by url', async () => {
   // check docker services
   const allContainers = await docker.listContainers();
   const urlContainers = allContainers.filter((c) =>
-    c.Labels[`traefik.http.routers.${c.Labels['exoframe.deployment']}.rule`].includes(testUrl)
+    c.Labels[`traefik.http.routers.${c.Labels['exoframe.deployment']}.rule`]?.includes?.(testUrl)
   );
   expect(urlContainers.length).toEqual(0);
 });
