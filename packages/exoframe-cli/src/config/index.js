@@ -77,7 +77,8 @@ export async function getConfig() {
  * @returns {Promise<void>}
  */
 export async function updateConfig(newCfg) {
-  const cfg = Object.assign(defaultConfig, newCfg);
+  const currentConfig = await getConfig();
+  const cfg = Object.assign(currentConfig, newCfg);
   await writeFile(configPath, jsyaml.dump(cfg), 'utf8');
 }
 
