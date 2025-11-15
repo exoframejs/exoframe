@@ -47,9 +47,9 @@ const getContainerLogs = async ({ username, id, reply, follow }) => {
 
   // if not found by name - try to find by domain.
   const containerByUrl = allContainers.find((c) => {
+    const ruleLabel = Object.keys(c.Labels).find((l) => l.includes('traefik.http.routers') && l.includes('.rule'));
     return (
-      c.Labels['exoframe.user'] === username &&
-      c.Labels[`traefik.http.routers.${c.Labels['exoframe.deployment']}.rule`].includes(id)
+      c.Labels['exoframe.user'] === username && ruleLabel && c.Labels[ruleLabel] && c.Labels[ruleLabel].includes(id)
     );
   });
   if (containerByUrl) {
