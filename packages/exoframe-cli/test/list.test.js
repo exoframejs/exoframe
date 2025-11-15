@@ -83,11 +83,11 @@ test('Should get list of deployments', async () => {
     ",
       ],
       [
-        "[31m   ID      [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m[90m [39m[31m   Type        [39m
-       test    [90m [39m   test.host   [90m [39m   Not set    [90m [39m   Container   
-       test2   [90m [39m   Not set     [90m [39m   Not set    [90m [39m   Container   
-       test3   [90m [39m   Not set     [90m [39m   Not set    [90m [39m   Container   
-       test4   [90m [39m   Not set     [90m [39m   alias4     [90m [39m   Container   ",
+        "[31m   ID      [39m[90m [39m[31m   Deployment Name   [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m[90m [39m[31m   Type        [39m
+       test    [90m [39m   test              [90m [39m   test.host   [90m [39m   Not set    [90m [39m   Container   
+       test2   [90m [39m                     [90m [39m   Not set     [90m [39m   Not set    [90m [39m   Container   
+       test3   [90m [39m                     [90m [39m   Not set     [90m [39m   Not set    [90m [39m   Container   
+       test4   [90m [39m                     [90m [39m   Not set     [90m [39m   alias4     [90m [39m   Container   ",
       ],
     ]
   `);

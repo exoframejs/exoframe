@@ -112,8 +112,8 @@ test('Should deploy simple project', async () => {
     ",
       ],
       [
-        "[31m   ID     [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m[90m [39m[31m   Type        [39m
-       test   [90m [39m   localhost   [90m [39m   test       [90m [39m   Container   ",
+        "[31m   ID     [39m[90m [39m[31m   Deployment Name   [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m[90m [39m[31m   Type        [39m
+       test   [90m [39m   test              [90m [39m   localhost   [90m [39m   test       [90m [39m   Container   ",
       ],
     ]
   `);
@@ -166,8 +166,8 @@ test('Should deploy with endpoint flag', async () => {
     ",
       ],
       [
-        "[31m   ID     [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m[90m [39m[31m   Type        [39m
-       test   [90m [39m   localhost   [90m [39m   test       [90m [39m   Container   ",
+        "[31m   ID     [39m[90m [39m[31m   Deployment Name   [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m[90m [39m[31m   Type        [39m
+       test   [90m [39m   test              [90m [39m   localhost   [90m [39m   test       [90m [39m   Container   ",
       ],
     ]
   `);
@@ -207,8 +207,8 @@ test('Should deploy without path', async () => {
     ",
       ],
       [
-        "[31m   ID     [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m[90m [39m[31m   Type        [39m
-       test   [90m [39m   localhost   [90m [39m   test       [90m [39m   Container   ",
+        "[31m   ID     [39m[90m [39m[31m   Deployment Name   [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m[90m [39m[31m   Type        [39m
+       test   [90m [39m   test              [90m [39m   localhost   [90m [39m   test       [90m [39m   Container   ",
       ],
     ]
   `);
@@ -255,8 +255,8 @@ test('Should deploy with token', async () => {
     ",
       ],
       [
-        "[31m   ID     [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m[90m [39m[31m   Type        [39m
-       test   [90m [39m   localhost   [90m [39m   test       [90m [39m   Container   ",
+        "[31m   ID     [39m[90m [39m[31m   Deployment Name   [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m[90m [39m[31m   Type        [39m
+       test   [90m [39m   test              [90m [39m   localhost   [90m [39m   test       [90m [39m   Container   ",
       ],
     ]
   `);
@@ -302,8 +302,8 @@ test('Should execute update', async () => {
     ",
       ],
       [
-        "[31m   ID     [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m[90m [39m[31m   Type        [39m
-       test   [90m [39m   localhost   [90m [39m   test       [90m [39m   Container   ",
+        "[31m   ID     [39m[90m [39m[31m   Deployment Name   [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m[90m [39m[31m   Type        [39m
+       test   [90m [39m   test              [90m [39m   localhost   [90m [39m   test       [90m [39m   Container   ",
       ],
     ]
   `);
@@ -351,8 +351,8 @@ test('Should open webpage after deploy', async () => {
     ",
       ],
       [
-        "[31m   ID     [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m[90m [39m[31m   Type        [39m
-       test   [90m [39m   localhost   [90m [39m   test       [90m [39m   Container   ",
+        "[31m   ID     [39m[90m [39m[31m   Deployment Name   [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m[90m [39m[31m   Type        [39m
+       test   [90m [39m   test              [90m [39m   localhost   [90m [39m   test       [90m [39m   Container   ",
       ],
       [
         "Opening deployed project in browser: localhost",
@@ -424,8 +424,8 @@ test('Should deploy with a custom config', async () => {
     ",
       ],
       [
-        "[31m   ID     [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m[90m [39m[31m   Type        [39m
-       test   [90m [39m   localhost   [90m [39m   test       [90m [39m   Container   ",
+        "[31m   ID     [39m[90m [39m[31m   Deployment Name   [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m[90m [39m[31m   Type        [39m
+       test   [90m [39m   test              [90m [39m   localhost   [90m [39m   test       [90m [39m   Container   ",
       ],
     ]
   `);
@@ -658,8 +658,8 @@ test('Should ignore specified files', async () => {
     ",
       ],
       [
-        "[31m   ID     [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m[90m [39m[31m   Type        [39m
-       test   [90m [39m   localhost   [90m [39m   test       [90m [39m   Container   ",
+        "[31m   ID     [39m[90m [39m[31m   Deployment Name   [39m[90m [39m[31m   URL         [39m[90m [39m[31m   Hostname   [39m[90m [39m[31m   Type        [39m
+       test   [90m [39m   test              [90m [39m   localhost   [90m [39m   test       [90m [39m   Container   ",
       ],
     ]
   `);
