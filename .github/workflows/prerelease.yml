@@ -106,6 +106,7 @@ jobs:
         working-directory: ./packages/exoframe-server
         env:
           IMAGE_NAME: exoframe/server
+          GHCR_IMAGE_NAME: exoframejs/server
         run: |
           REF=${GITHUB_REF##*/}
           VERSION=${{ steps.version.outputs.new }}
@@ -115,18 +116,19 @@ jobs:
           echo TAG=$TAG
           echo DEBUG_TAG=$DEBUG_TAG
           echo IMAGE_NAME=$IMAGE_NAME
+          echo GHCR_IMAGE_NAME=$GHCR_IMAGE_NAME
           echo VERSION=$VERSION
           # Build docker image
           docker build -f docker/Dockerfile --quiet --cache-from $IMAGE_NAME:$TAG --label "version=$VERSION" -t $IMAGE_NAME:$TAG .
           # Build debug docker image
           docker build -f docker/Dockerfile.debug --quiet --cache-from $IMAGE_NAME:$DEBUG_TAG --label "version=$VERSION" -t $IMAGE_NAME:$DEBUG_TAG .
           docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:next
-          docker tag $IMAGE_NAME:$TAG ghcr.io/$IMAGE_NAME:next
+          docker tag $IMAGE_NAME:$TAG ghcr.io/$GHCR_IMAGE_NAME:next
           docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:debug_next
-          docker tag $IMAGE_NAME:$TAG ghcr.io/$IMAGE_NAME:debug_next
+          docker tag $IMAGE_NAME:$TAG ghcr.io/$GHCR_IMAGE_NAME:debug_next
           # Push all images to registry
           docker push --all-tags $IMAGE_NAME
-          docker push --all-tags ghcr.io/$IMAGE_NAME
+          docker push --all-tags ghcr.io/$GHCR_IMAGE_NAME
 
   publish-recipe-ghost:
     runs-on: ubuntu-latest

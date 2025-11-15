@@ -99,6 +99,7 @@ jobs:
         working-directory: ./packages/exoframe-server
         env:
           IMAGE_NAME: exoframe/server
+          GHCR_IMAGE_NAME: exoframejs/server
         run: |
           VERSION=${{ steps.version.outputs.new }}
           TAG="$VERSION"
@@ -108,12 +109,12 @@ jobs:
           docker build -f docker/Dockerfile.debug --quiet --cache-from $IMAGE_NAME:$DEBUG_TAG --label "version=$VERSION" -t $IMAGE_NAME:$DEBUG_TAG .
           docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:latest
           docker tag $IMAGE_NAME:$DEBUG_TAG $IMAGE_NAME:debug_latest
-          docker tag $IMAGE_NAME:$TAG ghcr.io/$IMAGE_NAME:$TAG
-          docker tag $IMAGE_NAME:$DEBUG_TAG ghcr.io/$IMAGE_NAME:$DEBUG_TAG
-          docker tag $IMAGE_NAME:$TAG ghcr.io/$IMAGE_NAME:latest
-          docker tag $IMAGE_NAME:$DEBUG_TAG ghcr.io/$IMAGE_NAME:debug_latest
+          docker tag $IMAGE_NAME:$TAG ghcr.io/$GHCR_IMAGE_NAME:$TAG
+          docker tag $IMAGE_NAME:$DEBUG_TAG ghcr.io/$GHCR_IMAGE_NAME:$DEBUG_TAG
+          docker tag $IMAGE_NAME:$TAG ghcr.io/$GHCR_IMAGE_NAME:latest
+          docker tag $IMAGE_NAME:$DEBUG_TAG ghcr.io/$GHCR_IMAGE_NAME:debug_latest
           docker push --all-tags $IMAGE_NAME
-          docker push --all-tags ghcr.io/$IMAGE_NAME
+          docker push --all-tags ghcr.io/$GHCR_IMAGE_NAME
 
   publish-recipe-ghost:
     runs-on: ubuntu-latest

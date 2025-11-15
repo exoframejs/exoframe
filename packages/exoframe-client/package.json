@@ -1,6 +1,6 @@
 {
   "name": "exoframe-client",
-  "version": "7.0.0-rc.5",
+  "version": "7.0.0-rc.6",
   "description": "API client for Exoframe server, self-hosted deployment tool",
   "main": "index.js",
   "repository": "git@github.com:exoframejs/exoframe.git",
