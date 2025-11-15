@@ -45,15 +45,6 @@ const getContainerLogs = async ({ username, id, reply, follow }) => {
     return reply.send(logStream);
   }
 
-  // if not found by name - try to find by project
-  const containers = allContainers.filter(
-    (c) => c.Labels['exoframe.user'] === username && c.Labels['exoframe.project'] === id
-  );
-  if (!containers.length) {
-    reply.code(404).send({ error: 'Container not found!' });
-    return;
-  }
-
   // if not found by name - try to find by domain.
   const containerByUrl = allContainers.find((c) => {
     return (
@@ -66,6 +57,15 @@ const getContainerLogs = async ({ username, id, reply, follow }) => {
     const logs = await container.logs(generateLogsConfig(follow));
     const logStream = fixLogStream(logs);
     return reply.send(logStream);
+  }
+
+  // if not found by name - try to find by project
+  const containers = allContainers.filter(
+    (c) => c.Labels['exoframe.user'] === username && c.Labels['exoframe.project'] === id
+  );
+  if (!containers.length) {
+    reply.code(404).send({ error: 'Container not found!' });
+    return;
   }
 
   // get all log streams and prepend them with service names
