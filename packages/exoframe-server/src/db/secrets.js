@@ -2,7 +2,7 @@
 import Loki from 'lokijs';
 import { join } from 'path';
 // our packages
-import { baseFolder } from '../config/index.js';
+import { baseFolder } from '../config/paths.js';
 
 // init in-memory adapter for login requests
 const memAdapter = new Loki.LokiMemoryAdapter();

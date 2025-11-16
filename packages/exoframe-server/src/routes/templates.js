@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 // our modules
-import { extensionsFolder } from '../config/index.js';
+import { extensionsFolder } from '../config/paths.js';
 import { runNPM } from '../util/index.js';
 
 export default (fastify) => {

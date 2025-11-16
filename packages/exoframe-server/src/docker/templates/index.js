@@ -1,7 +1,7 @@
 // npm packages
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import { extensionsFolder } from '../../config/index.js';
+import { extensionsFolder } from '../../config/paths.js';
 import * as dockerfileTemplate from './dockerfile.js';
 import * as imageTemplate from './image.js';
 import * as nodeTemplate from './node.js';

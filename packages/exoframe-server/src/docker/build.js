@@ -1,7 +1,7 @@
 /* eslint no-async-promise-executor: off */
 import { join } from 'path';
 import { pack } from 'tar-fs';
-import { tempDockerDir } from '../config/index.js';
+import { tempDockerDir } from '../config/paths.js';
 import logger from '../logger/index.js';
 import { getBuildargs, getProjectConfig, tagFromConfig, writeStatus } from '../util/index.js';
 import docker from './docker.js';

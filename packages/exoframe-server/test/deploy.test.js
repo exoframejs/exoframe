@@ -10,6 +10,7 @@ import authToken from './fixtures/authToken.js';
 
 // mock config
 vi.mock('../src/config/index.js', () => import('./__mocks__/config.js'));
+vi.mock('../src/config/paths.js', () => import('./__mocks__/config.js'));
 
 const config = await import('../src/config/index.js');
 

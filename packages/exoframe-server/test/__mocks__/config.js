@@ -4,10 +4,11 @@ import { fileURLToPath } from 'url';
 // build test paths
 const currentDir = path.dirname(fileURLToPath(import.meta.url));
 export const baseFolder = path.join(currentDir, '..', '..', 'test', 'fixtures');
-// const configPath = path.join(baseFolder, 'server.config.yml');
-const publicKeysPath = path.join(currentDir, '..', '..', 'test', 'fixtures');
+export const configPath = path.join(baseFolder, 'server.config.yml');
+export const publicKeysPath = path.join(currentDir, '..', '..', 'test', 'fixtures');
 export const extensionsFolder = path.join(baseFolder, 'extensions');
 export const recipesFolder = path.join(baseFolder, 'recipes');
+export const logFolder = baseFolder;
 const tempDirNormal = path.join(baseFolder, 'deploying');
 export let tempDockerDir = tempDirNormal;
 

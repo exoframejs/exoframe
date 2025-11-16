@@ -1,7 +1,8 @@
 /* eslint no-await-in-loop: off */
 import { randomUUID } from 'crypto';
 import _ from 'highland';
-import { getConfig, tempDockerDir } from '../config/index.js';
+import { getConfig } from '../config/index.js';
+import { tempDockerDir } from '../config/paths.js';
 import { build } from '../docker/build.js';
 import { scheduleCleanup, schedulePrune } from '../docker/cleanup.js';
 import docker from '../docker/docker.js';

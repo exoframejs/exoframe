@@ -1,7 +1,8 @@
 import { randomUUID } from 'crypto';
 import { mkdirSync } from 'fs';
 import { join } from 'path';
-import { getConfig, recipesFolder, tempDockerDir } from '../config/index.js';
+import { getConfig } from '../config/index.js';
+import { recipesFolder, tempDockerDir } from '../config/paths.js';
 import { build, buildFromParams } from '../docker/build.js';
 import docker from '../docker/docker.js';
 import { createNetwork, initNetwork as getNetwork } from '../docker/network.js';

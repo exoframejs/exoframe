@@ -1,6 +1,6 @@
 import { join } from 'path';
 import pino from 'pino';
-import { logFolder } from '../config/index.js';
+import { logFolder } from '../config/paths.js';
 
 // prepare level
 const levelTesting = process.env.NODE_ENV === 'testing' ? 'error' : false;

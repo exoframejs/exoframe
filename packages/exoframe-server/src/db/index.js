@@ -2,7 +2,7 @@
 import Loki from 'lokijs';
 import { join } from 'path';
 // our packages
-import { baseFolder } from '../config/index.js';
+import { baseFolder } from '../config/paths.js';
 
 // TTL for auth requests
 const REQ_TTL =

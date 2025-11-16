@@ -5,7 +5,7 @@ import _ from 'lodash';
 import { join } from 'path';
 import { rimraf } from 'rimraf';
 import { extract } from 'tar-fs';
-import { tempDockerDir } from '../config/index.js';
+import { tempDockerDir } from '../config/paths.js';
 import { getSecretsCollection } from '../db/secrets.js';
 
 // try to find secret with current value name and return secret value if present

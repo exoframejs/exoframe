@@ -2,19 +2,9 @@
 import { spawn } from 'child_process';
 import { mkdirSync, readFileSync, statSync, watchFile, writeFileSync } from 'fs';
 import jsyaml from 'js-yaml';
-import { homedir } from 'os';
 import { join } from 'path';
 import logger from '../logger/index.js';
-
-// construct paths
-const xdgConfigHome = process.env.XDG_CONFIG_HOME || join(homedir(), '.config');
-export const baseFolder = join(xdgConfigHome, 'exoframe');
-const configPath = join(baseFolder, 'server.config.yml');
-const publicKeysPath = join(homedir(), '.ssh');
-export const extensionsFolder = join(baseFolder, 'extensions');
-export const recipesFolder = join(baseFolder, 'recipes');
-// dir for temporary files used to build docker images
-export const tempDockerDir = join(baseFolder, 'deploying');
+import { baseFolder, configPath, extensionsFolder, logFolder, publicKeysPath, recipesFolder } from './paths.js';
 
 // create base folder if doesn't exist
 try {
@@ -48,9 +38,6 @@ try {
 } catch {
   spawn('npm', ['init', '-y', '--silent'], { cwd: recipesFolder });
 }
-
-// construct log path
-export const logFolder = join(xdgConfigHome, 'exoframe', 'exoframe-server');
 
 // create logs folder if doesn't exist
 try {

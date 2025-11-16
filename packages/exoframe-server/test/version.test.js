@@ -7,6 +7,7 @@ import traefikReleasesJSON from './fixtures/version/traefik-releases.json';
 
 // mock config
 vi.mock('../src/config/index.js', () => import('./__mocks__/config.js'));
+vi.mock('../src/config/paths.js', () => import('./__mocks__/config.js'));
 
 // import server after mocking config
 const { startServer } = await import('../src/index.js');

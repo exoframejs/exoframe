@@ -6,5 +6,6 @@ entryPoints:
     address: ':80'
 providers:
   docker:
+    network: exoframe
     endpoint: unix:///var/run/docker.sock
     exposedByDefault: false
