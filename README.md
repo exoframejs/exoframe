@@ -35,13 +35,9 @@ Exoframe is a self-hosted tool that allows simple one-command deployments using 
 
 [![asciicast](https://asciinema.org/a/129255.png)](https://asciinema.org/a/129255)
 
-## Getting started
+## Getting started & Docs
 
-To be done.
-
-## Docs
-
-To be done.
+Follow a [Quick Start](https://exoframejs.github.io/exoframe/docs/getting-started/quick-start) guide to get starter or read through all docs [here](https://exoframejs.github.io/exoframe/).
 
 ## Special thanks
 
