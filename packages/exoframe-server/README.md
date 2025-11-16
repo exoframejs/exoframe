@@ -2,11 +2,8 @@
 
 > Simple Docker deployment tool
 
-[![CI: Test](https://github.com/exoframejs/exoframe-server/workflows/Test/badge.svg)](https://github.com/exoframejs/exoframe-server/actions?query=workflow%3ATest)
-[![CI: Release](https://github.com/exoframejs/exoframe-server/workflows/Release/badge.svg)](https://github.com/exoframejs/exoframe-server/actions?query=workflow%3ARelease)
-[![Coverage Status](https://coveralls.io/repos/github/exoframejs/exoframe-server/badge.svg?branch=master)](https://coveralls.io/github/exoframejs/exoframe-server?branch=master)
+[![Test Status](https://github.com/exoframejs/exoframe/workflows/Test/badge.svg)](https://github.com/exoframejs/exoframe/actions?query=workflow%3ATest)
 [![Docker Pulls](https://img.shields.io/docker/pulls/exoframe/server.svg)](https://hub.docker.com/r/exoframe/server/)
-[![Docker image size](https://images.microbadger.com/badges/image/exoframe/server.svg)](https://microbadger.com/images/exoframe/server)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://opensource.org/licenses/MIT)
 
 Exoframe is a self-hosted tool that allows simple one-command deployments using Docker.
