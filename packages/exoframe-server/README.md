@@ -13,17 +13,11 @@ Exoframe is a self-hosted tool that allows simple one-command deployments using 
 
 ## Installation, usage and docs
 
-For more details on how to get it up and running please follow the following link [how to setup exoframe-server](https://github.com/exoframejs/exoframe/tree/master/docs).
+For more details on how to get it up and running please follow the [quick start guide](https://exoframejs.github.io/exoframe/docs/getting-started/quick-start).
 
 ## Development
 
 ```bash
-# Start the development setup:
-npm run docker:start
-
-# Run something inside of the exoframe container:
-npm run docker:exec [command]
-
 # Test your code:
 npm run lint
 npm test
