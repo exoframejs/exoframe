@@ -102,7 +102,7 @@ test('Should generate new token via interactive input', async () => {
   // spy on console
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
   // handle correct request
-  const tokenServer = nock('http://localhost:8080').post('/deployToken').reply(200, { name: 'test', value: 'val' });
+  const tokenServer = nock('http://localhost:8080').post('/deployToken').reply(200, { name: 'test', token: 'val' });
 
   // mock enquirer reply
   const enqSpy = vi.spyOn(inquirer, 'prompt').mockImplementationOnce(() => Promise.resolve({ tokenName: 'test' }));
@@ -157,7 +157,7 @@ test('Should generate new token via flags', async () => {
   // spy on console
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
   // handle correct request
-  const tokenServer = nock('http://localhost:8080').post('/deployToken').reply(200, { name: 'test', value: 'val' });
+  const tokenServer = nock('http://localhost:8080').post('/deployToken').reply(200, { name: 'test', token: 'val' });
 
   // execute logs
   await program.parseAsync(['token', 'add', 'test'], { from: 'user' });

@@ -38,7 +38,7 @@ export const tokenAddHandler = async (name) => {
   try {
     const generatedToken = await createToken({ name: tokenName, endpoint, token });
 
-    console.log(chalk.bold('New token generated:'));
+    spinner.succeed('New token generated:');
     console.log('');
     console.log(` > Name: ${generatedToken.name}`);
     console.log(` > Value: ${generatedToken.value}`);

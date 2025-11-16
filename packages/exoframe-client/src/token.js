@@ -48,7 +48,7 @@ export const listTokens = async ({ endpoint, token }) => {
  * @param {string} params.name - new token name
  * @param {string} params.endpoint - exoframe server endpoint
  * @param {string} params.token - exoframe auth token
- * @returns {Token}
+ * @returns {Promise<Token>}
  */
 export const createToken = async ({ name, endpoint, token }) => {
   // services request url
@@ -67,7 +67,10 @@ export const createToken = async ({ name, endpoint, token }) => {
   // try sending request
   try {
     const { body } = await got(remoteUrl, options);
-    return body;
+    return {
+      name,
+      value: body.token,
+    };
   } catch (e) {
     // if authorization is expired/broken/etc
     if (e.response.statusCode === 401) {

@@ -7,12 +7,15 @@ const token = 'test-123';
 
 test('Should generate token', async () => {
   // handle correct request
-  const response = { value: 'test', name: 'new' };
+  const response = { token: 'test', name: 'new' };
   const tokenServer = nock(endpoint).post('/deployToken').reply(200, response);
   // execute token creation
   const result = await createToken({ name: response.name, endpoint, token });
   // make sure it was successful
-  expect(result).toEqual(response);
+  expect(result).toEqual({
+    name: response.name,
+    value: response.token,
+  });
   // check that server was called
   expect(tokenServer.isDone()).toBeTruthy();
   // tear down nock
