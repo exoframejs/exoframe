@@ -23,6 +23,10 @@ Exoframe is a self-hosted tool that allows simple one-command deployments using 
 
 \* Feature provided by [Traefik](https://traefik.io/)
 
+## Installation, usage and docs
+
+For more details on how to get it up and running please see docs in [the repository](https://github.com/exoframejs/exoframe/).
+
 ## License
 
 Licensed under MIT.
