@@ -1,6 +1,6 @@
 {
   "name": "exoframe",
-  "version": "7.0.0-rc.10",
+  "version": "7.0.0-rc.11",
   "description": "CLI for Exoframe, self-hosted deployment tool",
   "main": "dist/index.js",
   "bin": "dist/index.js",
