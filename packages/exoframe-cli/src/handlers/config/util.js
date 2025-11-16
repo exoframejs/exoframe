@@ -466,6 +466,7 @@ export const generateConfigPrompt = (config) => {
       name: 'prop',
       default: 'n',
       pageSize: 20,
+      expanded: true,
       choices,
     },
   ];

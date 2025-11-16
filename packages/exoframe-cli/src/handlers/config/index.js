@@ -53,6 +53,10 @@ export const configHandler = async (args) => {
   if (!nonInteractive) {
     const cfgPrompts = generateConfigPrompt(newConfig);
     const { prop } = await inquirer.prompt(cfgPrompts);
+    if (prop === 'abort') {
+      console.log(chalk.red('Aborted on user request'));
+      return;
+    }
     // create new prompt for specific prop chosen by user
     const propPrompts = configPrompts[prop](newConfig);
     const res = await inquirer.prompt(propPrompts);
