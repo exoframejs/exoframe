@@ -27,9 +27,7 @@ inspect_container_config() {
         existing_secret=$(docker inspect exoframe-server --format '{{range .Config.Env}}{{println .}}{{end}}' 2>/dev/null | grep -E '^EXO_PRIVATE_KEY=' | head -n 1 | cut -d= -f2-)
         if [ "$existing_mount" ]; then
             config_mount_source=$(echo "$existing_mount" | cut -d: -f1)
-            config_mount_dest=$(echo "$existing_mount" | cut -d: -f2-)
-            FILE=$config_mount_source/server.config.yml
-            echo "Reusing config mount from existing container: $config_mount_source -> $config_mount_dest"
+            echo "Reusing config mount source from existing container: $config_mount_source"
         fi
     fi
 }
@@ -39,10 +37,9 @@ inspect_container_config
 # fallback to old default location if found
 if [ "$config_mount_source" = "$config_dir/exoframe" ] && [ -d "$HOME/.exoframe" ]; then
     config_mount_source="$HOME/.exoframe"
-    config_mount_dest="/root/.exoframe"
-    FILE=$config_mount_source/server.config.yml
     echo "Reusing legacy config location at $config_mount_source"
 fi
+FILE=$config_mount_source/server.config.yml
 
 usage()
 {
