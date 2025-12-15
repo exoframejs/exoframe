@@ -40,8 +40,8 @@ jobs:
           - name: exoframe-client
             workspace: exoframe-client
           - name: exoframe
-            workspace: exoframe
-            build: npm run build -w exoframe
+            workspace: exoframe-cli
+            build: npm run build -w exoframe-cli
           - name: exoframe-server
             workspace: exoframe-server
             server: true
