@@ -16,9 +16,11 @@ INTERACTIVE=true
 config_letsencrypt=""
 config_letsencrypt_email=""
 existing_domain=""
+existing_container=false
 
 inspect_container_config() {
     if docker inspect exoframe-server >/dev/null 2>&1; then
+        existing_container=true
         existing_domain=$(docker inspect exoframe-server --format '{{ index .Config.Labels "traefik.http.routers.exoframe-server.rule" }}' 2>/dev/null | sed -n 's/.*Host(`\([^`]*\)`).*/\1/p' | head -n 1)
         existing_mount=$(docker inspect exoframe-server --format '{{range .Mounts}}{{if or (eq .Destination "/root/.config/exoframe") (eq .Destination "/root/.exoframe")}}{{.Source}}:{{.Destination}}{{"\n"}}{{end}}{{end}}' 2>/dev/null | head -n 1)
         if [ "$existing_mount" ]; then
@@ -170,6 +172,10 @@ exoframe/server"
 if [ $DRY_RUN -eq 1 ]; then
     echo
     echo "Commands to run inside server:"
+    if [ "$existing_container" = true ]; then
+        echo "docker stop exoframe-server"
+        echo "docker rm exoframe-server"
+    fi
     if [ "$ssl" ] && [ "$ssl" != false ]; then
         echo
         if [ $needs_letsencrypt = true ] || [ $needs_letsencrypt_email = true ]; then
@@ -186,5 +192,10 @@ if [ $DRY_RUN -eq 1 ]; then
     echo
     echo "$VAR"
 else
+    if [ "$existing_container" = true ]; then
+        echo "Stopping existing exoframe-server container..."
+        docker stop exoframe-server >/dev/null 2>&1 || true
+        docker rm exoframe-server >/dev/null 2>&1 || true
+    fi
     $VAR | (echo && echo && echo "$VAR" && echo)
 fi
