@@ -1,0 +1,131 @@
+name: Publish
+
+on:
+  push:
+    tags:
+      - '*'
+
+permissions:
+  contents: read
+  id-token: write
+  packages: write
+
+env:
+  NODE_VERSION: 24
+  REGISTRY_URL: https://registry.npmjs.org
+
+jobs:
+  detect-tag:
+    runs-on: ubuntu-latest
+    outputs:
+      npm_tag: ${{ steps.tag.outputs.npm_tag }}
+    steps:
+      - name: Select npm dist-tag
+        id: tag
+        run: |
+          REF="${GITHUB_REF_NAME}"
+          if [[ "$REF" == *"-pre"* || "$REF" == *"-rc"* ]]; then
+            echo "npm_tag=next" >> "$GITHUB_OUTPUT"
+          else
+            echo "npm_tag=latest" >> "$GITHUB_OUTPUT"
+          fi
+
+  publish-packages:
+    needs: detect-tag
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: exoframe-client
+            workspace: exoframe-client
+          - name: exoframe
+            workspace: exoframe
+            build: npm run build -w exoframe
+          - name: exoframe-server
+            workspace: exoframe-server
+            server: true
+          - name: exoframe-recipe-ghost
+            workspace: exoframe-recipe-ghost
+          - name: exoframe-template-java
+            workspace: exoframe-template-java
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          registry-url: ${{ env.REGISTRY_URL }}
+
+      - name: check versions
+        id: versions
+        run: |
+          TAG="${{ needs.detect-tag.outputs.npm_tag }}"
+          PACKAGE="${{ matrix.name }}"
+          current=$(npm info "${PACKAGE}@${TAG}" version 2>/dev/null || true)
+          echo "current=${current:-none}" >> "$GITHUB_OUTPUT"
+          echo "new=$(npm info ./packages/${{ matrix.workspace }} version)" >> "$GITHUB_OUTPUT"
+
+      - name: install
+        if: ${{ steps.versions.outputs.current != steps.versions.outputs.new }}
+        run: npm ci
+
+      - name: build
+        if: ${{ matrix.build && steps.versions.outputs.current != steps.versions.outputs.new }}
+        run: ${{ matrix.build }}
+
+      - name: publish
+        if: ${{ steps.versions.outputs.current != steps.versions.outputs.new }}
+        run: npm publish --access public --tag ${{ needs.detect-tag.outputs.npm_tag }} --provenance -w ${{ matrix.workspace }}
+
+      - name: Login to DockerHub Registry
+        if: ${{ matrix.server && steps.versions.outputs.current != steps.versions.outputs.new }}
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Log in to Github Container registry
+        if: ${{ matrix.server && steps.versions.outputs.current != steps.versions.outputs.new }}
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: get version
+        if: ${{ matrix.server && steps.versions.outputs.current != steps.versions.outputs.new }}
+        id: version
+        run: echo "new=$(npm info ./packages/${{ matrix.workspace }} version)" >> "$GITHUB_OUTPUT"
+
+      - name: Build & push docker image
+        if: ${{ matrix.server && steps.versions.outputs.current != steps.versions.outputs.new }}
+        working-directory: ./packages/${{ matrix.workspace }}
+        env:
+          IMAGE_NAME: exoframe/server
+          GHCR_IMAGE_NAME: exoframejs/server
+          PUBLISH_TAG: ${{ needs.detect-tag.outputs.npm_tag }}
+        run: |
+          VERSION=${{ steps.version.outputs.new }}
+          TAG="$VERSION"
+          DEBUG_TAG="debug_$TAG"
+          echo VERSION=$VERSION
+          docker build -f docker/Dockerfile --quiet --cache-from $IMAGE_NAME:$TAG --label "version=$VERSION" -t $IMAGE_NAME:$TAG .
+          docker build -f docker/Dockerfile.debug --quiet --cache-from $IMAGE_NAME:$DEBUG_TAG --label "version=$VERSION" -t $IMAGE_NAME:$DEBUG_TAG .
+          if [ "$PUBLISH_TAG" = "latest" ]; then
+            docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:latest
+            docker tag $IMAGE_NAME:$DEBUG_TAG $IMAGE_NAME:debug_latest
+            docker tag $IMAGE_NAME:$TAG ghcr.io/$GHCR_IMAGE_NAME:$TAG
+            docker tag $IMAGE_NAME:$DEBUG_TAG ghcr.io/$GHCR_IMAGE_NAME:$DEBUG_TAG
+            docker tag $IMAGE_NAME:$TAG ghcr.io/$GHCR_IMAGE_NAME:latest
+            docker tag $IMAGE_NAME:$DEBUG_TAG ghcr.io/$GHCR_IMAGE_NAME:debug_latest
+          else
+            docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:next
+            docker tag $IMAGE_NAME:$DEBUG_TAG $IMAGE_NAME:debug_next
+            docker tag $IMAGE_NAME:$TAG ghcr.io/$GHCR_IMAGE_NAME:next
+            docker tag $IMAGE_NAME:$DEBUG_TAG ghcr.io/$GHCR_IMAGE_NAME:debug_next
+          fi
+          docker push --all-tags $IMAGE_NAME
+          docker push --all-tags ghcr.io/$GHCR_IMAGE_NAME
