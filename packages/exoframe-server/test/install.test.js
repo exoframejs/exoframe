@@ -15,7 +15,7 @@ beforeEach(() => rm(testHome, { recursive: true, force: true }).catch(() => {}))
 
 describe('Test install script', () => {
   test('Should print help', async () => {
-    const { stdout } = await exec('tools/install.sh -h');
+    const { stdout } = await exec('tools/install.sh -h', shellOptions);
     expect(stdout).toMatchInlineSnapshot(`
       "
       Usage:
@@ -70,7 +70,8 @@ describe('Test install script', () => {
       shellOptions
     );
     expect(stdout).toMatchInlineSnapshot(`
-      "
+      "Reusing SSL setting from config
+
       Commands to run inside server:
 
 
