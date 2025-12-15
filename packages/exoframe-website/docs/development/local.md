@@ -5,7 +5,7 @@ sidebar_position: 1
 # Using Development and Debug Versions
 
 You might need to run Exoframe CLI and Server in development mode.  
-There is currently three ways to do so.
+There are currently three ways to do so.
 They are described in more detail below.
 
 ## Using development versions from source
@@ -15,7 +15,7 @@ Primary way of running Exoframe CLI and Server in development mode is by using s
 ### Exoframe CLI
 
 Exoframe CLI requires you to have Node.js and yarn installed.  
-To run Exoframe CLI in development follow this steps:
+To run Exoframe CLI in development follow these steps:
 
 1. Make sure you don't have `exoframe` installed globally - if you do, remove it
 2. Clone the Exoframe CLI repo: `git clone git@github.com:exoframejs/exoframe.git && cd exoframe`
@@ -26,7 +26,7 @@ To run Exoframe CLI in development follow this steps:
 ### Exoframe-Server
 
 Exoframe-Server requires you to have Node.js, yarn, Docker and docker-compose installed.  
-To run Exoframe-Server in development follow this steps:
+To run Exoframe-Server in development follow these steps:
 
 1. Clone the Exoframe-Server repo: `git clone git@github.com:exoframejs/exoframe-server.git && cd exoframe-server`
 2. Install dependencies: `yarn install`

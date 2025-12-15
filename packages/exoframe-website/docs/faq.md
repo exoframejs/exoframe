@@ -17,4 +17,4 @@ Currently, more than one user can use same username (so, all users with that use
 ## How does it work?
 
 Exoframe uses [Docker](https://www.docker.com/) to deploy your project and [Traefik](https://traefik.io/) to proxy requested domains and/or paths to deployed projects.  
-All the Docker configuration of your projects happens automatically. So after running the command, the only thing you need to do is wait a few seconds until your project have been built and deployed!
+All the Docker configuration of your projects happens automatically. So after running the command, the only thing you need to do is wait a few seconds until your project has been built and deployed!

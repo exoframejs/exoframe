@@ -74,7 +74,7 @@ const templateProps = {
 
 First thing Exoframe server will do is execute your `checkTemplate` function to see if your template fits the current project.  
 Typically you'd want to read the list of files in temporary project folder and see if it contains files related to your template type.  
-Here's an example of the core static HTML template, it check whether folder contains `index.html` file:
+Here's an example of the core static HTML template; it checks whether the folder contains an `index.html` file:
 
 ```js
 // function to check if the template fits this recipe

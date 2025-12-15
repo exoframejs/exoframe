@@ -47,7 +47,7 @@ docker run -d \
 --label "traefik.http.routers.exoframe-server.rule=Host(\`exoframe.your-host.com\`)"
 
 # this is used to tell traefik to enable letsencrypt on the exoframe server
-# you can safely remove this label if you are no using letsencrypt
+# you can safely remove this label if you are not using letsencrypt
 --label traefik.http.routers.exoframe-server.tls.certresolver=exoframeChallenge
 ```
 
@@ -88,10 +88,10 @@ docker run -d \
 --label "traefik.http.routers.exoframe-server-web.rule=Host(\`exoframe.your-host.com\`)" \
 
 # this is used to tell traefik to enable letsencrypt on the exoframe server
-# you can safely remove this label if you are no using letsencrypt
+# you can safely remove this label if you are not using letsencrypt
 --label traefik.http.routers.exoframe-server.tls.certresolver=exoframeChallenge
 
-# this labels below set up automatic http -> https redirect
+# these labels below set up automatic http -> https redirect
 # by defining two entrypoints - web on port 80 and websecure on port 443
 # and creating redirect middleware for web endpoint
 # for more details see traefik docs

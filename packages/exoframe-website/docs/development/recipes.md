@@ -2,7 +2,7 @@
 sidebar_position: 2
 ---
 
-# Templates guide
+# Recipes guide
 
 Exoframe allows doing complex deployments using third party recipes.  
 This guide aims to explain basics you need to know to create your own recipes.  
