@@ -181,6 +181,8 @@ if [ $DRY_RUN -eq 1 ]; then
     if [ "$existing_container" = true ]; then
         echo "docker stop exoframe-server"
         echo "docker rm exoframe-server"
+        echo "docker stop exoframe-traefik"
+        echo "docker rm exoframe-traefik"
     fi
     if [ "$ssl" ] && [ "$ssl" != false ]; then
         echo
@@ -202,6 +204,9 @@ else
         echo "Stopping existing exoframe-server container..."
         docker stop exoframe-server >/dev/null 2>&1 || true
         docker rm exoframe-server >/dev/null 2>&1 || true
+        echo "Stopping existing exoframe-traefik container..."
+        docker stop exoframe-traefik >/dev/null 2>&1 || true
+        docker rm exoframe-traefik >/dev/null 2>&1 || true
     fi
     $VAR | (echo && echo && echo "$VAR" && echo)
 fi
