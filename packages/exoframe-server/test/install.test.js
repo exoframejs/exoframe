@@ -7,9 +7,11 @@ import { beforeEach, describe, expect, test } from 'vitest';
 const exec = promisify(execCb);
 
 const testHome = path.join(process.cwd(), '.test-home');
-const shellOptions = { env: { ...process.env, HOME: testHome } };
-const configDir = path.join(testHome, '.config', 'exoframe');
+const configHome = path.join(testHome, '.config');
+const shellOptions = { env: { ...process.env, HOME: testHome, XDG_CONFIG_HOME: configHome } };
+const configDir = path.join(configHome, 'exoframe');
 const configPath = path.join(configDir, 'server.config.yml');
+const normalizeOutput = (output) => output.replaceAll(testHome, '<TEST_HOME>');
 
 beforeEach(() => rm(testHome, { recursive: true, force: true }).catch(() => {}));
 
@@ -33,11 +35,11 @@ describe('Test install script', () => {
       'tools/install.sh --dry-run --password PASSWORD -d exoframe.EXAMPLE.COM',
       shellOptions
     );
-    expect(stdout).toMatchInlineSnapshot(`
+    expect(normalizeOutput(stdout)).toMatchInlineSnapshot(`
       "
       Commands to run inside server:
 
-      docker run -d -v /var/run/docker.sock:/var/run/docker.sock -v /home/yamalight/github/exoframejs/exoframe/packages/exoframe-server/.test-home/.config/exoframe:/root/.config/exoframe -v /home/yamalight/github/exoframejs/exoframe/packages/exoframe-server/.test-home/.ssh/authorized_keys:/root/.ssh/authorized_keys:ro -e EXO_PRIVATE_KEY=PASSWORD --label traefik.enable=true --label traefik.http.routers.exoframe-server.rule=Host(\`exoframe.EXAMPLE.COM\`) --restart always --name exoframe-server exoframe/server
+      docker run -d -v /var/run/docker.sock:/var/run/docker.sock -v <TEST_HOME>/.config/exoframe:/root/.config/exoframe -v <TEST_HOME>/.ssh/authorized_keys:/root/.ssh/authorized_keys:ro -e EXO_PRIVATE_KEY=PASSWORD --label traefik.enable=true --label traefik.http.routers.exoframe-server.rule=Host(\`exoframe.EXAMPLE.COM\`) --restart always --name exoframe-server exoframe/server
       "
     `);
   });
@@ -47,16 +49,16 @@ describe('Test install script', () => {
       'tools/install.sh --dry-run --password PASSWORD -d exoframe.EXAMPLE.COM -e EMAIL@GMAIL.COM',
       shellOptions
     );
-    expect(stdout).toMatchInlineSnapshot(`
+    expect(normalizeOutput(stdout)).toMatchInlineSnapshot(`
       "
       Commands to run inside server:
 
-      mkdir -p /home/yamalight/github/exoframejs/exoframe/packages/exoframe-server/.test-home/.config/exoframe && touch /home/yamalight/github/exoframejs/exoframe/packages/exoframe-server/.test-home/.config/exoframe/server.config.yml
-      echo "letsencrypt: true" >> /home/yamalight/github/exoframejs/exoframe/packages/exoframe-server/.test-home/.config/exoframe/server.config.yml
-      echo "letsencryptEmail: EMAIL@GMAIL.COM" >> /home/yamalight/github/exoframejs/exoframe/packages/exoframe-server/.test-home/.config/exoframe/server.config.yml
+      mkdir -p <TEST_HOME>/.config/exoframe && touch <TEST_HOME>/.config/exoframe/server.config.yml
+      echo "letsencrypt: true" >> <TEST_HOME>/.config/exoframe/server.config.yml
+      echo "letsencryptEmail: EMAIL@GMAIL.COM" >> <TEST_HOME>/.config/exoframe/server.config.yml
 
 
-      docker run -d -v /var/run/docker.sock:/var/run/docker.sock -v /home/yamalight/github/exoframejs/exoframe/packages/exoframe-server/.test-home/.config/exoframe:/root/.config/exoframe -v /home/yamalight/github/exoframejs/exoframe/packages/exoframe-server/.test-home/.ssh/authorized_keys:/root/.ssh/authorized_keys:ro -e EXO_PRIVATE_KEY=PASSWORD --label traefik.enable=true --label traefik.http.routers.exoframe-server.rule=Host(\`exoframe.EXAMPLE.COM\`) --label traefik.http.routers.exoframe-server-web.rule=Host(\`exoframe.EXAMPLE.COM\`) --label traefik.http.routers.exoframe-server.tls.certresolver=exoframeChallenge --label traefik.http.middlewares.exoframe-server-redirect.redirectscheme.scheme=https --label traefik.http.routers.exoframe-server-web.entrypoints=web --label traefik.http.routers.exoframe-server-web.middlewares=exoframe-server-redirect@docker --label traefik.http.routers.exoframe-server.entrypoints=websecure --label entryPoints.web.address=:80 --label entryPoints.websecure.address=:443 --restart always --name exoframe-server exoframe/server
+      docker run -d -v /var/run/docker.sock:/var/run/docker.sock -v <TEST_HOME>/.config/exoframe:/root/.config/exoframe -v <TEST_HOME>/.ssh/authorized_keys:/root/.ssh/authorized_keys:ro -e EXO_PRIVATE_KEY=PASSWORD --label traefik.enable=true --label traefik.http.routers.exoframe-server.rule=Host(\`exoframe.EXAMPLE.COM\`) --label traefik.http.routers.exoframe-server-web.rule=Host(\`exoframe.EXAMPLE.COM\`) --label traefik.http.routers.exoframe-server.tls.certresolver=exoframeChallenge --label traefik.http.middlewares.exoframe-server-redirect.redirectscheme.scheme=https --label traefik.http.routers.exoframe-server-web.entrypoints=web --label traefik.http.routers.exoframe-server-web.middlewares=exoframe-server-redirect@docker --label traefik.http.routers.exoframe-server.entrypoints=websecure --label entryPoints.web.address=:80 --label entryPoints.websecure.address=:443 --restart always --name exoframe-server exoframe/server
       "
     `);
   });
@@ -69,13 +71,13 @@ describe('Test install script', () => {
       'tools/install.sh --dry-run --password PASSWORD -d exoframe.EXAMPLE.COM',
       shellOptions
     );
-    expect(stdout).toMatchInlineSnapshot(`
+    expect(normalizeOutput(stdout)).toMatchInlineSnapshot(`
       "Reusing SSL setting from config
 
       Commands to run inside server:
 
 
-      docker run -d -v /var/run/docker.sock:/var/run/docker.sock -v /home/yamalight/github/exoframejs/exoframe/packages/exoframe-server/.test-home/.config/exoframe:/root/.config/exoframe -v /home/yamalight/github/exoframejs/exoframe/packages/exoframe-server/.test-home/.ssh/authorized_keys:/root/.ssh/authorized_keys:ro -e EXO_PRIVATE_KEY=PASSWORD --label traefik.enable=true --label traefik.http.routers.exoframe-server.rule=Host(\`exoframe.EXAMPLE.COM\`) --label traefik.http.routers.exoframe-server-web.rule=Host(\`exoframe.EXAMPLE.COM\`) --label traefik.http.routers.exoframe-server.tls.certresolver=exoframeChallenge --label traefik.http.middlewares.exoframe-server-redirect.redirectscheme.scheme=https --label traefik.http.routers.exoframe-server-web.entrypoints=web --label traefik.http.routers.exoframe-server-web.middlewares=exoframe-server-redirect@docker --label traefik.http.routers.exoframe-server.entrypoints=websecure --label entryPoints.web.address=:80 --label entryPoints.websecure.address=:443 --restart always --name exoframe-server exoframe/server
+      docker run -d -v /var/run/docker.sock:/var/run/docker.sock -v <TEST_HOME>/.config/exoframe:/root/.config/exoframe -v <TEST_HOME>/.ssh/authorized_keys:/root/.ssh/authorized_keys:ro -e EXO_PRIVATE_KEY=PASSWORD --label traefik.enable=true --label traefik.http.routers.exoframe-server.rule=Host(\`exoframe.EXAMPLE.COM\`) --label traefik.http.routers.exoframe-server-web.rule=Host(\`exoframe.EXAMPLE.COM\`) --label traefik.http.routers.exoframe-server.tls.certresolver=exoframeChallenge --label traefik.http.middlewares.exoframe-server-redirect.redirectscheme.scheme=https --label traefik.http.routers.exoframe-server-web.entrypoints=web --label traefik.http.routers.exoframe-server-web.middlewares=exoframe-server-redirect@docker --label traefik.http.routers.exoframe-server.entrypoints=websecure --label entryPoints.web.address=:80 --label entryPoints.websecure.address=:443 --restart always --name exoframe-server exoframe/server
       "
     `);
   });
