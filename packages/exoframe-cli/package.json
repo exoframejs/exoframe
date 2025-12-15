@@ -1,6 +1,6 @@
 {
   "name": "exoframe",
-  "version": "7.0.0-rc.11",
+  "version": "7.0.0-rc.12",
   "description": "CLI for Exoframe, self-hosted deployment tool",
   "main": "dist/index.js",
   "bin": "dist/index.js",
@@ -24,9 +24,9 @@
     "commander": "^14.0.2",
     "exoframe-client": "^7.0.0-pre",
     "got": "^14.6.3",
-    "inquirer": "^12.11.0",
+    "inquirer": "^13.1.0",
     "lodash": "^4.17.21",
-    "open": "^10.2.0",
+    "open": "^11.0.0",
     "ora": "^9.0.0",
     "pretty-bytes": "^7.1.0"
   },
@@ -38,7 +38,7 @@
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
-    "globals": "^14.0.0",
+    "globals": "^16.5.0",
     "mock-stdin": "^1.0.0",
     "nock": "^14.0.10",
     "prettier": "^3.0.3",

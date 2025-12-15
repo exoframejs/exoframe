@@ -59,7 +59,7 @@ export const loginHandler = async ({ key, passphrase, url }) => {
   prompts.push({ type: 'input', name: 'username', message: 'Username:', validate, format });
   // only ask for key if no user key given
   if (noKey) {
-    prompts.push({ type: 'list', name: 'privateKeyName', message: 'Private key:', choices: privateKeys });
+    prompts.push({ type: 'select', name: 'privateKeyName', message: 'Private key:', choices: privateKeys });
     prompts.push({ type: 'password', name: 'password', message: 'Private key passpharse (leave blank if not set):' });
   }
 
