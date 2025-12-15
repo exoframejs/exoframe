@@ -51,6 +51,10 @@ export const getSecretHandler = async (name, { yes } = {}) => {
     }
 
     const secret = await getSecret({ name: selectedSecret, endpoint, token });
+    if (!secret) {
+      console.log(chalk.red('Error: no secret with this name found on server!'));
+      return;
+    }
     console.log(chalk.bold('Current secret value:'));
     console.log('');
     console.log(`Name: ${secret.secretName}`);
