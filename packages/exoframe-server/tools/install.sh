@@ -16,6 +16,7 @@ INTERACTIVE=true
 config_letsencrypt=""
 config_letsencrypt_email=""
 existing_domain=""
+existing_secret=""
 existing_container=false
 
 inspect_container_config() {
@@ -23,6 +24,7 @@ inspect_container_config() {
         existing_container=true
         existing_domain=$(docker inspect exoframe-server --format '{{ index .Config.Labels "traefik.http.routers.exoframe-server.rule" }}' 2>/dev/null | sed -n 's/.*Host(`\([^`]*\)`).*/\1/p' | head -n 1)
         existing_mount=$(docker inspect exoframe-server --format '{{range .Mounts}}{{if or (eq .Destination "/root/.config/exoframe") (eq .Destination "/root/.exoframe")}}{{.Source}}:{{.Destination}}{{"\n"}}{{end}}{{end}}' 2>/dev/null | head -n 1)
+        existing_secret=$(docker inspect exoframe-server --format '{{range .Config.Env}}{{println .}}{{end}}' 2>/dev/null | grep -E '^EXO_PRIVATE_KEY=' | head -n 1 | cut -d= -f2-)
         if [ "$existing_mount" ]; then
             config_mount_source=$(echo "$existing_mount" | cut -d: -f1)
             config_mount_dest=$(echo "$existing_mount" | cut -d: -f2-)
@@ -100,6 +102,10 @@ fi
 if [ -z "$domain" ] && [ -n "$existing_domain" ]; then
     domain=$existing_domain
     echo "Reusing domain from existing container: $domain"
+fi
+if [ -z "$passvar" ] && [ -n "$existing_secret" ]; then
+    passvar=$existing_secret
+    echo "Reusing JWT secret from existing container"
 fi
 
 if [ -z "$domain" ] && [ "$INTERACTIVE" = true ]; then
