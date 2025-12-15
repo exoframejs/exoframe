@@ -12,7 +12,7 @@
     "test": "NODE_ENV=testing vitest",
     "test:ci": "NODE_ENV=testing vitest run --coverage"
   },
-  "repository": "git@github.com:exoframejs/exoframe-server.git",
+  "repository": "git@github.com:exoframejs/exoframe.git",
   "author": "Tim Ermilov <yamalight@gmail.com>",
   "license": "MIT",
   "dependencies": {
