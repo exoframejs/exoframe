@@ -31,7 +31,7 @@ To install Exoframe Server, run our installation shell script on your server usi
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/exoframejs/exoframe/main/packages/exoframe-server/tools/install.sh)"
 ```
 
-The script will guide you through the basic setup process.
+The script will guide you through the basic setup process and can also be re-run later to upgrade an existing Exoframe Server.
 
 For detailed manual server installation instructions, please consult the [Installing Exoframe Server](../manual-install/server.md) section.
 
