@@ -1,6 +1,6 @@
 {
   "name": "exoframe-server",
-  "version": "7.0.0",
+  "version": "7.0.1",
   "description": "Exoframe server, a self-hosted deployment tool",
   "main": "src/index.js",
   "bin": "bin/exoframe-server.js",
