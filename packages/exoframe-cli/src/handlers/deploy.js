@@ -60,9 +60,6 @@ export const deployProject = async (
     }
     spinner && spinner.succeed('Deployment finished!');
 
-    // log response in verbose-verbose mode
-    verbose > 2 && console.log(chalk.gray('Server response:'), JSON.stringify(log.flat(), null, 2), '\n');
-
     // log result
     console.log('Your project is now deployed as:\n');
     // create table

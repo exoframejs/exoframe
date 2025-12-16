@@ -127,6 +127,7 @@ const streamToResponse = ({ tarStream, remoteUrl, options, verbose = 0, log = ()
 export const deploy = async ({ folder, endpoint, token, update, configFile = 'exoframe.json', verbose = 0 }) => {
   const loglist = [];
   const log = (...args) => {
+    if (verbose > 1) console.log(...args);
     loglist.push(args);
   };
 
