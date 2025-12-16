@@ -36,7 +36,7 @@ api:
 2. Add the following labels to your Exoframe Server (or any other new deployment):
 
 ```bash
---label "traefik.http.routers.api.rule=Host(`traefik.localhost`)"
+--label "traefik.http.routers.api.rule=Host(`traefik.your.host`)"
 --label traefik.http.routers.api.service=api@internal
 ```
 
