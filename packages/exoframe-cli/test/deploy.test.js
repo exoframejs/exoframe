@@ -576,6 +576,20 @@ test('Should display verbose output', async () => {
         "http://localhost:8080",
       ],
       [
+        "
+    No .exoframeignore file found, using default ignores",
+      ],
+      [
+        "
+    Ignoring following paths:",
+        [
+          ".git",
+          "node_modules",
+          ".exoframeignore",
+          "exoframe.json",
+        ],
+      ],
+      [
         "Error deploying project:",
         "Bad Gateway",
       ],
