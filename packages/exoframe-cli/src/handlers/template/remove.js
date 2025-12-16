@@ -28,7 +28,7 @@ export const templateRemoveHandler = async (name, { verbose } = {}) => {
       const templates = await listTemplates({ endpoint, token });
       const prompts = [];
       prompts.push({
-        type: 'list',
+        type: 'select',
         name: 'templateName',
         message: 'Choose template to remove:',
         choices: Object.keys(templates),

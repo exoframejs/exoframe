@@ -28,7 +28,7 @@ export const tokenRemoveHandler = async (name) => {
       const tokens = await listTokens({ endpoint, token });
       const prompts = [];
       prompts.push({
-        type: 'list',
+        type: 'select',
         name: 'tokenName',
         message: 'Choose token to remove:',
         choices: tokens.map((t) => t.tokenName),

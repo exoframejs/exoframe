@@ -54,7 +54,7 @@ export const endpointSwitchHandler = async (url) => {
     // if multiple - show selector
     const prompts = [];
     prompts.push({
-      type: 'list',
+      type: 'select',
       name: 'newEndpoint',
       message: 'Choose endpoint:',
       default: userConfig.endpoint,
@@ -119,7 +119,7 @@ export const endpointRmHandler = async (url) => {
     // if multiple - show selector
     const prompts = [];
     prompts.push({
-      type: 'list',
+      type: 'select',
       name: 'delEndpoint',
       message: 'Choose endpoint to remove:',
       default: userConfig.endpoint,

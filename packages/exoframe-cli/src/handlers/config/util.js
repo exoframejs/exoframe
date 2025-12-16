@@ -280,7 +280,7 @@ export const configPrompts = {
   ],
   restart: (config) => [
     {
-      type: 'list',
+      type: 'select',
       name: 'restart',
       message: 'Restart policy:',
       default: config.restart,

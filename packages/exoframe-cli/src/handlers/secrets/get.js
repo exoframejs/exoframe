@@ -26,7 +26,7 @@ export const getSecretHandler = async (name, { yes } = {}) => {
       const secrets = await listSecrets({ endpoint, token });
       const prompts = [];
       prompts.push({
-        type: 'list',
+        type: 'select',
         name: 'selectedSecret',
         message: `Choose secret to get`,
         choices: secrets.map((t) => t.name),
