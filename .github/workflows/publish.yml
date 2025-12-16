@@ -40,8 +40,9 @@ jobs:
           - name: exoframe-client
             workspace: exoframe-client
           - name: exoframe
-            workspace: exoframe-cli
-            build: npm run build -w exoframe-cli
+            workspace: exoframe
+            package_dir: exoframe-cli
+            build: npm run build -w exoframe
           - name: exoframe-server
             workspace: exoframe-server
             server: true
@@ -64,9 +65,10 @@ jobs:
         run: |
           TAG="${{ needs.detect-tag.outputs.npm_tag }}"
           PACKAGE="${{ matrix.name }}"
+          PACKAGE_DIR="${{ matrix.package_dir || matrix.workspace }}"
           current=$(npm info "${PACKAGE}@${TAG}" version 2>/dev/null || true)
           echo "current=${current:-none}" >> "$GITHUB_OUTPUT"
-          echo "new=$(npm info ./packages/${{ matrix.workspace }} version)" >> "$GITHUB_OUTPUT"
+          echo "new=$(npm info ./packages/${PACKAGE_DIR} version)" >> "$GITHUB_OUTPUT"
 
       - name: install
         if: ${{ steps.versions.outputs.current != steps.versions.outputs.new }}
@@ -98,11 +100,13 @@ jobs:
       - name: get version
         if: ${{ matrix.server && steps.versions.outputs.current != steps.versions.outputs.new }}
         id: version
-        run: echo "new=$(npm info ./packages/${{ matrix.workspace }} version)" >> "$GITHUB_OUTPUT"
+        env:
+          PACKAGE_DIR: ${{ matrix.package_dir || matrix.workspace }}
+        run: echo "new=$(npm info ./packages/${PACKAGE_DIR} version)" >> "$GITHUB_OUTPUT"
 
       - name: Build & push docker image
         if: ${{ matrix.server && steps.versions.outputs.current != steps.versions.outputs.new }}
-        working-directory: ./packages/${{ matrix.workspace }}
+        working-directory: ./packages/${{ matrix.package_dir || matrix.workspace }}
         env:
           IMAGE_NAME: exoframe/server
           GHCR_IMAGE_NAME: exoframejs/server
