@@ -94,6 +94,10 @@ test('Should deploy', async () => {
           ],
         ],
         [
+          "[info]",
+          "Deployment success!",
+        ],
+        [
           "Server response:",
           "{
       "message": "Deployment success!",
@@ -184,6 +188,10 @@ test('Should deploy with endpoint flag', async () => {
           ],
         ],
         [
+          "[info]",
+          "Deployment success!",
+        ],
+        [
           "Server response:",
           "{
       "message": "Deployment success!",
@@ -263,6 +271,10 @@ test('Should execute update', async () => {
           ],
         ],
         [
+          "[info]",
+          "Deployment success!",
+        ],
+        [
           "Server response:",
           "{
       "message": "Deployment success!",
@@ -316,7 +328,7 @@ test('Should deploy with custom config', async () => {
       const fileNames = [];
       s.pipe(
         tar.extract('./', {
-          ignore: (name, header) => {
+          ignore: (name) => {
             fileNames.push(name.split('/').pop());
             return true;
           },
@@ -370,6 +382,10 @@ test('Should deploy with custom config', async () => {
             ".exoframeignore",
             "exoframe.json",
           ],
+        ],
+        [
+          "[info]",
+          "Deployment success!",
         ],
         [
           "Server response:",
@@ -524,6 +540,10 @@ test('Should ignore specified files', async () => {
             "ignore.me",
             ".exoframeignore",
           ],
+        ],
+        [
+          "[info]",
+          "Deployment success!",
         ],
         [
           "Server response:",

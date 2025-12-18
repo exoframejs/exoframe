@@ -590,6 +590,11 @@ test('Should display verbose output', async () => {
         ],
       ],
       [
+        "[error]",
+        "Error parsing line:",
+        "Bad Gateway",
+      ],
+      [
         "Error deploying project:",
         "Bad Gateway",
       ],

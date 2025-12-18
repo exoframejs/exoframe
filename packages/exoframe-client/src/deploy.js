@@ -210,7 +210,7 @@ export const deploy = async ({ folder, endpoint, token, update, configFile = 'ex
   const options = { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/octet-stream' } };
 
   // pipe stream to remote
-  const res = await streamToResponse({ tarStream, remoteUrl, options, verbose });
+  const res = await streamToResponse({ tarStream, remoteUrl, options, verbose, log });
   // check deployments
   if (!res?.deployments?.length) {
     const err = new Error('Something went wrong!');
