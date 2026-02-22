@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url';
 import docker from '../docker/docker.js';
 
 // urls for tags request
-const exoServerUrl = `https://api.github.com/repos/exoframejs/exoframe-server/releases`;
+const exoServerUrl = `https://api.github.com/repos/exoframejs/exoframe/releases`;
 const traefikUrl = 'https://api.github.com/repos/containous/traefik/releases';
 const traefikVersionPrefix = 'v3';
 
