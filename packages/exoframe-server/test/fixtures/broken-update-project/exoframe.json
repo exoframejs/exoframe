@@ -1,0 +1,6 @@
+{
+  "name": "test-html-deploy",
+  "domain": "test.com",
+  "project": "simple-html",
+  "restart": "no"
+}

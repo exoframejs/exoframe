@@ -32,6 +32,7 @@ const streamNode = pack(join(currentDir, 'fixtures', 'node-project'));
 const streamNodeLock = pack(join(currentDir, 'fixtures', 'node-lock-project'));
 const streamHtml = pack(join(currentDir, 'fixtures', 'html-project'));
 const streamHtmlUpdate = pack(join(currentDir, 'fixtures', 'html-project'));
+const streamBrokenUpdate = pack(join(currentDir, 'fixtures', 'broken-update-project'));
 const streamBrokenDocker = pack(join(currentDir, 'fixtures', 'broken-docker-project'));
 const streamBrokenNode = pack(join(currentDir, 'fixtures', 'broken-node-project'));
 const streamBrokenTemplate = pack(join(currentDir, 'fixtures', 'broken-template-project'));
@@ -478,6 +479,40 @@ test('Should display error log for broken docker project', async () => {
   const allContainers = await docker.listContainers({ all: true });
   const exitedWithError = allContainers.filter((c) => c.Status.includes('Exited (1)'));
   await Promise.all(exitedWithError.map((c) => docker.getContainer(c.Id)).map((c) => c.remove()));
+});
+
+test('Should keep existing deployment when update build fails', async () => {
+  const deployOptions = Object.assign({}, optionsBase, { payload: pack(join(currentDir, 'fixtures', 'html-project')) });
+  const deployResponse = await fastify.inject(deployOptions);
+  const deployResult = deployResponse.payload
+    .split('\n')
+    .filter((l) => l && l.length)
+    .map((line) => JSON.parse(line));
+  const deployment = deployResult.find((it) => it.deployments && it.deployments.length).deployments[0];
+  const initialName = deployment.Name;
+
+  const updateOptions = Object.assign({}, optionsBase, { url: '/update', payload: streamBrokenUpdate });
+  const updateResponse = await fastify.inject(updateOptions);
+  const updateResult = updateResponse.payload
+    .split('\n')
+    .filter((l) => l && l.length)
+    .map((line) => JSON.parse(line));
+  const error = updateResult.pop();
+
+  expect(updateResponse.statusCode).toEqual(200);
+  expect(error.message).toEqual('Build failed! See build log for details.');
+
+  const allContainers = await docker.listContainers();
+  const projectContainers = allContainers.filter(
+    (containerInfo) => containerInfo.Labels['exoframe.project'] === 'simple-html'
+  );
+  expect(projectContainers.length).toBeGreaterThan(0);
+  const original = projectContainers.find((containerInfo) => containerInfo.Names.includes(initialName));
+  expect(original).toBeDefined();
+
+  await Promise.all(
+    projectContainers.map((containerInfo) => docker.getContainer(containerInfo.Id).remove({ force: true }))
+  );
 });
 
 test('Should display error log for broken Node.js project', async () => {
