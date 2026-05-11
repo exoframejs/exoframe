@@ -13,7 +13,11 @@ export default (fastify) => {
       // find user secrets
       const secrets = getSecretsCollection()
         .find({ user: username })
-        .map(({ ...secretWithoutValue }) => secretWithoutValue);
+        .map((secret) => {
+          const secretWithoutValue = { ...secret };
+          delete secretWithoutValue.value;
+          return secretWithoutValue;
+        });
 
       reply.send({ secrets });
     },
