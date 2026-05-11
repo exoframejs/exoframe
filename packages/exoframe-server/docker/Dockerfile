@@ -1,4 +1,4 @@
-FROM node:24-alpine
+FROM node:26-alpine
 
 # create new workdir
 WORKDIR /app
@@ -20,4 +20,4 @@ ENV NODE_ENV=production
 EXPOSE 8080
 
 # set binary as entry point
-CMD ["node", "bin/exoframe-server.js"]
+CMD ["node", "bin/exoframe-server.ts"]

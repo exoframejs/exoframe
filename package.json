@@ -1,5 +1,6 @@
 {
   "name": "exoframe-project",
+  "private": true,
   "workspaces": [
     "packages/exoframe-cli",
     "packages/exoframe-client",
@@ -8,8 +9,19 @@
     "packages/exoframe-recipe-ghost",
     "packages/exoframe-template-java"
   ],
+  "scripts": {
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "@typescript-eslint/eslint-plugin": "^8.46.2",
+    "@typescript-eslint/parser": "^8.46.2",
+    "typescript": "^5.9.3"
+  },
   "engines": {
-    "node": ">=18.12.0",
+    "node": ">=26.0.0",
     "npm": ">=8.19.0"
   }
 }

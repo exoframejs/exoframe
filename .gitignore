@@ -6,4 +6,9 @@ exoframe-macos
 exoframe-win.exe
 .DS_Store
 dist/
+.tsbuild/
 .next
+
+# exoframe-client source-adjacent JS emitted during workspace builds
+packages/exoframe-client/index.js
+packages/exoframe-client/src/**/*.js

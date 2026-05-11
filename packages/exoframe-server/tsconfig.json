@@ -1,0 +1,20 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "dist",
+    "declaration": true,
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "allowImportingTsExtensions": true,
+    "rewriteRelativeImportExtensions": true
+  },
+  "include": ["../../types/**/*.d.ts", "config.ts", "bin/**/*.ts", "src/**/*.ts"],
+  "exclude": [
+    "dist",
+    "node_modules",
+    "test/fixtures/**",
+    "src/templates/**",
+    "docker/**"
+  ]
+}

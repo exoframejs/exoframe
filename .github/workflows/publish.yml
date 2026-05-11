@@ -11,7 +11,7 @@ permissions:
   packages: write
 
 env:
-  NODE_VERSION: 24
+  NODE_VERSION: 26
   REGISTRY_URL: https://registry.npmjs.org
 
 jobs:

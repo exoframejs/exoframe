@@ -1,5 +1,7 @@
 import { FlatCompat } from '@eslint/eslintrc';
 import js from '@eslint/js';
+import tseslint from '@typescript-eslint/eslint-plugin';
+import tsParser from '@typescript-eslint/parser';
 import prettier from 'eslint-plugin-prettier';
 import { defineConfig } from 'eslint/config';
 import globals from 'globals';
@@ -16,12 +18,31 @@ const compat = new FlatCompat({
 
 export default defineConfig([
   {
+    ignores: ['dist/**', '.tsbuild/**'],
+  },
+  {
+    files: ['**/*.ts'],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        sourceType: 'module',
+      },
+      globals: { ...globals.node },
+    },
+    plugins: {
+      '@typescript-eslint': tseslint,
+      prettier,
+    },
+    rules: {
+      ...tseslint.configs.recommended.rules,
+      'prettier/prettier': 'error',
+      '@typescript-eslint/no-explicit-any': 'off',
+    },
+  },
+  {
     extends: compat.extends('eslint:recommended', 'prettier'),
-
     plugins: { prettier },
-
     languageOptions: { globals: { ...globals.node } },
-
     rules: {
       camelcase: 'off',
       'promise/param-names': 'off',

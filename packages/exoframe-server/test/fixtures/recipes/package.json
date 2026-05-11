@@ -2,8 +2,5 @@
   "name": "recipes",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT",
-  "dependencies": {
-    "exoframe-recipe-wordpress": "^0.6.0"
-  }
+  "license": "MIT"
 }

@@ -1,16 +1,23 @@
 {
   "name": "exoframe-client",
-  "version": "7.0.4",
+  "version": "8.0.0-pre",
   "description": "API client for Exoframe server, self-hosted deployment tool",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "repository": "git@github.com:exoframejs/exoframe.git",
   "author": "Tim Ermilov <yamalight@gmail.com>",
   "license": "MIT",
   "type": "module",
+  "files": [
+    "dist/*"
+  ],
   "scripts": {
-    "lint": "eslint src/",
+    "build": "tsc -p tsconfig.json",
+    "clean": "rm -rf dist",
+    "lint": "eslint src/ test/ index.ts",
     "test": "TZ=Greenland NODE_ENV=testing vitest",
-    "test:ci": "TZ=Greenland NODE_ENV=testing vitest run --coverage"
+    "test:ci": "TZ=Greenland NODE_ENV=testing vitest run --coverage",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
     "got": "^14.6.3",
@@ -31,6 +38,6 @@
     "vitest": "^4.0.8"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=26"
   }
 }

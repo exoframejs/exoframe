@@ -5,6 +5,7 @@ import Logo from '@site/static/img/logo.svg';
 import Heading from '@theme/Heading';
 import Layout from '@theme/Layout';
 import clsx from 'clsx';
+import type { JSX } from 'react';
 
 import styles from './index.module.css';
 

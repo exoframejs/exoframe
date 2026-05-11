@@ -1,4 +1,4 @@
-FROM node:24
+FROM node:26
 
 # create default folder for config and logs
 RUN mkdir -p /root/.config/exoframe/exoframe-server
@@ -17,4 +17,4 @@ COPY . /usr/src/app
 # expose ports
 EXPOSE 8080
 
-CMD ["node", "bin/exoframe-server.js"]
+CMD ["node", "bin/exoframe-server.ts"]

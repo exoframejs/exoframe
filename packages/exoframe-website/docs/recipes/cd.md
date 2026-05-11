@@ -29,7 +29,7 @@ jobs:
       - name: Use Node.js 24
         uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 26
       - name: Install dependencies
         run: npm install --ci
       - name: Deploy via Exoframe

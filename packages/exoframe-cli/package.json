@@ -1,6 +1,6 @@
 {
   "name": "exoframe",
-  "version": "7.0.4",
+  "version": "8.0.0-pre",
   "description": "CLI for Exoframe, self-hosted deployment tool",
   "main": "dist/index.js",
   "bin": "dist/index.js",
@@ -12,17 +12,19 @@
     "dist/*"
   ],
   "scripts": {
-    "build": "ncc build index.js -o dist",
-    "lint": "eslint src/ test/",
+    "build": "rm -rf dist && ncc build index.ts -o dist",
+    "clean": "rm -rf dist",
+    "lint": "eslint src/ test/ index.ts",
     "test": "TZ=Greenland NODE_ENV=testing FORCE_COLOR=false vitest",
-    "test:ci": "TZ=Greenland NODE_ENV=testing FORCE_COLOR=false vitest run --coverage"
+    "test:ci": "TZ=Greenland NODE_ENV=testing FORCE_COLOR=false vitest run --coverage",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
     "apache-md5": "^1.1.8",
     "chalk": "^5.3.0",
     "cli-table3": "^0.6.3",
     "commander": "^14.0.2",
-    "exoframe-client": "^7.0.0-pre",
+    "exoframe-client": "^8.0.0-pre",
     "got": "^14.6.3",
     "inquirer": "^13.1.0",
     "lodash": "^4.17.21",
@@ -46,6 +48,6 @@
     "vitest": "^4.0.8"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=26"
   }
 }

@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "paths": {
+      "exoframe-client": ["../exoframe-client/index.ts"]
+    }
+  },
+  "include": ["../../types/**/*.d.ts", "index.ts", "src/**/*.ts"],
+  "exclude": ["dist", ".tsbuild", "node_modules"]
+}

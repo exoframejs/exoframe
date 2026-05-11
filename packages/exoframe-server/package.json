@@ -1,16 +1,27 @@
 {
   "name": "exoframe-server",
-  "version": "7.0.4",
+  "version": "8.0.0-pre",
   "description": "Exoframe server, a self-hosted deployment tool",
-  "main": "src/index.js",
-  "bin": "bin/exoframe-server.js",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "bin": "dist/bin/exoframe-server.js",
   "type": "module",
+  "files": [
+    "dist/*",
+    "tools/install.sh",
+    "docker/*",
+    "README.md",
+    "CHANGELOG.md"
+  ],
   "scripts": {
-    "start": "node index.js",
-    "watch": "nodemon --watch src/ index.js",
-    "lint": "eslint src/ test/ bin/exoframe-server.js",
+    "build": "tsc -p tsconfig.json",
+    "clean": "rm -rf dist",
+    "start": "node bin/exoframe-server.ts",
+    "watch": "node --watch bin/exoframe-server.ts",
+    "lint": "eslint src/ test/ bin/ config.ts",
     "test": "NODE_ENV=testing vitest",
-    "test:ci": "NODE_ENV=testing vitest run --coverage"
+    "test:ci": "NODE_ENV=testing vitest run --coverage",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "repository": "git@github.com:exoframejs/exoframe.git",
   "author": "Tim Ermilov <yamalight@gmail.com>",
@@ -46,6 +57,6 @@
     "vitest": "^4.0.8"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=26"
   }
 }
