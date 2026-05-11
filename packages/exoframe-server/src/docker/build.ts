@@ -1,5 +1,6 @@
 /* eslint no-async-promise-executor: off */
 import { join } from 'path';
+import type { Readable } from 'stream';
 import { pack } from 'tar-fs';
 import { tempDockerDir } from '../config/paths.ts';
 import logger from '../logger/index.ts';
@@ -28,7 +29,7 @@ export function buildFromParams({
   buildargs,
   logLine = noop,
 }: {
-  tarStream: NodeJS.ReadableStream;
+  tarStream: Readable;
   tag: string;
   buildargs?: Record<string, string>;
   logLine?: (data: BuildLogEntry) => void;

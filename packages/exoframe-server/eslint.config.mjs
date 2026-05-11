@@ -40,6 +40,7 @@ export default defineConfig([
     },
   },
   {
+    files: ['**/*.{js,mjs,cjs}'],
     extends: compat.extends('eslint:recommended', 'prettier'),
     plugins: { prettier },
     languageOptions: { globals: { ...globals.node } },
@@ -49,7 +50,6 @@ export default defineConfig([
       'prefer-promise-reject-errors': 'off',
       'no-control-regex': 'off',
       'prettier/prettier': 'error',
-      'no-unused-vars': 'warn',
     },
   },
 ]);

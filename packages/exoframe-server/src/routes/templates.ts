@@ -27,7 +27,10 @@ export default (fastify) => {
     path: '/templates',
     async handler(request, reply) {
       const { templateName } = request.body;
-      const log = (await runNPM({ args: ['install', '--verbose', templateName], cwd: extensionsFolder })) as RunLogEntry[];
+      const log = (await runNPM({
+        args: ['install', '--verbose', templateName],
+        cwd: extensionsFolder,
+      })) as RunLogEntry[];
       reply.send({ success: !log.find((it) => it.level === 'error'), log });
     },
   });
@@ -50,7 +53,10 @@ export default (fastify) => {
         return;
       }
       // remove token from collection
-      const log = (await runNPM({ args: ['remove', '--verbose', templateName], cwd: extensionsFolder })) as RunLogEntry[];
+      const log = (await runNPM({
+        args: ['remove', '--verbose', templateName],
+        cwd: extensionsFolder,
+      })) as RunLogEntry[];
       // send back to user
       reply.send({ removed: !log.find((it) => it.level === 'error'), log });
     },

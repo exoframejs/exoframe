@@ -31,7 +31,9 @@ export const tokenListHandler = async () => {
     console.log(chalk.bold('Got generated tokens:'));
     console.log('');
     tokens.map((t) =>
-      console.log(`  > ${chalk.green(t.tokenName ?? t.name)} ${chalk.gray(`[${new Date(t.meta?.created ?? '').toLocaleString()}]`)}`)
+      console.log(
+        `  > ${chalk.green(t.tokenName ?? t.name)} ${chalk.gray(`[${new Date(t.meta?.created ?? '').toLocaleString()}]`)}`
+      )
     );
     if (!tokens.length) {
       console.log('  > No deployment tokens available!');

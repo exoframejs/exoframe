@@ -27,9 +27,7 @@ export const formatServices = (services: ServiceSpec[]): FormattedService[] =>
     const name = svc.Name.slice(1);
     const deploymentName = svc.Config.Labels['exoframe.deployment'];
     const domainRule = svc.Config.Labels[`traefik.http.routers.${name}.rule`];
-    const domain = domainRule
-      ? formatTraefikRule(domainRule)
-      : 'Not set';
+    const domain = domainRule ? formatTraefikRule(domainRule) : 'Not set';
     const networks = svc.NetworkSettings.Networks;
     const aliases = Object.keys(networks)
       .map((networkName) => networks[networkName])

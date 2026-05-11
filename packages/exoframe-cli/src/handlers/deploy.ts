@@ -56,7 +56,9 @@ export const deployProject = async (folder?: string, options: DeployHandlerOptio
       err.response = { error: 'Could not get services', log: log.map(formatLogEntry) };
       throw err;
     }
-    spinner && spinner.succeed('Deployment finished!');
+    if (spinner) {
+      spinner.succeed('Deployment finished!');
+    }
 
     // log result
     console.log('Your project is now deployed as:\n');
@@ -69,7 +71,9 @@ export const deployProject = async (folder?: string, options: DeployHandlerOptio
       open(`http://${formattedServices[0].domain.split(',')[0].trim()}`);
     }
   } catch (e) {
-    spinner && spinner.fail('Deployment failed!');
+    if (spinner) {
+      spinner.fail('Deployment failed!');
+    }
     const error = (e instanceof Error ? e : new Error(String(e))) as CliError;
 
     if (error.message.includes('ENOENT')) {
@@ -95,9 +99,13 @@ export const deployProject = async (folder?: string, options: DeployHandlerOptio
       .forEach((line) => console.log(line));
 
     // if in verbose mode - log original error and response
-    verbose && console.log('');
-    verbose && console.log('Original error:', error);
-    (verbose ?? 0) > 1 && console.log('Original response:', error.response);
+    if (verbose) {
+      console.log('');
+      console.log('Original error:', error);
+    }
+    if ((verbose ?? 0) > 1) {
+      console.log('Original response:', error.response);
+    }
     process.exit(1);
   }
 };

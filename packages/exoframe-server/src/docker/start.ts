@@ -58,7 +58,6 @@ export async function startFromParams({
   deploymentName,
   projectName,
   username,
-  backendName,
   frontend,
   port,
   hostname,
@@ -182,7 +181,7 @@ export async function startFromParams({
   return containerData.inspect();
 }
 
-export async function start({ image, username, folder, resultStream, existing = [] }) {
+export async function start({ image, username, folder, resultStream }) {
   const name = nameFromImage(image);
   const deploymentName = baseNameFromImage(image);
 

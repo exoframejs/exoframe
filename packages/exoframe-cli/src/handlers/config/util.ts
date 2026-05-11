@@ -378,8 +378,9 @@ const expandPromptFromProp = ({ config, prop, label, isObject = false, isArray =
 };
 
 export const generateConfigPrompt = (config: ProjectConfigDraft): CliPromptQuestion[] => {
-  const choices: Array<{ key: string; name: string; value: ExpandChoiceValue } | InstanceType<typeof inquirer.Separator>> =
-    [];
+  const choices: Array<
+    { key: string; name: string; value: ExpandChoiceValue } | InstanceType<typeof inquirer.Separator>
+  > = [];
 
   choices.push({ key: 'n', name: expandPromptFromProp({ config, prop: 'name', label: 'Name' }), value: 'name' });
   choices.push({

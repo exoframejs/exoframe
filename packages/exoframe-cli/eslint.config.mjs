@@ -42,6 +42,7 @@ export default defineConfig([
     },
   },
   {
+    files: ['**/*.{js,mjs,cjs}'],
     extends: compat.extends('eslint:recommended', 'prettier'),
     plugins: {
       prettier,

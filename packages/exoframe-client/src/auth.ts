@@ -20,7 +20,11 @@ interface LoginWithRequestParams extends LoginParams {
   loginRequest: LoginRequest;
 }
 
-export async function generateSignature({ keyPath, passphrase, loginPhrase }: SignatureParams): Promise<string | Buffer> {
+export async function generateSignature({
+  keyPath,
+  passphrase,
+  loginPhrase,
+}: SignatureParams): Promise<string | Buffer> {
   const key = await readFile(keyPath);
   const pKey = sshpk.parsePrivateKey(key, 'auto', { passphrase });
   const signer = pKey.createSign('sha512');

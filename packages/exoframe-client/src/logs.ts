@@ -60,7 +60,10 @@ export const getLogs = ({ id, follow, endpoint, token }: GetLogsParams): Promise
         })
         .filter((entry): entry is { date: Date | null; msg: string } => entry.msg !== undefined)
         .map(({ date, msg }) => ({
-          date: date && Number.isFinite(date.getTime()) ? `${date.toLocaleDateString()} ${date.toLocaleTimeString()}` : '  ',
+          date:
+            date && Number.isFinite(date.getTime())
+              ? `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`
+              : '  ',
           msg,
         }))
         .forEach((entry) => emitter.emit('data', entry));

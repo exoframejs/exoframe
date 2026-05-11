@@ -1,4 +1,5 @@
 import type EventEmitter from 'node:events';
+import type { Readable } from 'node:stream';
 import type { Headers } from 'tar-stream';
 
 export type NestedValue =
@@ -74,7 +75,7 @@ export interface DeployResult {
 }
 
 export interface StreamToResponseParams {
-  tarStream: NodeJS.ReadableStream;
+  tarStream: Readable;
   remoteUrl: string;
   options?: Record<string, NestedValue>;
   verbose?: number;

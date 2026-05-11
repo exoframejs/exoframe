@@ -24,7 +24,10 @@ export default (fastify) => {
       const { recipeName } = request.query;
       logger.debug('setting up:', recipeName);
       // install recipe
-      const log = (await util.runNPM({ args: ['install', '--verbose', recipeName], cwd: recipesFolder })) as RunLogEntry[];
+      const log = (await util.runNPM({
+        args: ['install', '--verbose', recipeName],
+        cwd: recipesFolder,
+      })) as RunLogEntry[];
       const success = !log.find((it) => it.level === 'error');
       // if log contains errors - just terminate now
       if (!success) {

@@ -48,24 +48,32 @@ const streamToResponse = async ({
   const requestOptions = options as { headers?: Record<string, string> } | undefined;
 
   return new Promise((resolve, reject) => {
-    const stream = _(tarStream.pipe(got.stream.post(remoteUrl, requestOptions))).split().filter((line: string) =>
-      Boolean(line?.length)
-    );
+    const stream = _(tarStream.pipe(got.stream.post(remoteUrl, requestOptions)))
+      .split()
+      .filter((line: string) => Boolean(line?.length));
 
     stream.on('data', (value: string) => {
       const serialized = value.toString();
       try {
         const data = JSON.parse(serialized) as DeployResponseData;
         if (data.level === 'info') {
-          verbose && log('[info]', data.message);
+          if (verbose) {
+            log('[info]', data.message);
+          }
           if (data.deployments) {
             result = data;
           }
         }
-        data.level === 'verbose' && verbose > 1 && log('[verbose]', data.message);
+        if (data.level === 'verbose' && verbose > 1) {
+          log('[verbose]', data.message);
+        }
         if (data.level === 'error') {
-          verbose && log('[error]', data.message);
-          verbose > 1 && log(JSON.stringify(data, null, 2));
+          if (verbose) {
+            log('[error]', data.message);
+          }
+          if (verbose > 1) {
+            log(JSON.stringify(data, null, 2));
+          }
           const requestError: ResponseError = new Error(data.message);
           requestError.response = data;
           error = requestError;
@@ -74,7 +82,9 @@ const streamToResponse = async ({
         const parseError: ResponseError = new Error('Error parsing output!');
         parseError.response = { error: serialized };
         error = parseError;
-        verbose && log('[error]', 'Error parsing line:', serialized);
+        if (verbose) {
+          log('[error]', 'Error parsing line:', serialized);
+        }
       }
     });
 
@@ -122,7 +132,9 @@ export const deploy = async ({
   } catch {
     const defaultConfig = JSON.stringify({ name: folderName });
     await writeFile(configPath, defaultConfig, 'utf-8');
-    verbose && log('Create new default config:', defaultConfig);
+    if (verbose) {
+      log('Create new default config:', defaultConfig);
+    }
   }
 
   let config: Config;
@@ -144,7 +156,9 @@ export const deploy = async ({
       .filter((line) => line.length > 0)
       .concat('.exoframeignore');
   } catch {
-    verbose && log('\nNo .exoframeignore file found, using default ignores');
+    if (verbose) {
+      log('\nNo .exoframeignore file found, using default ignores');
+    }
   }
 
   if (configFile !== 'exoframe.json') {
@@ -160,7 +174,9 @@ export const deploy = async ({
       return headers;
     },
   });
-  verbose && log('\nIgnoring following paths:', ignores);
+  if (verbose) {
+    log('\nIgnoring following paths:', ignores);
+  }
 
   const options = { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/octet-stream' } };
   const response = await streamToResponse({ tarStream, remoteUrl, options, verbose, log });
@@ -171,6 +187,8 @@ export const deploy = async ({
     throw error;
   }
 
-  verbose > 2 && log('Server response:', JSON.stringify(response, null, 2), '\n');
+  if (verbose > 2) {
+    log('Server response:', JSON.stringify(response, null, 2), '\n');
+  }
   return { formattedServices: formatServices(response.deployments), log: loglist };
 };

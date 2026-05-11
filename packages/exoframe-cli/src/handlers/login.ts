@@ -74,7 +74,11 @@ export const loginHandler = async ({ key, passphrase, url }: LoginHandlerOptions
   }
 
   // get username, key filename, password and generate key path
-  const { username, privateKeyName, password: userPass } = await inquirer.prompt<{
+  const {
+    username,
+    privateKeyName,
+    password: userPass,
+  } = await inquirer.prompt<{
     username: string;
     privateKeyName?: string;
     password?: string;

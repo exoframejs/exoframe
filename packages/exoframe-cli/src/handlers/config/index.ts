@@ -5,7 +5,7 @@ import path from 'path';
 import type { ProjectConfigDraft } from '../../types.ts';
 import { configPrompts, defaultConfigBase, generateConfigPrompt, writeConfig } from './util.ts';
 
-interface ConfigArgs extends Partial<ProjectConfigDraft> {}
+type ConfigArgs = Partial<ProjectConfigDraft>;
 
 export const configHandler = async (args: ConfigArgs) => {
   const { domain, port, project, name, restart, hostname } = args;

@@ -331,7 +331,8 @@ test('Should deploy with custom config', async () => {
           ignore: (name) => {
             fileNames.push(name.split('/').pop());
             return true;
-          },          finish: () => {
+          },
+          finish: () => {
             // validate that custom config was rename and is not packed
             expect(fileNames).toContain('exoframe.json');
             expect(fileNames).not.toContain('exoframe-custom.json');

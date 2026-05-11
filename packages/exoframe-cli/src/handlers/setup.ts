@@ -52,7 +52,11 @@ export const setupHandler = async (recipe?: string, { verbose }: SetupHandlerOpt
       name: recipeName,
     });
     console.log('');
-    verbose ? console.log('Log:') : console.log('');
+    if (verbose) {
+      console.log('Log:');
+    } else {
+      console.log('');
+    }
     log
       .filter((l) => l !== undefined)
       .filter((l) => verbose || l.level === 'info')
