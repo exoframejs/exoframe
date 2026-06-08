@@ -69,6 +69,35 @@ test('Should get logs', async () => {
   logServer.done();
 });
 
+test('Should pass log query options', async () => {
+  const readable = new Stream.Readable();
+  const emitLogs = () => {
+    dirtyLogs.forEach((item) => readable.push(item));
+    readable.push(null);
+  };
+  const logServer = nock(endpoint)
+    .get(`/logs/${id}`)
+    .query({ follow: 'true', tail: '10', since: '2017-05-18', until: '2017-05-19' })
+    .reply(200, () => {
+      emitLogs();
+      return readable;
+    });
+
+  const logEventEmitter = await getLogs({
+    id,
+    follow: true,
+    tail: 10,
+    since: '2017-05-18',
+    until: '2017-05-19',
+    endpoint,
+    token,
+  });
+  await consumeToEnd(logEventEmitter);
+
+  expect(logServer.isDone()).toBeTruthy();
+  logServer.done();
+});
+
 test('Should throw on auth error', async () => {
   // handle correct request
   const logServer = nock(endpoint).get(`/logs/${id}`).reply(401);

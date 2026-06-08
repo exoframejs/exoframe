@@ -5,16 +5,28 @@ import type { LogsEmitter } from './types.ts';
 interface GetLogsParams {
   id: string;
   follow?: boolean;
+  tail?: number | string;
+  since?: string;
+  until?: string;
   endpoint: string;
   token: string;
 }
 
-export const getLogs = ({ id, follow, endpoint, token }: GetLogsParams): Promise<LogsEmitter> =>
+export const getLogs = ({ id, follow, tail, since, until, endpoint, token }: GetLogsParams): Promise<LogsEmitter> =>
   new Promise((resolve) => {
     const remoteUrl = `${endpoint}/logs/${id}`;
     const searchParams: Record<string, string> = {};
     if (follow) {
       searchParams.follow = 'true';
+    }
+    if (tail !== undefined) {
+      searchParams.tail = String(tail);
+    }
+    if (since) {
+      searchParams.since = since;
+    }
+    if (until) {
+      searchParams.until = until;
     }
 
     const emitter = new EventEmitter() as LogsEmitter;

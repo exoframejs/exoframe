@@ -1,11 +1,40 @@
 import _ from 'highland';
 import docker from '../docker/docker.ts';
 
-const generateLogsConfig = (follow) => ({
+const parseTail = (tail) => {
+  if (tail === undefined) {
+    return undefined;
+  }
+
+  const parsedTail = Number(tail);
+  if (!Number.isInteger(parsedTail) || parsedTail < 0) {
+    throw new Error('Invalid tail value!');
+  }
+
+  return parsedTail;
+};
+
+const parseLogDate = (date) => {
+  if (!date) {
+    return undefined;
+  }
+
+  const timestamp = /^\d+$/.test(date) ? Number(date) : Math.floor(new Date(date).getTime() / 1000);
+  if (!Number.isFinite(timestamp)) {
+    throw new Error('Invalid date value!');
+  }
+
+  return timestamp;
+};
+
+export const generateLogsConfig = ({ follow, tail, since, until }) => ({
   follow: Boolean(follow),
   stdout: true,
   stderr: true,
   timestamps: true,
+  ...(tail !== undefined ? { tail: parseTail(tail) } : {}),
+  ...(since ? { since: parseLogDate(since) } : {}),
+  ...(until ? { until: parseLogDate(until) } : {}),
 });
 
 // fix for dockerode returning array of strings instead of log stream
@@ -17,7 +46,15 @@ const fixLogStream = (logs) => {
   return logs;
 };
 
-const getContainerLogs = async ({ username, id, reply, follow }) => {
+const getContainerLogs = async ({ username, id, reply, follow, tail, since, until }) => {
+  let logsConfig;
+  try {
+    logsConfig = generateLogsConfig({ follow, tail, since, until });
+  } catch (error) {
+    reply.code(400).send({ error: error.message });
+    return;
+  }
+
   const allContainers = await docker.listContainers({ all: true });
   const serverContainer = allContainers.find((c) => c.Names.find((n) => n.startsWith(`/exoframe-server`)));
 
@@ -29,7 +66,7 @@ const getContainerLogs = async ({ username, id, reply, follow }) => {
       return reply.send(logStream);
     }
     const container = docker.getContainer(serverContainer.Id);
-    const logs = await container.logs(generateLogsConfig(follow));
+    const logs = await container.logs(logsConfig);
     const logStream = fixLogStream(logs);
     return reply.send(logStream);
   }
@@ -40,7 +77,7 @@ const getContainerLogs = async ({ username, id, reply, follow }) => {
   );
   if (containerInfo) {
     const container = docker.getContainer(containerInfo.Id);
-    const logs = await container.logs(generateLogsConfig(follow));
+    const logs = await container.logs(logsConfig);
     const logStream = fixLogStream(logs);
     return reply.send(logStream);
   }
@@ -54,7 +91,7 @@ const getContainerLogs = async ({ username, id, reply, follow }) => {
   });
   if (containerByUrl) {
     const container = docker.getContainer(containerByUrl.Id);
-    const logs = await container.logs(generateLogsConfig(follow));
+    const logs = await container.logs(logsConfig);
     const logStream = fixLogStream(logs);
     return reply.send(logStream);
   }
@@ -72,7 +109,7 @@ const getContainerLogs = async ({ username, id, reply, follow }) => {
   const logRequests = await Promise.all(
     containers.map(async (cInfo) => {
       const container = docker.getContainer(cInfo.Id);
-      const logs = await container.logs(generateLogsConfig(follow));
+      const logs = await container.logs(logsConfig);
       const logStream = fixLogStream(logs);
       const name = cInfo.Names[0].replace(/^\//, '');
       const nameStream = _([`Logs for ${name}\n\n`]);
@@ -92,10 +129,10 @@ export default (fastify) => {
       // get username
       const { username } = request.user;
       const { id } = request.params;
-      const { follow } = request.query;
+      const { follow, tail, since, until } = request.query;
 
       // get container logs
-      return await getContainerLogs({ username, id, reply, follow });
+      return await getContainerLogs({ username, id, reply, follow, tail, since, until });
     },
   });
 };

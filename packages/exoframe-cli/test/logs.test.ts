@@ -94,6 +94,31 @@ test('Should get list of deployments', async () => {
   logServer.done();
 });
 
+test('Should pass log query options', async () => {
+  const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+  const readable = new Readable();
+  const emitLogs = () => {
+    dirtyLogs.forEach((item) => readable.push(`${item}\n`));
+    readable.push(null);
+  };
+  const logServer = nock('http://localhost:8080')
+    .get(`/logs/${id}`)
+    .query({ follow: 'true', tail: '10', since: '2017-05-18', until: '2017-05-19' })
+    .reply(200, () => {
+      emitLogs();
+      return readable;
+    });
+
+  await program.parseAsync(['logs', id, '--follow', '--tail', '10', '--since', '2017-05-18', '--until', '2017-05-19'], {
+    from: 'user',
+  });
+  await setTimeout(IO_TIMEOUT);
+
+  expect(logServer.isDone()).toBeTruthy();
+  consoleSpy.mockRestore();
+  logServer.done();
+});
+
 test('Should deauth on 401', async () => {
   // spy on console
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});

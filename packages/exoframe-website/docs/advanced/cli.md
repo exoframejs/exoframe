@@ -27,3 +27,5 @@ sidebar_position: 1
 Exoframe CLI also includes several special commands:
 
 - `exoframe logs exoframe-server` - Returns current server logs (only works when running the server as a container)
+- `exoframe logs <id> --tail 100` - Returns the last 100 log lines
+- `exoframe logs <id> --since 2026-06-08 --until 2026-06-09` - Returns logs for a specific date range

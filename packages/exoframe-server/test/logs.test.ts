@@ -9,6 +9,7 @@ vi.mock('../src/config/paths.ts', () => import('./__mocks__/config.ts'));
 
 // import server after mocking config
 const { startServer } = await import('../src/index.ts');
+const { generateLogsConfig } = await import('../src/routes/logs.ts');
 
 // options base
 const baseOptions = { method: 'GET', headers: { Authorization: `Bearer ${authToken}` } };
@@ -76,6 +77,33 @@ beforeAll(async () => {
 });
 
 afterAll(() => fastify?.close());
+
+test('Should generate logs config with tail and date filters', () => {
+  const config = generateLogsConfig({
+    follow: true,
+    tail: '10',
+    since: '2017-05-18T15:16:40Z',
+    until: '2017-05-19T15:16:40Z',
+  });
+
+  expect(config).toMatchObject({
+    follow: true,
+    stdout: true,
+    stderr: true,
+    timestamps: true,
+    tail: 10,
+    since: 1495120600,
+    until: 1495207000,
+  });
+});
+
+test('Should reject invalid log tail', () => {
+  expect(() => generateLogsConfig({ tail: 'asd' })).toThrowError('Invalid tail value!');
+});
+
+test('Should reject invalid log dates', () => {
+  expect(() => generateLogsConfig({ since: 'not-a-date' })).toThrowError('Invalid date value!');
+});
 
 test('Should get logs for current deployment', async () => {
   const options = Object.assign({}, baseOptions, { url: `/logs/${containerName}` });

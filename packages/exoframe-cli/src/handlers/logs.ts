@@ -2,7 +2,14 @@ import chalk from 'chalk';
 import { getLogs } from 'exoframe-client';
 import { getConfig, isLoggedIn, logout } from '../config/index.ts';
 
-export const logsHandler = async (id, { follow = false } = {}) => {
+interface LogsHandlerOptions {
+  follow?: boolean;
+  tail?: string;
+  since?: string;
+  until?: string;
+}
+
+export const logsHandler = async (id, { follow = false, tail, since, until }: LogsHandlerOptions = {}) => {
   if (!(await isLoggedIn())) {
     console.log(chalk.red('Error: not logged in!'), 'Please, login and try again.');
     return;
@@ -18,7 +25,7 @@ export const logsHandler = async (id, { follow = false } = {}) => {
   const authToken = token ?? '';
 
   // services request url
-  const logsEmitter = await getLogs({ id, follow, endpoint, token: authToken });
+  const logsEmitter = await getLogs({ id, follow, tail, since, until, endpoint, token: authToken });
   logsEmitter.on('error', async (e) => {
     // if authorization is expired/broken/etc
     if (e.message === 'Authorization expired!') {
