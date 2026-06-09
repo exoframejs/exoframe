@@ -18,6 +18,8 @@ jobs:
         run: npm ci
       - name: lint
         run: npm run lint -w exoframe-client
+      - name: typecheck
+        run: npm run typecheck -w exoframe-client
       - name: test
         run: npm run test:ci -w exoframe-client
 
@@ -33,6 +35,8 @@ jobs:
         run: npm ci
       - name: lint
         run: npm run lint -w exoframe
+      - name: typecheck
+        run: npm run typecheck -w exoframe
       - name: test
         env:
           TEST_INPUT_TIMEOUT: 100
@@ -50,5 +54,7 @@ jobs:
         run: npm ci
       - name: lint
         run: npm run lint -w exoframe-server
+      - name: typecheck
+        run: npm run typecheck -w exoframe-server
       - name: test
         run: npm run test:ci -w exoframe-server
