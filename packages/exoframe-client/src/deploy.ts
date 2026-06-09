@@ -5,6 +5,7 @@ import multimatch from 'multimatch';
 import path from 'path';
 import { serializeError } from 'serialize-error';
 import tar from 'tar-fs';
+import { EXOFRAME_CONFIG_SCHEMA_URL } from './config.ts';
 import type {
   Config,
   DeployParams,
@@ -130,7 +131,7 @@ export const deploy = async ({
   try {
     await stat(configPath);
   } catch {
-    const defaultConfig = JSON.stringify({ name: folderName });
+    const defaultConfig = JSON.stringify({ $schema: EXOFRAME_CONFIG_SCHEMA_URL, name: folderName });
     await writeFile(configPath, defaultConfig, 'utf-8');
     if (verbose) {
       log('Create new default config:', defaultConfig);

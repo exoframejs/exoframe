@@ -2,6 +2,7 @@ import chalk from 'chalk';
 import { writeFile } from 'fs/promises';
 import inquirer from 'inquirer';
 import { createRequire } from 'module';
+import { EXOFRAME_CONFIG_SCHEMA_URL } from 'exoframe-client';
 import type { CliPromptQuestion, ProjectConfigDraft } from '../../types.ts';
 
 const require = createRequire(import.meta.url);
@@ -42,12 +43,12 @@ const toObject = (pairs: string) =>
     .reduce<Record<string, string>>((result, entry) => Object.assign(result, { [entry.key]: entry.value }), {});
 
 export const writeConfig = async (configPath: string, newConfig: ProjectConfigDraft) => {
-  const config: ProjectConfigDraft = { name: newConfig.name };
+  const config: ProjectConfigDraft = { $schema: EXOFRAME_CONFIG_SCHEMA_URL, name: newConfig.name };
 
   if (newConfig.restart?.length) {
     config.restart = newConfig.restart;
   }
-  if (newConfig.domain?.length) {
+  if (newConfig.domain !== undefined && newConfig.domain !== '') {
     config.domain = newConfig.domain;
   }
   if (String(newConfig.port ?? '').length) {
@@ -108,7 +109,10 @@ export const writeConfig = async (configPath: string, newConfig: ProjectConfigDr
   if (newConfig.imageFile?.length) {
     config.imageFile = newConfig.imageFile;
   }
-  if (newConfig.basicAuth) {
+  if (newConfig.buildargs) {
+    config.buildargs = newConfig.buildargs;
+  }
+  if (newConfig.basicAuth !== undefined && newConfig.basicAuth !== '') {
     config.basicAuth = newConfig.basicAuth;
   }
   if (newConfig.users?.length) {
@@ -123,6 +127,7 @@ export const writeConfig = async (configPath: string, newConfig: ProjectConfigDr
 };
 
 export const defaultConfigBase: ProjectConfigDraft = {
+  $schema: EXOFRAME_CONFIG_SCHEMA_URL,
   name: '',
   domain: '',
   port: '',
@@ -134,10 +139,7 @@ export const defaultConfigBase: ProjectConfigDraft = {
   template: '',
   compress: undefined,
   letsencrypt: undefined,
-  rateLimit: {
-    average: undefined,
-    burst: undefined,
-  },
+  rateLimit: undefined,
   basicAuth: false,
   function: false,
 };

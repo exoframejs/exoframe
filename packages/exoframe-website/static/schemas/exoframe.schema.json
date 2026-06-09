@@ -1,0 +1,147 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://exoframejs.github.io/exoframe/schemas/exoframe.schema.json",
+  "title": "Exoframe Project Configuration",
+  "description": "Configuration schema for exoframe.json deployment files.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["name"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON Schema reference for editor autocomplete and validation.",
+      "default": "https://exoframejs.github.io/exoframe/schemas/exoframe.schema.json"
+    },
+    "name": {
+      "type": "string",
+      "description": "Deployment name (defaults to folder name).",
+      "minLength": 1
+    },
+    "restart": {
+      "type": "string",
+      "description": "Docker restart policy. Defaults to 'on-failure:2'.",
+      "default": "on-failure:2",
+      "examples": ["no", "always", "unless-stopped", "on-failure:2"]
+    },
+    "domain": {
+      "description": "Domain to assign to the project. Set to false to disable auto-assignment.",
+      "oneOf": [
+        { "type": "string", "minLength": 1 },
+        { "type": "boolean", "const": false }
+      ]
+    },
+    "port": {
+      "type": "string",
+      "description": "Exposed port. Defaults to the first exposed port or 80.",
+      "examples": ["80", "3000"]
+    },
+    "project": {
+      "type": "string",
+      "description": "Project name. Assembles from deployment name and username by default.",
+      "minLength": 1
+    },
+    "env": {
+      "type": "object",
+      "description": "Environment variables. Values can reference secrets with '@secret-name'.",
+      "additionalProperties": { "type": "string" }
+    },
+    "buildargs": {
+      "type": "object",
+      "description": "Docker build arguments. Values can reference secrets with '@secret-name'.",
+      "additionalProperties": { "type": "string" }
+    },
+    "labels": {
+      "type": "object",
+      "description": "Additional Docker labels for the container, including Traefik middleware configuration.",
+      "additionalProperties": { "type": "string" }
+    },
+    "middlewares": {
+      "type": "array",
+      "description": "Additional Traefik middlewares to apply.",
+      "items": { "type": "string" }
+    },
+    "volumes": {
+      "type": "array",
+      "description": "Docker volumes in 'source:destination[:type]' format.",
+      "items": { "type": "string" }
+    },
+    "hostname": {
+      "type": "string",
+      "description": "Internal hostname for the container.",
+      "minLength": 1
+    },
+    "template": {
+      "type": "string",
+      "description": "Deployment template name. Detected automatically if not set.",
+      "minLength": 1
+    },
+    "image": {
+      "type": "string",
+      "description": "Docker image name to deploy. Overrides other deployment types.",
+      "minLength": 1
+    },
+    "imageFile": {
+      "type": "string",
+      "description": "Docker image tar file to load before deployment.",
+      "minLength": 1
+    },
+    "compress": {
+      "type": "boolean",
+      "description": "Enable gzip compression on the domain. Omit to inherit server default; set false to disable."
+    },
+    "letsencrypt": {
+      "type": "boolean",
+      "description": "Enable Let's Encrypt TLS on the domain. Omit to inherit server default; set false to disable."
+    },
+    "rateLimit": {
+      "description": "Rate-limit configuration. Set to null to disable.",
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["average"],
+          "properties": {
+            "average": {
+              "type": "number",
+              "description": "Request rate over a given time period.",
+              "minimum": 1
+            },
+            "burst": {
+              "type": "number",
+              "description": "Max burst request rate over a given time period.",
+              "minimum": 1
+            }
+          }
+        },
+        { "type": "null" }
+      ]
+    },
+    "basicAuth": {
+      "description": "Basic auth credentials as 'user:pwhash' or comma-separated 'user1:pwhash1,user2:pwhash2'. Set to false to disable.",
+      "oneOf": [
+        { "type": "string", "minLength": 1 },
+        { "type": "boolean", "const": false }
+      ]
+    },
+    "function": {
+      "description": "Functional deployment configuration. Set to null to disable.",
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "Function type (e.g. 'http')."
+            },
+            "route": {
+              "type": "string",
+              "description": "Route pattern for the function."
+            }
+          }
+        },
+        { "type": "null" }
+      ]
+    }
+  }
+}

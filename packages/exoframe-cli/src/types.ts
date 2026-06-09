@@ -23,8 +23,9 @@ export interface RateLimitDraft {
 }
 
 export interface ProjectConfigDraft {
+  $schema?: string;
   name: string;
-  domain?: string;
+  domain?: string | boolean;
   port?: string;
   project?: string;
   restart?: string;
@@ -45,6 +46,7 @@ export interface ProjectConfigDraft {
   letsencrypt?: boolean;
   image?: string;
   imageFile?: string;
+  buildargs?: Record<string, string>;
   basicAuth?: string | boolean;
   users?: BasicAuthUser[];
   function?: boolean;

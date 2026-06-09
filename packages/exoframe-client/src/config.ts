@@ -4,16 +4,12 @@ import type { Config, CreateConfigParams } from './types.ts';
 const require = createRequire(import.meta.url);
 const hashPassword = require('apache-md5') as (value: string) => string;
 
+/** Stable URL for the exoframe.json JSON Schema */
+export const EXOFRAME_CONFIG_SCHEMA_URL = 'https://exoframejs.github.io/exoframe/schemas/exoframe.schema.json';
+
 const defaultConfig: Config = {
+  $schema: EXOFRAME_CONFIG_SCHEMA_URL,
   name: '',
-  domain: '',
-  port: '',
-  project: '',
-  restart: '',
-  env: null,
-  labels: null,
-  hostname: '',
-  template: '',
   compress: undefined,
   letsencrypt: undefined,
   rateLimit: null,

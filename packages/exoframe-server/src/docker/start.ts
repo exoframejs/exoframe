@@ -277,7 +277,9 @@ export async function start({ image, username, folder, resultStream }) {
   if (config.rateLimit) {
     // set values from project config
     Labels[`traefik.http.middlewares.${name}-rate.ratelimit.average`] = String(config.rateLimit.average);
-    Labels[`traefik.http.middlewares.${name}-rate.ratelimit.burst`] = String(config.rateLimit.burst);
+    if (config.rateLimit.burst !== undefined) {
+      Labels[`traefik.http.middlewares.${name}-rate.ratelimit.burst`] = String(config.rateLimit.burst);
+    }
     middlewares.push(`${name}-rate@docker`);
   }
 

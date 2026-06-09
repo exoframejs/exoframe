@@ -65,8 +65,9 @@ test('Should generate new config file', async () => {
   const cfg = await getConfig();
   expect(cfg).toMatchInlineSnapshot(`
     {
+      "$schema": "https://exoframejs.github.io/exoframe/schemas/exoframe.schema.json",
+      "basicAuth": false,
       "name": "config-test",
-      "rateLimit": {},
     }
   `);
   // restore console

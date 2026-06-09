@@ -38,7 +38,7 @@ export const configHandler = async (args: ConfigArgs) => {
     console.log(chalk.yellow('Mode changed to'), 'non-interactive');
   }
 
-  const overrideFromArgument = (key: keyof ProjectConfigDraft, value: string | undefined) => {
+  const overrideFromArgument = (key: keyof ProjectConfigDraft, value: string | boolean | undefined) => {
     if (!value) return;
     console.log('Setting', chalk.red(key), 'to', chalk.yellow(value));
     Object.assign(newConfig, { [key]: value } as Partial<ProjectConfigDraft>);

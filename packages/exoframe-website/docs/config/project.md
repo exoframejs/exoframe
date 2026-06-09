@@ -8,10 +8,24 @@ All configuration for deployed projects is managed using the `exoframe.json` con
 
 You can also instruct Exoframe to use an alternative config file during deployment by supplying the `--config` (or `-c`) flag, for example: `exoframe -c exoframe.dev.json`
 
+## Editor Autocomplete
+
+Exoframe ships with a [JSON Schema](https://json-schema.org/) for `exoframe.json`. The generated and updated config files automatically include a `$schema` property pointing to the hosted schema:
+
+```
+https://exoframejs.github.io/exoframe/schemas/exoframe.schema.json
+```
+
+Editors that support JSON Schema (VS Code, IntelliJ, Neovim, etc.) will provide autocomplete, hover descriptions, and validation for all config fields. If you have an existing `exoframe.json` without `$schema`, you can re-run `exoframe config` to update it.
+
+## Configuration Structure
+
 The config file has the following structure:
 
 ```json
 {
+  // JSON Schema reference for editor autocomplete and validation
+  "$schema": "https://exoframejs.github.io/exoframe/schemas/exoframe.schema.json",
   // Deployment name (defaults to folder name)
   "name": "deployment-name",
   // Restart policy [optional, defaults to "on-failure:2"]
@@ -54,10 +68,7 @@ The config file has the following structure:
   // Format: "source:destination[:type]". Type defaults to "volume",
   // but you can specify other Docker mount types such as "bind" or "tmpfs".
   // While you can use server paths in the source place, named volumes are recommended.
-  "volumes": [
-    "sourceVolume:/path/in/container",
-    "/tmp/local-cache:/app/cache:bind"
-  ],
+  "volumes": ["sourceVolume:/path/in/container", "/tmp/local-cache:/app/cache:bind"],
   // Internal hostname for the container [optional]
   // See Docker docs for more info
   // No hostname is assigned by default
