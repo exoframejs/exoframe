@@ -10,6 +10,7 @@ const configData = {
   hostname: 'host',
   restart: 'no',
   template: 'static',
+  deploymentStrategy: 'removeBeforeDeploy' as const,
   compress: true,
   letsencrypt: true,
   enableRatelimit: true,
@@ -77,6 +78,7 @@ test('Should generate config with extended data', () => {
   expect(cfg.labels?.label).toEqual('1');
   expect(cfg.labels?.other).toEqual('2');
   expect(cfg.template).toEqual(configData.template);
+  expect(cfg.deploymentStrategy).toEqual(configData.deploymentStrategy);
   expect(cfg.compress).toEqual(configData.compress);
   expect(cfg.letsencrypt).toEqual(configData.letsencrypt);
   expect(cfg.rateLimit).toEqual({

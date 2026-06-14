@@ -129,6 +129,7 @@ export default (fastify) => {
       // get project config and name
       const config = getProjectConfig(folder);
       const project = projectFromConfig({ username, config });
+      const deploymentStrategy = config.deploymentStrategy || 'removeAfterDeploy';
 
       // get all current containers
       const oldContainers = await docker.listContainers({ all: true });
@@ -145,8 +146,10 @@ export default (fastify) => {
       const responseStream = resultStream.toNodeStream();
       // schedule temp folder and container cleanup on deployment end
       responseStream.on('end', () => {
-        // schedule container cleanup
-        scheduleCleanup({ username, project, existing });
+        // schedule container cleanup unless it was already handled before starting the replacement
+        if (deploymentStrategy !== 'removeBeforeDeploy') {
+          scheduleCleanup({ username, project, existing });
+        }
         // clean temp folder
         cleanTemp(folder);
       });

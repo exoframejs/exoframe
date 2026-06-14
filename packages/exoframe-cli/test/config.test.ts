@@ -88,6 +88,8 @@ test('Should update config in non-interactive mode using values from parameters'
       '1234',
       '--restart',
       'unless-stopped',
+      '--deployment-strategy',
+      'removeBeforeDeploy',
       '--project',
       'give-project-name',
       '--name',
@@ -142,6 +144,12 @@ test('Should update config in non-interactive mode using values from parameters'
       ],
       [
         "Setting",
+        "deploymentStrategy",
+        "to",
+        "removeBeforeDeploy",
+      ],
+      [
+        "Setting",
         "hostname",
         "to",
         "test123.dev",
@@ -158,6 +166,7 @@ test('Should update config in non-interactive mode using values from parameters'
   expect(cfg.domain).toEqual('test123.dev');
   expect(cfg.port).toEqual('1234');
   expect(cfg.project).toEqual('give-project-name');
+  expect(cfg.deploymentStrategy).toEqual('removeBeforeDeploy');
   expect(cfg.hostname).toEqual('test123.dev');
   // restore console
   consoleSpy.mockReset();

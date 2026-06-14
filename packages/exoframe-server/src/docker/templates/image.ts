@@ -15,7 +15,16 @@ export async function checkTemplate({ config }) {
 }
 
 // function to execute current template
-export async function executeTemplate({ config, username, tempDockerDir, folder, resultStream, util, docker }) {
+export async function executeTemplate({
+  config,
+  username,
+  tempDockerDir,
+  folder,
+  resultStream,
+  util,
+  docker,
+  existing,
+}) {
   // build docker image
   try {
     const { image, imageFile } = config;
@@ -37,7 +46,7 @@ export async function executeTemplate({ config, username, tempDockerDir, folder,
     }
 
     // start image
-    const container = await docker.start({ image, username, folder, resultStream });
+    const container = await docker.start({ image, username, folder, existing, resultStream });
     util.logger.debug(container);
 
     // return new deployments

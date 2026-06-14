@@ -1,3 +1,5 @@
+import type { DeploymentStrategy } from 'exoframe-client';
+
 export interface CliUser {
   username: string;
 }
@@ -42,6 +44,7 @@ export interface ProjectConfigDraft {
   ratelimitBurst?: number;
   hostname?: string;
   template?: string;
+  deploymentStrategy?: DeploymentStrategy;
   compress?: boolean;
   letsencrypt?: boolean;
   image?: string;

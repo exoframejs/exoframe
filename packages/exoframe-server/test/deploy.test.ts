@@ -1,3 +1,6 @@
+import { randomUUID } from 'crypto';
+import { copyFile, mkdir, rm, writeFile } from 'fs/promises';
+import { tmpdir } from 'os';
 import { dirname, join } from 'path';
 import { pack } from 'tar-fs';
 import { fileURLToPath } from 'url';
@@ -409,6 +412,19 @@ test('Should deploy simple HTML project', async () => {
 });
 
 test('Should update simple HTML project', async () => {
+  if (!simpleHtmlInitialDeploy) {
+    const deployOptions = Object.assign({}, optionsBase, {
+      payload: pack(join(currentDir, 'fixtures', 'html-project')),
+    });
+    const deployResponse = await fastify.inject(deployOptions);
+    const deployResult = deployResponse.payload
+      .split('\n')
+      .filter((l) => l && l.length)
+      .map((line) => JSON.parse(line));
+    const deployment = deployResult.find((it) => it.deployments && it.deployments.length).deployments[0];
+    simpleHtmlInitialDeploy = deployment.Id;
+  }
+
   const options = Object.assign(optionsBase, { url: '/update', payload: streamHtmlUpdate });
 
   const response = await fastify.inject(options);
@@ -511,6 +527,159 @@ test('Should keep existing deployment when update build fails', async () => {
   await Promise.all(
     projectContainers.map((containerInfo) => docker.getContainer(containerInfo.Id).remove({ force: true }))
   );
+});
+
+test('Should keep existing deployment when remove-before update build fails', async () => {
+  const deployOptions = Object.assign({}, optionsBase, {
+    payload: pack(join(currentDir, 'fixtures', 'html-project-remove-before')),
+  });
+  const deployResponse = await fastify.inject(deployOptions);
+  const deployResult = deployResponse.payload
+    .split('\n')
+    .filter((l) => l && l.length)
+    .map((line) => JSON.parse(line));
+  const deployment = deployResult.find((it) => it.deployments && it.deployments.length).deployments[0];
+  const initialName = deployment.Name;
+
+  const updateOptions = Object.assign({}, optionsBase, {
+    url: '/update',
+    payload: pack(join(currentDir, 'fixtures', 'broken-update-remove-before')),
+  });
+  const updateResponse = await fastify.inject(updateOptions);
+  const updateResult = updateResponse.payload
+    .split('\n')
+    .filter((l) => l && l.length)
+    .map((line) => JSON.parse(line));
+  const error = updateResult.pop();
+
+  expect(updateResponse.statusCode).toEqual(200);
+  expect(error.message).toEqual('Build failed! See build log for details.');
+  expect(
+    updateResult.find((entry) => entry.message === 'Removing existing containers before deployment...')
+  ).toBeUndefined();
+
+  const allContainers = await docker.listContainers();
+  const projectContainers = allContainers.filter(
+    (containerInfo) => containerInfo.Labels['exoframe.project'] === 'simple-html-remove-before'
+  );
+  expect(projectContainers.length).toBeGreaterThan(0);
+  const original = projectContainers.find((containerInfo) => containerInfo.Names.includes(initialName));
+  expect(original).toBeDefined();
+
+  await Promise.all(
+    projectContainers.map((containerInfo) => docker.getContainer(containerInfo.Id).remove({ force: true }))
+  );
+});
+
+test('Should remove existing deployment before starting remove-before update', async () => {
+  const deployOptions = Object.assign({}, optionsBase, {
+    payload: pack(join(currentDir, 'fixtures', 'html-project-remove-before')),
+  });
+  const deployResponse = await fastify.inject(deployOptions);
+  const deployResult = deployResponse.payload
+    .split('\n')
+    .filter((l) => l && l.length)
+    .map((line) => JSON.parse(line));
+  const initialDeployment = deployResult.find((it) => it.deployments && it.deployments.length).deployments[0];
+
+  const updateOptions = Object.assign({}, optionsBase, {
+    url: '/update',
+    payload: pack(join(currentDir, 'fixtures', 'html-project-remove-before')),
+  });
+  const updateResponse = await fastify.inject(updateOptions);
+  const updateResult = updateResponse.payload
+    .split('\n')
+    .filter((l) => l && l.length)
+    .map((line) => JSON.parse(line));
+  const completeDeployments = updateResult.find((it) => it.deployments && it.deployments.length).deployments;
+
+  expect(updateResponse.statusCode).toEqual(200);
+  expect(completeDeployments.length).toEqual(1);
+  const removeIndex = updateResult.findIndex(
+    (entry) => entry.message === 'Removing existing containers before deployment...'
+  );
+  const startedIndex = updateResult.findIndex((entry) => entry.message === 'Container successfully started!');
+  expect(removeIndex).toBeGreaterThan(-1);
+  expect(startedIndex).toBeGreaterThan(removeIndex);
+
+  try {
+    await docker.getContainer(initialDeployment.Id).inspect();
+    throw new Error('Original container still exists');
+  } catch (e) {
+    expect(e.toString().includes('no such container')).toBeTruthy();
+  }
+
+  const allContainers = await docker.listContainers();
+  const projectContainers = allContainers.filter(
+    (containerInfo) => containerInfo.Labels['exoframe.project'] === 'simple-html-remove-before'
+  );
+  await Promise.all(
+    projectContainers.map((containerInfo) => docker.getContainer(containerInfo.Id).remove({ force: true }))
+  );
+});
+
+test('Should remove existing image deployment before starting remove-before update', async () => {
+  const fixtureDir = join(tmpdir(), `exoframe-image-remove-before-${randomUUID()}`);
+  await mkdir(fixtureDir, { recursive: true });
+  await copyFile(join(currentDir, 'fixtures', 'docker-image-project', 'image.tar'), join(fixtureDir, 'image.tar'));
+  await writeFile(
+    join(fixtureDir, 'exoframe.json'),
+    JSON.stringify(
+      {
+        name: 'test-docker-image-remove-before',
+        hostname: 'testimage-remove-before',
+        project: 'test-image-remove-before',
+        restart: 'no',
+        image: 'exo-test-image',
+        imageFile: 'image.tar',
+        deploymentStrategy: 'removeBeforeDeploy',
+      },
+      null,
+      2
+    ),
+    'utf-8'
+  );
+
+  try {
+    const deployOptions = Object.assign({}, optionsBase, { payload: pack(fixtureDir) });
+    const deployResponse = await fastify.inject(deployOptions);
+    const deployResult = deployResponse.payload
+      .split('\n')
+      .filter((l) => l && l.length)
+      .map((line) => JSON.parse(line));
+    const initialDeployment = deployResult.find((it) => it.deployments && it.deployments.length).deployments[0];
+
+    const updateOptions = Object.assign({}, optionsBase, { url: '/update', payload: pack(fixtureDir) });
+    const updateResponse = await fastify.inject(updateOptions);
+    const updateResult = updateResponse.payload
+      .split('\n')
+      .filter((l) => l && l.length)
+      .map((line) => JSON.parse(line));
+    const completeDeployments = updateResult.find((it) => it.deployments && it.deployments.length).deployments;
+
+    expect(updateResponse.statusCode).toEqual(200);
+    expect(completeDeployments.length).toEqual(1);
+    expect(
+      updateResult.find((entry) => entry.message === 'Removing existing containers before deployment...')
+    ).toBeDefined();
+
+    try {
+      await docker.getContainer(initialDeployment.Id).inspect();
+      throw new Error('Original image container still exists');
+    } catch (e) {
+      expect(e.toString().includes('no such container')).toBeTruthy();
+    }
+
+    const allContainers = await docker.listContainers();
+    const projectContainers = allContainers.filter(
+      (containerInfo) => containerInfo.Labels['exoframe.project'] === 'test-image-remove-before'
+    );
+    await Promise.all(
+      projectContainers.map((containerInfo) => docker.getContainer(containerInfo.Id).remove({ force: true }))
+    );
+  } finally {
+    await rm(fixtureDir, { force: true, recursive: true });
+  }
 });
 
 test('Should display error log for broken Node.js project', async () => {

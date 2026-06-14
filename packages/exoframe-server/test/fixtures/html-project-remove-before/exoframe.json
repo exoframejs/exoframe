@@ -1,0 +1,7 @@
+{
+  "name": "test-html-remove-before",
+  "domain": "remove-before.test.com",
+  "project": "simple-html-remove-before",
+  "restart": "no",
+  "deploymentStrategy": "removeBeforeDeploy"
+}

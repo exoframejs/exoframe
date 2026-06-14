@@ -13,6 +13,7 @@ export const createConfigCmd = () => {
     .option('-p, --project [project]', 'Sets the project name (enables non-interactive mode)')
     .option('-n, --name [name]', 'Sets the name (enables non-interactive mode)')
     .option('-r, --restart [restart]', 'Sets the restart option (enables non-interactive mode)')
+    .option('--deployment-strategy [strategy]', 'Sets the deployment strategy (enables non-interactive mode)')
     .option('--hostname [hostname]', 'Sets the hostname (enables non-interactive mode)')
     .action(configHandler);
 

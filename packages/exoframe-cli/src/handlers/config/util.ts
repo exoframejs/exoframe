@@ -19,6 +19,7 @@ type ConfigPromptKey =
   | 'rateLimit'
   | 'hostname'
   | 'restart'
+  | 'deploymentStrategy'
   | 'template'
   | 'compress'
   | 'letsencrypt'
@@ -94,6 +95,9 @@ export const writeConfig = async (configPath: string, newConfig: ProjectConfigDr
   if (newConfig.hostname?.length) {
     config.hostname = newConfig.hostname;
   }
+  if (newConfig.deploymentStrategy?.length) {
+    config.deploymentStrategy = newConfig.deploymentStrategy;
+  }
   if (newConfig.template?.length) {
     config.template = newConfig.template;
   }
@@ -136,6 +140,7 @@ export const defaultConfigBase: ProjectConfigDraft = {
   env: undefined,
   labels: undefined,
   hostname: '',
+  deploymentStrategy: undefined,
   template: '',
   compress: undefined,
   letsencrypt: undefined,
@@ -300,6 +305,16 @@ export const configPrompts: Record<ConfigPromptKey, (config: ProjectConfigDraft)
       filter,
     },
   ],
+  deploymentStrategy: (config) => [
+    {
+      type: 'select',
+      name: 'deploymentStrategy',
+      message: 'Deployment strategy:',
+      default: config.deploymentStrategy ?? '',
+      choices: ['', 'removeAfterDeploy', 'removeBeforeDeploy'],
+      filter,
+    },
+  ],
   template: (config) => [
     {
       type: 'input',
@@ -425,6 +440,11 @@ export const generateConfigPrompt = (config: ProjectConfigDraft): CliPromptQuest
     key: 'r',
     name: expandPromptFromProp({ config, prop: 'restart', label: 'Restart policy' }),
     value: 'restart',
+  });
+  choices.push({
+    key: 's',
+    name: expandPromptFromProp({ config, prop: 'deploymentStrategy', label: 'Deployment strategy' }),
+    value: 'deploymentStrategy',
   });
   choices.push({
     key: 't',

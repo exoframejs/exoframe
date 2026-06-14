@@ -86,6 +86,8 @@ export interface User {
   password: string;
 }
 
+export type DeploymentStrategy = 'removeAfterDeploy' | 'removeBeforeDeploy';
+
 export interface FunctionalDeploymentConfig {
   type?: string;
   route?: string;
@@ -110,6 +112,7 @@ export interface Config {
   volumes?: string[];
   hostname?: string;
   template?: string;
+  deploymentStrategy?: DeploymentStrategy;
   image?: string;
   imageFile?: string;
   compress?: boolean;
@@ -129,6 +132,7 @@ export interface CreateConfigParams {
   labels?: Record<string, string>;
   hostname?: string;
   template?: string;
+  deploymentStrategy?: DeploymentStrategy;
   compress?: boolean;
   letsencrypt?: boolean;
   ratelimitAverage?: number;

@@ -8,7 +8,7 @@ import { configPrompts, defaultConfigBase, generateConfigPrompt, writeConfig } f
 type ConfigArgs = Partial<ProjectConfigDraft>;
 
 export const configHandler = async (args: ConfigArgs) => {
-  const { domain, port, project, name, restart, hostname } = args;
+  const { domain, port, project, name, restart, deploymentStrategy, hostname } = args;
 
   const workdir = process.cwd();
   const folderName = path.basename(workdir);
@@ -50,6 +50,7 @@ export const configHandler = async (args: ConfigArgs) => {
   overrideFromArgument('name', name);
   overrideFromArgument('project', project);
   overrideFromArgument('restart', restart);
+  overrideFromArgument('deploymentStrategy', deploymentStrategy);
   overrideFromArgument('hostname', hostname);
 
   if (!nonInteractive) {

@@ -23,6 +23,12 @@
       "default": "on-failure:2",
       "examples": ["no", "always", "unless-stopped", "on-failure:2"]
     },
+    "deploymentStrategy": {
+      "type": "string",
+      "description": "Strategy to use when replacing existing containers during updates. Defaults to 'removeAfterDeploy'. Use 'removeBeforeDeploy' when the old container must be removed after the new image is ready but before the replacement container starts.",
+      "default": "removeAfterDeploy",
+      "enum": ["removeAfterDeploy", "removeBeforeDeploy"]
+    },
     "domain": {
       "description": "Domain to assign to the project. Set to false to disable auto-assignment.",
       "oneOf": [

@@ -45,6 +45,8 @@ const templateProps = {
   username,
   // response stream, used to send log back to user
   resultStream,
+  // containers from the same project that already existed before this update
+  existing,
   // temp dir that contains the project
   tempDockerDir,
   // docker-related things
@@ -57,7 +59,7 @@ const templateProps = {
     // returns following object: {log, image}
     build,
     // exoframe start function
-    // has the following signature: async ({image, username, resultStream}) => {}
+    // has the following signature: async ({image, username, existing, resultStream}) => {}
     // executes `docker start` with given image while setting all required labels, env vars, etc
     // returns inspect info from started container
     start,
@@ -105,7 +107,7 @@ RUN chmod -R 755 /usr/share/nginx/html
 `;
 
 // function to execute current template
-exports.executeTemplate = async ({ username, tempDockerDir, resultStream, util, docker }) => {
+exports.executeTemplate = async ({ username, tempDockerDir, resultStream, util, docker, existing }) => {
   try {
     // generate new dockerfile
     const dockerfile = nginxDockerfile;
@@ -136,7 +138,7 @@ exports.executeTemplate = async ({ username, tempDockerDir, resultStream, util, 
     }
 
     // start image
-    const containerInfo = await docker.start(Object.assign({}, buildRes, { username, resultStream }));
+    const containerInfo = await docker.start(Object.assign({}, buildRes, { username, existing, resultStream }));
     // log results in server logs
     util.logger.debug(containerInfo.Name);
 
@@ -160,6 +162,8 @@ exports.executeTemplate = async ({ username, tempDockerDir, resultStream, util, 
   }
 };
 ```
+
+Templates that call `docker.start(...)` should pass the `existing` value through as shown above. This lets project-level settings such as `deploymentStrategy: "removeBeforeDeploy"` remove old containers after a successful build but before the replacement container is started.
 
 ## Examples
 

@@ -31,6 +31,9 @@ The config file has the following structure:
   // Restart policy [optional, defaults to "on-failure:2"]
   // See Docker docs for more info
   "restart": "on-failure:2",
+  // Deployment strategy for updates [optional, defaults to "removeAfterDeploy"]
+  // Use "removeBeforeDeploy" for services that cannot run two instances at once
+  "deploymentStrategy": "removeAfterDeploy",
   // Domain to be assigned to the project [optional, no domain is assigned by default]
   // Set to "false" to disable auto-assignment of a domain
   "domain": "www.project.domain.com",
@@ -108,3 +111,9 @@ The config file has the following structure:
 ```
 
 This structure defines various options for configuring the deployment of your projects.
+
+### Deployment strategy
+
+By default, updates use `removeAfterDeploy`: Exoframe builds and starts the replacement container first, then removes the previous container after the new one is running.
+
+Set `deploymentStrategy` to `removeBeforeDeploy` when your service cannot have two running instances at the same time (for example, bots that allow only one active API connection). With this strategy Exoframe still waits for the new image build/pull/load to succeed, then removes the existing project containers immediately before creating and starting the replacement container.

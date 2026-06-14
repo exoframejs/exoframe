@@ -12,6 +12,7 @@ import {
   writeStatus,
 } from '../util/index.ts';
 import docker from './docker.ts';
+import { removeContainer } from './util.ts';
 
 interface RestartPolicyConfig {
   Name?: string;
@@ -22,6 +23,16 @@ interface MountConfig {
   Type: string;
   Source: string;
   Target: string;
+}
+
+type DeploymentStrategy = 'removeAfterDeploy' | 'removeBeforeDeploy';
+
+interface ExistingContainerInfo {
+  Id: string;
+}
+
+interface ProjectConfig {
+  deploymentStrategy?: DeploymentStrategy;
 }
 
 interface ContainerConfig {
@@ -181,7 +192,19 @@ export async function startFromParams({
   return containerData.inspect();
 }
 
-export async function start({ image, username, folder, resultStream }) {
+export async function start({
+  image,
+  username,
+  folder,
+  existing = [],
+  resultStream,
+}: {
+  image: string;
+  username: string;
+  folder: string;
+  existing?: ExistingContainerInfo[];
+  resultStream: unknown;
+}) {
   const name = nameFromImage(image);
   const deploymentName = baseNameFromImage(image);
 
@@ -189,7 +212,7 @@ export async function start({ image, username, folder, resultStream }) {
   const serverConfig = getConfig();
 
   // get project info
-  const config = getProjectConfig(folder);
+  const config = getProjectConfig(folder) as ProjectConfig & Record<string, any>;
 
   // generate project name
   const project = projectFromConfig({ username, config });
@@ -314,6 +337,11 @@ export async function start({ image, username, folder, resultStream }) {
     containerConfig,
     level: 'verbose',
   });
+
+  if (config.deploymentStrategy === 'removeBeforeDeploy' && existing.length > 0) {
+    writeStatus(resultStream, { message: 'Removing existing containers before deployment...', level: 'verbose' });
+    await Promise.all(existing.map(removeContainer));
+  }
 
   // create container
   const container = await docker.createContainer(containerConfig);
