@@ -24,6 +24,9 @@ const { startServer } = await import('../src/index.ts');
 
 // current folder
 const currentDir = dirname(fileURLToPath(import.meta.url));
+const noConfigFixture = join(currentDir, 'fixtures', 'no-config-project');
+const missingProjectConfigMessage =
+  'Project config exoframe.json was not found. Please add exoframe.json to the project root before deploying.';
 // create tar streams
 const streamDockerImage = pack(join(currentDir, 'fixtures', 'docker-image-project'));
 const streamDockerImageExternal = pack(join(currentDir, 'fixtures', 'docker-image-external'));
@@ -62,6 +65,42 @@ beforeAll(async () => {
 afterAll(() => {
   secretDb.close();
   fastify?.close();
+});
+
+test('Should display error log when deploy project config is missing', async () => {
+  const options = Object.assign({}, optionsBase, { payload: pack(noConfigFixture) });
+
+  const response = await fastify.inject(options);
+  const result = response.payload
+    .split('\n')
+    .filter((l) => l && l.length)
+    .map((line) => JSON.parse(line));
+  const error = result.pop();
+
+  expect(response.statusCode).toEqual(200);
+  expect(result.length).toEqual(0);
+  expect(error.level).toEqual('error');
+  expect(error.message).toEqual(missingProjectConfigMessage);
+  expect(error.error).toEqual(missingProjectConfigMessage);
+  expect(error.log).toBeUndefined();
+});
+
+test('Should display error log when update project config is missing', async () => {
+  const options = Object.assign({}, optionsBase, { url: '/update', payload: pack(noConfigFixture) });
+
+  const response = await fastify.inject(options);
+  const result = response.payload
+    .split('\n')
+    .filter((l) => l && l.length)
+    .map((line) => JSON.parse(line));
+  const error = result.pop();
+
+  expect(response.statusCode).toEqual(200);
+  expect(result.length).toEqual(0);
+  expect(error.level).toEqual('error');
+  expect(error.message).toEqual(missingProjectConfigMessage);
+  expect(error.error).toEqual(missingProjectConfigMessage);
+  expect(error.log).toBeUndefined();
 });
 
 test('Should deploy simple docker project', async () => {

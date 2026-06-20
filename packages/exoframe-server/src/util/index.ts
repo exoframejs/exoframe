@@ -18,6 +18,22 @@ interface RunLogEntry {
   level: string;
 }
 
+export const missingProjectConfigMessage =
+  'Project config exoframe.json was not found. Please add exoframe.json to the project root before deploying.';
+
+export const invalidProjectConfigMessage =
+  'Project config exoframe.json contains invalid JSON. Please fix it before deploying.';
+
+export class ProjectConfigError extends Error {
+  code: string;
+
+  constructor(code: string, message: string) {
+    super(message);
+    this.name = 'ProjectConfigError';
+    this.code = code;
+  }
+}
+
 // try to find secret with current value name and return secret value if present
 const valueOrSecret = (value, secrets) => {
   const secret = secrets.find((s) => `@${s.name}` === value);
@@ -43,10 +59,24 @@ export function unpack({ tarStream, folder }) {
 }
 
 export function getProjectConfig(folder) {
-  const projectConfigString = readFileSync(join(tempDockerDir, folder, 'exoframe.json'));
-  const config = JSON.parse(projectConfigString.toString());
+  const configPath = join(tempDockerDir, folder, 'exoframe.json');
+  let projectConfigString;
 
-  return config;
+  try {
+    projectConfigString = readFileSync(configPath);
+  } catch (e) {
+    if (e.code === 'ENOENT') {
+      throw new ProjectConfigError('MISSING_PROJECT_CONFIG', missingProjectConfigMessage);
+    }
+    throw e;
+  }
+
+  try {
+    const config = JSON.parse(projectConfigString.toString());
+    return config;
+  } catch {
+    throw new ProjectConfigError('INVALID_PROJECT_CONFIG', invalidProjectConfigMessage);
+  }
 }
 
 export function tagFromConfig({ username, config }) {

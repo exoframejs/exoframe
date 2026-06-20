@@ -15,6 +15,19 @@ import * as util from '../util/index.ts';
 // destruct locally used functions
 const { cleanTemp, unpack, getProjectConfig, projectFromConfig } = util;
 
+const writeDeploymentError = ({ resultStream, error }) => {
+  const message = error?.message || error?.error || 'Deployment failed! See server log for details.';
+  const errorMessage = error?.error || message;
+  logger.debug('Deployment failed!', error);
+  util.writeStatus(resultStream, {
+    message,
+    error: errorMessage,
+    log: error?.log,
+    level: 'error',
+  });
+  resultStream.end?.('');
+};
+
 // deployment from unpacked files
 const deploy = async ({
   username,
@@ -104,7 +117,9 @@ export default (fastify) => {
       // create new highland stream for results
       const resultStream = _();
       // run deploy
-      deploy({ username, folder, resultStream }).then(() => schedulePrune());
+      deploy({ username, folder, resultStream })
+        .catch((error) => writeDeploymentError({ resultStream, error }))
+        .finally(() => schedulePrune());
       // reply with deploy stream
       const responseStream = resultStream.toNodeStream();
       // schedule temp folder cleanup on end
@@ -125,34 +140,45 @@ export default (fastify) => {
       const folder = `${username}-${randomUUID()}`;
       // unpack to temp user folder
       await unpack({ tarStream, folder });
-      // get old project containers if present
-      // get project config and name
-      const config = getProjectConfig(folder);
-      const project = projectFromConfig({ username, config });
-      const deploymentStrategy = config.deploymentStrategy || 'removeAfterDeploy';
-
-      // get all current containers
-      const oldContainers = await docker.listContainers({ all: true });
-      // find containers for current user and project
-      const existing = oldContainers.filter(
-        (c) => c.Labels['exoframe.user'] === username && c.Labels['exoframe.project'] === project
-      );
-
       // create new highland stream for results
       const resultStream = _();
-      // deploy new versions
-      deploy({ username, folder, existing, resultStream });
       // reply with deploy stream
       const responseStream = resultStream.toNodeStream();
+      let project;
+      let deploymentStrategy = 'removeAfterDeploy';
+      let existing = [];
       // schedule temp folder and container cleanup on deployment end
       responseStream.on('end', () => {
         // schedule container cleanup unless it was already handled before starting the replacement
-        if (deploymentStrategy !== 'removeBeforeDeploy') {
+        if (project && deploymentStrategy !== 'removeBeforeDeploy') {
           scheduleCleanup({ username, project, existing });
         }
         // clean temp folder
         cleanTemp(folder);
       });
+
+      try {
+        // get old project containers if present
+        // get project config and name
+        const config = getProjectConfig(folder);
+        project = projectFromConfig({ username, config });
+        deploymentStrategy = config.deploymentStrategy || 'removeAfterDeploy';
+
+        // get all current containers
+        const oldContainers = await docker.listContainers({ all: true });
+        // find containers for current user and project
+        existing = oldContainers.filter(
+          (c) => c.Labels['exoframe.user'] === username && c.Labels['exoframe.project'] === project
+        );
+      } catch (error) {
+        writeDeploymentError({ resultStream, error });
+        return reply.code(200).send(responseStream);
+      }
+
+      // deploy new versions
+      deploy({ username, folder, existing, resultStream }).catch((error) =>
+        writeDeploymentError({ resultStream, error })
+      );
       return reply.code(200).send(responseStream);
     },
   });
