@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import { mkdir, readFile, stat, writeFile } from 'fs/promises';
-import jsyaml from 'js-yaml';
+import * as jsyaml from 'js-yaml';
 import { homedir } from 'os';
 import { join } from 'path';
 import type { CliUserConfig } from '../types.ts';

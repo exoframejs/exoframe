@@ -1,5 +1,5 @@
 import { existsSync, readFileSync, statSync, writeFileSync } from 'fs';
-import jsyaml from 'js-yaml';
+import * as jsyaml from 'js-yaml';
 import { mkdirp } from 'mkdirp';
 import { join } from 'path';
 import { getConfig, waitForConfig } from '../config/index.ts';
@@ -49,7 +49,7 @@ async function generateTraefikConfig(config, volumePath) {
   if (existsSync(traefikCustomConfigPath)) {
     logger.info(`Using custom traefik config: ${traefikCustomConfigPath}`);
 
-    const traefikCustomConfig = jsyaml.load(readFileSync(traefikCustomConfigPath, 'utf8'));
+    const traefikCustomConfig = jsyaml.load(readFileSync(traefikCustomConfigPath, 'utf8')) as Record<string, unknown>;
 
     // merge custom
     traefikConfig = { ...traefikConfig, ...traefikCustomConfig };

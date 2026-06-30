@@ -3,7 +3,7 @@ log:
   filePath: /var/traefik/traefik.log
 entryPoints:
   web:
-    address: ':80'
+    address: :80
 providers:
   docker:
     network: exoframe

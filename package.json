@@ -16,13 +16,13 @@
     "test": "npm run test:ci --workspaces --if-present"
   },
   "devDependencies": {
-    "@types/node": "^24.10.1",
-    "@typescript-eslint/eslint-plugin": "^8.46.2",
-    "@typescript-eslint/parser": "^8.46.2",
-    "typescript": "^5.9.3"
+    "@types/node": "^26.0.1",
+    "@typescript-eslint/eslint-plugin": "^8.62.1",
+    "@typescript-eslint/parser": "^8.62.1",
+    "typescript": "^6.0.3"
   },
   "engines": {
     "node": ">=26.0.0",
-    "npm": ">=8.19.0"
+    "npm": ">=11.0.0"
   }
 }

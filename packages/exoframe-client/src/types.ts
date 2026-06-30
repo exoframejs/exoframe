@@ -2,15 +2,7 @@ import type EventEmitter from 'node:events';
 import type { Headers } from 'tar-stream';
 
 export type NestedValue =
-  | string
-  | number
-  | boolean
-  | null
-  | undefined
-  | Error
-  | Buffer
-  | NestedValue[]
-  | { [key: string]: NestedValue };
+  string | number | boolean | null | undefined | Error | Buffer | NestedValue[] | { [key: string]: NestedValue };
 
 export interface NetworkSpec {
   Aliases?: string[];

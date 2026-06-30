@@ -1,4 +1,4 @@
-import { readdirSync, writeFileSync } from 'fs';
+import { readdirSync, readFileSync, writeFileSync } from 'fs';
 import { mkdirp } from 'mkdirp';
 import { join } from 'path';
 import { afterAll, beforeAll, expect, test, vi } from 'vitest';
@@ -20,6 +20,11 @@ let fastify;
 
 // test recipe name
 const testInstallRecipe = 'exoframe-recipe-wordpress';
+
+// recipes fixture package.json path and its original contents,
+// so we can restore it after npm mutates it during install/remove
+const recipesPackageJsonPath = join(recipesFolder, 'package.json');
+const recipesPackageJson = readFileSync(recipesPackageJsonPath);
 const testRunRecipe = 'test-recipe';
 
 beforeAll(async () => {
@@ -27,9 +32,11 @@ beforeAll(async () => {
   fastify = await startServer(0);
 });
 
-afterAll(() => {
-  fastify?.close();
-  runNPM({ args: ['remove', '--verbose', testInstallRecipe], cwd: recipesFolder });
+afterAll(async () => {
+  await fastify?.close();
+  await runNPM({ args: ['remove', '--verbose', testInstallRecipe], cwd: recipesFolder });
+  // restore the tracked fixture so npm install/remove does not leave the tree dirty
+  writeFileSync(recipesPackageJsonPath, recipesPackageJson);
 });
 
 test('Should install new recipe and return list of questions', async () => {

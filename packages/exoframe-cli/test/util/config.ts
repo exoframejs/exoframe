@@ -1,11 +1,17 @@
 import chalk from 'chalk';
 import fs from 'fs';
-import jsyaml from 'js-yaml';
+import * as fsp from 'fs/promises';
+import * as jsyaml from 'js-yaml';
 import os from 'os';
 import { join } from 'path';
 import { fileURLToPath } from 'url';
 import { vi } from 'vitest';
 import { fixturesFolder, testFolder } from './paths.ts';
+
+// Source code imports fs ops via named exports from 'fs/promises' (e.g. `import { stat } from 'fs/promises'`).
+// Since vitest 4.1 spying on `fs.promises.*` no longer intercepts those bindings, so we spy on the
+// 'fs/promises' module exports directly via an auto-spy mock.
+vi.mock('fs/promises', { spy: true });
 
 const clone = (value) => JSON.parse(JSON.stringify(value));
 const createDefaultUserConfig = (addUser = true) => {
@@ -111,14 +117,14 @@ export const setupMocks = (addUserOrOptions = true, options = {}) => {
   }
   const restoreConfigMock = mockConfig ? mockConfigModule(addUser) : null;
 
-  const mkdirSpy = vi.spyOn(fs.promises, 'mkdir').mockImplementation(async () => {});
-  const statSpy = vi.spyOn(fs.promises, 'stat').mockImplementation(async (path) => {
+  const mkdirSpy = vi.spyOn(fsp, 'mkdir').mockImplementation(async () => {});
+  const statSpy = vi.spyOn(fsp, 'stat').mockImplementation(async (path) => {
     // console.log('stat', path);
     if (path.includes('exoframe.json') && !exoConfigExists) {
       throw new Error('ENOENT Does not exist');
     }
   });
-  const rfSpy = vi.spyOn(fs.promises, 'readFile').mockImplementation(async (path) => {
+  const rfSpy = vi.spyOn(fsp, 'readFile').mockImplementation(async (path) => {
     // console.log('readfile', { path, userConfig, exoConfig });
     if ((typeof path === 'string' && path.includes('.json')) || path.href?.includes('.json')) {
       return Buffer.from(JSON.stringify(exoConfig));
@@ -128,7 +134,7 @@ export const setupMocks = (addUserOrOptions = true, options = {}) => {
     }
     return fs.readFileSync(path);
   });
-  const wfSpy = vi.spyOn(fs.promises, 'writeFile').mockImplementation(async (path, string) => {
+  const wfSpy = vi.spyOn(fsp, 'writeFile').mockImplementation(async (path, string) => {
     // console.log('writefile', { path, string });
     if (path.includes('.json')) {
       exoConfig = JSON.parse(string);
@@ -139,7 +145,7 @@ export const setupMocks = (addUserOrOptions = true, options = {}) => {
       userConfig = string;
     }
   });
-  const ulSpy = vi.spyOn(fs.promises, 'unlink').mockImplementation(async (path) => {
+  const ulSpy = vi.spyOn(fsp, 'unlink').mockImplementation(async (path) => {
     // console.log('unlink', { path, string });
     if (path.includes('exoframe.json')) {
       exoConfigExists = false;

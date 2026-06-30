@@ -1,7 +1,7 @@
 // npm packages
 import { spawn } from 'child_process';
 import { mkdirSync, readFileSync, statSync, watchFile, writeFileSync } from 'fs';
-import jsyaml from 'js-yaml';
+import * as jsyaml from 'js-yaml';
 import { join } from 'path';
 import logger from '../logger/index.ts';
 import { baseFolder, configPath, extensionsFolder, logFolder, publicKeysPath, recipesFolder } from './paths.ts';

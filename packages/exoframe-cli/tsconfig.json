@@ -3,7 +3,7 @@
   "compilerOptions": {
     "noEmit": true,
     "allowSyntheticDefaultImports": true,
-    "baseUrl": ".",
+    "rootDir": "..",
     "paths": {
       "exoframe-client": ["../exoframe-client/index.ts"]
     }
