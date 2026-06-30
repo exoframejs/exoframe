@@ -63,12 +63,12 @@ jobs:
       - name: check versions
         id: versions
         run: |
-          TAG="${{ needs.detect-tag.outputs.npm_tag }}"
           PACKAGE="${{ matrix.name }}"
           PACKAGE_DIR="${{ matrix.package_dir || matrix.workspace }}"
-          current=$(npm info "${PACKAGE}@${TAG}" version 2>/dev/null || true)
+          new=$(npm info ./packages/${PACKAGE_DIR} version)
+          current=$(npm info "${PACKAGE}@${new}" version 2>/dev/null || true)
           echo "current=${current:-none}" >> "$GITHUB_OUTPUT"
-          echo "new=$(npm info ./packages/${PACKAGE_DIR} version)" >> "$GITHUB_OUTPUT"
+          echo "new=${new}" >> "$GITHUB_OUTPUT"
 
       - name: install
         if: ${{ steps.versions.outputs.current != steps.versions.outputs.new }}
