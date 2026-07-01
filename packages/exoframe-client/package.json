@@ -1,6 +1,6 @@
 {
   "name": "exoframe-client",
-  "version": "8.0.0-rc1",
+  "version": "8.0.0",
   "description": "API client for Exoframe server, self-hosted deployment tool",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

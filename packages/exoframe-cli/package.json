@@ -1,6 +1,6 @@
 {
   "name": "exoframe",
-  "version": "8.0.0-rc1",
+  "version": "8.0.0",
   "description": "CLI for Exoframe, self-hosted deployment tool",
   "main": "dist/index.js",
   "bin": "dist/index.js",
@@ -24,7 +24,7 @@
     "chalk": "^5.6.2",
     "cli-table3": "^0.6.5",
     "commander": "^15.0.0",
-    "exoframe-client": "^8.0.0-rc1",
+    "exoframe-client": "^8.0.0",
     "got": "^15.0.7",
     "inquirer": "^14.0.2",
     "lodash": "^4.18.1",

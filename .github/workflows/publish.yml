@@ -39,12 +39,14 @@ jobs:
         include:
           - name: exoframe-client
             workspace: exoframe-client
+            build: npm run build -w exoframe-client
           - name: exoframe
             workspace: exoframe
             package_dir: exoframe-cli
             build: npm run build -w exoframe
           - name: exoframe-server
             workspace: exoframe-server
+            build: npm run build -w exoframe-server
             server: true
           - name: exoframe-recipe-ghost
             workspace: exoframe-recipe-ghost
