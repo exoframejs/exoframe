@@ -1,4 +1,5 @@
 export * from './src/auth.ts';
+export * from './src/buildLocally.ts';
 export * from './src/config.ts';
 export * from './src/deploy.ts';
 export * from './src/list.ts';

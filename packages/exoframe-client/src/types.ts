@@ -48,9 +48,13 @@ export interface DeployParams {
   update?: boolean;
   configFile?: string;
   verbose?: number;
+  buildLocal?: boolean;
+  platform?: string;
 }
 
 export type LogEntry = NestedValue[];
+
+export type LogFn = (...args: NestedValue[]) => void;
 
 export interface DeployResponseData {
   level: string;
@@ -90,6 +94,11 @@ export interface RateLimitConfig {
   burst?: number;
 }
 
+export interface BuildConfig {
+  local?: boolean;
+  platform?: string;
+}
+
 export interface Config {
   $schema?: string;
   name: string;
@@ -107,6 +116,7 @@ export interface Config {
   deploymentStrategy?: DeploymentStrategy;
   image?: string;
   imageFile?: string;
+  build?: BuildConfig;
   compress?: boolean;
   letsencrypt?: boolean;
   rateLimit?: RateLimitConfig | null;

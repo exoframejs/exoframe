@@ -1,0 +1,10 @@
+{
+  "name": "test-local-build-config",
+  "build": {
+    "local": true,
+    "platform": "linux/386"
+  },
+  "buildargs": {
+    "MY_ARG": "my-value"
+  }
+}

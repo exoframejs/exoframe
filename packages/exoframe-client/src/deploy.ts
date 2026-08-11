@@ -1,10 +1,12 @@
-import { readFile, stat, writeFile } from 'fs/promises';
+import { readFile, rm, stat, writeFile } from 'fs/promises';
 import got from 'got';
 import _ from 'highland';
 import multimatch from 'multimatch';
 import path from 'path';
 import { serializeError } from 'serialize-error';
 import tar from 'tar-fs';
+import { checkToken } from './auth.ts';
+import { buildLocally } from './buildLocally.ts';
 import { EXOFRAME_CONFIG_SCHEMA_URL } from './config.ts';
 import type {
   Config,
@@ -12,7 +14,7 @@ import type {
   DeployResponseData,
   DeployResult,
   LogEntry,
-  NestedValue,
+  LogFn,
   StreamToResponseParams,
   TarMapHeaders,
 } from './types.ts';
@@ -110,9 +112,11 @@ export const deploy = async ({
   update,
   configFile = 'exoframe.json',
   verbose = 0,
+  buildLocal,
+  platform,
 }: DeployParams): Promise<DeployResult> => {
   const loglist: LogEntry[] = [];
-  const log = (...args: NestedValue[]) => {
+  const log: LogFn = (...args) => {
     if (verbose > 1) console.log(...args);
     loglist.push(args);
   };
@@ -166,7 +170,7 @@ export const deploy = async ({
     ignores.push('exoframe.json');
   }
 
-  const tarStream = tar.pack(workdir, {
+  const packOptions = {
     ignore: (name: string) => multimatch([path.relative(workdir, name)], ignores).length !== 0,
     map: (headers: TarMapHeaders) => {
       if (headers.name === configFile) {
@@ -174,13 +178,41 @@ export const deploy = async ({
       }
       return headers;
     },
-  });
+  };
   if (verbose) {
     log('\nIgnoring following paths:', ignores);
   }
 
+  // build image on this machine and ship it instead of the sources if requested
+  let tarStream: NodeJS.ReadableStream;
+  let buildFolder: string | undefined;
+  if (buildLocal ?? config.build?.local) {
+    // the token is the only trustworthy source of the username the server deploys as, and asking
+    // for it also fails a revoked token in a second rather than after a long build
+    const { username } = await checkToken({ endpoint, token });
+    const build = await buildLocally({
+      workdir,
+      config,
+      username,
+      platform: platform ?? config.build?.platform,
+      contextStream: tar.pack(workdir, packOptions),
+      log,
+    });
+    buildFolder = build.folder;
+    tarStream = tar.pack(buildFolder);
+  } else {
+    tarStream = tar.pack(workdir, packOptions);
+  }
+
   const options = { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/octet-stream' } };
-  const response = await streamToResponse({ tarStream, remoteUrl, options, verbose, log });
+  let response: DeployResponseData | undefined;
+  try {
+    response = await streamToResponse({ tarStream, remoteUrl, options, verbose, log });
+  } finally {
+    if (buildFolder) {
+      await rm(buildFolder, { recursive: true, force: true });
+    }
+  }
 
   if (!response?.deployments?.length) {
     const error = new Error('Something went wrong!');

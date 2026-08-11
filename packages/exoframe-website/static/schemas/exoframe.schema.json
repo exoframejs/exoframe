@@ -91,6 +91,22 @@
       "description": "Docker image tar file to load before deployment.",
       "minLength": 1
     },
+    "build": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Build configuration.",
+      "properties": {
+        "local": {
+          "type": "boolean",
+          "description": "Build the image on the deploying machine and ship it to the server instead of building remotely. Requires Docker and a Dockerfile in the project."
+        },
+        "platform": {
+          "type": "string",
+          "description": "Target platform for local builds. Required when the deploying machine and the server have different architectures, e.g. when deploying from arm64 to an amd64 server - otherwise the deploy succeeds but the container fails to start.",
+          "examples": ["linux/amd64", "linux/arm64"]
+        }
+      }
+    },
     "compress": {
       "type": "boolean",
       "description": "Enable gzip compression on the domain. Omit to inherit server default; set false to disable."

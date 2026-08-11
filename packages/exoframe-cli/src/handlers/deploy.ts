@@ -10,7 +10,16 @@ import { renderDeployments } from '../util/renderDeployments.ts';
 const formatLogEntry = (entry: LogEntry) => entry.map((part) => String(part)).join(' ');
 
 export const deployProject = async (folder?: string, options: DeployHandlerOptions = {}) => {
-  const { config, endpoint: userEndpoint, token: deployToken, update, open: openInBrowser, verbose } = options;
+  const {
+    config,
+    endpoint: userEndpoint,
+    token: deployToken,
+    update,
+    buildLocal,
+    platform,
+    open: openInBrowser,
+    verbose,
+  } = options;
   // exit if not logged in and no token provided
   if (!deployToken && !(await isLoggedIn())) {
     console.log(chalk.red('Error: not logged in!'), 'Please, login and try again.');
@@ -40,7 +49,7 @@ export const deployProject = async (folder?: string, options: DeployHandlerOptio
   // pipe stream to remote
   try {
     if (spinner) {
-      spinner.text = `Uploading project..`;
+      spinner.text = buildLocal ? `Building and uploading project..` : `Uploading project..`;
     }
     const { formattedServices, log } = await deployExo({
       folder,
@@ -49,6 +58,8 @@ export const deployProject = async (folder?: string, options: DeployHandlerOptio
       update,
       configFile: config,
       verbose,
+      buildLocal,
+      platform,
     });
     // check deployments
     if (!formattedServices?.length) {
@@ -83,7 +94,7 @@ export const deployProject = async (folder?: string, options: DeployHandlerOptio
 
     const response = error.response ?? {};
     // if authorization is expired/broken/etc
-    if (response.statusCode === 401) {
+    if (response.statusCode === 401 || error.message === 'Authorization expired!') {
       await logout();
       console.log(chalk.red('Error: authorization expired!'), 'Please, relogin and try again.');
       return process.exit(1);

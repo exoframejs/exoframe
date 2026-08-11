@@ -24,7 +24,8 @@ type ConfigPromptKey =
   | 'compress'
   | 'letsencrypt'
   | 'image'
-  | 'imageFile';
+  | 'imageFile'
+  | 'build';
 
 type ExpandChoiceValue = ConfigPromptKey | 'abort';
 
@@ -112,6 +113,15 @@ export const writeConfig = async (configPath: string, newConfig: ProjectConfigDr
   }
   if (newConfig.imageFile?.length) {
     config.imageFile = newConfig.imageFile;
+  }
+  if (newConfig.build && newConfig.buildLocal === undefined) {
+    config.build = newConfig.build;
+  }
+  if (newConfig.buildLocal) {
+    config.build = { local: true };
+    if (newConfig.buildPlatform?.length) {
+      config.build.platform = newConfig.buildPlatform;
+    }
   }
   if (newConfig.buildargs) {
     config.buildargs = newConfig.buildargs;
@@ -362,6 +372,22 @@ export const configPrompts: Record<ConfigPromptKey, (config: ProjectConfigDraft)
       filter,
     },
   ],
+  build: (config) => [
+    {
+      type: 'confirm',
+      name: 'buildLocal',
+      message: 'Build image locally?',
+      default: config.build?.local ?? false,
+    },
+    {
+      type: 'input',
+      name: 'buildPlatform',
+      message: 'Build platform:',
+      default: config.build?.platform ?? '',
+      filter,
+      when: (answers) => Boolean(answers.buildLocal),
+    },
+  ],
 };
 
 const expandPromptFromProp = ({ config, prop, label, isObject = false, isArray = false }: ExpandPromptOptions) => {
@@ -466,6 +492,11 @@ export const generateConfigPrompt = (config: ProjectConfigDraft): CliPromptQuest
     key: 'f',
     name: expandPromptFromProp({ config, prop: 'imageFile', label: 'Image file' }),
     value: 'imageFile',
+  });
+  choices.push({
+    key: 'b',
+    name: expandPromptFromProp({ config, prop: 'build', label: 'Build', isObject: true }),
+    value: 'build',
   });
   choices.push(new inquirer.Separator());
   choices.push({ key: 'x', name: 'Abort', value: 'abort' });

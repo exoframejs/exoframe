@@ -24,6 +24,11 @@ export interface RateLimitDraft {
   burst?: number;
 }
 
+export interface BuildDraft {
+  local?: boolean;
+  platform?: string;
+}
+
 export interface ProjectConfigDraft {
   $schema?: string;
   name: string;
@@ -49,6 +54,9 @@ export interface ProjectConfigDraft {
   letsencrypt?: boolean;
   image?: string;
   imageFile?: string;
+  build?: BuildDraft;
+  buildLocal?: boolean;
+  buildPlatform?: string;
   buildargs?: Record<string, string>;
   basicAuth?: string | boolean;
   users?: BasicAuthUser[];
@@ -85,6 +93,8 @@ export interface DeployHandlerOptions {
   endpoint?: string;
   token?: string;
   update?: boolean;
+  buildLocal?: boolean;
+  platform?: string;
   open?: boolean;
   verbose?: number;
 }

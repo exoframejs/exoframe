@@ -1,6 +1,7 @@
 import { readFile } from 'fs/promises';
 import got from 'got';
 import sshpk from 'sshpk';
+import { getStatusCode } from './http.ts';
 import type { LoginRequest, LoginResponse } from './types.ts';
 
 interface SignatureParams {
@@ -75,6 +76,28 @@ export const loginWithLoginRequest = async ({
   }
 
   return body;
+};
+
+export const checkToken = async ({
+  endpoint,
+  token,
+}: LoginParams & { token: string }): Promise<{ username: string }> => {
+  try {
+    const { body } = await got.get<{ credentials?: { username?: string } }>(`${endpoint}/checkToken`, {
+      headers: { Authorization: `Bearer ${token}` },
+      responseType: 'json',
+    });
+    const username = body?.credentials?.username;
+    if (!username) {
+      throw new Error('Error getting user from token. Server did not return correct values!');
+    }
+    return { username };
+  } catch (error) {
+    if (getStatusCode(error) === 401) {
+      throw new Error('Authorization expired!');
+    }
+    throw error;
+  }
 };
 
 export const executeLogin = async ({

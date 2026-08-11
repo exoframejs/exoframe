@@ -208,6 +208,55 @@ test('Should update config in interactive mode', async () => {
   inquirerSpy.mockReset();
 });
 
+test('Should enable local build in interactive mode', async () => {
+  // spy on console
+  const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+  // stub inquirer answers
+  const inquirerSpy = vi
+    .spyOn(inquirer, 'prompt')
+    .mockImplementationOnce(() => Promise.resolve({ prop: 'build' }))
+    .mockImplementationOnce(() => Promise.resolve({ buildLocal: true, buildPlatform: 'linux/amd64' }));
+
+  // execute config update
+  await program.parseAsync(['config'], { from: 'user' });
+
+  // give time to IO / net
+  await setTimeout(IO_TIMEOUT);
+
+  // then check config changes
+  const cfg = await getConfig();
+  expect(cfg.build).toEqual({ local: true, platform: 'linux/amd64' });
+  // restore console
+  consoleSpy.mockReset();
+  inquirerSpy.mockReset();
+});
+
+test('Should disable local build in interactive mode', async () => {
+  // spy on console
+  const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+  // stub inquirer answers, first enabling and then disabling local build
+  const inquirerSpy = vi
+    .spyOn(inquirer, 'prompt')
+    .mockImplementationOnce(() => Promise.resolve({ prop: 'build' }))
+    .mockImplementationOnce(() => Promise.resolve({ buildLocal: true, buildPlatform: '' }))
+    .mockImplementationOnce(() => Promise.resolve({ prop: 'build' }))
+    .mockImplementationOnce(() => Promise.resolve({ buildLocal: false }));
+
+  // enable local build
+  await program.parseAsync(['config'], { from: 'user' });
+  await setTimeout(IO_TIMEOUT);
+  expect((await getConfig()).build).toEqual({ local: true });
+
+  // then disable it again
+  await program.parseAsync(['config'], { from: 'user' });
+  await setTimeout(IO_TIMEOUT);
+  expect((await getConfig()).build).toBeUndefined();
+
+  // restore console
+  consoleSpy.mockReset();
+  inquirerSpy.mockReset();
+});
+
 test('Should add users basic auth to config', async () => {
   // spy on console
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});

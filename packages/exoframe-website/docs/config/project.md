@@ -53,6 +53,7 @@ The config file has the following structure:
   "buildargs": {
     "BUILD_ARG": "123",
     // Use secrets to hide sensitive values from build args
+    // Secrets are resolved by the server, so they don't work with local builds
     "OTHER_ARG": "@my-secret"
   },
   // Additional Docker labels for your container [optional]
@@ -87,6 +88,18 @@ The config file has the following structure:
   // Exoframe will load the given tar file into the Docker daemon before
   // Executing the image deployment
   "imageFile": "",
+  // Build config [optional]
+  // See "local builds" recipe for more info
+  "build": {
+    // Build the image on your machine and ship it to the server
+    // instead of building it on the server
+    // Requires Docker and a Dockerfile in the project
+    "local": true,
+    // Target platform for the local build [optional]
+    // Required when your machine and your server have different architectures,
+    // Otherwise the deploy will succeed but the container won't start
+    "platform": "linux/amd64"
+  },
   // Whether to use gzip on the given domain [optional]
   // Can also be set for all deployments using server config
   // Per-project option will override the global setting

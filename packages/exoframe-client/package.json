@@ -22,6 +22,7 @@
   "dependencies": {
     "got": "^15.0.7",
     "highland": "^2.13.5",
+    "lodash": "^4.18.1",
     "multimatch": "^8.0.0",
     "serialize-error": "^13.0.1",
     "sshpk": "^1.18.0",

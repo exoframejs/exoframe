@@ -16,6 +16,7 @@
     "test": "npm run test:ci --workspaces --if-present"
   },
   "devDependencies": {
+    "@types/lodash": "^4.17.25",
     "@types/node": "^26.0.1",
     "@typescript-eslint/eslint-plugin": "^8.62.1",
     "@typescript-eslint/parser": "^8.62.1",

@@ -38,3 +38,9 @@ RUN npm run build
   }
 }
 ```
+
+Values starting with `@` are [secrets](../advanced/secrets.md) and are resolved from the server's secret
+store while the image is being built.
+This means they only work for server-side builds — deploying a project that uses them with
+[local builds](./local-build.md) fails with an explicit error instead of building the image with a
+literal `@my-secret` value.

@@ -1,0 +1,6 @@
+{
+  "name": "test-local-build-secret",
+  "buildargs": {
+    "MY_SECRET": "@my-secret"
+  }
+}
