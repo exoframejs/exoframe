@@ -111,7 +111,7 @@ Here's an example for the Wordpress recipe:
 // image names
 const mysqlImage = 'mariadb:latest';
 const wordpressImage = 'wordpress:latest';
-const phpmyadminImage = 'phpmyadmin/phpmyadmin:latest';
+const phpmyadminImage = 'phpmyadmin:latest';
 
 // ask user to provide params for deployment
 exports.getQuestions = () => [
